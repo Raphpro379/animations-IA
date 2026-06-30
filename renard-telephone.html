@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Renard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #cce8d0; }
+  body {
+    background: linear-gradient(to bottom, #d8f0dc 0%, #cce8d0 50%, #a8d0 a8 100%);
+    background: linear-gradient(to bottom, #d8f0dc 0%, #cce8d0 50%, #a8d0a8 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent;
+  }
+  svg { width: 92vw; max-width: 500px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #b85a1a; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="furr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff8a4a"/><stop offset="100%" stop-color="#e86a28"/></linearGradient>
+</defs>
+<circle cx="320" cy="55" r="22" fill="#fff2a8" opacity="0.9"/>
+<g><ellipse cx="80" cy="62" rx="28" ry="12" fill="#fff" opacity="0.8"/><ellipse cx="102" cy="55" rx="20" ry="10" fill="#fff" opacity="0.8"/><animateTransform attributeName="transform" type="translate" values="0 0;25 0;0 0" dur="14s" repeatCount="indefinite"/></g>
+
+<!-- sapins en fond -->
+<g>
+<polygon points="40,250 22,200 58,200" fill="#3a8a4a"/><polygon points="40,225 26,185 54,185" fill="#46a155"/><rect x="36" y="248" width="8" height="14" fill="#6a4a2a"/>
+<polygon points="340,250 322,200 358,200" fill="#3a8a4a"/><polygon points="340,225 326,185 354,185" fill="#46a155"/><rect x="336" y="248" width="8" height="14" fill="#6a4a2a"/>
+<polygon points="300,255 286,212 314,212" fill="#3a8a4a"/><rect x="296" y="253" width="8" height="12" fill="#6a4a2a"/>
+</g>
+
+<rect x="0" y="258" width="380" height="82" fill="#8fc25a"/>
+<path d="M0 258 Q190 248 380 258 L380 268 Q190 258 0 268 Z" fill="#a8d96a" opacity="0.6"/>
+<g fill="#5a9a2a"><path d="M60 262 Q56 250 54 261 Z"/><path d="M120 264 Q124 250 130 263 Z"/><path d="M260 263 Q256 250 254 262 Z"/></g>
+
+<ellipse cx="190" cy="300" rx="80" ry="14" fill="#5a8a3a" opacity="0.4"/>
+
+<g>
+<animateTransform attributeName="transform" type="translate" values="0 0; 0 -5; 0 0" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+
+<!-- queue touffue -->
+<g><animateTransform attributeName="transform" type="rotate" values="0 240 250;12 240 250;0 240 250" dur="2s" repeatCount="indefinite"/>
+<path d="M236 252 Q290 248 300 210 Q302 192 288 198 Q296 212 286 228 Q276 248 234 248 Z" fill="url(#furr)"/>
+<path d="M292 196 Q304 190 300 206 Q292 210 286 202 Z" fill="#fff0e0"/></g>
+
+<ellipse cx="190" cy="248" rx="50" ry="40" fill="url(#furr)"/>
+<ellipse cx="190" cy="262" rx="34" ry="26" fill="#fff0e0"/>
+<rect x="166" y="276" width="14" height="22" rx="5" fill="#3a2a22"/>
+<rect x="200" y="276" width="14" height="22" rx="5" fill="#3a2a22"/>
+
+<!-- tete -->
+<g>
+<animateTransform attributeName="transform" type="rotate" values="-2 190 180;2 190 180;-2 190 180" dur="3.2s" repeatCount="indefinite"/>
+<path d="M150 150 L138 108 L172 134 Z" fill="url(#furr)"/>
+<path d="M230 150 L242 108 L208 134 Z" fill="url(#furr)"/>
+<path d="M152 148 L144 120 L166 136 Z" fill="#3a2a22"/>
+<path d="M228 148 L236 120 L214 136 Z" fill="#3a2a22"/>
+<circle cx="190" cy="172" r="44" fill="url(#furr)"/>
+<path d="M190 150 Q160 158 152 192 Q165 210 190 212 Q215 210 228 192 Q220 158 190 150 Z" fill="#fff0e0"/>
+<ellipse cx="172" cy="170" rx="8" ry="10" fill="#3a2a22"/>
+<ellipse cx="208" cy="170" rx="8" ry="10" fill="#3a2a22"/>
+<circle cx="174" cy="167" r="2.5" fill="#fff"/><circle cx="210" cy="167" r="2.5" fill="#fff"/>
+<rect x="162" y="158" width="18" height="0" fill="url(#furr)"><animate attributeName="height" values="0;0;0;20;0;0" dur="3.5s" repeatCount="indefinite" keyTimes="0;0.8;0.84;0.88;0.92;1"/></rect>
+<rect x="198" y="158" width="18" height="0" fill="url(#furr)"><animate attributeName="height" values="0;0;0;20;0;0" dur="3.5s" repeatCount="indefinite" keyTimes="0;0.8;0.84;0.88;0.92;1"/></rect>
+<path d="M190 188 L184 196 L196 196 Z" fill="#3a2a22"/>
+<path d="M190 196 Q190 204 182 206 M190 196 Q190 204 198 206" stroke="#7a5a3a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<ellipse cx="166" cy="186" rx="7" ry="5" fill="#ffb6a0" opacity="0.6"/>
+<ellipse cx="214" cy="186" rx="7" ry="5" fill="#ffb6a0" opacity="0.6"/>
+</g>
+</g>
+</svg>
+<div id="hint">Mon renard 🦊</div>
+</body>
+</html>
