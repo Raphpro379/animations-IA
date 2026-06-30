@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)file:///C:/Users/RAPHAEL/Downloads/chat-telephone.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mon chat mignon</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #ffd9b3;
+  }
+  body {
+    background: radial-gradient(circle at 50% 32%, #ffe9cf 0%, #ffd9b3 50%, #ffc499 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  svg {
+    width: 90vw;
+    max-width: 480px;
+    height: auto;
+  }
+  #hint {
+    position: fixed;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #c2562f;
+    font-size: 15px;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+
+<circle cx="60" cy="60" r="10" fill="#ffffff" opacity="0.6">
+<animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite"></animate>
+</circle>
+<circle cx="320" cy="80" r="7" fill="#ffffff" opacity="0.6">
+<animate attributeName="opacity" values="0.6;0.2;0.6" dur="3.5s" repeatCount="indefinite"></animate>
+</circle>
+<circle cx="300" cy="40" r="5" fill="#ffffff" opacity="0.5">
+<animate attributeName="opacity" values="0.2;0.6;0.2" dur="2.5s" repeatCount="indefinite"></animate>
+</circle>
+<circle cx="40" cy="120" r="6" fill="#ffffff" opacity="0.5">
+<animate attributeName="opacity" values="0.5;0.2;0.5" dur="4s" repeatCount="indefinite"></animate>
+</circle>
+
+<g fill="#ffb3c1" opacity="0.8">
+<path d="M90 70 l4 8 8 1 -6 6 2 8 -8 -4 -8 4 2 -8 -6 -6 8 -1 Z">
+<animatetransform attributeName="transform" type="rotate" values="0 92 78; 360 92 78" dur="14s" repeatCount="indefinite"></animatetransform>
+</path>
+<path d="M300 130 l3 6 6 1 -4 5 1 6 -6 -3 -6 3 1 -6 -4 -5 6 -1 Z">
+<animatetransform attributeName="transform" type="rotate" values="0 301 137; -360 301 137" dur="16s" repeatCount="indefinite"></animatetransform>
+</path>
+</g>
+
+<ellipse cx="190" cy="300" rx="110" ry="26" fill="#f5a3c7" opacity="0.55"></ellipse>
+<ellipse cx="190" cy="298" rx="105" ry="22" fill="#ffc2dd"></ellipse>
+
+<g>
+<animatetransform attributeName="transform" type="translate" values="0 0; 0 -4; 0 0" dur="2.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"></animatetransform>
+
+<path d="M255 250 Q300 240 298 200 Q297 182 284 188 Q294 196 288 212 Q282 232 252 238 Z" fill="#9aa3ad">
+<animate attributeName="d" values="M255 250 Q300 240 298 200 Q297 182 284 188 Q294 196 288 212 Q282 232 252 238 Z;M255 250 Q305 250 312 212 Q316 192 300 192 Q310 202 302 220 Q294 240 252 244 Z;M255 250 Q300 240 298 200 Q297 182 284 188 Q294 196 288 212 Q282 232 252 238 Z" dur="1.6s" repeatCount="indefinite"></animate>
+</path>
+
+<ellipse cx="190" cy="232" rx="70" ry="52" fill="#aab3bd"></ellipse>
+<ellipse cx="190" cy="248" rx="58" ry="40" fill="#c4ccd4"></ellipse>
+
+<ellipse cx="150" cy="276" rx="20" ry="14" fill="#aab3bd"></ellipse>
+<ellipse cx="230" cy="276" rx="20" ry="14" fill="#aab3bd"></ellipse>
+<ellipse cx="150" cy="278" rx="13" ry="8" fill="#d6dce2"></ellipse>
+<ellipse cx="230" cy="278" rx="13" ry="8" fill="#d6dce2"></ellipse>
+
+<g>
+<animatetransform attributeName="transform" type="rotate" values="-2 190 150; 2 190 150; -2 190 150" dur="3.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"></animatetransform>
+
+<path d="M138 120 L120 70 L168 100 Z" fill="#aab3bd"></path>
+<path d="M242 120 L260 70 L212 100 Z" fill="#aab3bd"></path>
+<path d="M140 116 L128 84 L160 102 Z" fill="#ffb6c8"></path>
+<path d="M240 116 L252 84 L220 102 Z" fill="#ffb6c8"></path>
+
+<circle cx="190" cy="150" r="62" fill="#c4ccd4"></circle>
+<ellipse cx="190" cy="172" rx="48" ry="38" fill="#e2e7ec"></ellipse>
+
+<g>
+<ellipse cx="166" cy="150" rx="13" ry="16" fill="#3a3f47"></ellipse>
+<ellipse cx="214" cy="150" rx="13" ry="16" fill="#3a3f47"></ellipse>
+<circle cx="170" cy="145" r="4.5" fill="#ffffff"></circle>
+<circle cx="218" cy="145" r="4.5" fill="#ffffff"></circle>
+<circle cx="163" cy="155" r="2" fill="#ffffff" opacity="0.8"></circle>
+<circle cx="211" cy="155" r="2" fill="#ffffff" opacity="0.8"></circle>
+<rect x="153" y="134" width="26" height="0" fill="#c4ccd4">
+<animate attributeName="height" values="0;0;0;32;0;0" dur="4s" repeatCount="indefinite" keyTimes="0;0.78;0.82;0.86;0.9;1"></animate>
+</rect>
+<rect x="201" y="134" width="26" height="0" fill="#c4ccd4">
+<animate attributeName="height" values="0;0;0;32;0;0" dur="4s" repeatCount="indefinite" keyTimes="0;0.78;0.82;0.86;0.9;1"></animate>
+</rect>
+</g>
+
+<ellipse cx="172" cy="178" rx="13" ry="8" fill="#ffc2dd" opacity="0.7"></ellipse>
+<ellipse cx="208" cy="178" rx="13" ry="8" fill="#ffc2dd" opacity="0.7"></ellipse>
+
+<path d="M184 168 L196 168 L190 176 Z" fill="#ff8fab"></path>
+<path d="M190 176 Q190 184 182 186 M190 176 Q190 184 198 186" stroke="#7a8088" stroke-width="2" fill="none" stroke-linecap="round"></path>
+<path d="M182 188 Q190 192 198 188" stroke="#7a8088" stroke-width="2" fill="none" stroke-linecap="round"></path>
+
+<g stroke="#b8c0c8" stroke-width="1.5" stroke-linecap="round">
+<line x1="158" y1="174" x2="120" y2="168"></line>
+<line x1="158" y1="180" x2="122" y2="184"></line>
+<line x1="222" y1="174" x2="260" y2="168"></line>
+<line x1="222" y1="180" x2="258" y2="184"></line>
+</g>
+</g>
+</g>
+</svg>
+
+<div id="hint">Mon petit chat 🐱</div>
+
+
+
+</body></html>

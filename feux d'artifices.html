@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)file:///C:/Users/RAPHAEL/Downloads/feu-artifice-telephone.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Feu d'artifice</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #08081a; }
+  body {
+    background: linear-gradient(to bottom, #08081a 0%, #14143a 60%, #2a1a44 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent;
+  }
+  svg { width: 96vw; max-width: 540px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #ffd24a; font-size: 15px; opacity: 0.75; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="380" height="340" fill="none"></rect>
+<g fill="#ffffff">
+<circle cx="40" cy="40" r="1"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.4s" repeatCount="indefinite"></animate></circle>
+<circle cx="200" cy="25" r="1"><animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"></animate></circle>
+<circle cx="340" cy="45" r="1"><animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"></animate></circle>
+</g>
+
+<!-- ville en bas -->
+<g fill="#1a1a3a">
+<rect x="0" y="300" width="380" height="40"></rect>
+<rect x="20" y="280" width="24" height="40"></rect><rect x="60" y="270" width="20" height="50"></rect>
+<rect x="100" y="288" width="28" height="32"></rect><rect x="150" y="276" width="22" height="44"></rect>
+<rect x="200" y="284" width="26" height="36"></rect><rect x="250" y="272" width="20" height="48"></rect>
+<rect x="300" y="282" width="24" height="38"></rect><rect x="340" y="278" width="22" height="42"></rect>
+</g>
+<g fill="#ffd24a" opacity="0.7">
+<rect x="26" y="288" width="4" height="4"></rect><rect x="66" y="280" width="4" height="4"></rect>
+<rect x="156" y="284" width="4" height="4"></rect><rect x="256" y="282" width="4" height="4"></rect>
+<rect x="346" y="286" width="4" height="4"></rect>
+</g>
+
+<!-- explosion 1 -->
+<g transform="translate(110 110)">
+<g>
+<animate attributeName="opacity" values="0;1;1;0;0" dur="2.4s" repeatCount="indefinite" keyTimes="0;0.1;0.5;0.7;1"></animate>
+<g stroke="#ff6b8a" stroke-width="2.5" stroke-linecap="round">
+<line x1="0" y1="0" x2="0" y2="-42"></line><line x1="0" y1="0" x2="0" y2="42"></line><line x1="0" y1="0" x2="-42" y2="0"></line><line x1="0" y1="0" x2="42" y2="0"></line>
+<line x1="0" y1="0" x2="-30" y2="-30"></line><line x1="0" y1="0" x2="30" y2="-30"></line><line x1="0" y1="0" x2="-30" y2="30"></line><line x1="0" y1="0" x2="30" y2="30"></line>
+</g>
+<g fill="#ffd24a"><circle cx="0" cy="-42" r="3"></circle><circle cx="0" cy="42" r="3"></circle><circle cx="-42" cy="0" r="3"></circle><circle cx="42" cy="0" r="3"></circle><circle cx="-30" cy="-30" r="3"></circle><circle cx="30" cy="-30" r="3"></circle><circle cx="-30" cy="30" r="3"></circle><circle cx="30" cy="30" r="3"></circle></g>
+<animatetransform attributeName="transform" type="scale" values="0.2;1;1.15" dur="2.4s" repeatCount="indefinite" keyTimes="0;0.5;1"></animatetransform>
+</g>
+</g>
+
+<!-- explosion 2 -->
+<g transform="translate(270 90)">
+<g>
+<animate attributeName="opacity" values="0;0;1;1;0;0" dur="2.8s" repeatCount="indefinite" keyTimes="0;0.25;0.35;0.65;0.8;1"></animate>
+<g stroke="#5fd0ff" stroke-width="2.5" stroke-linecap="round">
+<line x1="0" y1="0" x2="0" y2="-38"></line><line x1="0" y1="0" x2="0" y2="38"></line><line x1="0" y1="0" x2="-38" y2="0"></line><line x1="0" y1="0" x2="38" y2="0"></line>
+<line x1="0" y1="0" x2="-27" y2="-27"></line><line x1="0" y1="0" x2="27" y2="-27"></line><line x1="0" y1="0" x2="-27" y2="27"></line><line x1="0" y1="0" x2="27" y2="27"></line>
+</g>
+<g fill="#aef0ff"><circle cx="0" cy="-38" r="3"></circle><circle cx="0" cy="38" r="3"></circle><circle cx="-38" cy="0" r="3"></circle><circle cx="38" cy="0" r="3"></circle><circle cx="-27" cy="-27" r="3"></circle><circle cx="27" cy="-27" r="3"></circle><circle cx="-27" cy="27" r="3"></circle><circle cx="27" cy="27" r="3"></circle></g>
+<animatetransform attributeName="transform" type="scale" values="0.2;1;1.15" dur="2.8s" repeatCount="indefinite" keyTimes="0;0.6;1"></animatetransform>
+</g>
+</g>
+
+<!-- explosion 3 -->
+<g transform="translate(195 170)">
+<g>
+<animate attributeName="opacity" values="0;0;0;1;1;0;0" dur="3.2s" repeatCount="indefinite" keyTimes="0;0.3;0.45;0.55;0.8;0.9;1"></animate>
+<g stroke="#7be08a" stroke-width="2.5" stroke-linecap="round">
+<line x1="0" y1="0" x2="0" y2="-34"></line><line x1="0" y1="0" x2="0" y2="34"></line><line x1="0" y1="0" x2="-34" y2="0"></line><line x1="0" y1="0" x2="34" y2="0"></line>
+<line x1="0" y1="0" x2="-24" y2="-24"></line><line x1="0" y1="0" x2="24" y2="-24"></line><line x1="0" y1="0" x2="-24" y2="24"></line><line x1="0" y1="0" x2="24" y2="24"></line>
+</g>
+<g fill="#ffd24a"><circle cx="0" cy="-34" r="2.5"></circle><circle cx="0" cy="34" r="2.5"></circle><circle cx="-34" cy="0" r="2.5"></circle><circle cx="34" cy="0" r="2.5"></circle><circle cx="-24" cy="-24" r="2.5"></circle><circle cx="24" cy="-24" r="2.5"></circle><circle cx="-24" cy="24" r="2.5"></circle><circle cx="24" cy="24" r="2.5"></circle></g>
+<animatetransform attributeName="transform" type="scale" values="0.2;1;1.15" dur="3.2s" repeatCount="indefinite" keyTimes="0;0.55;1"></animatetransform>
+</g>
+</g>
+
+<!-- explosion 4 violette petite -->
+<g transform="translate(320 160)">
+<g>
+<animate attributeName="opacity" values="0;0;1;1;0;0" dur="2.6s" begin="0.5s" repeatCount="indefinite" keyTimes="0;0.4;0.5;0.7;0.85;1"></animate>
+<g stroke="#c98aff" stroke-width="2" stroke-linecap="round">
+<line x1="0" y1="0" x2="0" y2="-26"></line><line x1="0" y1="0" x2="0" y2="26"></line><line x1="0" y1="0" x2="-26" y2="0"></line><line x1="0" y1="0" x2="26" y2="0"></line>
+<line x1="0" y1="0" x2="-18" y2="-18"></line><line x1="0" y1="0" x2="18" y2="-18"></line><line x1="0" y1="0" x2="-18" y2="18"></line><line x1="0" y1="0" x2="18" y2="18"></line>
+</g>
+<animatetransform attributeName="transform" type="scale" values="0.2;1;1.2" dur="2.6s" begin="0.5s" repeatCount="indefinite" keyTimes="0;0.6;1"></animatetransform>
+</g>
+</g>
+
+<!-- traînées de lancement -->
+<g stroke="#ffd24a" stroke-width="1.5" opacity="0.6">
+<line x1="110" y1="300" x2="110" y2="150"><animate attributeName="opacity" values="0.6;0;0;0.6" dur="2.4s" repeatCount="indefinite" keyTimes="0;0.1;0.9;1"></animate></line>
+</g>
+</svg>
+<div id="hint">Mon feu d'artifice 🎆</div>
+
+
+</body></html>

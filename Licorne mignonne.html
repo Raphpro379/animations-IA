@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/RAPHAEL/Downloads/licorne-telephone.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Licorne</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #ffd9ec; }
+  body {
+    background: linear-gradient(to bottom, #fff0f8 0%, #ffd9ec 50%, #e0c8ff 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent;
+  }
+  svg { width: 92vw; max-width: 500px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #b85a9a; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="horn" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe066"></stop><stop offset="100%" stop-color="#ffb733"></stop></lineargradient>
+<lineargradient id="mane" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff8fc8"></stop><stop offset="50%" stop-color="#c98aff"></stop><stop offset="100%" stop-color="#5fd0ff"></stop></lineargradient>
+</defs>
+<g fill="#ffffff" opacity="0.8"><circle cx="60" cy="60" r="8"></circle><circle cx="320" cy="80" r="6"></circle><circle cx="300" cy="40" r="5"></circle></g>
+<g fill="#ffd24a"><path d="M90 80 l3 7 7 1 -5 5 1 7 -6 -3 -6 3 1 -7 -5 -5 7 -1 Z"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"></animate></path><path d="M310 130 l2 6 6 1 -4 4 1 6 -5 -3 -5 3 1 -6 -4 -4 6 -1 Z"><animate attributeName="opacity" values="1;0.3;1" dur="2.5s" repeatCount="indefinite"></animate></path></g>
+<ellipse cx="190" cy="298" rx="100" ry="20" fill="#e0a8d8" opacity="0.4"></ellipse>
+<g>
+<animatetransform attributeName="transform" type="translate" values="0 0; 0 -6; 0 0" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"></animatetransform>
+<path d="M250 250 Q290 240 296 200 Q298 184 285 188 Q294 200 286 216 Q278 240 248 244 Z" fill="url(#mane)"><animate attributeName="d" values="M250 250 Q290 240 296 200 Q298 184 285 188 Q294 200 286 216 Q278 240 248 244 Z;M250 250 Q295 248 304 208 Q307 190 292 192 Q300 206 290 222 Q280 246 248 248 Z;M250 250 Q290 240 296 200 Q298 184 285 188 Q294 200 286 216 Q278 240 248 244 Z" dur="2.5s" repeatCount="indefinite"></animate></path>
+<ellipse cx="190" cy="232" rx="62" ry="46" fill="#fff5fb"></ellipse>
+<rect x="150" y="268" width="15" height="40" rx="6" fill="#fff5fb"></rect>
+<rect x="178" y="270" width="15" height="40" rx="6" fill="#f0e0ee"></rect>
+<rect x="208" y="268" width="15" height="40" rx="6" fill="#fff5fb"></rect>
+<rect x="150" y="302" width="15" height="8" rx="2" fill="#e0c8d8"></rect><rect x="178" y="304" width="15" height="8" rx="2" fill="#e0c8d8"></rect><rect x="208" y="302" width="15" height="8" rx="2" fill="#e0c8d8"></rect>
+<path d="M135 200 Q120 175 138 168 Q150 185 152 205 Z" fill="url(#mane)"></path>
+<ellipse cx="135" cy="195" rx="32" ry="40" fill="#fff5fb"></ellipse>
+<path d="M120 158 L112 132 L132 152 Z" fill="#fff5fb"></path>
+<path d="M150 154 L150 128 L166 150 Z" fill="#fff5fb"></path>
+<path d="M122 156 L117 138 L130 152 Z" fill="#ffd6ec"></path>
+<path d="M150 152 L150 134 L162 150 Z" fill="#ffd6ec"></path>
+<path d="M138 150 L150 110 L156 150 Z" fill="url(#horn)"></path>
+<path d="M140 144 L152 124 M141 138 L153 132" stroke="#e0a020" stroke-width="1.5"></path>
+<path d="M120 168 Q108 175 110 188 Q120 192 132 184 Z" fill="url(#mane)"><animate attributeName="d" values="M120 168 Q108 175 110 188 Q120 192 132 184 Z;M120 168 Q104 178 108 192 Q120 194 132 184 Z;M120 168 Q108 175 110 188 Q120 192 132 184 Z" dur="2s" repeatCount="indefinite"></animate></path>
+<circle cx="128" cy="190" r="6" fill="#3a2a3a"></circle>
+<circle cx="130" cy="188" r="2" fill="#fff"></circle>
+<rect x="120" y="180" width="16" height="0" fill="#fff5fb"><animate attributeName="height" values="0;0;0;12;0;0" dur="3.5s" repeatCount="indefinite" keyTimes="0;0.8;0.84;0.88;0.92;1"></animate></rect>
+<ellipse cx="116" cy="206" rx="6" ry="4" fill="#ffb6d8" opacity="0.7"></ellipse>
+<path d="M106 210 Q100 210 98 214" stroke="#c8a0c0" stroke-width="1.5" fill="none" stroke-linecap="round"></path>
+</g>
+</svg>
+<div id="hint">Ma licorne 🦄</div>
+
+
+</body></html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)file:///C:/Users/RAPHAEL/Downloads/tour-eiffel-telephone.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tour Eiffel la nuit</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #0a1130;
+  }
+  body {
+    background: linear-gradient(to bottom, #0a1130 0%, #1a2455 55%, #3a2a55 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  svg {
+    width: 94vw;
+    max-width: 520px;
+    height: auto;
+  }
+  #hint {
+    position: fixed;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #ffd277;
+    font-size: 15px;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="nightsky" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0a1130"></stop>
+<stop offset="55%" stop-color="#1a2455"></stop>
+<stop offset="100%" stop-color="#3a2a55"></stop>
+</lineargradient>
+<lineargradient id="towernight" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#ffd277"></stop>
+<stop offset="100%" stop-color="#c99030"></stop>
+</lineargradient>
+<radialgradient id="beam" cx="50%" cy="0%" r="100%">
+<stop offset="0%" stop-color="#fff7d0" stop-opacity="0.55"></stop>
+<stop offset="100%" stop-color="#fff7d0" stop-opacity="0"></stop>
+</radialgradient>
+<radialgradient id="glowtop" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#fff2b0" stop-opacity="0.9"></stop>
+<stop offset="100%" stop-color="#fff2b0" stop-opacity="0"></stop>
+</radialgradient>
+</defs>
+
+<rect x="0" y="0" width="380" height="340" fill="url(#nightsky)"></rect>
+
+<g fill="#ffffff">
+<circle cx="40" cy="40" r="1.2"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.4s" repeatCount="indefinite"></animate></circle>
+<circle cx="100" cy="30" r="1"><animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"></animate></circle>
+<circle cx="330" cy="35" r="1.4"><animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"></animate></circle>
+<circle cx="350" cy="100" r="1"><animate attributeName="opacity" values="1;0.4;1" dur="2.7s" repeatCount="indefinite"></animate></circle>
+<circle cx="20" cy="110" r="1.2"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite"></animate></circle>
+<circle cx="60" cy="160" r="1"><animate attributeName="opacity" values="1;0.3;1" dur="3.1s" repeatCount="indefinite"></animate></circle>
+<circle cx="360" cy="150" r="1.3"><animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"></animate></circle>
+<circle cx="310" cy="200" r="1"><animate attributeName="opacity" values="1;0.4;1" dur="2.8s" repeatCount="indefinite"></animate></circle>
+</g>
+
+<circle cx="60" cy="60" r="20" fill="#fff7e0" opacity="0.9"></circle>
+<circle cx="54" cy="55" r="5" fill="#e6dcc0" opacity="0.5"></circle>
+<circle cx="66" cy="66" r="3.5" fill="#e6dcc0" opacity="0.5"></circle>
+
+<polygon points="190,38 168,12 212,12" fill="url(#beam)">
+<animatetransform attributeName="transform" type="rotate" values="-35 190 40; 35 190 40; -35 190 40" dur="6s" repeatCount="indefinite"></animatetransform>
+</polygon>
+
+<circle cx="190" cy="40" r="14" fill="url(#glowtop)"></circle>
+<circle cx="190" cy="40" r="3" fill="#fff7d0"><animate attributeName="opacity" values="1;0.4;1" dur="1.2s" repeatCount="indefinite"></animate></circle>
+
+<rect x="0" y="305" width="380" height="35" fill="#141a38"></rect>
+<ellipse cx="190" cy="308" rx="90" ry="9" fill="#ffd277" opacity="0.18"></ellipse>
+
+<rect x="187" y="40" width="6" height="18" fill="#c99030"></rect>
+
+<g fill="url(#towernight)" stroke="#a8761f" stroke-width="0.5">
+<polygon points="184,58 196,58 200,120 180,120"></polygon>
+<polygon points="180,120 200,120 210,200 170,200"></polygon>
+<polygon points="170,200 210,200 232,305 148,305"></polygon>
+</g>
+
+<g fill="#6a4e18">
+<rect x="176" y="118" width="28" height="6"></rect>
+<rect x="166" y="198" width="48" height="7"></rect>
+</g>
+<path d="M158 250 Q190 238 222 250" fill="none" stroke="#6a4e18" stroke-width="3"></path>
+<path d="M148 305 Q190 290 232 305" fill="none" stroke="#c99030" stroke-width="3"></path>
+
+<g stroke="#a8761f" stroke-width="1" opacity="0.6">
+<line x1="180" y1="120" x2="200" y2="200"></line>
+<line x1="200" y1="120" x2="180" y2="200"></line>
+<line x1="170" y1="200" x2="210" y2="305"></line>
+<line x1="210" y1="200" x2="170" y2="305"></line>
+<line x1="184" y1="58" x2="196" y2="120"></line>
+<line x1="196" y1="58" x2="184" y2="120"></line>
+<line x1="148" y1="305" x2="168" y2="200"></line>
+<line x1="232" y1="305" x2="212" y2="200"></line>
+</g>
+
+<g fill="#fff2b0">
+<circle cx="190" cy="70" r="1.3"><animate attributeName="opacity" values="0.2;1;0.2" dur="0.5s" repeatCount="indefinite"></animate></circle>
+<circle cx="186" cy="90" r="1.3"><animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"></animate></circle>
+<circle cx="194" cy="105" r="1.3"><animate attributeName="opacity" values="0.4;1;0.3" dur="0.6s" repeatCount="indefinite"></animate></circle>
+<circle cx="178" cy="140" r="1.3"><animate attributeName="opacity" values="0.2;1;0.4" dur="0.55s" repeatCount="indefinite"></animate></circle>
+<circle cx="202" cy="145" r="1.3"><animate attributeName="opacity" values="1;0.3;1" dur="0.65s" repeatCount="indefinite"></animate></circle>
+<circle cx="190" cy="160" r="1.3"><animate attributeName="opacity" values="0.3;1;0.2" dur="0.5s" repeatCount="indefinite"></animate></circle>
+<circle cx="172" cy="180" r="1.3"><animate attributeName="opacity" values="1;0.4;1" dur="0.7s" repeatCount="indefinite"></animate></circle>
+<circle cx="208" cy="182" r="1.3"><animate attributeName="opacity" values="0.4;1;0.3" dur="0.6s" repeatCount="indefinite"></animate></circle>
+<circle cx="165" cy="230" r="1.3"><animate attributeName="opacity" values="0.3;1;0.4" dur="0.55s" repeatCount="indefinite"></animate></circle>
+<circle cx="215" cy="232" r="1.3"><animate attributeName="opacity" values="1;0.2;1" dur="0.65s" repeatCount="indefinite"></animate></circle>
+<circle cx="155" cy="270" r="1.3"><animate attributeName="opacity" values="0.4;1;0.3" dur="0.6s" repeatCount="indefinite"></animate></circle>
+<circle cx="225" cy="272" r="1.3"><animate attributeName="opacity" values="0.2;1;0.4" dur="0.5s" repeatCount="indefinite"></animate></circle>
+<circle cx="190" cy="210" r="1.3"><animate attributeName="opacity" values="1;0.3;1" dur="0.7s" repeatCount="indefinite"></animate></circle>
+<circle cx="180" cy="290" r="1.3"><animate attributeName="opacity" values="0.3;1;0.2" dur="0.6s" repeatCount="indefinite"></animate></circle>
+<circle cx="200" cy="292" r="1.3"><animate attributeName="opacity" values="0.4;1;0.4" dur="0.55s" repeatCount="indefinite"></animate></circle>
+</g>
+
+<g stroke-width="2.5" fill="none" stroke-linecap="round">
+<g stroke="#ff6b8a">
+<path d="M60 100 Q66 94 72 100 Q78 94 84 100"><animate attributeName="d" values="M60 100 Q66 94 72 100 Q78 94 84 100;M60 98 Q66 104 72 98 Q78 104 84 98;M60 100 Q66 94 72 100 Q78 94 84 100" dur="0.5s" repeatCount="indefinite"></animate></path>
+<animatetransform attributeName="transform" type="translate" values="0 0; 60 25; 120 0" dur="9s" repeatCount="indefinite"></animatetransform>
+</g>
+<g stroke="#ffd24a">
+<path d="M120 140 Q126 134 132 140 Q138 134 144 140"><animate attributeName="d" values="M120 140 Q126 134 132 140 Q138 134 144 140;M120 138 Q126 144 132 138 Q138 144 144 138;M120 140 Q126 134 132 140 Q138 134 144 140" dur="0.45s" repeatCount="indefinite"></animate></path>
+<animatetransform attributeName="transform" type="translate" values="0 0; -50 18; -100 5" dur="11s" repeatCount="indefinite"></animatetransform>
+</g>
+<g stroke="#5fd0ff">
+<path d="M250 80 Q256 74 262 80 Q268 74 274 80"><animate attributeName="d" values="M250 80 Q256 74 262 80 Q268 74 274 80;M250 78 Q256 84 262 78 Q268 84 274 78;M250 80 Q256 74 262 80 Q268 74 274 80" dur="0.5s" repeatCount="indefinite"></animate></path>
+<animatetransform attributeName="transform" type="translate" values="0 0; -40 30; -80 10" dur="10s" repeatCount="indefinite"></animatetransform>
+</g>
+<g stroke="#7be08a">
+<path d="M300 170 Q306 164 312 170 Q318 164 324 170"><animate attributeName="d" values="M300 170 Q306 164 312 170 Q318 164 324 170;M300 168 Q306 174 312 168 Q318 174 324 168;M300 170 Q306 164 312 170 Q318 164 324 170" dur="0.55s" repeatCount="indefinite"></animate></path>
+<animatetransform attributeName="transform" type="translate" values="0 0; 30 -20; 60 0" dur="8s" repeatCount="indefinite"></animatetransform>
+</g>
+<g stroke="#c98aff">
+<path d="M40 200 Q46 194 52 200 Q58 194 64 200"><animate attributeName="d" values="M40 200 Q46 194 52 200 Q58 194 64 200;M40 198 Q46 204 52 198 Q58 204 64 198;M40 200 Q46 194 52 200 Q58 194 64 200" dur="0.5s" repeatCount="indefinite"></animate></path>
+<animatetransform attributeName="transform" type="translate" values="0 0; 50 -15; 100 5" dur="12s" repeatCount="indefinite"></animatetransform>
+</g>
+<g stroke="#ff9a4a">
+<path d="M300 240 Q306 234 312 240 Q318 234 324 240"><animate attributeName="d" values="M300 240 Q306 234 312 240 Q318 234 324 240;M300 238 Q306 244 312 238 Q318 244 324 238;M300 240 Q306 234 312 240 Q318 234 324 240" dur="0.6s" repeatCount="indefinite"></animate></path>
+<animatetransform attributeName="transform" type="translate" values="0 0; -45 -12; -90 6" dur="10.5s" repeatCount="indefinite"></animatetransform>
+</g>
+</g>
+</svg>
+
+<div id="hint">Tour Eiffel la nuit 🗼</div>
+
+
+
+</body></html>

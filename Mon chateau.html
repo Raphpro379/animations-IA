@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/RAPHAEL/Downloads/chateau-telephone.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mon château</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #aee0ff;
+  }
+  body {
+    background: linear-gradient(to bottom, #aee0ff 0%, #e6f5ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  svg {
+    width: 92vw;
+    max-width: 500px;
+    height: auto;
+  }
+  #hint {
+    position: fixed;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #5a4632;
+    font-size: 15px;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="towerc" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#dfe6ee"></stop>
+<stop offset="100%" stop-color="#bcc7d2"></stop>
+</lineargradient>
+<lineargradient id="wallc" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#e8edf3"></stop>
+<stop offset="100%" stop-color="#c4cdd7"></stop>
+</lineargradient>
+</defs>
+
+<circle cx="320" cy="55" r="24" fill="#fff4c2"></circle>
+<ellipse cx="70" cy="70" rx="30" ry="13" fill="#ffffff" opacity="0.85"></ellipse>
+<ellipse cx="95" cy="62" rx="22" ry="11" fill="#ffffff" opacity="0.85"></ellipse>
+
+<g stroke="#5a6b7a" stroke-width="2" fill="none" stroke-linecap="round">
+<path d="M250 50 Q256 45 262 50 Q268 45 274 50"><animate attributeName="d" values="M250 50 Q256 45 262 50 Q268 45 274 50;M250 48 Q256 53 262 48 Q268 53 274 48;M250 50 Q256 45 262 50 Q268 45 274 50" dur="3s" repeatCount="indefinite"></animate></path>
+<path d="M285 70 Q291 65 297 70 Q303 65 309 70"><animate attributeName="d" values="M285 70 Q291 65 297 70 Q303 65 309 70;M285 68 Q291 73 297 68 Q303 73 309 68;M285 70 Q291 65 297 70 Q303 65 309 70" dur="2.6s" repeatCount="indefinite"></animate></path>
+</g>
+
+<rect x="0" y="250" width="380" height="90" fill="#8fc24f"></rect>
+<path d="M0 250 Q190 238 380 250 L380 262 Q190 250 0 262 Z" fill="#a8d96a" opacity="0.6"></path>
+
+<rect x="95" y="150" width="190" height="105" fill="url(#wallc)"></rect>
+<g fill="#aab6c2">
+<rect x="95" y="142" width="14" height="14"></rect>
+<rect x="123" y="142" width="14" height="14"></rect>
+<rect x="151" y="142" width="14" height="14"></rect>
+<rect x="179" y="142" width="14" height="14"></rect>
+<rect x="207" y="142" width="14" height="14"></rect>
+<rect x="235" y="142" width="14" height="14"></rect>
+<rect x="263" y="142" width="14" height="14"></rect>
+</g>
+
+<rect x="70" y="110" width="52" height="145" fill="url(#towerc)"></rect>
+<g fill="#aab6c2"><rect x="70" y="102" width="12" height="12"></rect><rect x="89" y="102" width="12" height="12"></rect><rect x="108" y="102" width="12" height="12"></rect></g>
+<polygon points="64,110 96,68 128,110" fill="#7a5cc4"></polygon>
+<polygon points="64,110 96,68 96,110" fill="#6a4cb4"></polygon>
+
+<rect x="258" y="110" width="52" height="145" fill="url(#towerc)"></rect>
+<g fill="#aab6c2"><rect x="258" y="102" width="12" height="12"></rect><rect x="277" y="102" width="12" height="12"></rect><rect x="296" y="102" width="12" height="12"></rect></g>
+<polygon points="252,110 284,68 316,110" fill="#7a5cc4"></polygon>
+<polygon points="284,110 284,68 316,110" fill="#6a4cb4"></polygon>
+
+<rect x="160" y="80" width="60" height="175" fill="url(#towerc)"></rect>
+<g fill="#aab6c2"><rect x="160" y="72" width="13" height="12"></rect><rect x="183" y="72" width="13" height="12"></rect><rect x="207" y="72" width="13" height="12"></rect></g>
+<polygon points="152,80 190,28 228,80" fill="#8a6cd4"></polygon>
+<polygon points="152,80 190,28 190,80" fill="#7a5cc4"></polygon>
+
+<g>
+<line x1="190" y1="28" x2="190" y2="12" stroke="#6a5a4a" stroke-width="2"></line>
+<path d="M190 13 L210 17 L190 25 Z" fill="#ff6b6b"><animate attributeName="d" values="M190 13 L210 17 L190 25 Z;M190 13 L208 13 L190 25 Z;M190 13 L210 17 L190 25 Z" dur="1.6s" repeatCount="indefinite"></animate></path>
+</g>
+<g>
+<line x1="96" y1="68" x2="96" y2="54" stroke="#6a5a4a" stroke-width="1.5"></line>
+<path d="M96 55 L112 58 L96 65 Z" fill="#ffb733"><animate attributeName="d" values="M96 55 L112 58 L96 65 Z;M96 55 L110 55 L96 65 Z;M96 55 L112 58 L96 65 Z" dur="1.9s" repeatCount="indefinite"></animate></path>
+</g>
+<g>
+<line x1="284" y1="68" x2="284" y2="54" stroke="#6a5a4a" stroke-width="1.5"></line>
+<path d="M284 55 L300 58 L284 65 Z" fill="#ffb733"><animate attributeName="d" values="M284 55 L300 58 L284 65 Z;M284 55 L298 55 L284 65 Z;M284 55 L300 58 L284 65 Z" dur="1.7s" repeatCount="indefinite"></animate></path>
+</g>
+
+<path d="M174 255 L174 205 Q190 188 206 205 L206 255 Z" fill="#5a4632"></path>
+<path d="M180 255 L180 210 Q190 198 200 210 L200 255 Z" fill="#3a2c1e"></path>
+<line x1="190" y1="200" x2="190" y2="252" stroke="#6a5a4a" stroke-width="1"></line>
+
+<g fill="#8fb4e0">
+<rect x="84" y="130" width="11" height="18" rx="5"></rect>
+<rect x="97" y="130" width="11" height="18" rx="5"></rect>
+<rect x="272" y="130" width="11" height="18" rx="5"></rect>
+<rect x="285" y="130" width="11" height="18" rx="5"></rect>
+<rect x="178" y="105" width="11" height="18" rx="5"></rect>
+<rect x="191" y="105" width="11" height="18" rx="5"></rect>
+</g>
+
+<g>
+<g transform="translate(40 270)">
+<g><animatetransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="1.4s" repeatCount="indefinite"></animatetransform>
+<rect x="-2" y="-2" width="4" height="24" fill="#6a5a4a"></rect>
+<polygon points="-2,-22 6,-22 6,-2 -2,-2" fill="#ff6b6b"></polygon>
+<rect x="-7" y="20" width="14" height="20" rx="5" fill="#3a5a9e"></rect>
+<circle cx="0" cy="14" r="7" fill="#ffd6a8"></circle>
+<path d="M-7 12 Q0 2 7 12 Z" fill="#aab6c2"></path>
+</g></g>
+
+<g transform="translate(95 270)">
+<g><animatetransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="1.4s" begin="0.2s" repeatCount="indefinite"></animatetransform>
+<rect x="-2" y="-2" width="4" height="24" fill="#6a5a4a"></rect>
+<polygon points="-2,-22 6,-22 6,-2 -2,-2" fill="#ffb733"></polygon>
+<rect x="-7" y="20" width="14" height="20" rx="5" fill="#3a5a9e"></rect>
+<circle cx="0" cy="14" r="7" fill="#ffd6a8"></circle>
+<path d="M-7 12 Q0 2 7 12 Z" fill="#aab6c2"></path>
+</g></g>
+
+<g transform="translate(150 272)">
+<g><animatetransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="1.4s" begin="0.4s" repeatCount="indefinite"></animatetransform>
+<rect x="-2" y="-2" width="4" height="24" fill="#6a5a4a"></rect>
+<polygon points="-2,-22 6,-22 6,-2 -2,-2" fill="#4caf8a"></polygon>
+<rect x="-7" y="20" width="14" height="20" rx="5" fill="#3a5a9e"></rect>
+<circle cx="0" cy="14" r="7" fill="#ffd6a8"></circle>
+<path d="M-7 12 Q0 2 7 12 Z" fill="#aab6c2"></path>
+</g></g>
+
+<g transform="translate(230 272)">
+<g><animatetransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="1.4s" begin="0.6s" repeatCount="indefinite"></animatetransform>
+<rect x="-2" y="-2" width="4" height="24" fill="#6a5a4a"></rect>
+<polygon points="-2,-22 6,-22 6,-2 -2,-2" fill="#ff6b6b"></polygon>
+<rect x="-7" y="20" width="14" height="20" rx="5" fill="#3a5a9e"></rect>
+<circle cx="0" cy="14" r="7" fill="#ffd6a8"></circle>
+<path d="M-7 12 Q0 2 7 12 Z" fill="#aab6c2"></path>
+</g></g>
+
+<g transform="translate(285 270)">
+<g><animatetransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="1.4s" begin="0.8s" repeatCount="indefinite"></animatetransform>
+<rect x="-2" y="-2" width="4" height="24" fill="#6a5a4a"></rect>
+<polygon points="-2,-22 6,-22 6,-2 -2,-2" fill="#ffb733"></polygon>
+<rect x="-7" y="20" width="14" height="20" rx="5" fill="#3a5a9e"></rect>
+<circle cx="0" cy="14" r="7" fill="#ffd6a8"></circle>
+<path d="M-7 12 Q0 2 7 12 Z" fill="#aab6c2"></path>
+</g></g>
+
+<g transform="translate(340 272)">
+<g><animatetransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="1.4s" begin="1s" repeatCount="indefinite"></animatetransform>
+<rect x="-2" y="-2" width="4" height="24" fill="#6a5a4a"></rect>
+<polygon points="-2,-22 6,-22 6,-2 -2,-2" fill="#4caf8a"></polygon>
+<rect x="-7" y="20" width="14" height="20" rx="5" fill="#3a5a9e"></rect>
+<circle cx="0" cy="14" r="7" fill="#ffd6a8"></circle>
+<path d="M-7 12 Q0 2 7 12 Z" fill="#aab6c2"></path>
+</g></g>
+</g>
+</svg>
+
+<div id="hint">Mon château 🏰</div>
+
+
+
+</body></html>
