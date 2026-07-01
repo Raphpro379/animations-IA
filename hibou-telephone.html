@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Hibou</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a44; }
+  body { background: linear-gradient(to bottom, #1a1a44 0%, #3a2a5a 60%, #5a3a5a 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 92vw; max-width: 500px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #ffd6a8; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="owl" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b8804a"/><stop offset="100%" stop-color="#8a5a2a"/></linearGradient></defs>
+<circle cx="315" cy="55" r="22" fill="#fff7e0"/><circle cx="308" cy="50" r="5" fill="#e6dcc0" opacity="0.5"/><circle cx="322" cy="60" r="3.5" fill="#e6dcc0" opacity="0.5"/>
+<g fill="#ffffff">
+<circle cx="50" cy="50" r="1.4"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.4s" repeatCount="indefinite"/></circle>
+<circle cx="120" cy="35" r="1"><animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/></circle>
+<circle cx="250" cy="40" r="1.3"><animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/></circle>
+<circle cx="80" cy="120" r="1"><animate attributeName="opacity" values="1;0.4;1" dur="2.7s" repeatCount="indefinite"/></circle>
+<circle cx="330" cy="130" r="1.2"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite"/></circle>
+</g>
+<!-- branche -->
+<rect x="0" y="292" width="380" height="12" fill="#5a3a2a"/>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0 0; 0 -4; 0 0" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+<!-- pattes -->
+<g stroke="#ffb733" stroke-width="3" stroke-linecap="round"><line x1="175" y1="285" x2="175" y2="295"/><line x1="205" y1="285" x2="205" y2="295"/></g>
+<!-- ailes -->
+<g><animateTransform attributeName="transform" type="rotate" values="0 150 220;-6 150 220;0 150 220" dur="2s" repeatCount="indefinite"/><ellipse cx="146" cy="230" rx="16" ry="40" fill="#8a5a2a"/></g>
+<g><animateTransform attributeName="transform" type="rotate" values="0 234 220;6 234 220;0 234 220" dur="2s" repeatCount="indefinite"/><ellipse cx="234" cy="230" rx="16" ry="40" fill="#8a5a2a"/></g>
+<!-- corps -->
+<ellipse cx="190" cy="220" rx="56" ry="66" fill="url(#owl)"/>
+<ellipse cx="190" cy="240" rx="38" ry="44" fill="#e8c9a0"/>
+<g fill="#b8804a" opacity="0.5"><path d="M170 220 q6 6 0 12 M190 220 q6 6 0 12 M210 220 q6 6 0 12 M180 240 q6 6 0 12 M200 240 q6 6 0 12"/></g>
+<!-- oreilles -->
+<path d="M152 165 L142 138 L166 158 Z" fill="url(#owl)"/>
+<path d="M228 165 L238 138 L214 158 Z" fill="url(#owl)"/>
+<!-- yeux -->
+<circle cx="168" cy="185" r="24" fill="#fff"/>
+<circle cx="212" cy="185" r="24" fill="#fff"/>
+<g>
+<circle cx="168" cy="185" r="13" fill="#3a2a1a"/>
+<circle cx="212" cy="185" r="13" fill="#3a2a1a"/>
+<circle cx="171" cy="181" r="4.5" fill="#fff"/>
+<circle cx="215" cy="181" r="4.5" fill="#fff"/>
+<ellipse cx="168" cy="185" rx="24" ry="0" fill="url(#owl)"><animate attributeName="ry" values="0;0;0;24;0;0" dur="4s" repeatCount="indefinite" keyTimes="0;0.8;0.84;0.88;0.92;1"/></ellipse>
+<ellipse cx="212" cy="185" rx="24" ry="0" fill="url(#owl)"><animate attributeName="ry" values="0;0;0;24;0;0" dur="4s" repeatCount="indefinite" keyTimes="0;0.8;0.84;0.88;0.92;1"/></ellipse>
+</g>
+<!-- bec -->
+<path d="M184 200 L196 200 L190 214 Z" fill="#ffb733"/>
+</g>
+</svg>
+<div id="hint">Mon hibou 🦉</div>
+</body>
+</html>

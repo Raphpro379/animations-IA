@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bonhomme de neige</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #8fb0d0; }
+  body { background: linear-gradient(to bottom, #aec8e0 0%, #8fb0d0 55%, #d0e4f0 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 90vw; max-width: 480px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #3a6a9a; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<!-- neige qui tombe -->
+<g fill="#ffffff">
+<circle cx="40" cy="0" r="4"><animate attributeName="cy" values="-10;350" dur="7s" repeatCount="indefinite"/><animate attributeName="cx" values="40;55;40" dur="7s" repeatCount="indefinite"/></circle>
+<circle cx="120" cy="0" r="3"><animate attributeName="cy" values="-10;350" dur="9s" repeatCount="indefinite"/><animate attributeName="cx" values="120;108;120" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="200" cy="0" r="4"><animate attributeName="cy" values="-10;350" dur="6s" repeatCount="indefinite"/><animate attributeName="cx" values="200;215;200" dur="6s" repeatCount="indefinite"/></circle>
+<circle cx="290" cy="0" r="3"><animate attributeName="cy" values="-10;350" dur="8s" repeatCount="indefinite"/><animate attributeName="cx" values="290;278;290" dur="8s" repeatCount="indefinite"/></circle>
+<circle cx="340" cy="0" r="4"><animate attributeName="cy" values="-10;350" dur="7.5s" repeatCount="indefinite"/><animate attributeName="cx" values="340;352;340" dur="7.5s" repeatCount="indefinite"/></circle>
+<circle cx="80" cy="0" r="3"><animate attributeName="cy" values="-10;350" dur="10s" repeatCount="indefinite"/></circle>
+<circle cx="250" cy="0" r="3.5"><animate attributeName="cy" values="-10;350" dur="6.5s" repeatCount="indefinite"/></circle>
+</g>
+<!-- sol enneige -->
+<path d="M0 290 Q190 265 380 290 L380 340 L0 340 Z" fill="#ffffff"/>
+<!-- sapins -->
+<g><polygon points="50,285 34,240 66,240" fill="#3a7a4a"/><polygon points="50,258 38,222 62,222" fill="#46945a"/><rect x="46" y="283" width="8" height="12" fill="#5a3a2a"/><g fill="#fff"><polygon points="50,285 40,258 60,258" opacity="0.4"/></g></g>
+<g><polygon points="330,288 314,238 346,238" fill="#3a7a4a"/><polygon points="330,258 318,220 342,220" fill="#46945a"/><rect x="326" y="285" width="8" height="12" fill="#5a3a2a"/></g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0 0; 0 -3; 0 0" dur="3.5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+<ellipse cx="190" cy="292" rx="60" ry="10" fill="#c8d8e8" opacity="0.5"/>
+<!-- corps -->
+<circle cx="190" cy="248" r="48" fill="#fff" stroke="#dce8f0" stroke-width="2"/>
+<circle cx="190" cy="180" r="36" fill="#fff" stroke="#dce8f0" stroke-width="2"/>
+<!-- boutons -->
+<g fill="#3a3a3a"><circle cx="190" cy="235" r="4"/><circle cx="190" cy="252" r="4"/><circle cx="190" cy="269" r="4"/></g>
+<!-- bras -->
+<g><animateTransform attributeName="transform" type="rotate" values="0 154 210;-14 154 210;0 154 210" dur="2s" repeatCount="indefinite"/><line x1="154" y1="210" x2="110" y2="185" stroke="#8a5a2a" stroke-width="4" stroke-linecap="round"/><line x1="128" y1="197" x2="118" y2="185" stroke="#8a5a2a" stroke-width="3" stroke-linecap="round"/></g>
+<line x1="226" y1="210" x2="266" y2="192" stroke="#8a5a2a" stroke-width="4" stroke-linecap="round"/><line x1="250" y1="200" x2="260" y2="188" stroke="#8a5a2a" stroke-width="3" stroke-linecap="round"/>
+<!-- visage -->
+<circle cx="178" cy="176" r="4.5" fill="#3a3a3a"/><circle cx="202" cy="176" r="4.5" fill="#3a3a3a"/>
+<circle cx="179" cy="174" r="1.5" fill="#fff"/><circle cx="203" cy="174" r="1.5" fill="#fff"/>
+<polygon points="190,182 214,188 190,194" fill="#ff8a3a"/>
+<g fill="#3a3a3a"><circle cx="176" cy="192" r="1.5"/><circle cx="183" cy="196" r="1.5"/><circle cx="190" cy="197" r="1.5"/><circle cx="197" cy="196" r="1.5"/><circle cx="204" cy="192" r="1.5"/></g>
+<ellipse cx="170" cy="188" rx="6" ry="4" fill="#ffb6c8" opacity="0.6"/><ellipse cx="210" cy="188" rx="6" ry="4" fill="#ffb6c8" opacity="0.6"/>
+<!-- chapeau -->
+<ellipse cx="190" cy="150" rx="34" ry="7" fill="#3a3a3a"/>
+<rect x="170" y="118" width="40" height="34" rx="3" fill="#3a3a3a"/>
+<rect x="170" y="140" width="40" height="7" fill="#ff5a5a"/>
+</g>
+</svg>
+<div id="hint">Mon bonhomme de neige ⛄</div>
+</body>
+</html>

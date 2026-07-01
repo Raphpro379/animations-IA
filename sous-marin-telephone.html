@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sous-marin</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0a4a70; }
+  body { background: linear-gradient(to bottom, #1a7aa0 0%, #0a4a70 55%, #052a48 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 94vw; max-width: 520px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #cdeeff; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="sub" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffd24a"/><stop offset="100%" stop-color="#e0a030"/></linearGradient></defs>
+<!-- rayons de lumiere -->
+<g fill="#ffffff" opacity="0.06"><polygon points="100,0 60,340 160,340 140,0"/><polygon points="260,0 240,340 320,340 300,0"/></g>
+<!-- bulles -->
+<g fill="#ffffff" opacity="0.4">
+<circle cx="60" cy="300" r="5"><animate attributeName="cy" values="320;-20" dur="6s" repeatCount="indefinite"/></circle>
+<circle cx="320" cy="300" r="4"><animate attributeName="cy" values="330;-20" dur="7s" repeatCount="indefinite"/></circle>
+<circle cx="200" cy="300" r="3"><animate attributeName="cy" values="335;-20" dur="8s" repeatCount="indefinite"/></circle>
+</g>
+<!-- petits poissons -->
+<g><g transform="translate(300 120)"><ellipse cx="0" cy="0" rx="12" ry="7" fill="#ff8a5a"/><polygon points="10,0 20,-6 20,6" fill="#ff8a5a"/><circle cx="-5" cy="-2" r="2" fill="#fff"/></g><animateTransform attributeName="transform" type="translate" values="0 0;-360 30;0 0" dur="14s" repeatCount="indefinite"/></g>
+<!-- fond marin -->
+<path d="M0 300 Q95 285 190 300 Q285 315 380 300 L380 340 L0 340 Z" fill="#2a5a3a"/>
+<g fill="#3a7a4a"><path d="M40 300 Q34 275 46 300 Z"/><path d="M300 302 Q294 278 306 302 Z"/></g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="-20 6; 20 -6; -20 6" dur="5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+<!-- helice -->
+<g><animateTransform attributeName="transform" type="rotate" from="0 120 190" to="360 120 190" dur="0.4s" repeatCount="indefinite"/><ellipse cx="120" cy="190" rx="4" ry="14" fill="#c98a30"/><ellipse cx="120" cy="190" rx="14" ry="4" fill="#c98a30"/></g>
+<rect x="122" y="184" width="10" height="12" fill="#c98a30"/>
+<!-- corps -->
+<ellipse cx="200" cy="190" rx="72" ry="40" fill="url(#sub)"/>
+<!-- tourelle -->
+<rect x="185" y="140" width="34" height="24" rx="8" fill="#e0a030"/>
+<rect x="197" y="122" width="6" height="20" fill="#c98a30"/><circle cx="200" cy="120" r="4" fill="#ff6b6b"><animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/></circle>
+<!-- hublots -->
+<circle cx="170" cy="190" r="14" fill="#7ec8e8" stroke="#c98a30" stroke-width="4"/>
+<circle cx="205" cy="190" r="14" fill="#7ec8e8" stroke="#c98a30" stroke-width="4"/>
+<circle cx="240" cy="190" r="12" fill="#7ec8e8" stroke="#c98a30" stroke-width="4"/>
+<ellipse cx="166" cy="186" rx="4" ry="5" fill="#fff" opacity="0.7"/>
+<ellipse cx="201" cy="186" rx="4" ry="5" fill="#fff" opacity="0.7"/>
+<!-- nez -->
+<ellipse cx="270" cy="190" rx="10" ry="16" fill="#e0a030"/>
+</g>
+</svg>
+<div id="hint">Mon sous-marin 🚤</div>
+</body>
+</html>
