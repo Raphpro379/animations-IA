@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Requin</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #1a6a9a; }
+  body { background: linear-gradient(to bottom, #3a9fd0 0%, #1a6a9a 55%, #0a4a70 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 94vw; max-width: 520px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #cdeeff; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="shark" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8aa0b0"/><stop offset="55%" stop-color="#5a7488"/><stop offset="100%" stop-color="#e8eef2"/></linearGradient></defs>
+<g fill="#ffffff" opacity="0.06"><polygon points="100,0 60,340 160,340 140,0"/><polygon points="280,0 250,340 330,340 300,0"/></g>
+<g fill="#ffffff" opacity="0.35">
+<circle cx="70" cy="300" r="4"><animate attributeName="cy" values="320;-20" dur="7s" repeatCount="indefinite"/></circle>
+<circle cx="300" cy="300" r="3"><animate attributeName="cy" values="330;-20" dur="8s" repeatCount="indefinite"/></circle>
+</g>
+<path d="M0 305 Q95 292 190 305 Q285 318 380 305 L380 340 L0 340 Z" fill="#2a5a3a"/>
+<g fill="#3a7a4a"><path d="M40 305 Q34 282 46 305 Z"/><path d="M320 307 Q314 284 326 307 Z"/></g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0 4; 0 -4; 0 4" dur="3.5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+<!-- queue -->
+<g><animateTransform attributeName="transform" type="rotate" values="-12 118 185;12 118 185;-12 118 185" dur="1.2s" repeatCount="indefinite"/>
+<path d="M118 185 L88 160 L100 185 L88 210 Z" fill="url(#shark)"/></g>
+<!-- corps -->
+<path d="M120 185 Q180 155 270 175 Q290 180 288 186 Q285 194 262 196 Q180 210 120 185 Z" fill="url(#shark)"/>
+<!-- ventre clair -->
+<path d="M140 195 Q200 205 262 196 Q200 208 150 200 Z" fill="#eef4f8"/>
+<!-- aileron dorsal -->
+<path d="M185 162 L200 128 L212 165 Z" fill="#5a7488"/>
+<!-- nageoire -->
+<path d="M185 198 Q180 220 200 222 Q205 208 205 198 Z" fill="#5a7488"/>
+<!-- branchies -->
+<g stroke="#3a5468" stroke-width="1.5"><line x1="245" y1="178" x2="243" y2="192"/><line x1="252" y1="178" x2="250" y2="192"/><line x1="259" y1="178" x2="257" y2="191"/></g>
+<!-- oeil -->
+<circle cx="272" cy="182" r="4.5" fill="#2e2e2e"/><circle cx="273.5" cy="180.5" r="1.5" fill="#fff"/>
+<!-- bouche + dents -->
+<path d="M280 190 Q270 196 258 194" stroke="#3a5468" stroke-width="2" fill="none" stroke-linecap="round"/>
+<g fill="#fff"><polygon points="266,192 268,197 270,192"/><polygon points="272,192 274,197 276,192"/></g>
+</g>
+</svg>
+<div id="hint">Mon requin 🦈</div>
+</body>
+</html>

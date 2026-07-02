@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vague</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #6ab0d8; }
+  body { background: linear-gradient(to bottom, #bfe9ff 0%, #7ec8e8 55%, #3a8fc0 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 94vw; max-width: 520px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #1a5a80; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="wave" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4ab0e0"/><stop offset="100%" stop-color="#1a6a9a"/></linearGradient></defs>
+<circle cx="315" cy="55" r="24" fill="#fff2c0"/>
+<g><ellipse cx="90" cy="60" rx="28" ry="12" fill="#fff" opacity="0.8"/><ellipse cx="112" cy="53" rx="20" ry="10" fill="#fff" opacity="0.8"/><animateTransform attributeName="transform" type="translate" values="0 0;25 0;0 0" dur="16s" repeatCount="indefinite"/></g>
+<!-- mouette -->
+<g stroke="#5a5a6a" stroke-width="2" fill="none" stroke-linecap="round"><g><path d="M240 70 Q246 64 252 70 Q258 64 264 70"><animate attributeName="d" values="M240 70 Q246 64 252 70 Q258 64 264 70;M240 68 Q246 74 252 68 Q258 74 264 68;M240 70 Q246 64 252 70 Q258 64 264 70" dur="0.7s" repeatCount="indefinite"/></path><animateTransform attributeName="transform" type="translate" values="0 0;-30 10;0 0" dur="10s" repeatCount="indefinite"/></g></g>
+<!-- grande vague -->
+<g>
+<path d="M0 200 Q80 120 180 160 Q240 184 250 150 Q260 120 240 108 Q270 118 268 158 Q266 210 200 220 Q100 232 0 210 Z" fill="url(#wave)">
+<animate attributeName="d" values="M0 200 Q80 120 180 160 Q240 184 250 150 Q260 120 240 108 Q270 118 268 158 Q266 210 200 220 Q100 232 0 210 Z;M0 205 Q80 130 180 168 Q240 190 250 158 Q262 128 242 114 Q272 124 270 164 Q268 216 200 226 Q100 236 0 214 Z;M0 200 Q80 120 180 160 Q240 184 250 150 Q260 120 240 108 Q270 118 268 158 Q266 210 200 220 Q100 232 0 210 Z" dur="3s" repeatCount="indefinite"/>
+</path>
+<!-- ecume -->
+<g fill="#ffffff">
+<circle cx="245" cy="118" r="10" opacity="0.9"><animate attributeName="cy" values="118;112;118" dur="1.5s" repeatCount="indefinite"/></circle>
+<circle cx="258" cy="128" r="7" opacity="0.8"><animate attributeName="cy" values="128;122;128" dur="1.7s" repeatCount="indefinite"/></circle>
+<circle cx="232" cy="122" r="8" opacity="0.85"><animate attributeName="cy" values="122;116;122" dur="1.4s" repeatCount="indefinite"/></circle>
+<circle cx="200" cy="150" r="6" opacity="0.7"><animate attributeName="cx" values="200;190;200" dur="2s" repeatCount="indefinite"/></circle>
+</g>
+<!-- gouttes -->
+<g fill="#ffffff" opacity="0.7">
+<circle cx="260" cy="100" r="4"><animate attributeName="cy" values="100;70;130" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.8;0.2;0" dur="1.8s" repeatCount="indefinite"/></circle>
+<circle cx="240" cy="95" r="3"><animate attributeName="cy" values="95;65;125" dur="2.1s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.8;0.2;0" dur="2.1s" repeatCount="indefinite"/></circle>
+</g>
+</g>
+<!-- mer -->
+<path d="M0 250 Q95 238 190 250 Q285 262 380 250 L380 340 L0 340 Z" fill="#2a7fb0"><animate attributeName="d" values="M0 250 Q95 238 190 250 Q285 262 380 250 L380 340 L0 340 Z;M0 250 Q95 262 190 250 Q285 238 380 250 L380 340 L0 340 Z;M0 250 Q95 238 190 250 Q285 262 380 250 L380 340 L0 340 Z" dur="3s" repeatCount="indefinite"/></path>
+<path d="M0 275 Q95 265 190 275 Q285 285 380 275 L380 340 L0 340 Z" fill="#1a6a9a" opacity="0.6"><animate attributeName="d" values="M0 275 Q95 265 190 275 Q285 285 380 275 L380 340 L0 340 Z;M0 275 Q95 285 190 275 Q285 265 380 275 L380 340 L0 340 Z;M0 275 Q95 265 190 275 Q285 285 380 275 L380 340 L0 340 Z" dur="3.6s" repeatCount="indefinite"/></path>
+</svg>
+<div id="hint">Ma vague 🌊</div>
+</body>
+</html>
