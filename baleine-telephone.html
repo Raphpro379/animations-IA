@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Baleine</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #2a7fb0; }
+  body { background: linear-gradient(to bottom, #6ab0d8 0%, #2a7fb0 55%, #1a5a88 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 94vw; max-width: 520px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #cdeeff; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="whale" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6a8fd0"/><stop offset="100%" stop-color="#3a5f9a"/></linearGradient></defs>
+<circle cx="315" cy="50" r="22" fill="#fff2c0" opacity="0.9"/>
+<g><ellipse cx="80" cy="60" rx="28" ry="12" fill="#fff" opacity="0.75"/><ellipse cx="102" cy="53" rx="20" ry="10" fill="#fff" opacity="0.75"/><animateTransform attributeName="transform" type="translate" values="0 0;25 0;0 0" dur="16s" repeatCount="indefinite"/></g>
+<!-- jet d'eau -->
+<g>
+<g fill="#bfe4ff" opacity="0.8">
+<circle cx="175" cy="130" r="5"><animate attributeName="cy" values="150;90" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.8;0" dur="1.5s" repeatCount="indefinite"/></circle>
+<circle cx="168" cy="130" r="4"><animate attributeName="cy" values="150;100" dur="1.8s" repeatCount="indefinite"/><animate attributeName="cx" values="175;160" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.8;0" dur="1.8s" repeatCount="indefinite"/></circle>
+<circle cx="182" cy="130" r="4"><animate attributeName="cy" values="150;100" dur="1.6s" repeatCount="indefinite"/><animate attributeName="cx" values="175;190" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.8;0" dur="1.6s" repeatCount="indefinite"/></circle>
+</g>
+</g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0 6; 0 -6; 0 6" dur="4s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+<!-- queue -->
+<g><animateTransform attributeName="transform" type="rotate" values="0 250 210;10 250 210;0 250 210" dur="2.5s" repeatCount="indefinite"/>
+<path d="M245 210 Q285 190 300 200 Q288 210 278 208 Q292 220 300 232 Q282 232 245 218 Z" fill="url(#whale)"/></g>
+<!-- corps -->
+<path d="M100 210 Q100 160 175 158 Q250 160 255 205 Q250 230 175 232 Q105 230 100 210 Z" fill="url(#whale)"/>
+<!-- ventre -->
+<path d="M110 216 Q175 236 245 216 Q240 232 175 234 Q115 232 110 216 Z" fill="#cfe4f5"/>
+<g stroke="#a8c4e0" stroke-width="1.5"><line x1="120" y1="222" x2="122" y2="232"/><line x1="140" y1="226" x2="141" y2="234"/><line x1="160" y1="228" x2="160" y2="235"/></g>
+<!-- nageoire -->
+<path d="M150 220 Q140 240 155 244 Q162 232 165 222 Z" fill="#3a5f9a"/>
+<!-- event -->
+<path d="M172 158 Q176 152 180 158" stroke="#3a5f9a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<!-- oeil + sourire -->
+<circle cx="128" cy="195" r="6" fill="#2e2e2e"/><circle cx="130" cy="193" r="2" fill="#fff"/>
+<path d="M112 210 Q124 220 140 212" stroke="#2e3f5a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<ellipse cx="120" cy="205" rx="6" ry="4" fill="#ff9ac0" opacity="0.5"/>
+</g>
+<!-- vagues -->
+<path d="M0 300 Q47 290 95 300 Q142 310 190 300 Q237 290 285 300 Q332 310 380 300 L380 340 L0 340 Z" fill="#1a5a88" opacity="0.6"><animate attributeName="d" values="M0 300 Q47 290 95 300 Q142 310 190 300 Q237 290 285 300 Q332 310 380 300 L380 340 L0 340 Z;M0 300 Q47 310 95 300 Q142 290 190 300 Q237 310 285 300 Q332 290 380 300 L380 340 L0 340 Z;M0 300 Q47 290 95 300 Q142 310 190 300 Q237 290 285 300 Q332 310 380 300 L380 340 L0 340 Z" dur="3s" repeatCount="indefinite"/></path>
+</svg>
+<div id="hint">Ma baleine 🐳</div>
+</body>
+</html>

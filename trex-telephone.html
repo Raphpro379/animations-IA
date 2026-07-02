@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>T-Rex</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #d0e0b0; }
+  body { background: linear-gradient(to bottom, #cfe8f0 0%, #d8e8b8 55%, #b0d080 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 92vw; max-width: 500px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #4a7a2a; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="rex" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7ac04a"/><stop offset="100%" stop-color="#4a8a2a"/></linearGradient></defs>
+<circle cx="320" cy="55" r="24" fill="#fff2a8"/>
+<g><ellipse cx="80" cy="65" rx="28" ry="12" fill="#fff" opacity="0.8"/><ellipse cx="102" cy="58" rx="20" ry="10" fill="#fff" opacity="0.8"/><animateTransform attributeName="transform" type="translate" values="0 0;25 0;0 0" dur="14s" repeatCount="indefinite"/></g>
+<polygon points="40,250 20,200 60,200" fill="#5a8a3a"/><polygon points="330,255 312,210 348,210" fill="#5a8a3a"/>
+<rect x="0" y="258" width="380" height="82" fill="#8fc25a"/>
+<path d="M0 258 Q190 248 380 258 L380 268 Q190 258 0 268 Z" fill="#a8d96a" opacity="0.6"/>
+<g fill="#5a9a2a"><path d="M60 262 Q56 250 54 261 Z"/><path d="M280 263 Q276 250 274 262 Z"/></g>
+<ellipse cx="190" cy="300" rx="90" ry="14" fill="#5a8a3a" opacity="0.4"/>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0 0; 0 -6; 0 0" dur="1.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.3 0 0.5 1; 0.5 0 0.7 1"/>
+<!-- queue -->
+<path d="M150 240 Q90 235 70 205 Q88 225 130 228 Q150 230 150 240 Z" fill="url(#rex)"/>
+<!-- jambe -->
+<g><animateTransform attributeName="transform" type="rotate" values="0 175 250;6 175 250;0 175 250" dur="1.2s" repeatCount="indefinite"/>
+<path d="M168 235 Q160 270 170 292 L192 292 Q186 265 190 238 Z" fill="#4a8a2a"/>
+<path d="M164 290 L196 290 L196 298 L160 298 Z" fill="#3a7a2a"/></g>
+<!-- corps -->
+<ellipse cx="200" cy="220" rx="56" ry="48" fill="url(#rex)"/>
+<ellipse cx="205" cy="230" rx="34" ry="30" fill="#c8e0a0" opacity="0.6"/>
+<!-- petit bras -->
+<path d="M232 210 Q248 214 250 226 Q242 224 236 220 Z" fill="#4a8a2a"/>
+<!-- autre jambe -->
+<path d="M210 240 Q206 272 214 294 L234 294 Q228 268 230 242 Z" fill="url(#rex)"/>
+<path d="M208 292 L238 292 L238 300 L204 300 Z" fill="#3a7a2a"/>
+<!-- tete -->
+<g>
+<animateTransform attributeName="transform" type="rotate" values="0 230 175;-3 230 175;0 230 175" dur="2.4s" repeatCount="indefinite"/>
+<ellipse cx="245" cy="165" rx="44" ry="36" fill="url(#rex)"/>
+<path d="M250 175 Q290 172 300 186 Q288 192 250 190 Z" fill="url(#rex)"/>
+<!-- machoire qui bouge -->
+<g><animateTransform attributeName="transform" type="rotate" values="0 258 188;10 258 188;0 258 188" dur="1.5s" repeatCount="indefinite"/>
+<path d="M258 188 Q290 190 298 198 Q285 204 256 200 Z" fill="#3a7a2a"/>
+<g fill="#fff"><polygon points="268,190 272,198 276,190"/><polygon points="280,191 284,199 288,191"/></g></g>
+<g fill="#fff"><polygon points="262,182 266,190 270,182"/><polygon points="276,183 280,191 284,183"/><polygon points="290,185 293,192 296,185"/></g>
+<circle cx="238" cy="152" r="10" fill="#fff"/>
+<circle cx="240" cy="153" r="5" fill="#2e2e2e"/><circle cx="242" cy="151" r="1.6" fill="#fff"/>
+<ellipse cx="288" cy="180" rx="3" ry="2" fill="#2e2e2e"/>
+<path d="M224 140 L228 130 L234 140 Z" fill="#4a8a2a"/>
+</g>
+</g>
+</svg>
+<div id="hint">Mon T-Rex 🦖</div>
+</body>
+</html>

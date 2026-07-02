@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tournesol</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #aee0ff; }
+  body { background: linear-gradient(to bottom, #bfe9ff 0%, #cdeeff 45%, #a8e0a8 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 90vw; max-width: 480px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #b87a1a; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<circle cx="315" cy="55" r="26" fill="#fff2a8"/>
+<g stroke="#ffe066" stroke-width="3" stroke-linecap="round" opacity="0.8"><line x1="315" y1="16" x2="315" y2="26"/><line x1="277" y1="55" x2="287" y2="55"/><line x1="343" y1="55" x2="353" y2="55"/><line x1="288" y1="28" x2="295" y2="35"/></g>
+<g><ellipse cx="80" cy="70" rx="28" ry="12" fill="#fff" opacity="0.8"/><ellipse cx="102" cy="63" rx="20" ry="10" fill="#fff" opacity="0.8"/><animateTransform attributeName="transform" type="translate" values="0 0;25 0;0 0" dur="15s" repeatCount="indefinite"/></g>
+<rect x="0" y="300" width="380" height="40" fill="#5fb02f"/>
+<g fill="#4a8a2a"><path d="M60 300 Q56 288 54 299 Z"/><path d="M300 300 Q296 288 294 299 Z"/></g>
+<g>
+<animateTransform attributeName="transform" type="rotate" values="-3 190 300; 3 190 300; -3 190 300" dur="3.5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+<!-- tige -->
+<path d="M190 305 Q186 220 190 155" stroke="#3a8a2a" stroke-width="7" fill="none" stroke-linecap="round"/>
+<!-- feuilles -->
+<g><animateTransform attributeName="transform" type="rotate" values="0 190 250;5 190 250;0 190 250" dur="3s" repeatCount="indefinite"/><path d="M188 255 Q155 245 145 265 Q168 275 190 264 Z" fill="#4a9a3a"/></g>
+<g><animateTransform attributeName="transform" type="rotate" values="0 190 225;-5 190 225;0 190 225" dur="3.4s" repeatCount="indefinite"/><path d="M192 230 Q225 220 235 240 Q212 250 190 239 Z" fill="#4a9a3a"/></g>
+<!-- fleur -->
+<g transform="translate(190 150)">
+<g><animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="30s" repeatCount="indefinite"/>
+<g fill="#ffc21a">
+<ellipse cx="0" cy="-48" rx="10" ry="22"/><ellipse cx="0" cy="48" rx="10" ry="22"/><ellipse cx="-48" cy="0" rx="22" ry="10"/><ellipse cx="48" cy="0" rx="22" ry="10"/>
+<ellipse cx="-34" cy="-34" rx="20" ry="10" transform="rotate(45 -34 -34)"/><ellipse cx="34" cy="-34" rx="20" ry="10" transform="rotate(-45 34 -34)"/><ellipse cx="-34" cy="34" rx="20" ry="10" transform="rotate(-45 -34 34)"/><ellipse cx="34" cy="34" rx="20" ry="10" transform="rotate(45 34 34)"/>
+<ellipse cx="0" cy="-48" rx="10" ry="22" transform="rotate(22)"/><ellipse cx="0" cy="48" rx="10" ry="22" transform="rotate(22)"/><ellipse cx="-48" cy="0" rx="22" ry="10" transform="rotate(22)"/><ellipse cx="48" cy="0" rx="22" ry="10" transform="rotate(22)"/>
+</g></g>
+<circle cx="0" cy="0" r="30" fill="#8a5a2a"/>
+<circle cx="0" cy="0" r="30" fill="#6a4520" opacity="0.4"/>
+<g fill="#4a2f18"><circle cx="-10" cy="-8" r="3"/><circle cx="2" cy="-10" r="3"/><circle cx="12" cy="-4" r="3"/><circle cx="-6" cy="6" r="3"/><circle cx="8" cy="8" r="3"/><circle cx="-14" cy="4" r="3"/></g>
+<!-- visage -->
+<circle cx="-9" cy="2" r="3.5" fill="#2e2e2e"/><circle cx="9" cy="2" r="3.5" fill="#2e2e2e"/>
+<circle cx="-8" cy="1" r="1.2" fill="#fff"/><circle cx="10" cy="1" r="1.2" fill="#fff"/>
+<path d="M-8 12 Q0 18 8 12" stroke="#2e2e2e" stroke-width="2" fill="none" stroke-linecap="round"/>
+</g>
+</g>
+<!-- abeille -->
+<g><animateTransform attributeName="transform" type="translate" values="-30 0;420 -20;-30 0" dur="10s" repeatCount="indefinite"/>
+<g transform="translate(60 100)"><ellipse cx="0" cy="0" rx="9" ry="6" fill="#ffce3a"/><g fill="#2e2e2e"><rect x="-4" y="-6" width="2.5" height="12"/><rect x="2" y="-6" width="2.5" height="12"/></g><g fill="#cdeeff" opacity="0.8"><ellipse cx="-3" cy="-7" rx="6" ry="3"/><ellipse cx="3" cy="-7" rx="6" ry="3"/></g></g></g>
+</svg>
+<div id="hint">Mon tournesol 🌻</div>
+</body>
+</html>

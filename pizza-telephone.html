@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pizza</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #ffcf9a; }
+  body { background: radial-gradient(circle at 50% 40%, #ffe4c0 0%, #ffcf9a 60%, #ffb877 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  svg { width: 90vw; max-width: 480px; height: auto; }
+  #hint { position: fixed; bottom: 22px; left: 0; right: 0; text-align: center; color: #b8541a; font-size: 15px; opacity: 0.85; pointer-events: none; }
+</style>
+</head>
+<body>
+<svg id="scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="cheese" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffd24a"/><stop offset="100%" stop-color="#f0a828"/></linearGradient>
+<linearGradient id="crust" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0a860"/><stop offset="100%" stop-color="#c98840"/></linearGradient>
+</defs>
+<!-- vapeur -->
+<g stroke="#fff" stroke-width="3" fill="none" opacity="0.5" stroke-linecap="round">
+<path d="M160 90 Q152 78 160 66 Q168 54 160 42"><animate attributeName="opacity" values="0.5;0;0.5" dur="2.5s" repeatCount="indefinite"/></path>
+<path d="M200 90 Q192 78 200 66 Q208 54 200 42"><animate attributeName="opacity" values="0;0.5;0" dur="2.5s" repeatCount="indefinite"/></path>
+</g>
+<g>
+<animateTransform attributeName="transform" type="rotate" values="-3 190 200; 3 190 200; -3 190 200" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+<!-- part de pizza (triangle) -->
+<path d="M190 110 L120 270 Q190 290 260 270 Z" fill="url(#cheese)"/>
+<!-- croute -->
+<path d="M120 270 Q190 290 260 270 Q255 258 245 258 Q190 275 135 258 Q125 258 120 270 Z" fill="url(#crust)"/>
+<!-- coulure de fromage -->
+<path d="M155 200 Q152 220 158 232 Q164 220 160 200 Z" fill="#fff0c0" opacity="0.7"/>
+<path d="M215 205 Q218 228 212 240 Q206 226 210 205 Z" fill="#fff0c0" opacity="0.7"/>
+<!-- pepperoni -->
+<circle cx="175" cy="170" r="14" fill="#d8402a"/><circle cx="175" cy="170" r="14" fill="#c8301a" opacity="0.3"/>
+<circle cx="210" cy="200" r="13" fill="#d8402a"/><circle cx="210" cy="200" r="13" fill="#c8301a" opacity="0.3"/>
+<circle cx="165" cy="225" r="12" fill="#d8402a"/><circle cx="165" cy="225" r="12" fill="#c8301a" opacity="0.3"/>
+<circle cx="215" cy="245" r="11" fill="#d8402a"/>
+<!-- olives -->
+<circle cx="200" cy="160" r="5" fill="#3a2a3a"/><circle cx="200" cy="160" r="2" fill="#5a4a5a"/>
+<circle cx="150" cy="195" r="5" fill="#3a2a3a"/><circle cx="150" cy="195" r="2" fill="#5a4a5a"/>
+<circle cx="188" cy="235" r="5" fill="#3a2a3a"/><circle cx="188" cy="235" r="2" fill="#5a4a5a"/>
+<!-- basilic -->
+<ellipse cx="192" cy="195" rx="7" ry="4" fill="#4a9a3a" transform="rotate(30 192 195)"/>
+<ellipse cx="160" cy="150" rx="6" ry="3.5" fill="#4a9a3a" transform="rotate(-20 160 150)"/>
+<!-- visage rigolo sur la pizza -->
+<circle cx="178" cy="205" r="6" fill="#3a2a1a"/><circle cx="205" cy="222" r="6" fill="#3a2a1a"/>
+<circle cx="180" cy="203" r="2" fill="#fff"/><circle cx="207" cy="220" r="2" fill="#fff"/>
+<path d="M175 235 Q188 248 202 240" stroke="#3a2a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+</g>
+</svg>
+<div id="hint">Ma pizza 🍕</div>
+</body>
+</html>
