@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue de dessins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF9EF; --ink:#2B2D42;
+    --leaf:#3FA34D; --leaf-bg:#E3F6E5;
+    --sky:#2E86C1; --sky-bg:#E1F0FB;
+    --plum:#8E44AD; --plum-bg:#F1E4F8;
+    --sun:#F6B93B; --coral:#FF6B6B; --card:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:'Nunito',sans-serif;padding:16px 12px 90px;}
+  .page{max-width:960px;margin:0 auto;}
+
+  /* ===== BARRE D'ÉDITION (visible seulement en mode édition) ===== */
+  .toolbar{
+    display:none;
+    position:sticky;top:8px;z-index:50;
+    flex-wrap:wrap;gap:8px;justify-content:center;
+    background:rgba(255,255,255,.94);backdrop-filter:blur(4px);
+    border:2px solid #F0E9DB;border-radius:16px;
+    padding:10px;margin-bottom:18px;
+    box-shadow:0 4px 14px rgba(0,0,0,.06);
+  }
+  body.edit .toolbar{display:flex;}
+  .toolbar button{
+    font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;
+    border:none;border-radius:999px;padding:10px 16px;cursor:pointer;
+    display:flex;align-items:center;gap:6px;
+  }
+  #dlBtn{background:var(--leaf);color:#fff;}
+  #quitBtn{background:var(--ink);color:#fff;}
+  #pwdBtn{background:#EDE7DA;color:var(--ink);}
+  .toolbar button:active{transform:scale(.96);}
+  #msg{width:100%;text-align:center;font-weight:800;font-size:13px;min-height:16px;color:var(--leaf);}
+
+  /* ===== CRAYON DISCRET (mode public) ===== */
+  #editBtn{
+    position:fixed;bottom:14px;right:14px;z-index:60;
+    width:44px;height:44px;border-radius:50%;
+    border:2px solid #F0E9DB;background:rgba(255,255,255,.85);
+    font-size:18px;cursor:pointer;opacity:.55;
+  }
+  body.edit #editBtn{display:none;}
+
+  header{
+    text-align:center;padding:22px 14px 18px;
+    border:3px dashed var(--sun);border-radius:24px;
+    background:var(--card);margin-bottom:20px;
+  }
+  header .emojis{font-size:24px;letter-spacing:6px;}
+  h1{font-family:'Baloo 2',cursive;font-size:clamp(26px,7vw,44px);font-weight:800;margin:4px 0 2px;}
+  header p{font-weight:700;color:#6b6d85;font-size:14px;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:8px;}
+  .legend span{font-weight:800;font-size:13px;padding:6px 12px;border-radius:999px;}
+  .lg-a{background:#FFF3D6;color:#B9770E;}
+  .hint{
+    display:none;
+    text-align:center;font-weight:800;font-size:13px;color:#B9770E;
+    background:#FFF3D6;border-radius:12px;padding:8px 12px;margin-bottom:16px;
+  }
+  body.edit .hint{display:block;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;}
+  @media(max-width:420px){
+    .grid{grid-template-columns:1fr 1fr;gap:8px;}
+  }
+  .item{
+    background:var(--card);border-radius:16px;padding:10px 10px 9px;
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    border:2px solid #F0E9DB;position:relative;break-inside:avoid;
+    align-self:start;
+  }
+  .item .pic{font-size:24px;line-height:1;min-width:28px;max-width:34px;max-height:30px;overflow:hidden;text-align:center;}
+  .item .txt{flex:1;min-width:72px;}
+  .item .num{font-size:10.5px;font-weight:800;color:#A9A48F;letter-spacing:.5px;}
+  .item .name{font-weight:800;font-size:13.5px;line-height:1.15;}
+  .price{
+    font-family:'Baloo 2',cursive;font-weight:800;font-size:14px;
+    padding:3px 9px;border-radius:999px;white-space:nowrap;
+    background:var(--leaf-bg);color:var(--leaf);
+  }
+  .star{
+    position:absolute;top:-10px;right:-7px;
+    font-size:19px;user-select:none;
+    filter:grayscale(1) opacity(.35);
+  }
+  .star.on{filter:none;}
+  body.edit .star{cursor:pointer;}
+  body:not(.edit) .star:not(.on){display:none;}
+
+  [contenteditable="true"]{
+    outline:none;border-radius:6px;
+    box-shadow:0 0 0 1.5px transparent;
+    transition:box-shadow .15s, background .15s;
+  }
+  [contenteditable="true"]:hover{background:#FFF7E0;}
+  [contenteditable="true"]:focus{background:#FFF7E0;box-shadow:0 0 0 1.5px var(--sun);}
+
+  h2{font-family:'Baloo 2',cursive;font-size:23px;font-weight:800;margin:30px 0 12px;display:flex;align-items:center;gap:10px;}
+  h2::after{content:"";flex:1;height:3px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--sun) 0 14px,transparent 14px 24px);}
+
+  .supps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
+  .supp{background:var(--card);border:2px solid #F0E9DB;border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;}
+  .supp .pic{font-size:28px;}
+  .supp .name{font-weight:800;font-size:14.5px;}
+  .supp .desc{font-size:12.5px;color:#6b6d85;font-weight:600;}
+  .supp .price{margin-left:auto;background:#FFE9E9;color:var(--coral);font-size:15px;}
+
+  .qrs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+  .qr{background:var(--card);border-radius:18px;padding:16px 14px;text-align:center;border:2px solid #F0E9DB;border-top:6px solid var(--sun);}
+  .qr:nth-child(2){border-top-color:var(--sky);}
+  .qr:nth-child(3){border-top-color:var(--plum);}
+  .qr .dots{font-size:20px;letter-spacing:4px;margin-bottom:6px;}
+  .qr h3{font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;}
+  .qr div.lines{margin:8px 0 12px;font-size:13px;font-weight:700;color:#6b6d85;}
+  .qr .price{font-size:17px;background:#FFF3D6;color:#B9770E;}
+  .qr:nth-child(2) .price{background:var(--sky-bg);color:var(--sky);}
+  .qr:nth-child(3) .price{background:var(--plum-bg);color:var(--plum);}
+
+  .note{margin-top:16px;background:#FFF3D6;border-radius:14px;padding:12px 14px;font-weight:700;font-size:13.5px;color:#8a6510;}
+  footer{text-align:center;margin-top:28px;font-weight:800;color:#A9A48F;font-size:13.5px;}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .toolbar,.hint,#editBtn{display:none !important;}
+  }
+</style>
+</head>
+<body class="">
+<div class="page">
+
+  <div class="toolbar">
+    <button id="dlBtn" onclick="exporter()">📥 Télécharger pour GitHub</button>
+    <button id="pwdBtn" onclick="changePwd()">🔑 Mot de passe</button>
+    <button id="quitBtn" onclick="quitter()">🔒 Quitter l'édition</button>
+    <div id="msg" style="color: var(--leaf);"></div>
+  </div>
+
+  <header>
+    <div class="emojis">🎨 ✏️ 🌈</div>
+    <h1 class="ed" data-k="titre" contenteditable="false">Mon catalogue de dessins</h1>
+    <p class="ed" data-k="soustitre" contenteditable="false">50 dessins faits main · choisis ton préféré par son numéro !</p>
+  </header>
+
+  <div class="legend">
+    <span class="lg-a">⭐ = déjà montré au public</span>
+  </div>
+  <div class="hint">✏️ Mode édition : clique sur les textes pour les modifier, sur les ⭐ pour les allumer/éteindre. Puis 📥 Télécharger et remets le fichier sur GitHub !</div>
+
+  <div class="grid" id="grid"></div>
+
+  <h2 class="ed" data-k="titreSupp" contenteditable="false">✨ Suppléments</h2>
+  <div class="supps" id="supps"></div>
+
+  <h2 class="ed" data-k="titreQr" contenteditable="false">📱 Les QR codes</h2>
+  <div class="qrs" id="qrs"></div>
+
+  <div class="note ed" data-k="note" contenteditable="false">💡 Chaque QR code est testé avant d'être donné, pour être sûr qu'il se scanne bien avec un téléphone !<div>ATTENTION : Certains QR code pourrais êtres dur à scanner veuiller en informer le responsable</div></div>
+
+  <footer class="ed" data-k="footer" contenteditable="false">Merci et à bientôt ! 🎨✨</footer>
+
+</div>
+
+<button id="editBtn" onclick="entrer()" title="Mode édition">✏️</button>
+
+<script id="cat-data" type="application/json">{"pwd":"UlNNMzc5","textes":{"note":"💡 Chaque QR code est testé avant d'être donné, pour être sûr qu'il se scanne bien avec un téléphone !ATTENTION : Certains QR code pourrais êtres dur à scanner veuiller en informer le responsable"},"items":[["🗼","N°1","Tour Eiffel","2 €",0],["🤖","N°2","Robot","2 €",0],["🐧","N°3","Pingouin","2 €",0],["🦄","N°4","Licorne","2 €",0],["🎡","N°5","Fête foraine","2 €",0],["🚜","N°6","Ferme","2 €",0],["🌌","N°7","Espace étoilé","2 €",0],["🐉","N°8","Dragon","2 €",0],["🦕","N°9","Dino","2 €",1],["🏰","N°10","Château","3 €",0],["🐼","N°11","Panda","2,50 €",0],["🐝","N°12","Abeille","2,50 €",0],["🌈","N°13","Arc-en-ciel","2 €",0],["🎈","N°14","Montgolfière","3 €",0],["🐙","N°15","Poulpe","3 €",0],["🌋","N°16","Volcan","3 €",0],["🐢","N°17","Tortue","2 €",0],["🦋","N°18","Papillon","2 €",0],["⛵","N°19","Bateau","2 €",1],["🚂","N°20","Train","2,50 €",0],["🌸","N°21","Fleur","2 €",0],["🦉","N°22","Hibou","2,50 €",0],["🤿","N°23","Sous-marin","3 €",0],["⛄","N°24","Bonhomme de neige","2,50 €",0],["🎐","N°25","Méduse","2,50 €",0],["🚁","N°26","Hélicoptère","2,50 €",0],["🎃","N°27","Chat Halloween","3 €",0],["❤️","N°28","Cœur","2 €",0],["🦖","N°29","T-Rex","3 €",0],["🐋","N°30","Baleine","3 €",0],["🌻","N°31","Tournesol","2 €",0],["🦩","N°32","Flamant rose","2 €",0],["🍕","N°33","Pizza","2,50 €",0],["🦈","N°34","Requin","2,50 €",0],["🦇","N°35","Chauve-souris","3 €",0],["🌊","N°36","Vague","2 €",0],["🎉","N°37","Ballons","2,50 €",0],["🦑","N°38","Pieuvre géante","3 €",0],["🍯","N°39","Ruche","3 €",0],["🏯","N°40","Château fort","3 €",0],["🎪","N°41","Cirque","2,50 €",0],["🌵","N°42","Cactus","2,50 €",0],["🐸","N°43","Grenouille","2,50 €",0],["🏎️","N°44","Voiture de course","3 €",0],["🍄","N°45","Champignon","2,50 €",0],["🦁","N°46","Lion","3 €",0],["🌙","N°47","Lune endormie","3 €",0],["🐧","N°48","Manchot","3 €",0],["🦜","N°49","Perroquet","3 €",0],["🐌","N°50","Escargot","2,50 €",0]],"supps":[["🖍️","Couleurs, image…","Pour rendre ton dessin encore plus beau","Voire Les qr codes"],["🎬","Animation sur commande","Ton dessin prend vie + QR code inclus","3,50 € + QR code"]],"qrs":[["⬛⬜","2 couleurs","1 couleur pour le QR code\n1 couleur pour le fond","2 €"],["🟦🟩⬜","3 couleurs","2 couleurs pour le QR code\n1 couleur pour le fond","3 €"],["🟥🟨🟦🟩⬜","5 couleurs","4 couleurs pour le QR code\n1 couleur pour le fond","4 €"]]}</script>
+
+<script>
+let data = JSON.parse(document.getElementById('cat-data').textContent);
+let edit = false;
+
+function esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+
+function render(){
+  document.querySelectorAll('.ed').forEach(el=>{
+    const k=el.dataset.k;
+    if(data.textes[k]!==undefined) el.textContent=data.textes[k];
+  });
+
+  const g=document.getElementById('grid'); g.innerHTML='';
+  data.items.forEach((it,i)=>{
+    const d=document.createElement('div');
+    d.className='item';
+    d.innerHTML =
+      '<span class="star'+(it[4]?' on':'')+'" onclick="toggleStar('+i+')" title="Montré au public">⭐</span>'+
+      '<span class="pic">'+esc(it[0])+'</span>'+
+      '<span class="txt"><span class="num f" data-i="'+i+'" data-f="1">'+esc(it[1])+'</span><br>'+
+      '<span class="name f" data-i="'+i+'" data-f="2">'+esc(it[2])+'</span></span>'+
+      '<span class="price f" data-i="'+i+'" data-f="3">'+esc(it[3])+'</span>';
+    g.appendChild(d);
+  });
+
+  const s=document.getElementById('supps'); s.innerHTML='';
+  data.supps.forEach((it,i)=>{
+    const d=document.createElement('div');
+    d.className='supp';
+    d.innerHTML =
+      '<span class="pic">'+esc(it[0])+'</span>'+
+      '<span><span class="name sf" data-i="'+i+'" data-f="1">'+esc(it[1])+'</span><br>'+
+      '<span class="desc sf" data-i="'+i+'" data-f="2">'+esc(it[2])+'</span></span>'+
+      '<span class="price sf" data-i="'+i+'" data-f="3">'+esc(it[3])+'</span>';
+    s.appendChild(d);
+  });
+
+  const q=document.getElementById('qrs'); q.innerHTML='';
+  data.qrs.forEach((it,i)=>{
+    const d=document.createElement('div');
+    d.className='qr';
+    d.innerHTML =
+      '<div class="dots">'+esc(it[0])+'</div>'+
+      '<h3 class="qf" data-i="'+i+'" data-f="1">'+esc(it[1])+'</h3>'+
+      '<div class="lines qf" data-i="'+i+'" data-f="2">'+esc(it[2]).replace(/\n/g,'<br>')+'</div>'+
+      '<span class="price qf" data-i="'+i+'" data-f="3">'+esc(it[3])+'</span>';
+    q.appendChild(d);
+  });
+
+  appliquerMode();
+}
+
+function appliquerMode(){
+  document.body.classList.toggle('edit', edit);
+  document.querySelectorAll('.ed,.f,.sf,.qf').forEach(el=>{
+    el.setAttribute('contenteditable', edit ? 'true' : 'false');
+  });
+}
+
+document.addEventListener('focusout', e=>{
+  const el=e.target;
+  if(!(el instanceof HTMLElement)) return;
+  if(el.classList.contains('ed')) data.textes[el.dataset.k]=el.textContent;
+  if(el.classList.contains('f'))  data.items[el.dataset.i][el.dataset.f]=el.textContent;
+  if(el.classList.contains('sf')) data.supps[el.dataset.i][el.dataset.f]=el.textContent;
+  if(el.classList.contains('qf')) data.qrs[el.dataset.i][el.dataset.f]=el.textContent;
+});
+
+function toggleStar(i){
+  if(!edit) return;
+  data.items[i][4] = data.items[i][4] ? 0 : 1;
+  render();
+}
+
+/* ===== ENTRER / QUITTER LE MODE ÉDITION ===== */
+function code(p){ return btoa(unescape(encodeURIComponent(p))); }
+
+function entrer(){
+  if(!data.pwd){
+    const p = prompt('Première fois ! Choisis ton mot de passe secret d\'édition :');
+    if(!p) return;
+    data.pwd = code(p);
+    edit = true;
+    render();
+    flash('🔑 Mot de passe créé ! Pense à 📥 Télécharger pour qu\'il soit gardé dans le fichier.');
+    return;
+  }
+  const p = prompt('Mot de passe d\'édition :');
+  if(p===null) return;
+  if(code(p)===data.pwd){
+    edit = true;
+    render();
+    flash('✏️ Mode édition activé !');
+  }else{
+    alert('❌ Mauvais mot de passe.');
+  }
+}
+
+function quitter(){
+  document.activeElement && document.activeElement.blur();
+  edit = false;
+  render();
+}
+
+function changePwd(){
+  const p = prompt('Nouveau mot de passe :');
+  if(!p){ flash('Changement annulé.', true); return; }
+  data.pwd = code(p);
+  flash('🔑 Mot de passe changé ! Pense à 📥 Télécharger pour le garder.');
+}
+
+/* ===== EXPORTER LE FICHIER POUR GITHUB ===== */
+function exporter(){
+  document.activeElement && document.activeElement.blur();
+
+  // 1. graver les données à jour dans le fichier
+  document.getElementById('cat-data').textContent = JSON.stringify(data);
+
+  // 2. préparer une copie propre : mode public + zones dynamiques vides
+  edit = false;
+  document.body.classList.remove('edit');
+  document.querySelectorAll('[contenteditable]').forEach(el=>el.setAttribute('contenteditable','false'));
+  const g=document.getElementById('grid'), s=document.getElementById('supps'), q=document.getElementById('qrs');
+  const sg=g.innerHTML, ss=s.innerHTML, sq=q.innerHTML;
+  g.innerHTML=''; s.innerHTML=''; q.innerHTML='';
+
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+  // 3. restaurer l'affichage et revenir en mode édition
+  g.innerHTML=sg; s.innerHTML=ss; q.innerHTML=sq;
+  edit = true;
+  render();
+
+  // 4. télécharger
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'catalogue.html';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+
+  flash('📥 Fichier téléchargé ! Remets « catalogue.html » sur GitHub pour publier tes changements.');
+}
+
+function flash(t, bad){
+  const m=document.getElementById('msg');
+  m.textContent=t;
+  m.style.color = bad ? 'var(--coral)' : 'var(--leaf)';
+  clearTimeout(flash.t);
+  flash.t=setTimeout(()=>{m.textContent='';},5000);
+}
+
+render();
+</script>
+
+
+</body></html>
