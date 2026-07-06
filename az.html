@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/RAPHAEL/Downloads/compte-a-rebours.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compte à rebours — Festival de l'Animation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./az_files/css2" rel="stylesheet">
+<style>
+  :root{--nuit:#101426;--or:#D4AF37;--or-clair:#F1D687;--ivoire:#F5EFE0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% 0%, #232C4C 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 100%, #1E2745 0%, transparent 50%),
+      var(--nuit);
+    color:var(--ivoire);font-family:'Montserrat',sans-serif;
+    display:flex;flex-direction:column;align-items:center;
+    padding:26px 16px 40px;overflow-x:hidden;
+  }
+  .scintille{position:fixed;border-radius:50%;background:var(--or-clair);pointer-events:none;animation:sc 2.6s ease-in-out infinite;}
+  @keyframes sc{0%,100%{opacity:.15;}50%{opacity:.9;}}
+
+  .entete{font-size:clamp(10px,2.6vw,13px);font-weight:600;letter-spacing:4px;color:var(--or-clair);text-align:center;}
+  h1{
+    font-family:'Playfair Display',serif;font-weight:900;
+    font-size:clamp(30px,7.5vw,58px);line-height:1.05;text-align:center;margin:8px 0 2px;
+    background:linear-gradient(180deg,var(--or-clair) 20%,var(--or) 60%,#A8842A 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:var(--or);
+    filter:drop-shadow(0 0 16px rgba(241,214,135,.3));
+  }
+  .sousT{font-family:'Great Vibes',cursive;font-size:clamp(20px,5vw,32px);color:var(--or-clair);text-align:center;}
+  .filet{width:min(70vw,320px);display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--or);font-size:12px;}
+  .filet::before,.filet::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--or),transparent);}
+
+  /* ===== compte à rebours ===== */
+  #avant{display:flex;flex-direction:column;align-items:center;}
+  .phrase{font-size:clamp(12px,3vw,16px);font-weight:600;letter-spacing:2.5px;color:#CEC8B8;margin-bottom:14px;}
+  .blocs{display:flex;gap:clamp(8px,2.4vw,18px);}
+  .bloc{
+    position:relative;
+    width:clamp(66px,17vw,110px);
+    padding:clamp(12px,3vw,20px) 4px clamp(10px,2.4vw,16px);
+    text-align:center;
+    background:linear-gradient(180deg,rgba(241,214,135,.10),rgba(241,214,135,.02));
+    border:1px solid rgba(212,175,55,.6);
+    border-radius:14px;
+    box-shadow:0 0 22px rgba(212,175,55,.15), inset 0 1px 0 rgba(241,214,135,.35);
+  }
+  .bloc::before{content:"✦";position:absolute;top:-9px;left:50%;transform:translateX(-50%);color:var(--or);font-size:11px;background:var(--nuit);padding:0 5px;}
+  .val{
+    font-family:'Playfair Display',serif;font-weight:900;
+    font-size:clamp(30px,8.5vw,58px);line-height:1;
+    color:var(--or-clair);
+    text-shadow:0 0 18px rgba(241,214,135,.55);
+    font-variant-numeric:tabular-nums;
+  }
+  .lab{margin-top:6px;font-size:clamp(8px,2vw,11px);font-weight:700;letter-spacing:2.5px;color:#B0A886;}
+
+  /* ===== jour J / pendant le festival ===== */
+  #pendant{display:none;flex-direction:column;align-items:center;text-align:center;}
+  .maintenant{
+    font-size:clamp(11px,2.6vw,13px);font-weight:700;letter-spacing:3px;color:var(--nuit);
+    background:linear-gradient(180deg,var(--or-clair),var(--or));
+    padding:6px 20px;border-radius:999px;
+    animation:puls 1.6s ease-in-out infinite;
+  }
+  @keyframes puls{0%,100%{box-shadow:0 0 10px rgba(241,214,135,.4);}50%{box-shadow:0 0 26px rgba(241,214,135,.9);}}
+  .actNom{
+    font-family:'Playfair Display',serif;font-weight:900;
+    font-size:clamp(24px,6.5vw,44px);color:var(--or-clair);margin:12px 0 4px;
+    text-shadow:0 0 18px rgba(241,214,135,.45);
+  }
+  .prochain{font-size:clamp(13px,3vw,16px);font-style:italic;color:#CEC8B8;}
+  .prochain b{color:var(--or-clair);font-variant-numeric:tabular-nums;}
+
+  #apres{display:none;flex-direction:column;align-items:center;text-align:center;}
+  #apres .merci{
+    font-family:'Great Vibes',cursive;font-size:clamp(34px,9vw,64px);color:var(--or-clair);
+    text-shadow:0 0 20px rgba(241,214,135,.5);
+  }
+  #apres .rdv{font-size:14px;font-style:italic;color:#CEC8B8;margin-top:8px;}
+
+  /* ===== programme ===== */
+  h2{
+    margin-top:8px;
+    font-size:clamp(12px,3vw,15px);font-weight:700;letter-spacing:3.5px;color:var(--or);
+  }
+  .prog{
+    margin-top:14px;width:min(92vw,520px);
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .evt{
+    display:flex;align-items:center;gap:14px;
+    border:1px solid rgba(212,175,55,.35);
+    border-radius:12px;padding:10px 16px;
+    background:rgba(241,214,135,.04);
+    transition:all .4s;
+  }
+  .evt .h{
+    font-family:'Playfair Display',serif;font-weight:700;
+    font-size:clamp(14px,3.6vw,18px);color:var(--or-clair);
+    min-width:64px;font-variant-numeric:tabular-nums;
+  }
+  .evt .e{font-size:clamp(16px,4vw,20px);}
+  .evt .n{font-weight:600;font-size:clamp(13px,3.2vw,15.5px);flex:1;text-align:left;}
+  .evt.passe{opacity:.35;}
+  .evt.encours{
+    border-color:var(--or);
+    background:rgba(241,214,135,.14);
+    box-shadow:0 0 18px rgba(212,175,55,.35);
+    transform:scale(1.03);
+  }
+  .evt.encours .n::after{content:"  ← en ce moment";color:var(--or);font-size:11px;font-weight:700;letter-spacing:1px;}
+  .evt.clou{border-width:1.5px;}
+  .evt.clou .n{color:var(--or-clair);}
+
+  .basPage{margin-top:22px;font-family:'Great Vibes',cursive;font-size:clamp(18px,4.5vw,26px);color:var(--or);opacity:.85;}
+</style>
+</head>
+<body>
+
+<div class="entete">FESTIVAL DE L'ANIMATION · PREMIÈRE ÉDITION</div>
+<h1>Le Grand Jour</h1>
+<div class="sousT">15 juillet 2026 · ouverture à 16 heures</div>
+<div class="filet">✦</div>
+
+<div id="avant" style="display: flex;">
+  <div class="phrase">LE FESTIVAL OUVRE DANS</div>
+  <div class="blocs">
+    <div class="bloc"><div class="val" id="cj">9</div><div class="lab">JOURS</div></div>
+    <div class="bloc"><div class="val" id="ch">06</div><div class="lab">HEURES</div></div>
+    <div class="bloc"><div class="val" id="cm">05</div><div class="lab">MINUTES</div></div>
+    <div class="bloc"><div class="val" id="cs">34</div><div class="lab">SECONDES</div></div>
+  </div>
+</div>
+
+<div id="pendant" style="display: none;">
+  <div class="maintenant">✦ LE FESTIVAL EST OUVERT ✦</div>
+  <div class="actNom" id="actNom"></div>
+  <div class="prochain" id="prochain"></div>
+</div>
+
+<div id="apres" style="display: none;">
+  <div class="merci">Merci et à bientôt...</div>
+  <div class="rdv">Le Festival de l'Animation reviendra ! ⭐</div>
+</div>
+
+<div class="filet">✦</div>
+<h2>LE PROGRAMME DE LA SOIRÉE</h2>
+<div class="prog" id="prog"><div class="evt" id="evt0"><span class="h">16h00</span><span class="e">🎪</span><span class="n">Ouverture du festival</span></div><div class="evt" id="evt1"><span class="h">16h15</span><span class="e">🎁</span><span class="n">Le cadeau des invités</span></div><div class="evt" id="evt2"><span class="h">16h25</span><span class="e">✨</span><span class="n">La surprise</span></div><div class="evt" id="evt3"><span class="h">16h45</span><span class="e">🛍️</span><span class="n">Les magasins</span></div><div class="evt clou" id="evt4"><span class="h">17h25</span><span class="e">🎬</span><span class="n">Le clou du spectacle : le film « Étincelle »</span></div><div class="evt" id="evt5"><span class="h">18h00</span><span class="e">🌙</span><span class="n">Fermeture du festival</span></div></div>
+
+<div class="basPage">Raphaël présente...</div>
+
+<script>
+/* ============ L'EMPLOI DU TEMPS OFFICIEL ============ */
+const JOUR = '2026-07-15T';
+const PROGRAMME = [
+  {h:'16h00', t:JOUR+'16:00', e:'🎪', n:"Ouverture du festival"},
+  {h:'16h15', t:JOUR+'16:15', e:'🎁', n:"Le cadeau des invités"},
+  {h:'16h25', t:JOUR+'16:25', e:'✨', n:"La surprise"},
+  {h:'16h45', t:JOUR+'16:45', e:'🛍️', n:"Les magasins"},
+  {h:'17h25', t:JOUR+'17:25', e:'🎬', n:"Le clou du spectacle : le film « Étincelle »", clou:true},
+  {h:'18h00', t:JOUR+'18:00', e:'🌙', n:"Fermeture du festival"}
+];
+const DEBUT = new Date(PROGRAMME[0].t).getTime();
+const FIN = new Date(PROGRAMME[PROGRAMME.length-1].t).getTime();
+
+/* étoiles scintillantes du fond */
+for(let i=0;i<26;i++){
+  const s=document.createElement('div');
+  s.className='scintille';
+  const taille=(Math.random()*2.4+1).toFixed(1);
+  s.style.cssText='width:'+taille+'px;height:'+taille+'px;left:'+(Math.random()*100)+'vw;top:'+(Math.random()*100)+'vh;animation-delay:'+(Math.random()*2.6).toFixed(2)+'s;';
+  document.body.appendChild(s);
+}
+
+/* programme affiché */
+const progDiv=document.getElementById('prog');
+PROGRAMME.forEach(function(p,i){
+  const d=document.createElement('div');
+  d.className='evt'+(p.clou?' clou':'');
+  d.id='evt'+i;
+  d.innerHTML='<span class="h">'+p.h+'</span><span class="e">'+p.e+'</span><span class="n">'+p.n+'</span>';
+  progDiv.appendChild(d);
+});
+
+function deuxCh(n){return String(n).padStart(2,'0');}
+
+function tic(){
+  const now=Date.now();
+  const avant=document.getElementById('avant');
+  const pendant=document.getElementById('pendant');
+  const apres=document.getElementById('apres');
+
+  if(now < DEBUT){
+    avant.style.display='flex'; pendant.style.display='none'; apres.style.display='none';
+    let d=DEBUT-now;
+    const j=Math.floor(d/86400000); d-=j*86400000;
+    const h=Math.floor(d/3600000); d-=h*3600000;
+    const m=Math.floor(d/60000); d-=m*60000;
+    const s=Math.floor(d/1000);
+    document.getElementById('cj').textContent=j;
+    document.getElementById('ch').textContent=deuxCh(h);
+    document.getElementById('cm').textContent=deuxCh(m);
+    document.getElementById('cs').textContent=deuxCh(s);
+  } else if(now < FIN){
+    avant.style.display='none'; pendant.style.display='flex'; apres.style.display='none';
+    /* trouver l'activité en cours */
+    let enCours=0;
+    for(let i=0;i<PROGRAMME.length;i++){
+      if(now >= new Date(PROGRAMME[i].t).getTime()) enCours=i;
+    }
+    document.getElementById('actNom').textContent = PROGRAMME[enCours].e+' '+PROGRAMME[enCours].n;
+    /* prochaine activité */
+    if(enCours < PROGRAMME.length-1){
+      const proch=PROGRAMME[enCours+1];
+      let d=new Date(proch.t).getTime()-now;
+      const m=Math.floor(d/60000), s=Math.floor((d-m*60000)/1000);
+      document.getElementById('prochain').innerHTML='Ensuite à '+proch.h+' : '+proch.e+' '+proch.n+' — dans <b>'+m+' min '+deuxCh(s)+' s</b>';
+    } else {
+      document.getElementById('prochain').textContent='';
+    }
+    /* surligner dans le programme */
+    PROGRAMME.forEach(function(p,i){
+      const el=document.getElementById('evt'+i);
+      el.classList.toggle('encours', i===enCours);
+      el.classList.toggle('passe', i<enCours);
+    });
+  } else {
+    avant.style.display='none'; pendant.style.display='none'; apres.style.display='flex';
+    PROGRAMME.forEach(function(p,i){
+      const el=document.getElementById('evt'+i);
+      el.classList.remove('encours'); el.classList.add('passe');
+    });
+  }
+}
+tic();
+setInterval(tic, 1000);
+</script><div class="scintille" style="width: 2.7px; height: 2.7px; left: 22.2978vw; top: 49.7176vh; animation-delay: 1.76s;"></div><div class="scintille" style="width: 1px; height: 1px; left: 74.8428vw; top: 13.5133vh; animation-delay: 1.99s;"></div><div class="scintille" style="width: 1.9px; height: 1.9px; left: 36.8408vw; top: 51.4072vh; animation-delay: 2.37s;"></div><div class="scintille" style="width: 2.8px; height: 2.8px; left: 24.8418vw; top: 50.0196vh; animation-delay: 1.54s;"></div><div class="scintille" style="width: 2.8px; height: 2.8px; left: 26.9259vw; top: 28.5988vh; animation-delay: 1.32s;"></div><div class="scintille" style="width: 1.7px; height: 1.7px; left: 15.5217vw; top: 50.3719vh; animation-delay: 2.12s;"></div><div class="scintille" style="width: 3.3px; height: 3.3px; left: 49.3427vw; top: 26.8096vh; animation-delay: 0.6s;"></div><div class="scintille" style="width: 2.1px; height: 2.1px; left: 76.1678vw; top: 80.6744vh; animation-delay: 2.16s;"></div><div class="scintille" style="width: 2px; height: 2px; left: 31.8091vw; top: 43.5186vh; animation-delay: 1.44s;"></div><div class="scintille" style="width: 2.5px; height: 2.5px; left: 19.5754vw; top: 34.0796vh; animation-delay: 1.52s;"></div><div class="scintille" style="width: 1.4px; height: 1.4px; left: 91.753vw; top: 47.6673vh; animation-delay: 1.85s;"></div><div class="scintille" style="width: 1.3px; height: 1.3px; left: 22.3713vw; top: 71.6081vh; animation-delay: 2.09s;"></div><div class="scintille" style="width: 3.2px; height: 3.2px; left: 98.1146vw; top: 59.1087vh; animation-delay: 0.7s;"></div><div class="scintille" style="width: 3.1px; height: 3.1px; left: 12.0226vw; top: 98.9278vh; animation-delay: 1.46s;"></div><div class="scintille" style="width: 2.8px; height: 2.8px; left: 68.1012vw; top: 2.68403vh; animation-delay: 1.9s;"></div><div class="scintille" style="width: 2.9px; height: 2.9px; left: 8.58958vw; top: 57.4232vh; animation-delay: 1.65s;"></div><div class="scintille" style="width: 1.9px; height: 1.9px; left: 28.5878vw; top: 84.1929vh; animation-delay: 2.49s;"></div><div class="scintille" style="width: 2.9px; height: 2.9px; left: 27.8755vw; top: 63.6356vh; animation-delay: 2.46s;"></div><div class="scintille" style="width: 1.9px; height: 1.9px; left: 11.5201vw; top: 45.3231vh; animation-delay: 1.14s;"></div><div class="scintille" style="width: 1.3px; height: 1.3px; left: 19.3683vw; top: 99.6528vh; animation-delay: 0.45s;"></div><div class="scintille" style="width: 1.6px; height: 1.6px; left: 5.50824vw; top: 56.2236vh; animation-delay: 1.46s;"></div><div class="scintille" style="width: 1.3px; height: 1.3px; left: 37.4354vw; top: 79.9318vh; animation-delay: 2.11s;"></div><div class="scintille" style="width: 1.4px; height: 1.4px; left: 89.9021vw; top: 14.528vh; animation-delay: 2.48s;"></div><div class="scintille" style="width: 2.7px; height: 2.7px; left: 99.9494vw; top: 12.6659vh; animation-delay: 2.25s;"></div><div class="scintille" style="width: 2.9px; height: 2.9px; left: 54.7698vw; top: 79.6687vh; animation-delay: 2.38s;"></div><div class="scintille" style="width: 3.1px; height: 3.1px; left: 62.9981vw; top: 92.1323vh; animation-delay: 2.36s;"></div>
+
+
+</body></html>
