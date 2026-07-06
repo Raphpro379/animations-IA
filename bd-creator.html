@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Créateur de BD</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Comic Neue',cursive;background:#f5f0e8;display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:260px;background:#1a1a2e;color:white;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+.sidebar-tabs{display:flex;border-bottom:3px solid #e94560;}
+.tab{flex:1;padding:10px 4px;text-align:center;cursor:pointer;font-family:'Bangers',cursive;font-size:15px;letter-spacing:1px;color:#aaa;transition:all 0.1s;}
+.tab.active{color:#f5c518;border-bottom:3px solid #f5c518;margin-bottom:-3px;}
+.tab:hover{color:white;}
+.sidebar-content{flex:1;overflow-y:auto;padding:10px;}
+
+.section-title{font-family:'Bangers',cursive;font-size:13px;letter-spacing:2px;color:#f5c518;margin:10px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(245,197,24,0.2);}
+
+/* CHARACTER GRID */
+.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.char-item{background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px;cursor:pointer;text-align:center;transition:all 0.12s;}
+.char-item:hover{border-color:#f5c518;background:rgba(245,197,24,0.1);}
+.char-item svg{display:block;margin:0 auto;}
+.char-item span{font-size:10px;color:#aaa;display:block;margin-top:2px;}
+
+/* BG GRID */
+.bg-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.bg-item{height:54px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all 0.12s;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(0,0,0,0.5);overflow:hidden;}
+.bg-item:hover{border-color:#f5c518;transform:scale(1.03);}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.toolbar{background:white;border-bottom:3px solid #1a1a2e;padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.toolbar h1{font-family:'Bangers',cursive;font-size:22px;color:#e94560;letter-spacing:2px;text-shadow:2px 2px 0 #f5c518;margin-right:6px;}
+button{font-family:'Bangers',cursive;font-size:14px;letter-spacing:1px;padding:6px 14px;border:2.5px solid #1a1a2e;border-radius:7px;cursor:pointer;transition:transform 0.1s;background:white;}
+button:hover{transform:translate(-1px,-1px);box-shadow:2px 2px 0 #1a1a2e;}
+button:active{transform:none;box-shadow:none;}
+.btn-y{background:#f5c518;}
+.btn-g{background:#5dd8a4;}
+.btn-r{background:#e94560;color:white;}
+
+/* CANVAS */
+.canvas-wrap{flex:1;overflow:auto;padding:20px;display:flex;justify-content:center;align-items:flex-start;}
+.bd-page{width:640px;background:white;border:4px solid #1a1a2e;box-shadow:6px 6px 0 #e94560;padding:8px;display:flex;flex-direction:column;gap:6px;}
+
+/* PANEL */
+.panel{position:relative;border:3px solid #1a1a2e;min-height:170px;overflow:hidden;cursor:pointer;background:#f0e6d3;}
+.panel.selected{border-color:#e94560;border-width:4px;}
+.panel-inner{width:100%;min-height:170px;position:relative;}
+.panel-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+.panel-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#ccc;font-size:12px;text-align:center;pointer-events:none;}
+.panel-del{position:absolute;top:5px;right:5px;background:#e94560;color:white;border:2px solid #1a1a2e;border-radius:5px;font-size:11px;padding:2px 7px;cursor:pointer;font-family:'Bangers',cursive;z-index:30;letter-spacing:1px;}
+
+/* ELEMENTS (chars, bubbles) */
+.bd-el{position:absolute;cursor:move;user-select:none;z-index:10;}
+.bd-el .el-del{position:absolute;top:-9px;right:-9px;width:18px;height:18px;background:#e94560;border:2px solid #1a1a2e;border-radius:50%;font-size:12px;cursor:pointer;display:none;align-items:center;justify-content:center;color:white;font-weight:700;z-index:20;}
+.bd-el:hover .el-del{display:flex;}
+
+/* BUBBLE */
+.bubble{background:white;border:2.5px solid #1a1a2e;border-radius:16px;padding:7px 11px;font-family:'Comic Neue',cursive;font-weight:700;font-size:13px;color:#1a1a2e;max-width:160px;text-align:center;line-height:1.3;position:relative;}
+.bubble::after{content:'';position:absolute;bottom:-13px;left:14px;border-left:9px solid transparent;border-right:4px solid transparent;border-top:13px solid #1a1a2e;}
+.bubble::before{content:'';position:absolute;bottom:-10px;left:15px;border-left:8px solid transparent;border-right:3px solid transparent;border-top:10px solid white;z-index:1;}
+.thought{background:white;border:2.5px solid #1a1a2e;border-radius:50%;padding:10px 14px;font-family:'Comic Neue',cursive;font-weight:700;font-size:13px;color:#1a1a2e;max-width:150px;text-align:center;line-height:1.3;}
+.shout{background:#f5c518;border:2.5px solid #1a1a2e;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);width:90px;height:90px;display:flex;align-items:center;justify-content:center;font-family:'Bangers',cursive;font-size:13px;color:#e94560;text-align:center;padding:20px;}
+
+/* BUBBLE PANEL */
+.bubble-panel{background:white;border-top:3px solid #1a1a2e;padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.bubble-panel input{font-family:'Comic Neue',cursive;font-size:13px;border:2px solid #ccc;border-radius:6px;padding:5px 9px;flex:1;min-width:120px;}
+.bubble-panel input:focus{outline:none;border-color:#e94560;}
+.bubble-type-btn{font-size:11px;padding:5px 10px;border-radius:6px;}
+.bubble-type-btn.active{background:#e94560;color:white;border-color:#c73652;}
+
+/* RESIZE HANDLE */
+.resize-handle{position:absolute;bottom:0;right:0;width:14px;height:14px;cursor:se-resize;z-index:25;}
+.resize-handle::after{content:'';position:absolute;bottom:3px;right:3px;width:7px;height:7px;border-right:2px solid #1a1a2e;border-bottom:2px solid #1a1a2e;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-tabs">
+    <div class="tab active" onclick="showTab('chars')">👤 Persos</div>
+    <div class="tab" onclick="showTab('bgs')">🌄 Fonds</div>
+  </div>
+  <div class="sidebar-content" id="tab-chars">
+    <div id="char-list"></div>
+  </div>
+  <div class="sidebar-content" id="tab-bgs" style="display:none;">
+    <div id="bg-list"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="toolbar">
+    <h1>📖 BD!</h1>
+    <button class="btn-y" onclick="addPanel()">+ Case</button>
+    <button class="btn-r" onclick="clearAll()">🗑 Effacer</button>
+    <span style="font-size:11px;color:#999;font-family:'Comic Neue',cursive;">← Glisse persos/fonds sur une case</span>
+  </div>
+
+  <div class="canvas-wrap">
+    <div class="bd-page" id="bd-page">
+      <div id="placeholder" style="text-align:center;color:#ccc;padding:50px;font-size:13px;">Cliquez sur <b>+ Case</b> pour commencer !</div>
+    </div>
+  </div>
+
+  <div class="bubble-panel">
+    <span style="font-family:'Bangers',cursive;font-size:14px;letter-spacing:1px;color:#1a1a2e;">BULLE :</span>
+    <input type="text" id="bubble-text" placeholder="Texte du dialogue..." />
+    <button class="bubble-type-btn active" id="bt-speech" onclick="setBt('speech')">💬 Dialogue</button>
+    <button class="bubble-type-btn" id="bt-thought" onclick="setBt('thought')">💭 Pensée</button>
+    <button class="bubble-type-btn" id="bt-shout" onclick="setBt('shout')">💥 Cri</button>
+    <button class="btn-g" onclick="addBubble()">+ Ajouter</button>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let selectedPanel = null;
+let bubbleType = 'speech';
+let drag = null;
+let resize = null;
+
+// ── CHARACTERS (100 SVG) ──
+const CHARS = [
+  // HEROES
+  {name:"Héros", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#ffe0a0" stroke="#1a1a2e" stroke-width="2"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#3355ff" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#3355ff" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#3355ff" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#222" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#222" stroke="#1a1a2e" stroke-width="2"/><circle cx="24" cy="16" r="3" fill="#1a1a2e"/><circle cx="36" cy="16" r="3" fill="#1a1a2e"/><path d="M24 24 Q30 29 36 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="30,0 26,10 36,10" fill="#f5c518"/></svg>`},
+  {name:"Héroïne", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#ffc0a0" stroke="#1a1a2e" stroke-width="2"/><path d="M16,30 Q30,44 44,30 L46,65 Q30,72 14,65Z" fill="#e94560" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="32" width="9" height="24" rx="5" fill="#e94560" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="32" width="9" height="24" rx="5" fill="#e94560" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="65" width="10" height="22" rx="5" fill="#222" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="65" width="10" height="22" rx="5" fill="#222" stroke="#1a1a2e" stroke-width="2"/><circle cx="24" cy="16" r="3" fill="#1a1a2e"/><circle cx="36" cy="16" r="3" fill="#1a1a2e"/><path d="M24 24 Q30 29 36 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><path d="M16,8 Q30,20 44,8 Q38,2 22,2Z" fill="#8b4513"/></svg>`},
+  {name:"Cape Rouge", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#ffe0a0" stroke="#1a1a2e" stroke-width="2"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><path d="M14,32 Q6,50 10,70 L18,66 L14,67Z" fill="#990000" stroke="#1a1a2e" stroke-width="1.5"/><path d="M46,32 Q54,50 50,70 L42,66 L46,67Z" fill="#990000" stroke="#1a1a2e" stroke-width="1.5"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><circle cx="24" cy="16" r="3" fill="#1a1a2e"/><circle cx="36" cy="16" r="3" fill="#1a1a2e"/><path d="M24 24 Q30 29 36 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/></svg>`},
+  {name:"Ninja", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#222" stroke="#1a1a2e" stroke-width="2"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="14" y="18" width="32" height="8" rx="2" fill="#cc0000"/><circle cx="24" cy="16" r="2.5" fill="#fff"/><circle cx="36" cy="16" r="2.5" fill="#fff"/><line x1="42" y1="40" x2="58" y2="28" stroke="#999" stroke-width="2"/><polygon points="58,28 52,28 58,22" fill="#999"/></svg>`},
+  {name:"Chevalier", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="16" r="12" fill="#ffe0a0" stroke="#1a1a2e" stroke-width="2"/><path d="M18,4 Q30,0 42,4 L40,16 Q30,22 20,16Z" fill="#888" stroke="#1a1a2e" stroke-width="2"/><rect x="14" y="28" width="32" height="38" rx="3" fill="#888" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="30" width="10" height="26" rx="5" fill="#888" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="30" width="10" height="26" rx="5" fill="#888" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="65" width="11" height="22" rx="5" fill="#666" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="65" width="11" height="22" rx="5" fill="#666" stroke="#1a1a2e" stroke-width="2"/><line x1="48" y1="25" x2="48" y2="70" stroke="#aaa" stroke-width="3"/><polygon points="48,18 44,26 52,26" fill="#aaa" stroke="#1a1a2e" stroke-width="1"/><rect x="14" y="38" width="32" height="4" fill="#c00"/><circle cx="24" cy="13" r="2.5" fill="#1a1a2e"/><circle cx="36" cy="13" r="2.5" fill="#1a1a2e"/></svg>`},
+  {name:"Sorcière", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="20" r="13" fill="#d4b896" stroke="#1a1a2e" stroke-width="2"/><polygon points="30,0 18,18 42,18" fill="#1a1a2e"/><rect x="22,0" width="16" height="4" fill="#5a0"/><path d="M16,33 Q30,48 44,33 L46,68 Q30,74 14,68Z" fill="#5a0d8a" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="34" width="9" height="25" rx="5" fill="#5a0d8a" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="34" width="9" height="25" rx="5" fill="#5a0d8a" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="68" width="10" height="20" rx="4" fill="#222" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="68" width="10" height="20" rx="4" fill="#222" stroke="#1a1a2e" stroke-width="2"/><circle cx="24" cy="18" r="2.5" fill="#1a1a2e"/><circle cx="36" cy="18" r="2.5" fill="#1a1a2e"/><path d="M24 25 Q30 30 36 25" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><line x1="44" y1="42" x2="58" y2="30" stroke="#8b4513" stroke-width="3"/><circle cx="58" cy="28" r="4" fill="#f5c518" opacity="0.7"/></svg>`},
+  {name:"Robot", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><rect x="14" y="4" width="32" height="28" rx="4" fill="#9bb" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="10" width="10" height="8" rx="2" fill="#44f"/><rect x="32" y="10" width="10" height="8" rx="2" fill="#44f"/><rect x="18" y="22" width="24" height="5" rx="2" fill="#1a1a2e"/><rect x="28" y="0" width="4" height="8" rx="2" fill="#666"/><circle cx="30" cy="0" r="3" fill="#f5c518"/><rect x="12" y="32" width="36" height="36" rx="4" fill="#9bb" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="34" width="10" height="28" rx="5" fill="#9bb" stroke="#1a1a2e" stroke-width="2"/><rect x="44" y="34" width="10" height="28" rx="5" fill="#9bb" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="68" width="12" height="20" rx="5" fill="#777" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="68" width="12" height="20" rx="5" fill="#777" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="42" width="24" height="10" rx="3" fill="#1a1a2e" opacity="0.3"/></svg>`},
+  {name:"Alien", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><ellipse cx="30" cy="18" rx="18" ry="16" fill="#7cf5a0" stroke="#1a1a2e" stroke-width="2"/><ellipse cx="22" cy="14" rx="6" ry="5" fill="#1a1a2e"/><ellipse cx="38" cy="14" rx="6" ry="5" fill="#1a1a2e"/><ellipse cx="22" cy="14" rx="3" ry="2.5" fill="#44f"/><ellipse cx="38" cy="14" rx="3" ry="2.5" fill="#44f"/><path d="M22 24 Q30 28 38 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="16" y="34" width="28" height="30" rx="6" fill="#7cf5a0" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="36" width="12" height="22" rx="6" fill="#7cf5a0" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="36" width="12" height="22" rx="6" fill="#7cf5a0" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="64" width="10" height="24" rx="5" fill="#5ad080" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="64" width="10" height="24" rx="5" fill="#5ad080" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Pirate", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="20" r="14" fill="#ffe0b0" stroke="#1a1a2e" stroke-width="2"/><path d="M16,8 Q30,2 44,8 L42,14 Q30,18 18,14Z" fill="#1a1a2e"/><circle cx="36" cy="22" r="5" fill="#111" stroke="#1a1a2e" stroke-width="1.5"/><circle cx="36" cy="22" r="3" fill="#8b0000"/><rect x="14" y="34" width="32" height="34" rx="4" fill="#cc6600" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="36" width="10" height="24" rx="5" fill="#cc6600" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="36" width="10" height="24" rx="5" fill="#cc6600" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="67" width="11" height="21" rx="5" fill="#663300" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="67" width="11" height="21" rx="5" fill="#663300" stroke="#1a1a2e" stroke-width="2"/><circle cx="24" cy="18" r="2.5" fill="#1a1a2e"/><line x1="8" y1="54" x2="18" y2="46" stroke="#999" stroke-width="2"/></svg>`},
+  {name:"Astronaute", cat:"Héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="16" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><circle cx="30" cy="18" r="10" fill="#aad4ff" stroke="#1a1a2e" stroke-width="1.5"/><circle cx="26" cy="15" r="2.5" fill="#fff" opacity="0.6"/><rect x="12" y="34" width="36" height="34" rx="8" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><rect x="4" y="36" width="12" height="26" rx="6" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><rect x="44" y="36" width="12" height="26" rx="6" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="68" width="12" height="20" rx="6" fill="#bbb" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="68" width="12" height="20" rx="6" fill="#bbb" stroke="#1a1a2e" stroke-width="2"/><rect x="20" y="40" width="20" height="14" rx="3" fill="#aad4ff" stroke="#1a1a2e" stroke-width="1.5"/><rect x="24" y="28" width="6" height="8" rx="2" fill="#bbb"/></svg>`},
+
+  // MANGA
+  {name:"Écolière", cat:"Manga", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="16" r="13" fill="#ffe0c0" stroke="#1a1a2e" stroke-width="2"/><path d="M17,4 Q30,0 43,4 Q40,14 30,16 Q20,14 17,4Z" fill="#1a1a2e"/><circle cx="23" cy="14" r="4" fill="#1a1a2e"/><circle cx="37" cy="14" r="4" fill="#1a1a2e"/><circle cx="24" cy="13" r="1.5" fill="#fff"/><circle cx="38" cy="13" r="1.5" fill="#fff"/><path d="M24 22 Q30 27 36 22" fill="none" stroke="#e94560" stroke-width="1.5"/><path d="M16,29 Q30,44 44,29 L46,65 Q30,72 14,65Z" fill="#1a5fa0" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="31" width="9" height="22" rx="5" fill="#1a5fa0" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="31" width="9" height="22" rx="5" fill="#1a5fa0" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="65" width="10" height="22" rx="4" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="65" width="10" height="22" rx="4" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><path d="M17,4 Q10,20 14,30" fill="none" stroke="#1a1a2e" stroke-width="3"/><path d="M43,4 Q50,20 46,30" fill="none" stroke="#1a1a2e" stroke-width="3"/></svg>`},
+  {name:"Guerrier Manga", cat:"Manga", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="16" r="13" fill="#ffe0b0" stroke="#1a1a2e" stroke-width="2"/><path d="M17,5 Q30,1 43,5 L40,15 Q30,20 20,15Z" fill="#cc8800"/><circle cx="23" cy="14" r="4" fill="#1a1a2e"/><circle cx="37" cy="14" r="4" fill="#1a1a2e"/><circle cx="24" cy="13" r="1.5" fill="#fff"/><circle cx="38" cy="13" r="1.5" fill="#fff"/><path d="M26 21 Q30 24 34 21" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="29" width="32" height="36" rx="4" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="31" width="10" height="26" rx="5" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="31" width="10" height="26" rx="5" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="64" width="11" height="23" rx="5" fill="#222" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="64" width="11" height="23" rx="5" fill="#222" stroke="#1a1a2e" stroke-width="2"/><line x1="48" y1="22" x2="48" y2="65" stroke="#ccc" stroke-width="3"/><polygon points="48,15 44,24 52,24" fill="#ccc"/></svg>`},
+  {name:"Idole Pop", cat:"Manga", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="16" r="13" fill="#ffe0c0" stroke="#1a1a2e" stroke-width="2"/><circle cx="23" cy="14" r="4.5" fill="#1a1a2e"/><circle cx="37" cy="14" r="4.5" fill="#1a1a2e"/><circle cx="24" cy="13" r="2" fill="#fff"/><circle cx="38" cy="13" r="2" fill="#fff"/><path d="M23 22 Q30 27 37 22" fill="none" stroke="#e94560" stroke-width="2"/><path d="M17,4 Q14,16 17,29" fill="none" stroke="#ff69b4" stroke-width="3"/><path d="M43,4 Q46,16 43,29" fill="none" stroke="#ff69b4" stroke-width="3"/><path d="M16,29 Q30,44 44,29 L46,63 Q30,70 14,63Z" fill="#ff69b4" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="31" width="9" height="22" rx="5" fill="#ff69b4" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="31" width="9" height="22" rx="5" fill="#ff69b4" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="63" width="10" height="24" rx="4" fill="#222" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="63" width="10" height="24" rx="4" fill="#222" stroke="#1a1a2e" stroke-width="2"/><polygon points="30,0 27,8 33,8" fill="#f5c518"/></svg>`},
+  {name:"Démon Manga", cat:"Manga", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="13" fill="#d0a0ff" stroke="#1a1a2e" stroke-width="2"/><polygon points="20,6 16,0 24,8" fill="#8b0000"/><polygon points="40,6 44,0 36,8" fill="#8b0000"/><circle cx="23" cy="16" r="4" fill="#8b0000"/><circle cx="37" cy="16" r="4" fill="#8b0000"/><circle cx="24" cy="15" r="1.5" fill="#ffcc00"/><circle cx="38" cy="15" r="1.5" fill="#ffcc00"/><path d="M24 24 Q30 28 36 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="31" width="32" height="34" rx="4" fill="#3d0066" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="33" width="10" height="24" rx="5" fill="#3d0066" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="33" width="10" height="24" rx="5" fill="#3d0066" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="64" width="11" height="22" rx="5" fill="#2a0044" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="64" width="11" height="22" rx="5" fill="#2a0044" stroke="#1a1a2e" stroke-width="2"/><path d="M30,65 Q24,75 28,86" fill="none" stroke="#8b0000" stroke-width="2"/></svg>`},
+  {name:"Sensei", cat:"Manga", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="17" r="13" fill="#f0d0a0" stroke="#1a1a2e" stroke-width="2"/><path d="M17,6 Q30,1 43,6 L40,14 Q30,18 20,14Z" fill="#888"/><rect x="14" y="30" width="32" height="36" rx="4" fill="#f0f0f0" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="32" width="10" height="26" rx="5" fill="#f0f0f0" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="32" width="10" height="26" rx="5" fill="#f0f0f0" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="65" width="11" height="22" rx="5" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="65" width="11" height="22" rx="5" fill="#333" stroke="#1a1a2e" stroke-width="2"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><path d="M25 22 Q30 26 35 22" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><line x1="17" y1="20" x2="14" y2="28" stroke="#888" stroke-width="2"/><line x1="43" y1="20" x2="46" y2="28" stroke="#888" stroke-width="2"/><rect x="38" y="34" width="3" height="20" fill="#8b4513" stroke="#1a1a2e" stroke-width="1"/></svg>`},
+
+  // CARTOON
+  {name:"Clown", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#ffe0a0" stroke="#1a1a2e" stroke-width="2"/><circle cx="30" cy="12" r="5" fill="#e94560"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="24" cy="15" r="1.5" fill="#fff"/><circle cx="38" cy="15" r="1.5" fill="#fff"/><path d="M22 24 Q30 32 38 24" fill="#e94560" stroke="#1a1a2e" stroke-width="1.5"/><path d="M14,14 Q6,8 10,2 Q18,4 18,12Z" fill="#f5c518"/><path d="M46,14 Q54,8 50,2 Q42,4 42,12Z" fill="#e94560"/><rect x="12" y="32" width="36" height="35" rx="6" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><circle cx="22" cy="42" r="4" fill="#e94560"/><circle cx="30" cy="42" r="4" fill="#3355ff"/><circle cx="38" cy="42" r="4" fill="#5dd8a4"/><rect x="8" y="34" width="10" height="24" rx="5" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="24" rx="5" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="12" height="22" rx="8" fill="#e94560" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="66" width="12" height="22" rx="8" fill="#3355ff" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Fantôme", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><path d="M10,40 Q10,10 30,8 Q50,10 50,40 L50,80 Q44,74 38,80 Q32,74 24,80 Q18,74 10,80Z" fill="white" stroke="#1a1a2e" stroke-width="2.5"/><ellipse cx="22" cy="36" rx="5" ry="7" fill="#1a1a2e"/><ellipse cx="38" cy="36" rx="5" ry="7" fill="#1a1a2e"/><ellipse cx="23" cy="35" rx="2" ry="3" fill="#3355ff"/><ellipse cx="39" cy="35" rx="2" ry="3" fill="#3355ff"/><path d="M22 48 Q30 54 38 48" fill="none" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Zombie", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#b0d0a0" stroke="#1a1a2e" stroke-width="2"/><circle cx="23" cy="15" r="3.5" fill="#fff"/><circle cx="37" cy="15" r="3.5" fill="#fff"/><circle cx="23" cy="15" r="2" fill="#cc0000"/><circle cx="37" cy="15" r="2" fill="#cc0000"/><path d="M22 24 Q30 22 38 24" fill="none" stroke="#1a1a2e" stroke-width="2"/><rect x="23" y="23" width="4" height="3" fill="#f0f0f0"/><rect x="30" y="23" width="4" height="3" fill="#f0f0f0"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#8aaa80" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="26" width="12" height="8" rx="3" fill="#b0d0a0" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#8aaa80" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#6a8a60" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#6a8a60" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Dragon", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><ellipse cx="30" cy="22" rx="18" ry="16" fill="#e04020" stroke="#1a1a2e" stroke-width="2"/><polygon points="14,8 8,0 16,10" fill="#ff6040"/><polygon points="46,8 52,0 44,10" fill="#ff6040"/><circle cx="22" cy="18" r="5" fill="#f5c518"/><circle cx="38" cy="18" r="5" fill="#f5c518"/><circle cx="22" cy="18" r="3" fill="#1a1a2e"/><circle cx="38" cy="18" r="3" fill="#1a1a2e"/><path d="M22 28 Q30 34 38 28" fill="none" stroke="#1a1a2e" stroke-width="2"/><polygon points="30,32 26,40 34,40" fill="#ff4000"/><rect x="14" y="38" width="32" height="30" rx="6" fill="#e04020" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="40" width="12" height="22" rx="6" fill="#e04020" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="40" width="12" height="22" rx="6" fill="#e04020" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="68" width="10" height="20" rx="5" fill="#c03010" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="68" width="10" height="20" rx="5" fill="#c03010" stroke="#1a1a2e" stroke-width="2"/><path d="M30,68 Q36,80 34,88" fill="none" stroke="#e04020" stroke-width="3"/></svg>`},
+  {name:"Chat", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="20" r="15" fill="#f0a060" stroke="#1a1a2e" stroke-width="2"/><polygon points="16,8 10,0 20,10" fill="#f0a060" stroke="#1a1a2e" stroke-width="2"/><polygon points="44,8 50,0 40,10" fill="#f0a060" stroke="#1a1a2e" stroke-width="2"/><ellipse cx="22" cy="18" rx="5" ry="6" fill="#1a1a2e"/><ellipse cx="38" cy="18" rx="5" ry="6" fill="#1a1a2e"/><ellipse cx="22" cy="18" rx="2.5" ry="4" fill="#44cc44"/><ellipse cx="38" cy="18" rx="2.5" ry="4" fill="#44cc44"/><ellipse cx="30" cy="26" rx="4" ry="3" fill="#ff9999"/><path d="M24 28 Q30 33 36 28" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><line x1="16" y1="24" x2="2" y2="22" stroke="#1a1a2e" stroke-width="1.5"/><line x1="16" y1="26" x2="2" y2="26" stroke="#1a1a2e" stroke-width="1.5"/><line x1="44" y1="24" x2="58" y2="22" stroke="#1a1a2e" stroke-width="1.5"/><line x1="44" y1="26" x2="58" y2="26" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="35" width="32" height="32" rx="6" fill="#f0a060" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="37" width="11" height="22" rx="6" fill="#f0a060" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="37" width="11" height="22" rx="6" fill="#f0a060" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="67" width="10" height="21" rx="5" fill="#d08040" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="67" width="10" height="21" rx="5" fill="#d08040" stroke="#1a1a2e" stroke-width="2"/><path d="M30,67 Q38,76 36,87" fill="none" stroke="#f0a060" stroke-width="3"/></svg>`},
+  {name:"Vampire", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#d0d0f0" stroke="#1a1a2e" stroke-width="2"/><path d="M16,5 Q30,0 44,5 L42,12 Q36,8 30,9 Q24,8 18,12Z" fill="#1a1a2e"/><circle cx="23" cy="16" r="4" fill="#cc0000"/><circle cx="37" cy="16" r="4" fill="#cc0000"/><circle cx="24" cy="15" r="2" fill="#ffaaaa"/><circle cx="38" cy="15" r="2" fill="#ffaaaa"/><path d="M24 24 Q30 28 36 24" fill="#cc0000" stroke="#1a1a2e" stroke-width="1.5"/><rect x="28" y="23" width="3" height="5" rx="1" fill="white"/><rect x="32" y="23" width="3" height="5" rx="1" fill="white"/><path d="M6,30 Q16,32 14,65 Q22,70 30,68 Q38,70 46,65 Q44,32 54,30 L46,32 L30,34 L14,32Z" fill="#1a1a2e" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="67" width="11" height="21" rx="5" fill="#888" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="67" width="11" height="21" rx="5" fill="#888" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Pikachu Style", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><ellipse cx="30" cy="22" rx="18" ry="16" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><polygon points="16,8 12,0 22,10" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><polygon points="44,8 48,0 38,10" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><polygon points="16,8 12,0 22,10" fill="#1a1a2e" opacity="0.3"/><polygon points="44,8 48,0 38,10" fill="#1a1a2e" opacity="0.3"/><ellipse cx="22" cy="20" rx="5" ry="6" fill="#1a1a2e"/><ellipse cx="38" cy="20" rx="5" ry="6" fill="#1a1a2e"/><ellipse cx="22" cy="20" rx="2.5" ry="3" fill="#fff"/><ellipse cx="38" cy="20" rx="2.5" ry="3" fill="#fff"/><ellipse cx="22" cy="28" rx="6" ry="4" fill="#e94560" opacity="0.6"/><ellipse cx="38" cy="28" rx="6" ry="4" fill="#e94560" opacity="0.6"/><path d="M24 30 Q30 35 36 30" fill="none" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="38" width="28" height="28" rx="8" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="40" width="12" height="20" rx="6" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><rect x="40" y="40" width="12" height="20" rx="6" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><rect x="20" y="66" width="10" height="22" rx="6" fill="#d4a800" stroke="#1a1a2e" stroke-width="2"/><rect x="30" y="66" width="10" height="22" rx="6" fill="#d4a800" stroke="#1a1a2e" stroke-width="2"/><path d="M30,66 Q40,72 44,86 Q36,84 30,76 Q24,84 16,86 Q20,72 30,66Z" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Gnome", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="28" r="14" fill="#ffe0b0" stroke="#1a1a2e" stroke-width="2"/><polygon points="30,2 14,28 46,28" fill="#e94560" stroke="#1a1a2e" stroke-width="2"/><path d="M22,32 Q26,42 30,40 Q34,42 38,32" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><circle cx="23" cy="25" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="25" r="3.5" fill="#1a1a2e"/><path d="M24 32 Q30 37 36 32" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="42" width="32" height="28" rx="6" fill="#5a9a20" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="44" width="12" height="20" rx="6" fill="#5a9a20" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="44" width="12" height="20" rx="6" fill="#5a9a20" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="70" width="10" height="18" rx="5" fill="#4a7a10" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="70" width="10" height="18" rx="5" fill="#4a7a10" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Singe", cat:"Cartoon", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="20" r="14" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><ellipse cx="30" cy="26" rx="8" ry="6" fill="#d4956a"/><circle cx="14" cy="14" r="8" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><circle cx="46" cy="14" r="8" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><circle cx="14" cy="14" r="5" fill="#d4956a"/><circle cx="46" cy="14" r="5" fill="#d4956a"/><circle cx="23" cy="16" r="4" fill="#1a1a2e"/><circle cx="37" cy="16" r="4" fill="#1a1a2e"/><circle cx="24" cy="15" r="2" fill="#fff"/><circle cx="38" cy="15" r="2" fill="#fff"/><circle cx="27" cy="24" r="2" fill="#1a1a2e"/><circle cx="33" cy="24" r="2" fill="#1a1a2e"/><path d="M23 28 Q30 34 37 28" fill="none" stroke="#1a1a2e" stroke-width="2"/><rect x="14" y="34" width="32" height="30" rx="6" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="36" width="12" height="22" rx="6" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="36" width="12" height="22" rx="6" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="64" width="10" height="24" rx="6" fill="#6b3e1c" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="64" width="10" height="24" rx="6" fill="#6b3e1c" stroke="#1a1a2e" stroke-width="2"/><path d="M30,64 Q42,72 44,86" fill="none" stroke="#8b5e3c" stroke-width="3"/></svg>`},
+
+  // SUPER-HEROS
+  {name:"Flash Rouge", cat:"Super-héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#ffe0a0" stroke="#1a1a2e" stroke-width="2"/><path d="M16,5 Q30,1 44,5 L42,14 Q30,18 18,14Z" fill="#cc0000"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><path d="M26 23 Q30 27 34 23" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><polygon points="30,34 24,46 28,46 22,58 38,42 32,42 38,34" fill="#f5c518"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#990000" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#990000" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Titan Vert", cat:"Super-héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="16" r="16" fill="#44bb44" stroke="#1a1a2e" stroke-width="2"/><circle cx="22" cy="13" r="5" fill="#1a1a2e"/><circle cx="38" cy="13" r="5" fill="#1a1a2e"/><circle cx="23" cy="12" r="2.5" fill="#ff4400"/><circle cx="39" cy="12" r="2.5" fill="#ff4400"/><path d="M22 23 Q30 30 38 23" fill="none" stroke="#1a1a2e" stroke-width="2.5"/><rect x="10" y="32" width="40" height="38" rx="6" fill="#44bb44" stroke="#1a1a2e" stroke-width="2"/><rect x="2" y="34" width="13" height="30" rx="6" fill="#44bb44" stroke="#1a1a2e" stroke-width="2"/><rect x="45" y="34" width="13" height="30" rx="6" fill="#44bb44" stroke="#1a1a2e" stroke-width="2"/><rect x="14" y="70" width="14" height="18" rx="6" fill="#228822" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="70" width="14" height="18" rx="6" fill="#228822" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="30" width="44" height="4" rx="2" fill="#777"/></svg>`},
+  {name:"Archer", cat:"Super-héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="13" fill="#ffe0b0" stroke="#1a1a2e" stroke-width="2"/><path d="M17,7 Q30,2 43,7 L40,15 Q30,19 20,15Z" fill="#2a5a00"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><path d="M24 23 Q30 28 36 23" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="31" width="32" height="35" rx="4" fill="#2a5a00" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="33" width="10" height="26" rx="5" fill="#2a5a00" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="33" width="10" height="26" rx="5" fill="#2a5a00" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="65" width="11" height="23" rx="5" fill="#1a3a00" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="65" width="11" height="23" rx="5" fill="#1a3a00" stroke="#1a1a2e" stroke-width="2"/><path d="M48,20 Q48,50 48,62" fill="none" stroke="#8b4513" stroke-width="2.5"/><path d="M44,25 Q48,20 52,25" fill="none" stroke="#8b4513" stroke-width="2"/><line x1="44" y1="40" x2="58" y2="30" stroke="#8b4513" stroke-width="1.5"/><polygon points="58,30 54,32 56,28" fill="#8b4513"/></svg>`},
+  {name:"Mage Feu", cat:"Super-héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#f0c0a0" stroke="#1a1a2e" stroke-width="2"/><path d="M17,5 Q30,0 43,5 L40,14 Q30,18 20,14Z" fill="#cc4400"/><circle cx="23" cy="16" r="4" fill="#1a1a2e"/><circle cx="37" cy="16" r="4" fill="#1a1a2e"/><circle cx="24" cy="15" r="2" fill="#ff8800"/><circle cx="38" cy="15" r="2" fill="#ff8800"/><path d="M24 24 Q30 29 36 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#990000" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#990000" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#990000" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#660000" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#660000" stroke="#1a1a2e" stroke-width="2"/><path d="M46,32 Q54,24 52,16 Q48,20 50,28 Q46,22 48,14 Q42,18 44,28Z" fill="#ff6600"/></svg>`},
+  {name:"Invisible", cat:"Super-héros", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#d0e8ff" stroke="#1a1a2e" stroke-width="2" opacity="0.5"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e" opacity="0.4"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e" opacity="0.4"/><path d="M24 24 Q30 29 36 24" fill="none" stroke="#1a1a2e" stroke-width="1.5" opacity="0.4"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#a0c8ff" stroke="#1a1a2e" stroke-width="2" opacity="0.4"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#a0c8ff" stroke="#1a1a2e" stroke-width="2" opacity="0.4"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#a0c8ff" stroke="#1a1a2e" stroke-width="2" opacity="0.4"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#80a8e0" stroke="#1a1a2e" stroke-width="2" opacity="0.4"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#80a8e0" stroke="#1a1a2e" stroke-width="2" opacity="0.4"/></svg>`},
+
+  // VILLAINS
+  {name:"Boss Mafia", cat:"Vilains", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#d0a880" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="4" width="28" height="10" rx="4" fill="#1a1a2e"/><circle cx="23" cy="17" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="17" r="3.5" fill="#1a1a2e"/><path d="M26 24 Q30 27 34 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="32" width="32" height="36" rx="4" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="22" y="32" width="16" height="20" rx="2" fill="#f5f5f5"/><rect x="25" y="32" width="4" height="18" fill="#c00"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="67" width="11" height="21" rx="5" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="67" width="11" height="21" rx="5" fill="#333" stroke="#1a1a2e" stroke-width="2"/><ellipse cx="24" cy="36" rx="5" ry="3" fill="#999" opacity="0.5"/></svg>`},
+  {name:"Savant Fou", cat:"Vilains", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#f0d0b0" stroke="#1a1a2e" stroke-width="2"/><path d="M16,5 Q18,0 30,2 Q42,0 44,5 L40,12 Q30,4 20,12Z" fill="#f0f0c0"/><rect x="18" y="13" width="10" height="7" rx="2" fill="#aad4ff" stroke="#1a1a2e" stroke-width="1.5"/><rect x="32" y="13" width="10" height="7" rx="2" fill="#aad4ff" stroke="#1a1a2e" stroke-width="1.5"/><path d="M24 23 Q30 28 36 23" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#f5f5f5" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#f5f5f5" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#f5f5f5" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#ccc" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#ccc" stroke="#1a1a2e" stroke-width="2"/><circle cx="48" cy="38" r="6" fill="#aad4ff" stroke="#1a1a2e" stroke-width="1.5"/><path d="M44,38 Q46,34 50,36" fill="none" stroke="#3355ff" stroke-width="2"/></svg>`},
+  {name:"Sorcier Noir", cat:"Vilains", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="20" r="13" fill="#c0a080" stroke="#1a1a2e" stroke-width="2"/><polygon points="30,0 14,20 46,20" fill="#111" stroke="#1a1a2e" stroke-width="2"/><circle cx="23" cy="18" r="3.5" fill="#cc0000"/><circle cx="37" cy="18" r="3.5" fill="#cc0000"/><path d="M24 26 Q30 30 36 26" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><path d="M16,33 Q30,48 44,33 L46,66 Q30,72 14,66Z" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="35" width="9" height="24" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="35" width="9" height="24" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="66" width="10" height="22" rx="4" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="66" width="10" height="22" rx="4" fill="#333" stroke="#1a1a2e" stroke-width="2"/><circle cx="44" cy="42" r="8" fill="#6600cc" opacity="0.6"/><circle cx="44" cy="42" r="4" fill="#cc00ff" opacity="0.8"/></svg>`},
+  {name:"Cyborg Maléfique", cat:"Vilains", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><rect x="14" y="4" width="32" height="28" rx="4" fill="#666" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="10" width="10" height="8" rx="2" fill="#cc0000"/><rect x="32" y="10" width="10" height="8" rx="2" fill="#1a1a2e"/><circle cx="37" cy="14" r="3" fill="#cc0000"/><rect x="18" y="22" width="24" height="5" rx="2" fill="#1a1a2e"/><rect x="12" y="32" width="36" height="36" rx="4" fill="#555" stroke="#1a1a2e" stroke-width="2"/><rect x="4" y="34" width="12" height="28" rx="6" fill="#555" stroke="#1a1a2e" stroke-width="2"/><rect x="44" y="34" width="12" height="28" rx="6" fill="#555" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="68" width="12" height="20" rx="5" fill="#444" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="68" width="12" height="20" rx="5" fill="#444" stroke="#1a1a2e" stroke-width="2"/><rect x="20" y="40" width="20" height="12" rx="2" fill="#cc0000" opacity="0.6"/><line x1="4" y1="44" x2="12" y2="44" stroke="#cc0000" stroke-width="2"/></svg>`},
+
+  // EVERYDAY
+  {name:"Policier", cat:"Quotidien", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#ffe0b0" stroke="#1a1a2e" stroke-width="2"/><path d="M16,5 Q30,0 44,5 L42,12 Q30,15 18,12Z" fill="#1a3a8a"/><circle cx="30" cy="6" r="3" fill="#f5c518"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><path d="M25 24 Q30 28 35 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#1a3a8a" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#1a3a8a" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#1a3a8a" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#111" stroke="#1a1a2e" stroke-width="2"/><rect x="22" y="40" width="16" height="10" rx="2" fill="#f5c518"/><rect x="25" y="42" width="10" height="6" rx="1" fill="#1a3a8a"/></svg>`},
+  {name:"Médecin", cat:"Quotidien", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#ffe0b0" stroke="#1a1a2e" stroke-width="2"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><path d="M24 24 Q30 29 36 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="32" width="32" height="35" rx="4" fill="white" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="34" width="10" height="26" rx="5" fill="white" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="white" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><rect x="27" y="38" width="6" height="18" rx="2" fill="#cc0000"/><rect x="21" y="44" width="18" height="6" rx="2" fill="#cc0000"/><path d="M38,58 Q48,56 46,64" fill="none" stroke="#888" stroke-width="2"/><circle cx="46" cy="66" r="4" fill="none" stroke="#888" stroke-width="1.5"/></svg>`},
+  {name:"Cuisinier", cat:"Quotidien", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="20" r="14" fill="#ffe0b0" stroke="#1a1a2e" stroke-width="2"/><ellipse cx="30" cy="8" rx="14" ry="10" fill="white" stroke="#1a1a2e" stroke-width="2"/><circle cx="23" cy="18" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="18" r="3.5" fill="#1a1a2e"/><path d="M24 26 Q30 31 36 26" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="34" width="32" height="34" rx="4" fill="white" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="36" width="10" height="24" rx="5" fill="white" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="36" width="10" height="24" rx="5" fill="white" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="67" width="11" height="21" rx="5" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="67" width="11" height="21" rx="5" fill="#ddd" stroke="#1a1a2e" stroke-width="2"/><rect x="24" y="34" width="12" height="34" fill="none" stroke="#ccc" stroke-width="1"/><line x1="48" y1="44" x2="58" y2="38" stroke="#999" stroke-width="2"/><path d="M55,35 Q60,32 58,38" fill="#999"/></svg>`},
+  {name:"Prof", cat:"Quotidien", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="13" fill="#f0d0a0" stroke="#1a1a2e" stroke-width="2"/><path d="M17,7 Q30,2 43,7 L40,14 Q30,18 20,14Z" fill="#555"/><rect x="18" y="13" width="9" height="6" rx="2" fill="#aad4ff" stroke="#1a1a2e" stroke-width="1.5"/><rect x="33" y="13" width="9" height="6" rx="2" fill="#aad4ff" stroke="#1a1a2e" stroke-width="1.5"/><path d="M24 23 Q30 28 36 23" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="31" width="32" height="36" rx="4" fill="#4a6a30" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="33" width="10" height="26" rx="5" fill="#4a6a30" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="33" width="10" height="26" rx="5" fill="#4a6a30" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#3a5020" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#3a5020" stroke="#1a1a2e" stroke-width="2"/><line x1="48" y1="38" x2="58" y2="32" stroke="#8b4513" stroke-width="2.5"/></svg>`},
+  {name:"Pompier", cat:"Quotidien", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#ffe0b0" stroke="#1a1a2e" stroke-width="2"/><rect x="14" y="5" width="32" height="12" rx="4" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><path d="M14,14 Q30,20 46,14" fill="none" stroke="#f5c518" stroke-width="2"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><path d="M25 24 Q30 28 35 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="32" width="32" height="35" rx="4" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="34" width="10" height="26" rx="5" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="34" width="10" height="26" rx="5" fill="#cc0000" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#880000" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#880000" stroke="#1a1a2e" stroke-width="2"/><rect x="22" y="40" width="16" height="6" rx="2" fill="#f5c518"/></svg>`},
+
+  // FANTASY
+  {name:"Elfe", cat:"Fantasy", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="13" fill="#e8f0d0" stroke="#1a1a2e" stroke-width="2"/><path d="M17,8 Q8,4 10,14 Q14,10 20,16Z" fill="#e8f0d0" stroke="#1a1a2e" stroke-width="1.5"/><path d="M43,8 Q52,4 50,14 Q46,10 40,16Z" fill="#e8f0d0" stroke="#1a1a2e" stroke-width="1.5"/><path d="M17,4 Q30,0 43,4 Q38,14 30,16 Q22,14 17,4Z" fill="#a0c050"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="24" cy="15" r="2" fill="#00cc88"/><circle cx="38" cy="15" r="2" fill="#00cc88"/><path d="M24 23 Q30 28 36 23" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><path d="M16,31 Q30,44 44,31 L46,65 Q30,72 14,65Z" fill="#3a8a30" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="33" width="9" height="22" rx="5" fill="#3a8a30" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="33" width="9" height="22" rx="5" fill="#3a8a30" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="65" width="10" height="23" rx="5" fill="#2a6a20" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="65" width="10" height="23" rx="5" fill="#2a6a20" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Nain", cat:"Fantasy", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="24" r="14" fill="#d4956a" stroke="#1a1a2e" stroke-width="2"/><path d="M16,12 Q30,6 44,12 L40,20 Q30,24 20,20Z" fill="#8b6914"/><circle cx="23" cy="22" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="22" r="3.5" fill="#1a1a2e"/><path d="M22 30 Q30 36 38 30" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><path d="M18,28 Q10,34 12,50" fill="none" stroke="#d4956a" stroke-width="8" stroke-linecap="round"/><path d="M42,28 Q50,34 48,50" fill="none" stroke="#d4956a" stroke-width="8" stroke-linecap="round"/><rect x="12" y="38" width="36" height="30" rx="5" fill="#8b4513" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="68" width="12" height="20" rx="5" fill="#6b2a00" stroke="#1a1a2e" stroke-width="2"/><rect x="30" y="68" width="12" height="20" rx="5" fill="#6b2a00" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="28" width="28" height="10" rx="2" fill="#d4a800" opacity="0.6"/></svg>`},
+  {name:"Fée", cat:"Fantasy", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="12" fill="#ffd4f0" stroke="#1a1a2e" stroke-width="2"/><circle cx="24" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="36" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="25" cy="15" r="2" fill="#ff99cc"/><circle cx="37" cy="15" r="2" fill="#ff99cc"/><path d="M23 23 Q30 28 37 23" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><path d="M4,18 Q8,10 14,22 Q8,24 4,18Z" fill="#aaddff" stroke="#1a1a2e" stroke-width="1" opacity="0.8"/><path d="M56,18 Q52,10 46,22 Q52,24 56,18Z" fill="#aaddff" stroke="#1a1a2e" stroke-width="1" opacity="0.8"/><path d="M16,30 Q30,44 44,30 L46,62 Q30,68 14,62Z" fill="#ff88cc" stroke="#1a1a2e" stroke-width="2"/><rect x="9" y="32" width="8" height="20" rx="5" fill="#ff88cc" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="32" width="8" height="20" rx="5" fill="#ff88cc" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="62" width="9" height="26" rx="5" fill="#cc66aa" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="62" width="9" height="26" rx="5" fill="#cc66aa" stroke="#1a1a2e" stroke-width="2"/><line x1="46" y1="30" x2="54" y2="22" stroke="#f5c518" stroke-width="2"/><polygon points="56,20 52,22 54,26" fill="#f5c518"/></svg>`},
+  {name:"Ogre", cat:"Fantasy", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="16" fill="#88aa44" stroke="#1a1a2e" stroke-width="2"/><circle cx="22" cy="14" r="5.5" fill="#1a1a2e"/><circle cx="38" cy="14" r="5.5" fill="#1a1a2e"/><circle cx="23" cy="13" r="2.5" fill="#ff4400"/><circle cx="39" cy="13" r="2.5" fill="#ff4400"/><path d="M20 25 Q30 32 40 25" fill="#88aa44" stroke="#1a1a2e" stroke-width="2.5"/><rect x="26" y="24" width="5" height="6" rx="1" fill="#eee"/><rect x="33" y="24" width="5" height="6" rx="1" fill="#eee"/><rect x="8" y="34" width="44" height="36" rx="6" fill="#88aa44" stroke="#1a1a2e" stroke-width="2"/><rect x="2" y="36" width="12" height="28" rx="6" fill="#88aa44" stroke="#1a1a2e" stroke-width="2"/><rect x="46" y="36" width="12" height="28" rx="6" fill="#88aa44" stroke="#1a1a2e" stroke-width="2"/><rect x="12" y="70" width="14" height="18" rx="6" fill="#668833" stroke="#1a1a2e" stroke-width="2"/><rect x="34" y="70" width="14" height="18" rx="6" fill="#668833" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Sirène", cat:"Fantasy", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="13" fill="#ffd0b0" stroke="#1a1a2e" stroke-width="2"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><path d="M23 24 Q30 29 37 24" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><path d="M16,4 Q10,14 14,30" fill="none" stroke="#4488ff" stroke-width="4" stroke-linecap="round"/><path d="M44,4 Q50,14 46,30" fill="none" stroke="#4488ff" stroke-width="4" stroke-linecap="round"/><path d="M16,31 Q30,44 44,31 L44,64 Q30,70 16,64Z" fill="#00aaaa" stroke="#1a1a2e" stroke-width="2"/><path d="M16,64 Q22,78 30,82 Q38,78 44,64 Q36,70 30,68 Q24,70 16,64Z" fill="#008888" stroke="#1a1a2e" stroke-width="2"/><path d="M22,82 Q26,90 30,86 Q34,90 38,82" fill="none" stroke="#008888" stroke-width="3"/><rect x="9" y="33" width="8" height="20" rx="5" fill="#00aaaa" stroke="#1a1a2e" stroke-width="2"/><rect x="43" y="33" width="8" height="20" rx="5" fill="#00aaaa" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+
+  // ANIMALS
+  {name:"Lion", cat:"Animaux", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="22" r="14" fill="#d4a800" stroke="#1a1a2e" stroke-width="2"/><circle cx="30" cy="22" r="20" fill="none" stroke="#aa7700" stroke-width="8" opacity="0.6"/><circle cx="22" cy="20" r="5" fill="#1a1a2e"/><circle cx="38" cy="20" r="5" fill="#1a1a2e"/><circle cx="23" cy="19" r="2.5" fill="#fff"/><circle cx="39" cy="19" r="2.5" fill="#fff"/><ellipse cx="30" cy="28" rx="5" ry="3.5" fill="#e8c060"/><path d="M22 30 Q30 36 38 30" fill="none" stroke="#1a1a2e" stroke-width="2"/><line x1="16" y1="28" x2="2" y2="25" stroke="#1a1a2e" stroke-width="1.5"/><line x1="16" y1="30" x2="2" y2="30" stroke="#1a1a2e" stroke-width="1.5"/><line x1="44" y1="28" x2="58" y2="25" stroke="#1a1a2e" stroke-width="1.5"/><line x1="44" y1="30" x2="58" y2="30" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="36" width="32" height="30" rx="6" fill="#d4a800" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="38" width="12" height="22" rx="6" fill="#d4a800" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="38" width="12" height="22" rx="6" fill="#d4a800" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="66" width="10" height="22" rx="6" fill="#aa7700" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="66" width="10" height="22" rx="6" fill="#aa7700" stroke="#1a1a2e" stroke-width="2"/><path d="M30,66 Q40,74 40,86" fill="none" stroke="#d4a800" stroke-width="3"/></svg>`},
+  {name:"Ours", cat:"Animaux", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="22" r="15" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><circle cx="14" cy="12" r="9" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><circle cx="46" cy="12" r="9" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><ellipse cx="30" cy="28" rx="8" ry="5" fill="#d4956a"/><circle cx="22" cy="20" r="4.5" fill="#1a1a2e"/><circle cx="38" cy="20" r="4.5" fill="#1a1a2e"/><circle cx="23" cy="19" r="2" fill="#fff"/><circle cx="39" cy="19" r="2" fill="#fff"/><circle cx="30" cy="26" r="3" fill="#1a1a2e"/><path d="M22 32 Q30 38 38 32" fill="none" stroke="#1a1a2e" stroke-width="2"/><rect x="12" y="37" width="36" height="30" rx="8" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><rect x="4" y="39" width="12" height="24" rx="6" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><rect x="44" y="39" width="12" height="24" rx="6" fill="#8b5e3c" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="67" width="12" height="21" rx="6" fill="#6b3e1c" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="67" width="12" height="21" rx="6" fill="#6b3e1c" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+  {name:"Renard", cat:"Animaux", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="22" r="14" fill="#e07030" stroke="#1a1a2e" stroke-width="2"/><polygon points="16,12 8,0 20,16" fill="#e07030" stroke="#1a1a2e" stroke-width="2"/><polygon points="44,12 52,0 40,16" fill="#e07030" stroke="#1a1a2e" stroke-width="2"/><ellipse cx="30" cy="28" rx="7" ry="5" fill="#f0d0b0"/><circle cx="22" cy="19" r="4.5" fill="#1a1a2e"/><circle cx="38" cy="19" r="4.5" fill="#1a1a2e"/><circle cx="23" cy="18" r="2" fill="#fff"/><circle cx="39" cy="18" r="2" fill="#fff"/><circle cx="27" cy="26" r="2" fill="#1a1a2e"/><circle cx="33" cy="26" r="2" fill="#1a1a2e"/><path d="M23 30 Q30 36 37 30" fill="none" stroke="#1a1a2e" stroke-width="2"/><line x1="16" y1="26" x2="2" y2="24" stroke="#1a1a2e" stroke-width="1.5"/><line x1="44" y1="26" x2="58" y2="24" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="36" width="32" height="28" rx="6" fill="#e07030" stroke="#1a1a2e" stroke-width="2"/><rect x="6" y="38" width="12" height="20" rx="6" fill="#e07030" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="38" width="12" height="20" rx="6" fill="#e07030" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="64" width="10" height="24" rx="6" fill="#b05020" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="64" width="10" height="24" rx="6" fill="#b05020" stroke="#1a1a2e" stroke-width="2"/><path d="M30,64 Q44,72 46,86 Q36,80 30,72 Q24,80 14,86 Q16,72 30,64Z" fill="#f0d0b0" stroke="#1a1a2e" stroke-width="2"/></svg>`},
+
+  // SCI-FI
+  {name:"Soldat Futur", cat:"Sci-fi", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><rect x="14" y="4" width="32" height="28" rx="6" fill="#445566" stroke="#1a1a2e" stroke-width="2"/><rect x="18" y="10" width="24" height="14" rx="3" fill="#667788"/><rect x="20" y="12" width="10" height="10" rx="2" fill="#aaddff" opacity="0.7"/><rect x="32" y="14" width="8" height="6" rx="1" fill="#88aacc" opacity="0.5"/><rect x="22" y="26" width="16" height="3" fill="#aaddff" opacity="0.5"/><rect x="12" y="32" width="36" height="36" rx="4" fill="#334455" stroke="#1a1a2e" stroke-width="2"/><rect x="4" y="34" width="12" height="28" rx="6" fill="#334455" stroke="#1a1a2e" stroke-width="2"/><rect x="44" y="34" width="12" height="28" rx="6" fill="#334455" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="68" width="12" height="20" rx="5" fill="#223344" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="68" width="12" height="20" rx="5" fill="#223344" stroke="#1a1a2e" stroke-width="2"/><rect x="44" y="44" width="18" height="6" rx="3" fill="#334455" stroke="#1a1a2e" stroke-width="1.5"/><rect x="56" y="42" width="6" height="10" rx="2" fill="#aaddff" opacity="0.6"/></svg>`},
+  {name:"IA Androïde", cat:"Sci-fi", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="14" fill="#c8d8e8" stroke="#1a1a2e" stroke-width="2"/><rect x="28" y="4" width="4" height="6" rx="2" fill="#888"/><circle cx="30" cy="3" r="3" fill="#44aaff"/><rect x="18" y="12" width="10" height="8" rx="2" fill="#44aaff" opacity="0.8"/><rect x="32" y="12" width="10" height="8" rx="2" fill="#ff4444" opacity="0.8"/><rect x="20" y="24" width="20" height="4" rx="2" fill="#1a1a2e"/><rect x="12" y="32" width="36" height="36" rx="4" fill="#a8b8c8" stroke="#1a1a2e" stroke-width="2"/><rect x="4" y="34" width="12" height="28" rx="6" fill="#a8b8c8" stroke="#1a1a2e" stroke-width="2"/><rect x="44" y="34" width="12" height="28" rx="6" fill="#a8b8c8" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="68" width="12" height="20" rx="5" fill="#88a0b0" stroke="#1a1a2e" stroke-width="2"/><rect x="32" y="68" width="12" height="20" rx="5" fill="#88a0b0" stroke="#1a1a2e" stroke-width="2"/><rect x="20" y="40" width="20" height="12" rx="3" fill="#1a1a2e" opacity="0.2"/><circle cx="24" cy="46" r="3" fill="#44aaff" opacity="0.8"/><circle cx="30" cy="46" r="3" fill="#44ff44" opacity="0.8"/><circle cx="36" cy="46" r="3" fill="#ff4444" opacity="0.8"/></svg>`},
+
+  // HISTORICAL
+  {name:"Pharaon", cat:"Historique", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="22" r="13" fill="#d4956a" stroke="#1a1a2e" stroke-width="2"/><path d="M17,10 L17,34 Q30,40 43,34 L43,10 Q36,4 30,4 Q24,4 17,10Z" fill="#f5c518" stroke="#1a1a2e" stroke-width="2"/><rect x="17" y="26" width="26" height="8" rx="2" fill="#1a5fa0"/><circle cx="23" cy="20" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="20" r="3.5" fill="#1a1a2e"/><circle cx="24" cy="19" r="2" fill="#44aaff"/><circle cx="38" cy="19" r="2" fill="#44aaff"/><path d="M24 27 Q30 31 36 27" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="34" width="32" height="34" rx="4" fill="#1a5fa0" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="36" width="10" height="24" rx="5" fill="#1a5fa0" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="36" width="10" height="24" rx="5" fill="#1a5fa0" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="68" width="11" height="20" rx="4" fill="#1a3a70" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="68" width="11" height="20" rx="4" fill="#1a3a70" stroke="#1a1a2e" stroke-width="2"/><rect x="22" y="34" width="16" height="34" fill="none" stroke="#f5c518" stroke-width="1.5"/><line x1="44" y1="38" x2="52" y2="30" stroke="#8b6914" stroke-width="2.5"/><polygon points="52,28 48,32 56,32" fill="#8b6914"/></svg>`},
+  {name:"Samouraï", cat:"Historique", svg:`<svg width="60" height="90" viewBox="0 0 60 90"><circle cx="30" cy="18" r="13" fill="#d4956a" stroke="#1a1a2e" stroke-width="2"/><path d="M17,6 Q30,0 43,6 L40,14 Q30,17 20,14Z" fill="#1a1a2e"/><circle cx="23" cy="16" r="3.5" fill="#1a1a2e"/><circle cx="37" cy="16" r="3.5" fill="#1a1a2e"/><path d="M25 23 Q30 27 35 23" fill="none" stroke="#1a1a2e" stroke-width="1.5"/><rect x="14" y="31" width="32" height="36" rx="4" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="8" y="33" width="10" height="26" rx="5" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="42" y="33" width="10" height="26" rx="5" fill="#333" stroke="#1a1a2e" stroke-width="2"/><rect x="16" y="66" width="11" height="22" rx="5" fill="#1a1a2e" stroke="#1a1a2e" stroke-width="2"/><rect x="33" y="66" width="11" height="22" rx="5" fill="#1a1a2e" stroke="#1a1a2e" stroke-width="2"/><rect x="20" y="31" width="20" height="36" fill="none" stroke="#cc0000" stroke-width="2"/><line x1="48" y1="20" x2="48" y2="68" stroke="#ccc" stroke-width="3"/><line x1="44" y1="36" x2="52" y2="36" stroke="#8b4513" stroke-width="2"/></svg>`},
+];
+
+// BACKGROUNDS
+const BGS = [
+  // Solid colors
+  {name:"Jour", style:"background:#87CEEB;"},
+  {name:"Nuit", style:"background:#0d0d2e;"},
+  {name:"Coucher soleil", style:"background:linear-gradient(to bottom,#ff6b35,#f7931e,#ffd700);"},
+  {name:"Aube rose", style:"background:linear-gradient(to bottom,#ff9a9e,#fecfef,#ffd6e7);"},
+  {name:"Forêt", style:"background:linear-gradient(to bottom,#2d5a27,#3d7a34,#4a9a3f);"},
+  {name:"Désert", style:"background:linear-gradient(to bottom,#f5deb3,#daa520,#cd853f);"},
+  {name:"Océan", style:"background:linear-gradient(to bottom,#006994,#0099cc,#00b4d8);"},
+  {name:"Espace", style:"background:radial-gradient(ellipse at center,#1a0533 0%,#000 70%);"},
+  {name:"Lave", style:"background:linear-gradient(to bottom,#1a0000,#8b0000,#ff4500);"},
+  {name:"Glace", style:"background:linear-gradient(to bottom,#e0f7fa,#b2ebf2,#80deea);"},
+  {name:"Herbe", style:"background:linear-gradient(to bottom,#87CEEB 60%,#228B22 60%);"},
+  {name:"Neige", style:"background:linear-gradient(to bottom,#dce8f5,#eef4fb,#fff);"},
+
+  // SVG Backgrounds
+  {name:"Ville nuit", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#0d0d2e"/><rect x="5%" y="40%" width="12%" height="60%" fill="#1a1a4e"/><rect x="20%" y="30%" width="15%" height="70%" fill="#1a1a4e"/><rect x="38%" y="20%" width="20%" height="80%" fill="#1a1a4e"/><rect x="62%" y="35%" width="13%" height="65%" fill="#1a1a4e"/><rect x="78%" y="25%" width="18%" height="75%" fill="#1a1a4e"/><rect x="7%" y="44%" width="2%" height="3%" fill="#f5c518" opacity="0.8"/><rect x="11%" y="50%" width="2%" height="3%" fill="#f5c518" opacity="0.8"/><rect x="23%" y="34%" width="2%" height="3%" fill="#f5c518" opacity="0.6"/><rect x="27%" y="42%" width="2%" height="3%" fill="#f5c518" opacity="0.8"/><rect x="40%" y="25%" width="2%" height="3%" fill="#f5c518" opacity="0.7"/><rect x="46%" y="30%" width="2%" height="3%" fill="#f5c518" opacity="0.8"/><circle cx="20%" cy="10%" r="3%" fill="#fff" opacity="0.9"/><circle cx="60%" cy="8%" r="1%" fill="#fff" opacity="0.7"/><circle cx="80%" cy="15%" r="0.8%" fill="#fff" opacity="0.6"/><circle cx="40%" cy="5%" r="0.6%" fill="#fff" opacity="0.8"/></svg>`},
+  {name:"Forêt magique", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#0a2010"/><ellipse cx="20%" cy="110%" rx="15%" ry="60%" fill="#1a4a10"/><ellipse cx="50%" cy="110%" rx="18%" ry="75%" fill="#1a5a10"/><ellipse cx="80%" cy="110%" rx="15%" ry="65%" fill="#1a4a10"/><ellipse cx="35%" cy="110%" rx="12%" ry="55%" fill="#155010"/><ellipse cx="65%" cy="110%" rx="13%" ry="60%" fill="#155010"/><circle cx="20%" cy="20%" r="3%" fill="#f5c518" opacity="0.8"/><circle cx="60%" cy="15%" r="4%" fill="#f5c518" opacity="0.7"/><circle cx="80%" cy="25%" r="2%" fill="#ffdd88" opacity="0.6"/><circle cx="40%" cy="12%" r="2.5%" fill="#ffdd88" opacity="0.5"/><circle cx="15%" cy="60%" r="1.5%" fill="#88ff88" opacity="0.4"/><circle cx="75%" cy="50%" r="1%" fill="#88ff88" opacity="0.3"/></svg>`},
+  {name:"Château", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#708090"/><rect x="30%" y="15%" width="40%" height="85%" fill="#555"/><rect x="20%" y="30%" width="15%" height="70%" fill="#555"/><rect x="65%" y="30%" width="15%" height="70%" fill="#555"/><rect x="28%" y="5%" width="8%" height="15%" fill="#555"/><rect x="42%" y="0%" width="16%" height="20%" fill="#555"/><rect x="64%" y="5%" width="8%" height="15%" fill="#555"/><rect x="46%" y="30%" width="8%" height="20%" fill="#222"/><rect x="44%" y="55%" width="12%" height="45%" fill="#222"/><circle cx="50%" cy="35%" r="4%" fill="#ffdd88" opacity="0.6"/><rect x="25%" y="35%" width="6%" height="8%" fill="#ffdd88" opacity="0.5"/><rect x="69%" y="35%" width="6%" height="8%" fill="#ffdd88" opacity="0.5"/></svg>`},
+  {name:"Espace étoilé", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#000010"/><circle cx="10%" cy="10%" r="0.5%" fill="white" opacity="0.9"/><circle cx="25%" cy="5%" r="0.8%" fill="white" opacity="0.7"/><circle cx="45%" cy="8%" r="0.4%" fill="white" opacity="0.8"/><circle cx="70%" cy="3%" r="0.6%" fill="white" opacity="0.9"/><circle cx="85%" cy="12%" r="0.4%" fill="white" opacity="0.7"/><circle cx="15%" cy="30%" r="0.5%" fill="white" opacity="0.6"/><circle cx="55%" cy="22%" r="0.8%" fill="white" opacity="0.8"/><circle cx="90%" cy="35%" r="0.5%" fill="white" opacity="0.7"/><circle cx="35%" cy="45%" r="0.4%" fill="white" opacity="0.9"/><circle cx="75%" cy="50%" r="0.6%" fill="white" opacity="0.6"/><circle cx="5%" cy="60%" r="0.5%" fill="white" opacity="0.8"/><circle cx="60%" cy="70%" r="0.4%" fill="white" opacity="0.7"/><circle cx="40%" cy="80%" r="0.6%" fill="white" opacity="0.5"/><circle cx="80%" cy="75%" r="0.5%" fill="white" opacity="0.8"/><ellipse cx="40%" cy="40%" rx="30%" ry="8%" fill="#4433aa" opacity="0.3" transform="rotate(-20,40%,40%)"/><circle cx="20%" cy="20%" r="5%" fill="#cc4400" opacity="0.4"/><circle cx="70%" cy="60%" r="8%" fill="#0044cc" opacity="0.3"/></svg>`},
+  {name:"Plage", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#87CEEB"/><rect x="0" y="55%" width="100%" height="20%" fill="#006994" opacity="0.9"/><rect x="0" y="70%" width="100%" height="30%" fill="#f5deb3"/><circle cx="80%" cy="20%" r="8%" fill="#FFD700"/><ellipse cx="25%" cy="58%" rx="18%" ry="3%" fill="#0099cc" opacity="0.5"/><ellipse cx="70%" cy="62%" rx="15%" ry="2.5%" fill="#0099cc" opacity="0.4"/><rect x="45%" y="50%" width="2%" height="18%" fill="#8b4513"/><ellipse cx="46%" cy="48%" rx="10%" ry="6%" fill="#228B22" opacity="0.9"/></svg>`},
+  {name:"Montagne", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#87CEEB"/><polygon points="0,100% 20%,30% 40%,100%" fill="#666"/><polygon points="15%,100% 40%,15% 65%,100%" fill="#888"/><polygon points="50%,100% 72%,25% 100%,100%" fill="#777"/><polygon points="0,30% 20%,10% 40%,30%" fill="white" opacity="0.9"/><polygon points="40%,15% 52%,5% 65%,15%" fill="white" opacity="0.9"/><rect x="0" y="75%" width="100%" height="25%" fill="#228B22"/></svg>`},
+  {name:"Laboratoire", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#1a2030"/><rect x="0" y="0" width="100%" height="100%" fill="url(#grid)" opacity="0.1"/><defs><pattern id="grid" width="10%" height="10%" patternUnits="userSpaceOnUse"><path d="M 0 0 L 100 0 L 100 100 L 0 100 Z" fill="none" stroke="#4488ff" stroke-width="0.5"/></pattern></defs><rect x="5%" y="20%" width="20%" height="60%" rx="5" fill="#223344" stroke="#4488ff" stroke-width="1"/><rect x="30%" y="10%" width="15%" height="70%" rx="3" fill="#223344" stroke="#44aaff" stroke-width="1"/><rect x="55%" y="25%" width="18%" height="55%" rx="5" fill="#223344" stroke="#4488ff" stroke-width="1"/><rect x="78%" y="15%" width="17%" height="65%" rx="3" fill="#223344" stroke="#44aaff" stroke-width="1"/><circle cx="14%" cy="50%" r="5%" fill="#44aaff" opacity="0.4"/><circle cx="37%" cy="45%" r="4%" fill="#44ff88" opacity="0.3"/><circle cx="64%" cy="52%" r="6%" fill="#ff4444" opacity="0.3"/><rect x="0" y="85%" width="100%" height="15%" fill="#111"/></svg>`},
+  {name:"Village", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#87CEEB"/><rect x="0" y="65%" width="100%" height="35%" fill="#5a8a30"/><rect x="5%" y="50%" width="18%" height="30%" fill="#cc6600"/><polygon points="5%,50% 14%,30% 23%,50%" fill="#8b2020"/><rect x="8%" y="58%" width="6%" height="12%" fill="#f5c518" opacity="0.8"/><rect x="30%" y="45%" width="22%" height="35%" fill="#daa060"/><polygon points="30%,45% 41%,22% 52%,45%" fill="#8b2020"/><rect x="36%" y="55%" width="10%" height="15%" fill="#4488ff" opacity="0.8"/><rect x="62%" y="52%" width="16%" height="28%" fill="#cc8844"/><polygon points="62%,52% 70%,35% 78%,52%" fill="#663300"/><rect x="65%" y="62%" width="6%" height="12%" fill="#f5c518" opacity="0.8"/><rect x="0" y="63%" width="100%" height="5%" fill="#4a7a20" opacity="0.6"/><circle cx="15%" cy="20%" r="8%" fill="#f5c518"/></svg>`},
+  {name:"Donjon", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#0a0a0a"/><rect x="0" y="0" width="100%" height="100%" fill="#111" opacity="0.8"/><rect x="10%" y="0" width="8%" height="100%" fill="#1a1a1a"/><rect x="30%" y="0" width="8%" height="100%" fill="#1a1a1a"/><rect x="55%" y="0" width="8%" height="100%" fill="#1a1a1a"/><rect x="78%" y="0" width="8%" height="#1a1a1a"/><rect x="0" y="20%" width="100%" height="6%" fill="#1a1a1a"/><rect x="0" y="55%" width="100%" height="6%" fill="#1a1a1a"/><circle cx="20%" cy="50%" r="3%" fill="#ff6600" opacity="0.6"/><circle cx="70%" cy="30%" r="2%" fill="#ff6600" opacity="0.4"/><rect x="42%" y="60%" width="16%" height="40%" fill="#111"/></svg>`},
+  {name:"Nuages", svg:`<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#87CEEB"/><ellipse cx="15%" cy="25%" rx="12%" ry="7%" fill="white" opacity="0.9"/><ellipse cx="25%" cy="22%" rx="10%" ry="6%" fill="white" opacity="0.9"/><ellipse cx="50%" cy="15%" rx="15%" ry="8%" fill="white" opacity="0.9"/><ellipse cx="63%" cy="18%" rx="12%" ry="7%" fill="white" opacity="0.9"/><ellipse cx="85%" cy="28%" rx="11%" ry="6%" fill="white" opacity="0.9"/><ellipse cx="30%" cy="55%" rx="13%" ry="6%" fill="white" opacity="0.7"/><ellipse cx="70%" cy="60%" rx="10%" ry="5%" fill="white" opacity="0.7"/><circle cx="50%" cy="80%" r="6%" fill="#f5c518" opacity="0.8"/></svg>`},
+];
+
+// ── RENDER SIDEBAR ──
+function renderChars() {
+  const cats = [...new Set(CHARS.map(c => c.cat))];
+  let html = '';
+  cats.forEach(cat => {
+    html += `<div class="section-title">${cat}</div><div class="char-grid">`;
+    CHARS.filter(c => c.cat === cat).forEach((c, i) => {
+      html += `<div class="char-item" draggable="true" data-char="${CHARS.indexOf(c)}" ondragstart="dragChar(event,${CHARS.indexOf(c)})" title="Cliquer ou glisser sur une case">
+        ${c.svg}<span>${c.name}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  document.getElementById('char-list').innerHTML = html;
+}
+
+function renderBGs() {
+  let html = '<div class="section-title">Couleurs & textures</div><div class="bg-grid">';
+  BGS.forEach((bg, i) => {
+    if (bg.svg) return;
+    html += `<div class="bg-item" style="${bg.style}" onclick="applyBG(${i})" title="${bg.name}">${bg.name}</div>`;
+  });
+  html += '</div><div class="section-title">Décors dessinés</div><div class="bg-grid">';
+  BGS.forEach((bg, i) => {
+    if (!bg.svg) return;
+    html += `<div class="bg-item" style="background:#222;position:relative;overflow:hidden;" onclick="applyBG(${i})" title="${bg.name}">
+      <div style="position:absolute;inset:0;">${bg.svg}</div>
+      <span style="position:relative;z-index:1;color:white;text-shadow:1px 1px 2px #000;">${bg.name}</span>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('bg-list').innerHTML = html;
+}
+
+function showTab(t) {
+  document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', (i===0&&t==='chars')||(i===1&&t==='bgs')));
+  document.getElementById('tab-chars').style.display = t==='chars'?'':'none';
+  document.getElementById('tab-bgs').style.display = t==='bgs'?'':'none';
+}
+
+// ── DRAG FROM SIDEBAR ──
+function dragChar(e, idx) {
+  e.dataTransfer.setData('charIdx', idx);
+}
+
+// ── PANEL ──
+function addPanel() {
+  document.getElementById('placeholder')?.remove();
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+
+  const inner = document.createElement('div');
+  inner.className = 'panel-inner';
+  inner.innerHTML = `<div class="panel-hint">Glisse un personnage ou un fond ici</div>`;
+  panel.appendChild(inner);
+
+  // Delete button
+  const del = document.createElement('div');
+  del.className = 'panel-del';
+  del.textContent = '✕ Supprimer';
+  del.onclick = e => { e.stopPropagation(); panel.remove(); if (selectedPanel===panel) selectedPanel=null; };
+  inner.appendChild(del);
+
+  // Click to select
+  panel.addEventListener('click', e => {
+    if (e.target.closest('.bd-el,.panel-del')) return;
+    selectPanel(panel);
+  });
+
+  // Drop zone for chars & bgs
+  panel.addEventListener('dragover', e => { e.preventDefault(); panel.style.outline='3px dashed #f5c518'; });
+  panel.addEventListener('dragleave', () => { panel.style.outline=''; });
+  panel.addEventListener('drop', e => {
+    e.preventDefault();
+    panel.style.outline='';
+    const charIdx = e.dataTransfer.getData('charIdx');
+    if (charIdx !== '') placeChar(panel, parseInt(charIdx));
+  });
+
+  document.getElementById('bd-page').appendChild(panel);
+  selectPanel(panel);
+}
+
+function selectPanel(p) {
+  document.querySelectorAll('.panel').forEach(x => x.classList.remove('selected'));
+  p.classList.add('selected');
+  selectedPanel = p;
+}
+
+function placeChar(panel, idx) {
+  selectPanel(panel);
+  const char = CHARS[idx];
+  const wrapper = document.createElement('div');
+  wrapper.className = 'bd-el';
+  wrapper.style.cssText = 'top:20px;left:20px;width:60px;height:90px;';
+  wrapper.innerHTML = char.svg;
+
+  const d = document.createElement('div');
+  d.className = 'el-del';
+  d.textContent = '×';
+  d.onclick = e => { e.stopPropagation(); wrapper.remove(); };
+  wrapper.appendChild(d);
+
+  // Resize
+  const rh = document.createElement('div');
+  rh.className = 'resize-handle';
+  rh.addEventListener('mousedown', e => {
+    e.stopPropagation();
+    const startX = e.clientX, startY = e.clientY;
+    const startW = wrapper.offsetWidth, startH = wrapper.offsetHeight;
+    const onMove = ev => {
+      wrapper.style.width = Math.max(30, startW + ev.clientX - startX) + 'px';
+      wrapper.style.height = Math.max(45, startH + ev.clientY - startY) + 'px';
+      wrapper.querySelector('svg').setAttribute('width', wrapper.style.width);
+      wrapper.querySelector('svg').setAttribute('height', wrapper.style.height);
+    };
+    const onUp = () => { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+  wrapper.appendChild(rh);
+
+  panel.querySelector('.panel-inner').appendChild(wrapper);
+  makeDraggable(wrapper);
+  panel.querySelector('.panel-hint').style.display = 'none';
+}
+
+function applyBG(idx) {
+  if (!selectedPanel) { alert('Cliquez d\'abord sur une case !'); return; }
+  const bg = BGS[idx];
+  let bgDiv = selectedPanel.querySelector('.panel-bg');
+  if (!bgDiv) {
+    bgDiv = document.createElement('div');
+    bgDiv.className = 'panel-bg';
+    selectedPanel.querySelector('.panel-inner').prepend(bgDiv);
+  }
+  bgDiv.style.cssText = 'position:absolute;inset:0;';
+  if (bg.svg) {
+    bgDiv.innerHTML = bg.svg;
+    bgDiv.style.background = '';
+  } else {
+    bgDiv.innerHTML = '';
+    bgDiv.style.cssText += bg.style;
+  }
+  selectedPanel.querySelector('.panel-hint').style.display = 'none';
+}
+
+// ── BUBBLES ──
+function setBt(t) {
+  bubbleType = t;
+  ['speech','thought','shout'].forEach(x => document.getElementById('bt-'+x).classList.toggle('active', x===t));
+}
+
+function addBubble() {
+  if (!selectedPanel) { alert('Cliquez d\'abord sur une case !'); return; }
+  const text = document.getElementById('bubble-text').value.trim() || '...';
+  const wrap = document.createElement('div');
+  wrap.className = 'bd-el';
+  wrap.style.cssText = 'top:10px;left:10px;';
+
+  const b = document.createElement('div');
+  b.className = bubbleType==='speech' ? 'bubble' : bubbleType==='thought' ? 'thought' : 'shout';
+  b.textContent = text;
+  wrap.appendChild(b);
+
+  const d = document.createElement('div');
+  d.className = 'el-del';
+  d.textContent = '×';
+  d.onclick = e => { e.stopPropagation(); wrap.remove(); };
+  wrap.appendChild(d);
+
+  b.addEventListener('dblclick', e => {
+    e.stopPropagation();
+    const v = prompt('Modifier le texte :', b.textContent);
+    if (v !== null) b.textContent = v;
+  });
+
+  selectedPanel.querySelector('.panel-inner').appendChild(wrap);
+  document.getElementById('bubble-text').value = '';
+  makeDraggable(wrap);
+}
+
+// ── DRAG (elements) ──
+function makeDraggable(el) {
+  el.addEventListener('mousedown', e => {
+    if (e.target.closest('.el-del,.resize-handle')) return;
+    e.stopPropagation();
+    const r = el.getBoundingClientRect();
+    drag = { el, ox: e.clientX - r.left, oy: e.clientY - r.top };
+    el.style.zIndex = 50;
+  });
+}
+
+document.addEventListener('mousemove', e => {
+  if (!drag) return;
+  const pr = drag.el.offsetParent.getBoundingClientRect();
+  drag.el.style.left = Math.max(0, e.clientX - pr.left - drag.ox) + 'px';
+  drag.el.style.top = Math.max(0, e.clientY - pr.top - drag.oy) + 'px';
+});
+document.addEventListener('mouseup', () => { if (drag) { drag.el.style.zIndex = 10; drag = null; } });
+
+// ── CLEAR ──
+function clearAll() {
+  if (confirm('Effacer toute la BD ?')) {
+    document.getElementById('bd-page').innerHTML = '<div id="placeholder" style="text-align:center;color:#ccc;padding:50px;font-size:13px;">Cliquez sur <b>+ Case</b> pour commencer !</div>';
+    selectedPanel = null;
+  }
+}
+
+// ── INIT ──
+renderChars();
+renderBGs();
+</script>
+</body>
+</html>
