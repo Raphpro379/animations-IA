@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Étincelle, la Petite Étoile — un dessin animé de 10 minutes</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{background:#07091A;font-family:Georgia,serif;overflow:hidden;color:#F5EFE0;}
+
+  /* ========== ÉCRAN D'ACCUEIL ========== */
+  #accueil{
+    position:fixed;inset:0;z-index:50;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at 50% 30%, #1E2745 0%, #07091A 70%);
+    text-align:center;padding:20px;
+  }
+  #accueil .etoiles{font-size:34px;letter-spacing:14px;animation:acFlotte 3s ease-in-out infinite;}
+  @keyframes acFlotte{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  #accueil h1{
+    font-size:clamp(30px,7vw,56px);margin:14px 0 6px;font-weight:bold;
+    background:linear-gradient(180deg,#F1D687 20%,#D4AF37 60%,#A8842A 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:#D4AF37;
+    filter:drop-shadow(0 0 14px rgba(241,214,135,.35));
+  }
+  #accueil .st{font-style:italic;font-size:clamp(14px,3.5vw,20px);color:#CEC8B8;}
+  #accueil .infos{margin-top:10px;font-size:13px;color:#8d8776;font-family:sans-serif;}
+  #btnCommencer{
+    margin-top:28px;font-family:Georgia,serif;font-weight:bold;
+    font-size:clamp(18px,4vw,24px);
+    background:linear-gradient(180deg,#F1D687,#D4AF37);color:#101426;
+    border:none;border-radius:999px;padding:16px 42px;cursor:pointer;
+    box-shadow:0 0 24px rgba(241,214,135,.45);
+    animation:acPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes acPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+  #btnCommencer:active{transform:scale(.96);}
+
+  /* ========== CINÉMA ========== */
+  #cinema{position:fixed;inset:0;display:none;}
+  body.enCours #cinema{display:block;}
+  body.enCours #accueil{display:none;}
+
+  .scene{display:none;position:absolute;inset:0;}
+  .scene.active{display:flex;align-items:center;justify-content:center;}
+  .scene svg{width:100%;height:100%;max-height:100vh;}
+
+  .chapitre{
+    position:absolute;top:12%;left:0;right:0;text-align:center;
+    font-size:clamp(18px,4.5vw,30px);font-weight:bold;color:#F1D687;
+    text-shadow:0 2px 12px rgba(0,0,0,.8);
+    opacity:0;pointer-events:none;
+  }
+  .scene.active .chapitre{animation:chapAff 4.5s ease-in-out forwards;}
+  @keyframes chapAff{0%{opacity:0;transform:translateY(10px);}12%,80%{opacity:1;transform:translateY(0);}100%{opacity:0;}}
+
+  /* ========== SOUS-TITRES ========== */
+  #bandeau{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
+    padding:14px 18px 46px;text-align:center;
+    background:linear-gradient(180deg,transparent,rgba(7,9,26,.9) 40%);
+    pointer-events:none;
+  }
+  body.enCours #bandeau{display:block;}
+  #soustitre{
+    font-size:clamp(15px,3.4vw,22px);font-style:italic;color:#F5EFE0;
+    text-shadow:0 2px 8px rgba(0,0,0,.9);
+    min-height:1.4em;
+  }
+
+  /* ========== CONTRÔLES ========== */
+  #controles{
+    position:fixed;top:0;left:0;right:0;z-index:45;display:none;
+    align-items:center;gap:10px;padding:10px 14px;
+    background:linear-gradient(180deg,rgba(7,9,26,.85),transparent);
+    font-family:sans-serif;
+  }
+  body.enCours #controles{display:flex;}
+  #controles button{
+    background:rgba(241,214,135,.14);color:#F1D687;
+    border:1px solid rgba(212,175,55,.5);border-radius:999px;
+    font-size:14px;font-weight:bold;padding:7px 14px;cursor:pointer;
+  }
+  #chapLabel{font-size:13px;font-weight:bold;color:#CEC8B8;margin-left:auto;}
+  #barre{
+    position:fixed;top:0;left:0;right:0;height:4px;z-index:46;display:none;
+    background:rgba(255,255,255,.08);
+  }
+  body.enCours #barre{display:block;}
+  #barrePlein{height:100%;width:0%;background:linear-gradient(90deg,#D4AF37,#F1D687);}
+
+  body.paused .scene *{animation-play-state:paused !important;}
+  #pauseVoile{
+    position:fixed;inset:0;z-index:44;display:none;
+    align-items:center;justify-content:center;
+    background:rgba(7,9,26,.45);
+    font-size:clamp(26px,6vw,44px);font-weight:bold;color:#F1D687;
+    text-shadow:0 2px 14px rgba(0,0,0,.9);
+  }
+  body.paused #pauseVoile{display:flex;}
+
+  /* ========== ÉCRAN DE FIN ========== */
+  #finEcran{
+    position:fixed;inset:0;z-index:48;display:none;
+    flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at 50% 30%, #1E2745 0%, #07091A 70%);
+    text-align:center;padding:20px;
+  }
+  #finEcran.visible{display:flex;}
+  #finEcran h2{
+    font-size:clamp(34px,8vw,60px);
+    background:linear-gradient(180deg,#F1D687 20%,#D4AF37 70%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:#D4AF37;
+  }
+  #finEcran .gen{margin-top:14px;font-style:italic;color:#CEC8B8;font-size:clamp(13px,3vw,17px);line-height:2;}
+  #btnRejouer{
+    margin-top:24px;font-family:Georgia,serif;font-weight:bold;font-size:18px;
+    background:transparent;color:#F1D687;
+    border:2px solid #D4AF37;border-radius:999px;padding:12px 32px;cursor:pointer;
+  }
+
+  /* ============ animations communes ============ */
+  .corpsEtoile{filter:drop-shadow(0 0 8px rgba(241,214,135,.9));animation:heroLueur 2s ease-in-out infinite;}
+  @keyframes heroLueur{0%,100%{filter:drop-shadow(0 0 6px rgba(241,214,135,.7));}50%{filter:drop-shadow(0 0 14px rgba(241,214,135,1));}}
+  .yeux{transform-box:fill-box;transform-origin:center;animation:heroCligne 4s infinite;}
+  @keyframes heroCligne{0%,92%,100%{transform:scaleY(1);}95%{transform:scaleY(.1);}}
+  .tw{animation:tw 2.4s ease-in-out infinite;}
+  .tw.t2{animation-delay:.8s;}
+  .tw.t3{animation-delay:1.6s;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:1;}}
+
+  /* ----- Scène 1 ----- */
+  .s1 .h1{animation:s1h 60s linear forwards;}
+  @keyframes s1h{
+    0%{transform:translate(380px,140px);}
+    20%{transform:translate(380px,128px);}
+    40%{transform:translate(392px,140px);}
+    60%{transform:translate(370px,132px);}
+    78%{transform:translate(380px,150px) rotate(0deg);}
+    84%{transform:translate(384px,176px) rotate(24deg);}
+    100%{transform:translate(420px,560px) rotate(200deg);}
+  }
+  .s1 .lune{animation:s1lune 60s linear forwards;transform-box:fill-box;transform-origin:center;}
+  @keyframes s1lune{0%{transform:rotate(-3deg);}100%{transform:rotate(3deg);}}
+  .s1 .bordNuage{animation:s1bn 5s ease-in-out infinite;}
+  @keyframes s1bn{0%,100%{transform:translateX(0);}50%{transform:translateX(8px);}}
+  .s1 .file{animation:s1file 60s linear forwards;opacity:0;}
+  @keyframes s1file{0%,78%{opacity:0;}82%{opacity:.9;}100%{opacity:0;}}
+
+  /* ----- Scène 2 ----- */
+  .s2 .h2{animation:s2h 60s ease-in-out forwards;}
+  @keyframes s2h{
+    0%{transform:translate(380px,-60px) rotate(140deg);}
+    12%{transform:translate(380px,180px) rotate(300deg);}
+    30%{transform:translate(340px,210px) rotate(340deg);}
+    50%{transform:translate(420px,200px) rotate(380deg);}
+    70%{transform:translate(360px,220px) rotate(350deg);}
+    92%{transform:translate(380px,240px) rotate(360deg);}
+    100%{transform:translate(380px,560px) rotate(380deg);}
+  }
+  .s2 .nuagesMonte{animation:s2nm 6s linear infinite;}
+  @keyframes s2nm{0%{transform:translateY(0);}100%{transform:translateY(-480px);}}
+  .s2 .vent{animation:s2vent 1.2s linear infinite;opacity:.35;}
+  @keyframes s2vent{0%{transform:translateY(-40px);opacity:0;}30%{opacity:.4;}100%{transform:translateY(520px);opacity:0;}}
+  .s2 .oiseau{animation:s2ois 60s linear forwards;}
+  @keyframes s2ois{0%,38%{transform:translate(820px,190px);}52%{transform:translate(340px,205px);}66%,100%{transform:translate(-140px,190px);}}
+  .s2 .aile{transform-box:fill-box;transform-origin:center bottom;animation:s2aile .5s ease-in-out infinite alternate;}
+  @keyframes s2aile{0%{transform:rotate(-24deg);}100%{transform:rotate(20deg);}}
+
+  /* ----- Scène 3 ----- */
+  .s3 .h3{animation:s3h 60s ease-in-out forwards;}
+  @keyframes s3h{
+    0%{transform:translate(180px,-80px) rotate(160deg);}
+    6%{transform:translate(190px,352px) rotate(350deg);}
+    9%{transform:translate(195px,332px) rotate(360deg);}
+    12%{transform:translate(198px,352px) rotate(360deg);}
+    55%{transform:translate(240px,350px);}
+    100%{transform:translate(600px,346px);}
+  }
+  .s3 .luc{transform-box:fill-box;transform-origin:center;animation:s3luc 4s ease-in-out infinite;}
+  .s3 .luc.l2{animation-delay:1.3s;}
+  .s3 .luc.l3{animation-delay:2.6s;}
+  @keyframes s3luc{0%,100%{opacity:.2;transform:translate(0,0);}50%{opacity:1;transform:translate(10px,-14px);}}
+  .s3 .caravane{animation:s3car 60s ease-in-out forwards;}
+  @keyframes s3car{0%,22%{transform:translate(300px,300px);}60%{transform:translate(420px,296px);}100%{transform:translate(700px,290px);}}
+  .s3 .hibouYeux{transform-box:fill-box;transform-origin:center;animation:s3hib 5s infinite;}
+  @keyframes s3hib{0%,90%,100%{transform:scaleY(1);}94%{transform:scaleY(.1);}}
+  .s3 .brancheBal{transform-box:fill-box;transform-origin:left center;animation:s3bal 4s ease-in-out infinite;}
+  @keyframes s3bal{0%,100%{transform:rotate(0deg);}50%{transform:rotate(1.6deg);}}
+
+  /* ----- Scène 4 ----- */
+  .s4 .feuille{animation:s4f 60s ease-in-out forwards;}
+  @keyframes s4f{
+    0%{transform:translate(60px,318px) rotate(-3deg);}
+    14%{transform:translate(180px,322px) rotate(3deg);}
+    28%{transform:translate(300px,318px) rotate(-3deg);}
+    42%{transform:translate(360px,322px) rotate(2deg);}
+    56%{transform:translate(370px,300px) rotate(0deg);}
+    62%,100%{transform:translate(370px,268px);}
+  }
+  .s4 .baleine4{animation:s4b 60s ease-in-out forwards;}
+  @keyframes s4b{
+    0%,34%{transform:translate(980px,420px);}
+    50%{transform:translate(560px,330px);}
+    60%{transform:translate(430px,330px);}
+    78%{transform:translate(300px,326px);}
+    100%{transform:translate(-40px,320px);}
+  }
+  .s4 .hSurBaleine{animation:s4hb 60s linear forwards;opacity:0;}
+  @keyframes s4hb{0%,61%{opacity:0;}62%,100%{opacity:1;}}
+  .s4 .hFeuille{animation:s4hf 60s linear forwards;}
+  @keyframes s4hf{0%,61%{opacity:1;}62%,100%{opacity:0;}}
+  .s4 .queue4{transform-box:fill-box;transform-origin:right center;animation:s4q 1.4s ease-in-out infinite;}
+  @keyframes s4q{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(10deg);}}
+  .s4 .vague4{animation:s4v 5s ease-in-out infinite;}
+  .s4 .vague4.v2{animation-delay:2.5s;}
+  @keyframes s4v{0%,100%{transform:translateX(0);}50%{transform:translateX(-26px);}}
+  .s4 .poisson4{animation:s4p 60s linear forwards;}
+  @keyframes s4p{0%,20%{transform:translate(500px,360px) rotate(0);}24%{transform:translate(540px,300px) rotate(-30deg);}28%,100%{transform:translate(590px,370px) rotate(-90deg);}}
+
+  /* ----- Scène 5 ----- */
+  .s5 .fondTempete{animation:s5f 60s linear forwards;}
+  @keyframes s5f{0%,8%{opacity:0;}16%,72%{opacity:1;}88%,100%{opacity:0;}}
+  .s5 .eclair{animation:s5e 60s linear forwards;opacity:0;}
+  @keyframes s5e{0%,20%{opacity:0;}21%{opacity:1;}23%{opacity:0;}34%{opacity:0;}35%{opacity:1;}37%{opacity:0;}52%{opacity:0;}53%{opacity:.9;}55%,100%{opacity:0;}}
+  .s5 .pluie{animation:s5p .7s linear infinite;}
+  @keyframes s5p{0%{transform:translateY(-60px);}100%{transform:translateY(480px);}}
+  .s5 .pluieOp{animation:s5po 60s linear forwards;}
+  @keyframes s5po{0%,10%{opacity:0;}18%,70%{opacity:.5;}86%,100%{opacity:0;}}
+  .s5 .duo{animation:s5d 60s ease-in-out forwards;}
+  @keyframes s5d{
+    0%{transform:translate(380px,320px) rotate(0);}
+    20%{transform:translate(360px,300px) rotate(-7deg);}
+    32%{transform:translate(400px,336px) rotate(8deg);}
+    44%{transform:translate(356px,306px) rotate(-8deg);}
+    56%{transform:translate(396px,330px) rotate(6deg);}
+    72%{transform:translate(376px,318px) rotate(-3deg);}
+    100%{transform:translate(380px,320px) rotate(0);}
+  }
+  .s5 .superLueur{animation:s5l 60s linear forwards;opacity:0;transform-box:fill-box;transform-origin:center;}
+  @keyframes s5l{0%,48%{opacity:0;transform:scale(.4);}58%{opacity:.85;transform:scale(1.25);}74%{opacity:.5;transform:scale(1);}100%{opacity:.25;transform:scale(.9);}}
+  .s5 .vagueT{animation:s5v 2.2s ease-in-out infinite;}
+  .s5 .vagueT.v2{animation-delay:1.1s;}
+  @keyframes s5v{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,-12px);}}
+
+  /* ----- Scène 6 ----- */
+  .s6 .faisceau{transform-box:fill-box;transform-origin:14% 50%;animation:s6f 8s linear infinite;}
+  @keyframes s6f{0%{transform:rotate(-40deg);}50%{transform:rotate(30deg);}100%{transform:rotate(-40deg);}}
+  .s6 .lampe{animation:s6l 8s linear infinite;}
+  @keyframes s6l{0%,100%{opacity:.7;}50%{opacity:1;}}
+  .s6 .duo6{animation:s6d 60s ease-in-out forwards;}
+  @keyframes s6d{0%{transform:translate(760px,352px);}30%{transform:translate(520px,346px);}60%,100%{transform:translate(420px,350px);}}
+  .s6 .queue6{transform-box:fill-box;transform-origin:right center;animation:s4q 1.6s ease-in-out infinite;}
+  .s6 .vague6{animation:s4v 6s ease-in-out infinite;}
+  .s6 .vague6.v2{animation-delay:3s;}
+
+  /* ----- Scène 7 ----- */
+  .s7 .h7{animation:s7h 60s ease-in-out forwards;}
+  @keyframes s7h{
+    0%{transform:translate(60px,306px);}
+    16%{transform:translate(150px,306px);}
+    22%{transform:translate(196px,266px);}
+    38%{transform:translate(300px,266px);}
+    44%{transform:translate(352px,318px);}
+    64%{transform:translate(470px,318px);}
+    70%{transform:translate(520px,282px);}
+    100%{transform:translate(660px,282px);}
+  }
+  .s7 .chat{animation:s7c 60s ease-in-out forwards;}
+  @keyframes s7c{
+    0%{transform:translate(10px,318px);}
+    16%{transform:translate(104px,318px);}
+    22%{transform:translate(152px,278px);}
+    38%{transform:translate(256px,278px);}
+    44%{transform:translate(308px,330px);}
+    64%{transform:translate(426px,330px);}
+    70%{transform:translate(476px,294px);}
+    100%{transform:translate(616px,294px);}
+  }
+  .s7 .queueChat{transform-box:fill-box;transform-origin:bottom left;animation:s7q 1.6s ease-in-out infinite;}
+  @keyframes s7q{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(14deg);}}
+  .s7 .fen{animation:s7fen 3.4s ease-in-out infinite;}
+  .s7 .fen.f2{animation-delay:1.2s;}
+  .s7 .fen.f3{animation-delay:2.3s;}
+  @keyframes s7fen{0%,100%{opacity:.4;}50%{opacity:1;}}
+  .s7 .fumee{animation:s7fum 4s linear infinite;opacity:0;}
+  .s7 .fumee.f2{animation-delay:2s;}
+  @keyframes s7fum{0%{transform:translate(0,0) scale(.6);opacity:0;}20%{opacity:.5;}100%{transform:translate(14px,-46px) scale(1.4);opacity:0;}}
+  .s7 .feteLoin{animation:s7fete 60s linear forwards;opacity:0;}
+  @keyframes s7fete{0%,58%{opacity:0;}70%,100%{opacity:1;}}
+  .s7 .grandeRoue7{transform-box:fill-box;transform-origin:center;animation:s7roue 14s linear infinite;}
+  @keyframes s7roue{0%{transform:rotate(0);}100%{transform:rotate(360deg);}}
+
+  /* ----- Scène 8 ----- */
+  .s8 .ballon8{animation:s8b 60s ease-in-out forwards;}
+  @keyframes s8b{
+    0%{transform:translate(380px,330px);}
+    20%{transform:translate(376px,268px);}
+    45%{transform:translate(388px,196px);}
+    70%{transform:translate(374px,150px);}
+    100%{transform:translate(382px,120px);}
+  }
+  .s8 .ville8{animation:s8v 60s ease-in-out forwards;}
+  @keyframes s8v{0%{transform:translateY(0) scale(1);}100%{transform:translateY(150px) scale(1.06);}}
+  .s8 .flamme8{transform-box:fill-box;transform-origin:center bottom;animation:s8fl .5s ease-in-out infinite;}
+  @keyframes s8fl{0%,100%{transform:scaleY(1);}50%{transform:scaleY(1.5);}}
+  .s8 .nuage8{animation:s8n 60s linear forwards;}
+  @keyframes s8n{0%{transform:translate(0,180px);opacity:0;}30%{opacity:.6;}100%{transform:translate(-90px,470px);opacity:0;}}
+  .s8 .nuage8.n2{animation-name:s8n2;}
+  @keyframes s8n2{0%{transform:translate(0,60px);opacity:0;}45%{opacity:.5;}100%{transform:translate(70px,430px);opacity:0;}}
+  .s8 .oiseau8{animation:s8o 60s linear forwards;}
+  @keyframes s8o{0%,55%{transform:translate(-120px,180px);}70%{transform:translate(330px,168px);}85%,100%{transform:translate(860px,150px);}}
+
+  /* ----- Scène 9 ----- */
+  .s9 .grandeRoue{transform-box:fill-box;transform-origin:center;animation:s7roue 12s linear infinite;}
+  .s9 .guir{animation:s9g 1.6s ease-in-out infinite;}
+  .s9 .guir.g2{animation-delay:.8s;}
+  @keyframes s9g{0%,100%{opacity:.4;}50%{opacity:1;}}
+  .s9 .ballon9{animation:s9b 60s ease-in-out forwards;}
+  @keyframes s9b{0%{transform:translate(380px,-160px);}25%{transform:translate(378px,96px);}60%,100%{transform:translate(380px,110px);}}
+  .s9 .hTransfert{animation:s9t 60s ease-in-out forwards;}
+  @keyframes s9t{
+    0%,58%{transform:translate(380px,150px);opacity:0;}
+    59%{opacity:1;}
+    64%{transform:translate(520px,300px);}
+    68%,74%{transform:translate(560px,336px);}
+    76%{transform:translate(560px,330px);}
+    78%{transform:translate(560px,336px);opacity:1;}
+    79%,100%{opacity:0;}
+  }
+  .s9 .fuseeFinale{animation:s9f 60s ease-in-out forwards;}
+  @keyframes s9f{
+    0%,77%{transform:translate(560px,340px);opacity:1;}
+    82%{transform:translate(540px,120px);}
+    88%,100%{transform:translate(500px,-260px);opacity:1;}
+  }
+  .s9 .flammeF{transform-box:fill-box;transform-origin:center top;animation:s9fl .3s ease-in-out infinite;opacity:0;}
+  .s9 .flammeOn{animation:s9fl .3s ease-in-out infinite, s9flon 60s linear forwards;}
+  @keyframes s9flon{0%,76%{opacity:0;}77%,100%{opacity:1;}}
+  @keyframes s9fl{0%,100%{transform:scaleY(1);}50%{transform:scaleY(1.6);}}
+  .s9 .feuP{transform-box:fill-box;transform-origin:center;opacity:0;}
+  .s9 .feuP.p1{animation:s9p1 60s ease-out forwards;}
+  @keyframes s9p1{0%,84%{transform:scale(0);opacity:0;}87%{opacity:1;}92%{transform:scale(1);opacity:0;}100%{opacity:0;}}
+  .s9 .feuP.p2{animation:s9p2 60s ease-out forwards;}
+  @keyframes s9p2{0%,88%{transform:scale(0);opacity:0;}91%{opacity:1;}96%{transform:scale(1);opacity:0;}100%{opacity:0;}}
+  .s9 .feuP.p3{animation:s9p3 60s ease-out forwards;}
+  @keyframes s9p3{0%,92%{transform:scale(0);opacity:0;}95%{opacity:1;}100%{transform:scale(1);opacity:0;}}
+  .s9 .compte{animation:s9c 60s linear forwards;opacity:0;}
+  @keyframes s9c{0%,66%{opacity:0;}67%,76%{opacity:1;}78%,100%{opacity:0;}}
+
+  /* ----- Scène 10 ----- */
+  .s10 .h10{animation:s10h 60s ease-in-out forwards;transform-box:fill-box;}
+  @keyframes s10h{
+    0%{transform:translate(380px,560px) scale(.7);}
+    12%{transform:translate(380px,190px) scale(1);}
+    30%{transform:translate(380px,178px) scale(1.06);}
+    60%{transform:translate(380px,186px) scale(1);}
+    100%{transform:translate(380px,180px) scale(1.05);}
+  }
+  .s10 .halo{transform-box:fill-box;transform-origin:center;animation:s10halo 3s ease-in-out infinite;}
+  @keyframes s10halo{0%,100%{transform:scale(1);opacity:.35;}50%{transform:scale(1.25);opacity:.6;}}
+  .s10 .filante{animation:s10fil 60s linear forwards;opacity:0;}
+  @keyframes s10fil{0%,40%{transform:translate(0,0);opacity:0;}42%{opacity:1;}50%{transform:translate(-360px,150px);opacity:0;}100%{opacity:0;}}
+  .s10 .finTexte{animation:s10fin 60s linear forwards;opacity:0;}
+  @keyframes s10fin{0%,82%{opacity:0;}90%,100%{opacity:1;}}
+</style>
+</head>
+<body>
+
+<div id="accueil">
+  <div class="etoiles">✨ ⭐ ✨</div>
+  <h1>Étincelle,<br>la Petite Étoile</h1>
+  <div class="st">un dessin animé en 10 chapitres · 10 minutes</div>
+  <div class="infos">Une production du Festival de l'Animation · par Raphaël</div>
+  <button id="btnCommencer" onclick="demarrer()">🎬 Commencer</button>
+</div>
+
+<div id="barre"><div id="barrePlein"></div></div>
+<div id="controles">
+  <button onclick="basculerPause()" id="btnPause">⏸ Pause</button>
+  <button onclick="passer()">⏭ Chapitre suivant</button>
+  <span id="chapLabel"></span>
+</div>
+<div id="pauseVoile">⏸ PAUSE</div>
+
+<div id="cinema">
+
+<!-- ========== SCÈNE 1 : PROLOGUE ========== -->
+<div class="scene s1" id="s1">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><radialGradient id="g1" cx=".5" cy=".3" r=".9">
+    <stop offset="0" stop-color="#1E2745"/><stop offset="1" stop-color="#07091A"/></radialGradient></defs>
+  <rect width="760" height="480" fill="url(#g1)"/>
+  <g fill="#F1D687">
+    <circle class="tw" cx="90" cy="70" r="2.4"/><circle class="tw t2" cx="210" cy="120" r="1.8"/>
+    <circle class="tw t3" cx="330" cy="60" r="2"/><circle class="tw" cx="470" cy="110" r="1.7"/>
+    <circle class="tw t2" cx="590" cy="70" r="2.3"/><circle class="tw t3" cx="690" cy="140" r="1.6"/>
+    <circle class="tw" cx="150" cy="220" r="1.5"/><circle class="tw t3" cx="620" cy="230" r="1.8"/>
+    <circle class="tw t2" cx="70" cy="330" r="1.6"/><circle class="tw" cx="700" cy="330" r="1.5"/>
+  </g>
+  <g class="lune">
+    <circle cx="620" cy="110" r="46" fill="#F5EFE0" opacity=".95"/>
+    <circle cx="604" cy="98" r="9" fill="#DDD5C0"/><circle cx="636" cy="124" r="6" fill="#DDD5C0"/>
+    <circle cx="618" cy="132" r="4" fill="#DDD5C0"/>
+  </g>
+  <g class="bordNuage" opacity=".85">
+    <ellipse cx="380" cy="205" rx="95" ry="22" fill="#232C4C"/>
+    <ellipse cx="320" cy="196" rx="45" ry="16" fill="#2A3458"/>
+    <ellipse cx="440" cy="196" rx="45" ry="16" fill="#2A3458"/>
+  </g>
+  <path class="file" d="M400 200 Q430 320 420 470" stroke="#F1D687" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="4 10"/>
+  <g class="h1"><g class="slotHero"></g></g>
+</svg>
+<div class="chapitre">Chapitre 1 · La plus curieuse des étoiles</div>
+</div>
+
+<!-- ========== SCÈNE 2 : LA CHUTE ========== -->
+<div class="scene s2" id="s2">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#101426"/><stop offset="1" stop-color="#2A3458"/></linearGradient></defs>
+  <rect width="760" height="480" fill="url(#g2)"/>
+  <g class="nuagesMonte" opacity=".8">
+    <g><ellipse cx="140" cy="90" rx="70" ry="20" fill="#3A4468"/><ellipse cx="190" cy="80" rx="40" ry="15" fill="#434E78"/></g>
+    <g><ellipse cx="600" cy="200" rx="80" ry="22" fill="#3A4468"/><ellipse cx="550" cy="190" rx="42" ry="15" fill="#434E78"/></g>
+    <g><ellipse cx="320" cy="360" rx="65" ry="18" fill="#3A4468"/></g>
+    <g><ellipse cx="140" cy="570" rx="70" ry="20" fill="#3A4468"/><ellipse cx="190" cy="560" rx="40" ry="15" fill="#434E78"/></g>
+    <g><ellipse cx="600" cy="680" rx="80" ry="22" fill="#3A4468"/><ellipse cx="550" cy="670" rx="42" ry="15" fill="#434E78"/></g>
+    <g><ellipse cx="320" cy="840" rx="65" ry="18" fill="#3A4468"/></g>
+  </g>
+  <g stroke="#7FB8F5" stroke-width="2" stroke-linecap="round">
+    <line class="vent" x1="120" y1="0" x2="120" y2="46"/>
+    <line class="vent" x1="640" y1="-80" x2="640" y2="-30" style="animation-delay:.4s"/>
+    <line class="vent" x1="260" y1="-40" x2="260" y2="8" style="animation-delay:.8s"/>
+    <line class="vent" x1="520" y1="-20" x2="520" y2="30" style="animation-delay:.2s"/>
+  </g>
+  <g class="oiseau">
+    <ellipse cx="0" cy="0" rx="16" ry="9" fill="#434E78"/>
+    <circle cx="14" cy="-4" r="6" fill="#434E78"/><circle cx="16.5" cy="-5" r="1.4" fill="#F5EFE0"/>
+    <path d="M20 -3 l8 2 -8 3 Z" fill="#F6B93B"/>
+    <path class="aile" d="M-4 -2 Q-2 -20 12 -18 Q4 -8 2 -2 Z" fill="#5A679E"/>
+  </g>
+  <g class="h2"><g class="slotHero"></g></g>
+</svg>
+<div class="chapitre">Chapitre 2 · La grande chute</div>
+</div>
+
+<!-- ========== SCÈNE 3 : LA FORÊT ========== -->
+<div class="scene s3" id="s3">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0A1424"/><stop offset="1" stop-color="#122A22"/></linearGradient></defs>
+  <rect width="760" height="480" fill="url(#g3)"/>
+  <circle class="tw" cx="120" cy="60" r="1.8" fill="#F1D687"/><circle class="tw t2" cx="420" cy="45" r="1.5" fill="#F1D687"/>
+  <circle class="tw t3" cx="660" cy="80" r="2" fill="#F1D687"/>
+  <g fill="#0E1F1A">
+    <path d="M60 400 L100 180 L140 400 Z"/><path d="M150 400 L200 120 L250 400 Z"/>
+    <path d="M540 400 L590 140 L640 400 Z"/><path d="M650 400 L690 200 L730 400 Z"/>
+    <path d="M330 400 L370 200 L410 400 Z" opacity=".8"/>
+  </g>
+  <g class="brancheBal">
+    <path d="M590 210 q60 -8 105 6" stroke="#1B3327" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <g transform="translate(668,196)">
+      <ellipse cx="0" cy="0" rx="15" ry="19" fill="#5C4326"/>
+      <circle cx="0" cy="-10" r="11" fill="#6D5230"/>
+      <path d="M-8 -18 l4 -8 4 8 Z" fill="#6D5230"/><path d="M0 -18 l4 -8 4 8 Z" fill="#6D5230"/>
+      <g class="hibouYeux"><circle cx="-4.5" cy="-11" r="3.6" fill="#F1D687"/><circle cx="4.5" cy="-11" r="3.6" fill="#F1D687"/>
+      <circle cx="-4.5" cy="-11" r="1.6" fill="#101426"/><circle cx="4.5" cy="-11" r="1.6" fill="#101426"/></g>
+      <path d="M-2 -7 l2 3 2 -3 Z" fill="#F6B93B"/>
+    </g>
+  </g>
+  <rect x="0" y="392" width="760" height="88" fill="#122A22"/>
+  <path d="M0 396 Q95 384 190 396 T380 396 T570 396 T760 396" stroke="#1B3327" stroke-width="7" fill="none"/>
+  <g class="caravane">
+    <circle class="luc" cx="0" cy="0" r="4" fill="#C8F169"/>
+    <circle class="luc l2" cx="26" cy="-14" r="3.4" fill="#C8F169"/>
+    <circle class="luc l3" cx="52" cy="2" r="3.8" fill="#C8F169"/>
+  </g>
+  <circle class="luc" cx="120" cy="250" r="3" fill="#C8F169"/>
+  <circle class="luc l3" cx="480" cy="300" r="3" fill="#C8F169"/>
+  <g class="h3"><g class="slotHero"></g></g>
+</svg>
+<div class="chapitre">Chapitre 3 · La forêt des lucioles</div>
+</div>
+
+<!-- ========== SCÈNE 4 : L'OCÉAN ========== -->
+<div class="scene s4" id="s4">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#101426"/><stop offset=".55" stop-color="#0E2A4A"/><stop offset="1" stop-color="#081A30"/></linearGradient></defs>
+  <rect width="760" height="480" fill="url(#g4)"/>
+  <circle class="tw" cx="140" cy="60" r="2" fill="#F1D687"/><circle class="tw t2" cx="380" cy="40" r="1.7" fill="#F1D687"/>
+  <circle class="tw t3" cx="620" cy="70" r="2.1" fill="#F1D687"/>
+  <circle cx="660" cy="90" r="30" fill="#F5EFE0" opacity=".9"/>
+  <path class="vague4" d="M-40 300 Q55 286 150 300 T340 300 T530 300 T720 300 T910 300 V480 H-40 Z" fill="#123A63" opacity=".9"/>
+  <path class="vague4 v2" d="M-40 322 Q55 310 150 322 T340 322 T530 322 T720 322 T910 322 V480 H-40 Z" fill="#0E2F52"/>
+  <g class="poisson4">
+    <path d="M0 0 C12 -10 30 -10 38 0 C30 10 12 10 0 0 Z" fill="#D4AF37"/>
+    <path d="M0 0 L-12 -9 L-12 9 Z" fill="#F1D687"/><circle cx="31" cy="-2.6" r="2" fill="#101426"/>
+  </g>
+  <g class="feuille">
+    <path d="M-34 12 Q0 30 34 12 Q18 4 0 4 Q-18 4 -34 12 Z" fill="#3FA34D"/>
+    <path d="M-30 12 Q0 8 30 12" stroke="#2E7D5B" stroke-width="2" fill="none"/>
+    <g class="hFeuille" transform="translate(0,-16) scale(.8)"><g class="slotHero"></g></g>
+  </g>
+  <g class="baleine4">
+    <g>
+      <path d="M-85 0 C-85 -50 85 -50 95 -5 C100 17 72 36 24 36 C-36 36 -85 26 -85 0 Z" fill="#2E86C1"/>
+      <path d="M-85 0 C-85 14 -36 36 24 36 C72 36 100 17 95 -5 C72 10 -36 17 -85 0 Z" fill="#7FB8F5" opacity=".55"/>
+      <g class="queue4"><path d="M-83 -3 C-112 -17 -117 -36 -131 -41 C-124 -22 -124 -8 -131 11 C-117 4 -110 -3 -83 -3 Z" fill="#2E86C1"/></g>
+      <circle cx="56" cy="-10" r="5.5" fill="#101426"/>
+      <path d="M36 10 Q53 20 70 10" stroke="#101426" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g class="hSurBaleine" transform="translate(10,-58) scale(.85)"><g class="slotHero"></g></g>
+    </g>
+  </g>
+</svg>
+<div class="chapitre">Chapitre 4 · La rencontre de l'océan</div>
+</div>
+
+<!-- ========== SCÈNE 5 : LA TEMPÊTE ========== -->
+<div class="scene s5" id="s5">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g5" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0E2A4A"/><stop offset="1" stop-color="#081A30"/></linearGradient>
+  <linearGradient id="g5b" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#151B33"/><stop offset="1" stop-color="#0A0F22"/></linearGradient></defs>
+  <rect width="760" height="480" fill="url(#g5)"/>
+  <rect class="fondTempete" width="760" height="480" fill="url(#g5b)"/>
+  <g class="fondTempete">
+    <ellipse cx="180" cy="70" rx="110" ry="34" fill="#232C4C"/>
+    <ellipse cx="420" cy="50" rx="130" ry="38" fill="#1C2440"/>
+    <ellipse cx="640" cy="80" rx="100" ry="32" fill="#232C4C"/>
+  </g>
+  <path class="eclair" d="M300 84 L268 170 L296 168 L252 268 L316 176 L288 178 L330 92 Z" fill="#F1D687"/>
+  <path class="eclair" style="animation-delay:.15s" d="M540 70 L516 140 L538 138 L505 220 L556 146 L534 148 L566 78 Z" fill="#F5EFE0" opacity=".9"/>
+  <g class="pluieOp"><g class="pluie" stroke="#7FB8F5" stroke-width="2" stroke-linecap="round">
+    <line x1="80" y1="0" x2="72" y2="26"/><line x1="180" y1="-40" x2="172" y2="-14"/>
+    <line x1="280" y1="-20" x2="272" y2="6"/><line x1="380" y1="-50" x2="372" y2="-24"/>
+    <line x1="480" y1="-10" x2="472" y2="16"/><line x1="580" y1="-45" x2="572" y2="-19"/>
+    <line x1="680" y1="-25" x2="672" y2="1"/><line x1="130" y1="-90" x2="122" y2="-64"/>
+    <line x1="330" y1="-100" x2="322" y2="-74"/><line x1="530" y1="-80" x2="522" y2="-54"/>
+    <line x1="630" y1="-110" x2="622" y2="-84"/><line x1="230" y1="-120" x2="222" y2="-94"/>
+  </g></g>
+  <path class="vagueT" d="M-60 340 Q35 306 130 340 T320 340 T510 340 T700 340 T890 340 V480 H-60 Z" fill="#123A63"/>
+  <path class="vagueT v2" d="M-60 368 Q35 340 130 368 T320 368 T510 368 T700 368 T890 368 V480 H-60 Z" fill="#0E2F52"/>
+  <g class="duo">
+    <circle class="superLueur" cx="10" cy="-52" r="70" fill="#F1D687"/>
+    <g>
+      <path d="M-70 0 C-70 -42 70 -42 78 -4 C82 14 60 30 20 30 C-30 30 -70 22 -70 0 Z" fill="#2E86C1"/>
+      <g class="queue4"><path d="M-68 -2 C-92 -14 -96 -30 -108 -34 C-102 -18 -102 -6 -108 10 C-96 4 -90 -2 -68 -2 Z" fill="#2E86C1"/></g>
+      <circle cx="46" cy="-8" r="4.5" fill="#101426"/>
+      <path d="M32 8 Q45 14 58 8" stroke="#101426" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <g transform="translate(10,-52) scale(.85)"><g class="slotHero"></g></g>
+    </g>
+  </g>
+</svg>
+<div class="chapitre">Chapitre 5 · La tempête</div>
+</div>
+
+<!-- ========== SCÈNE 6 : LE PHARE ========== -->
+<div class="scene s6" id="s6">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g6" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#101426"/><stop offset="1" stop-color="#0E2A4A"/></linearGradient></defs>
+  <rect width="760" height="480" fill="url(#g6)"/>
+  <circle class="tw" cx="120" cy="70" r="2" fill="#F1D687"/><circle class="tw t2" cx="300" cy="50" r="1.6" fill="#F1D687"/>
+  <circle class="tw t3" cx="480" cy="80" r="1.9" fill="#F1D687"/><circle class="tw" cx="660" cy="55" r="1.7" fill="#F1D687"/>
+  <path class="faisceau" d="M156 118 L560 60 L560 176 Z" fill="#F1D687" opacity=".28"/>
+  <ellipse cx="120" cy="410" rx="150" ry="46" fill="#1B3327"/>
+  <g>
+    <path d="M96 380 L112 130 H148 L164 380 Z" fill="#F5EFE0"/>
+    <path d="M99 340 h62 M103 290 h56 M106 240 h50 M109 195 h44" stroke="#C1121F" stroke-width="22"/>
+    <path d="M96 380 L112 130 H148 L164 380 Z" fill="none" stroke="#8d8776" stroke-width="2"/>
+    <rect x="106" y="100" width="48" height="34" rx="4" fill="#101426" stroke="#D4AF37" stroke-width="2"/>
+    <circle class="lampe" cx="130" cy="117" r="11" fill="#F1D687" style="filter:drop-shadow(0 0 10px #F1D687)"/>
+    <path d="M100 100 h60 l-8 -14 h-44 Z" fill="#8C2438"/>
+  </g>
+  <path class="vague6" d="M-40 396 Q55 382 150 396 T340 396 T530 396 T720 396 T910 396 V480 H-40 Z" fill="#123A63"/>
+  <path class="vague6 v2" d="M-40 420 Q55 408 150 420 T340 420 T530 420 T720 420 T910 420 V480 H-40 Z" fill="#0E2F52"/>
+  <g class="duo6">
+    <g transform="scale(.9)">
+      <path d="M-70 0 C-70 -42 70 -42 78 -4 C82 14 60 30 20 30 C-30 30 -70 22 -70 0 Z" fill="#2E86C1"/>
+      <g class="queue6"><path d="M-68 -2 C-92 -14 -96 -30 -108 -34 C-102 -18 -102 -6 -108 10 C-96 4 -90 -2 -68 -2 Z" fill="#2E86C1"/></g>
+      <circle cx="46" cy="-8" r="4.5" fill="#101426"/>
+      <path d="M32 8 Q45 14 58 8" stroke="#101426" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <g transform="translate(10,-52) scale(.9)"><g class="slotHero"></g></g>
+    </g>
+  </g>
+</svg>
+<div class="chapitre">Chapitre 6 · La lumière du phare</div>
+</div>
+
+<!-- ========== SCÈNE 7 : LA VILLE ENDORMIE ========== -->
+<div class="scene s7" id="s7">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g7" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#101426"/><stop offset="1" stop-color="#1E2745"/></linearGradient></defs>
+  <rect width="760" height="480" fill="url(#g7)"/>
+  <circle cx="90" cy="80" r="34" fill="#F5EFE0" opacity=".95"/><circle cx="80" cy="72" r="7" fill="#DDD5C0"/>
+  <circle class="tw" cx="240" cy="60" r="1.8" fill="#F1D687"/><circle class="tw t2" cx="420" cy="90" r="1.6" fill="#F1D687"/>
+  <circle class="tw t3" cx="600" cy="50" r="2" fill="#F1D687"/>
+  <g class="feteLoin">
+    <g transform="translate(690,150) scale(.5)">
+      <g class="grandeRoue7">
+        <circle r="40" fill="none" stroke="#F6B93B" stroke-width="3"/>
+        <path d="M0 -40 V40 M-40 0 H40 M-28 -28 L28 28 M-28 28 L28 -28" stroke="#F6B93B" stroke-width="2.4"/>
+        <circle cx="0" cy="-40" r="5" fill="#FF6B6B"/><circle cx="40" cy="0" r="5" fill="#7FB8F5"/>
+        <circle cx="0" cy="40" r="5" fill="#C8F169"/><circle cx="-40" cy="0" r="5" fill="#C9A7F5"/>
+      </g>
+      <path d="M-14 40 L0 4 L14 40" stroke="#B9770E" stroke-width="4" fill="none"/>
+    </g>
+    <circle class="guir7 fen" cx="648" cy="196" r="3" fill="#FF6B6B"/>
+    <circle class="fen f2" cx="662" cy="206" r="3" fill="#C8F169"/>
+    <circle class="fen f3" cx="732" cy="200" r="3" fill="#7FB8F5"/>
+  </g>
+  <g>
+    <rect x="20" y="330" width="150" height="150" fill="#151B33"/><path d="M12 330 L95 296 L178 330 Z" fill="#0F1430"/>
+    <rect x="196" y="290" width="130" height="190" fill="#1A2138"/><rect x="196" y="278" width="130" height="12" fill="#10162E"/>
+    <rect x="352" y="342" width="140" height="138" fill="#151B33"/><path d="M344 342 L422 306 L500 342 Z" fill="#0F1430"/>
+    <rect x="516" y="306" width="120" height="174" fill="#1A2138"/><rect x="516" y="294" width="120" height="12" fill="#10162E"/>
+    <rect x="652" y="350" width="100" height="130" fill="#151B33"/>
+    <rect x="236" y="250" width="14" height="28" fill="#10162E"/>
+    <g class="fumee"><circle cx="243" cy="244" r="7" fill="#434E78"/></g>
+    <g class="fumee f2"><circle cx="243" cy="244" r="5" fill="#434E78"/></g>
+    <g fill="#F6B93B">
+      <rect class="fen" x="48" y="360" width="16" height="20" rx="2"/>
+      <rect class="fen f2" x="110" y="400" width="16" height="20" rx="2"/>
+      <rect class="fen f3" x="226" y="330" width="15" height="19" rx="2"/>
+      <rect class="fen" x="280" y="380" width="15" height="19" rx="2"/>
+      <rect class="fen f2" x="390" y="380" width="16" height="20" rx="2"/>
+      <rect class="fen f3" x="545" y="340" width="15" height="19" rx="2"/>
+      <rect class="fen" x="596" y="400" width="15" height="19" rx="2"/>
+      <rect class="fen f3" x="680" y="386" width="15" height="19" rx="2"/>
+    </g>
+  </g>
+  <g class="chat">
+    <g>
+      <ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"/>
+      <circle cx="15" cy="-8" r="7.5" fill="#181B2C"/>
+      <path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"/><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"/>
+      <circle cx="13.5" cy="-9" r="1.3" fill="#C8F169"/><circle cx="18.5" cy="-9" r="1.3" fill="#C8F169"/>
+      <path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+  <g class="h7"><g transform="scale(.85)"><g class="slotHero"></g></g></g>
+</svg>
+<div class="chapitre">Chapitre 7 · La ville endormie</div>
+</div>
+
+<!-- ========== SCÈNE 8 : LA MONTGOLFIÈRE ========== -->
+<div class="scene s8" id="s8">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g8" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#07091A"/><stop offset="1" stop-color="#1E2745"/></linearGradient></defs>
+  <rect width="760" height="480" fill="url(#g8)"/>
+  <circle class="tw" cx="120" cy="60" r="2.2" fill="#F1D687"/><circle class="tw t2" cx="300" cy="40" r="1.7" fill="#F1D687"/>
+  <circle class="tw t3" cx="520" cy="70" r="2" fill="#F1D687"/><circle class="tw" cx="680" cy="50" r="1.8" fill="#F1D687"/>
+  <circle class="tw t2" cx="200" cy="140" r="1.5" fill="#F1D687"/><circle class="tw t3" cx="580" cy="150" r="1.6" fill="#F1D687"/>
+  <circle cx="650" cy="100" r="36" fill="#F5EFE0" opacity=".95"/><circle cx="638" cy="90" r="8" fill="#DDD5C0"/>
+  <g class="ville8">
+    <rect x="60" y="380" width="90" height="100" fill="#151B33"/>
+    <rect x="170" y="360" width="80" height="120" fill="#1A2138"/>
+    <rect x="270" y="392" width="100" height="88" fill="#151B33"/>
+    <rect x="390" y="368" width="86" height="112" fill="#1A2138"/>
+    <rect x="496" y="388" width="94" height="92" fill="#151B33"/>
+    <rect x="610" y="372" width="80" height="108" fill="#1A2138"/>
+    <g fill="#F6B93B" opacity=".9">
+      <rect x="82" y="400" width="9" height="11"/><rect x="196" y="384" width="9" height="11"/>
+      <rect x="300" y="410" width="9" height="11"/><rect x="416" y="392" width="9" height="11"/>
+      <rect x="524" y="408" width="9" height="11"/><rect x="636" y="396" width="9" height="11"/>
+    </g>
+  </g>
+  <g class="nuage8"><ellipse cx="170" cy="0" rx="60" ry="16" fill="#3A4468"/><ellipse cx="212" cy="-8" rx="34" ry="12" fill="#434E78"/></g>
+  <g class="nuage8 n2"><ellipse cx="590" cy="0" rx="66" ry="17" fill="#3A4468"/><ellipse cx="546" cy="-8" rx="34" ry="12" fill="#434E78"/></g>
+  <g class="oiseau8">
+    <ellipse cx="0" cy="0" rx="13" ry="7" fill="#434E78"/><circle cx="11" cy="-3" r="5" fill="#434E78"/>
+    <path d="M15 -2 l7 1.6 -7 2.6 Z" fill="#F6B93B"/><circle cx="13" cy="-4" r="1.2" fill="#F5EFE0"/>
+    <path class="aile" d="M-3 -1 Q-1 -16 10 -14 Q3 -6 1 -1 Z" fill="#5A679E"/>
+  </g>
+  <g class="ballon8">
+    <g>
+      <path d="M0 -74 C-56 -74 -64 -18 -32 10 L-15 33 H15 L32 10 C64 -18 56 -74 0 -74 Z" fill="#D4AF37"/>
+      <path d="M0 -74 C-19 -74 -23 -16 -11 10 L-5 33 H5 L11 10 C23 -16 19 -74 0 -74 Z" fill="#8C2438"/>
+      <path d="M0 -74 C-42 -70 -50 -22 -24 8" stroke="#F1D687" stroke-width="1.6" fill="none" opacity=".7"/>
+      <line x1="-15" y1="33" x2="-11" y2="52" stroke="#F1D687" stroke-width="1.8"/>
+      <line x1="15" y1="33" x2="11" y2="52" stroke="#F1D687" stroke-width="1.8"/>
+      <ellipse class="flamme8" cx="0" cy="44" rx="4.4" ry="8" fill="#FFB347"/>
+      <rect x="-15" y="52" width="30" height="19" rx="4" fill="#5C3A1E" stroke="#F1D687" stroke-width="1.6"/>
+      <g transform="translate(0,40) scale(.7)"><g class="slotHero"></g></g>
+    </g>
+  </g>
+</svg>
+<div class="chapitre">Chapitre 8 · Toujours plus haut</div>
+</div>
+
+<!-- ========== SCÈNE 9 : LE FESTIVAL ========== -->
+<div class="scene s9" id="s9">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="g9" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#07091A"/><stop offset="1" stop-color="#151B33"/></linearGradient></defs>
+  <rect width="760" height="480" fill="url(#g9)"/>
+  <circle class="tw" cx="140" cy="55" r="2" fill="#F1D687"/><circle class="tw t2" cx="360" cy="35" r="1.7" fill="#F1D687"/>
+  <circle class="tw t3" cx="600" cy="60" r="2" fill="#F1D687"/>
+  <rect x="0" y="420" width="760" height="60" fill="#10162E"/>
+  <g transform="translate(170,330)">
+    <g class="grandeRoue">
+      <circle r="72" fill="none" stroke="#F6B93B" stroke-width="4"/>
+      <path d="M0 -72 V72 M-72 0 H72 M-51 -51 L51 51 M-51 51 L51 -51" stroke="#F6B93B" stroke-width="3"/>
+      <circle cx="0" cy="-72" r="8" fill="#FF6B6B"/><circle cx="51" cy="-51" r="8" fill="#C8F169"/>
+      <circle cx="72" cy="0" r="8" fill="#7FB8F5"/><circle cx="51" cy="51" r="8" fill="#C9A7F5"/>
+      <circle cx="0" cy="72" r="8" fill="#F6B93B"/><circle cx="-51" cy="51" r="8" fill="#FF6B6B"/>
+      <circle cx="-72" cy="0" r="8" fill="#C8F169"/><circle cx="-51" cy="-51" r="8" fill="#7FB8F5"/>
+    </g>
+    <path d="M-24 90 L0 6 L24 90" stroke="#B9770E" stroke-width="6" fill="none"/>
+  </g>
+  <g transform="translate(420,368)">
+    <path d="M-70 52 L-58 -18 H58 L70 52 Z" fill="#8C2438"/>
+    <path d="M-58 -18 Q0 -64 58 -18 Z" fill="#C1121F"/>
+    <path d="M-58 -18 Q-29 -44 0 -18 Q29 -44 58 -18" fill="#F5EFE0" opacity=".25"/>
+    <path d="M0 -52 l0 -14 12 5 Z" fill="#F6B93B"/>
+    <rect x="-13" y="16" width="26" height="36" rx="4" fill="#5A1220"/>
+  </g>
+  <path d="M280 300 Q380 340 520 300" stroke="#B9770E" stroke-width="2" fill="none"/>
+  <circle class="guir" cx="316" cy="313" r="4" fill="#FF6B6B"/><circle class="guir g2" cx="366" cy="322" r="4" fill="#C8F169"/>
+  <circle class="guir" cx="420" cy="324" r="4" fill="#7FB8F5"/><circle class="guir g2" cx="472" cy="315" r="4" fill="#C9A7F5"/>
+  <g transform="translate(560,392)">
+    <rect x="-34" y="-24" width="68" height="52" rx="5" fill="#1A2138" stroke="#D4AF37" stroke-width="2"/>
+    <path d="M-38 -24 H38 L30 -40 H-30 Z" fill="#D4AF37"/>
+  </g>
+  <text class="compte" x="380" y="150" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="42" fill="#F1D687" style="filter:drop-shadow(0 0 8px rgba(241,214,135,.8))">3... 2... 1...</text>
+  <g class="ballon9">
+    <g transform="scale(.8)">
+      <path d="M0 -74 C-56 -74 -64 -18 -32 10 L-15 33 H15 L32 10 C64 -18 56 -74 0 -74 Z" fill="#D4AF37"/>
+      <path d="M0 -74 C-19 -74 -23 -16 -11 10 L-5 33 H5 L11 10 C23 -16 19 -74 0 -74 Z" fill="#8C2438"/>
+      <line x1="-15" y1="33" x2="-11" y2="52" stroke="#F1D687" stroke-width="1.8"/>
+      <line x1="15" y1="33" x2="11" y2="52" stroke="#F1D687" stroke-width="1.8"/>
+      <rect x="-15" y="52" width="30" height="19" rx="4" fill="#5C3A1E" stroke="#F1D687" stroke-width="1.6"/>
+    </g>
+  </g>
+  <g class="hTransfert"><g transform="scale(.8)"><g class="slotHero"></g></g></g>
+  <g class="fuseeFinale">
+    <g>
+      <path d="M0 -34 C10 -20 10 2 6 16 H-6 C-10 2 -10 -20 0 -34 Z" fill="#C1121F"/>
+      <path d="M0 -34 C4 -24 5 -6 4 16 H-4 C-5 -6 -4 -24 0 -34 Z" fill="#F6B93B"/>
+      <path d="M-6 8 L-14 22 L-6 18 Z" fill="#8C2438"/><path d="M6 8 L14 22 L6 18 Z" fill="#8C2438"/>
+      <g class="flammeF flammeOn"><path d="M-4 17 Q0 34 4 17 Z" fill="#FFB347"/><path d="M-2 17 Q0 27 2 17 Z" fill="#FFF3D6"/></g>
+      <g transform="translate(0,-44) scale(.65)"><g class="slotHero"></g></g>
+    </g>
+  </g>
+  <g class="feuP p1" transform="translate(240,130)">
+    <g stroke="#F1D687" stroke-width="3.4" stroke-linecap="round" style="filter:drop-shadow(0 0 6px #F1D687)">
+      <line y1="-52" y2="-24"/><line y1="24" y2="52"/><line x1="-52" x2="-24"/><line x1="24" x2="52"/>
+      <line x1="-37" y1="-37" x2="-17" y2="-17"/><line x1="17" y1="17" x2="37" y2="37"/>
+      <line x1="-37" y1="37" x2="-17" y2="17"/><line x1="17" y1="-17" x2="37" y2="-37"/>
+    </g><circle r="6" fill="#FFF3D6"/>
+  </g>
+  <g class="feuP p2" transform="translate(540,110)">
+    <g stroke="#FF6B6B" stroke-width="3.4" stroke-linecap="round" style="filter:drop-shadow(0 0 6px #FF6B6B)">
+      <line y1="-58" y2="-28"/><line y1="28" y2="58"/><line x1="-58" x2="-28"/><line x1="28" x2="58"/>
+      <line x1="-41" y1="-41" x2="-20" y2="-20"/><line x1="20" y1="20" x2="41" y2="41"/>
+      <line x1="-41" y1="41" x2="-20" y2="20"/><line x1="20" y1="-20" x2="41" y2="-41"/>
+    </g><circle r="6" fill="#FFE9E9"/>
+  </g>
+  <g class="feuP p3" transform="translate(390,90)">
+    <g stroke="#7FB8F5" stroke-width="3.4" stroke-linecap="round" style="filter:drop-shadow(0 0 6px #7FB8F5)">
+      <line y1="-64" y2="-30"/><line y1="30" y2="64"/><line x1="-64" x2="-30"/><line x1="30" x2="64"/>
+      <line x1="-45" y1="-45" x2="-22" y2="-22"/><line x1="22" y1="22" x2="45" y2="45"/>
+      <line x1="-45" y1="45" x2="-22" y2="22"/><line x1="22" y1="-22" x2="45" y2="-45"/>
+    </g><circle r="7" fill="#E1F0FB"/>
+  </g>
+</svg>
+<div class="chapitre">Chapitre 9 · Le soir du festival</div>
+</div>
+
+<!-- ========== SCÈNE 10 : ÉPILOGUE ========== -->
+<div class="scene s10" id="s10">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><radialGradient id="g10" cx=".5" cy=".35" r="1">
+    <stop offset="0" stop-color="#1E2745"/><stop offset="1" stop-color="#07091A"/></radialGradient></defs>
+  <rect width="760" height="480" fill="url(#g10)"/>
+  <g fill="#F1D687">
+    <circle class="tw" cx="90" cy="90" r="2"/><circle class="tw t2" cx="200" cy="60" r="1.7"/>
+    <circle class="tw t3" cx="310" cy="110" r="1.9"/><circle class="tw" cx="460" cy="70" r="1.6"/>
+    <circle class="tw t2" cx="580" cy="120" r="2.1"/><circle class="tw t3" cx="680" cy="60" r="1.8"/>
+    <circle class="tw t2" cx="130" cy="260" r="1.5"/><circle class="tw" cx="640" cy="270" r="1.6"/>
+    <circle class="tw t3" cx="270" cy="320" r="1.4"/><circle class="tw" cx="520" cy="330" r="1.5"/>
+  </g>
+  <circle cx="640" cy="100" r="40" fill="#F5EFE0" opacity=".95"/><circle cx="626" cy="90" r="8" fill="#DDD5C0"/>
+  <g class="filante">
+    <circle cx="600" cy="80" r="4" fill="#F1D687" style="filter:drop-shadow(0 0 6px #F1D687)"/>
+    <path d="M600 80 L664 52 L652 78 Z" fill="#F1D687" opacity=".5"/>
+  </g>
+  <g class="h10">
+    <circle class="halo" r="52" fill="#F1D687" opacity=".35"/>
+    <g transform="scale(1.15)"><g class="slotHero"></g></g>
+  </g>
+  <g class="finTexte">
+    <text x="380" y="392" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="52" fill="#F1D687" style="filter:drop-shadow(0 0 12px rgba(241,214,135,.6))">FIN</text>
+    <text x="380" y="428" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="17" fill="#CEC8B8">Une histoire du Festival de l&#8217;Animation</text>
+  </g>
+</svg>
+<div class="chapitre">Chapitre 10 · La plus brillante des étoiles</div>
+</div>
+
+</div><!-- fin cinéma -->
+
+<div id="bandeau"><div id="soustitre"></div></div>
+
+<div id="finEcran">
+  <h2>✨ FIN ✨</h2>
+  <div class="gen">
+    Étincelle, la Petite Étoile<br>
+    Une production du Festival de l'Animation<br>
+    Réalisateur : Raphaël 🎨<br>
+    Merci d'avoir regardé !
+  </div>
+  <button id="btnRejouer" onclick="demarrer()">🔁 Rejouer le film</button>
+</div>
+
+<script>
+/* ================== LE HÉROS (injecté dans chaque scène) ================== */
+const HERO = '<g class="corpsEtoile">'
+  + '<path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"/>'
+  + '<circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"/><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"/>'
+  + '<g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"/><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"/></g>'
+  + '<path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"/>'
+  + '</g>';
+document.querySelectorAll('.slotHero').forEach(function(s){ s.innerHTML = HERO; });
+
+/* ================== LE SCÉNARIO ================== */
+const FILM = [
+ {id:'s1', dur:60, subs:[
+   [1,"Tout là-haut, dans le grand ciel de velours, vivaient des milliers d'étoiles."],
+   [9,"La plus petite d'entre elles s'appelait Étincelle."],
+   [17,"Étincelle était la plus curieuse de toutes les étoiles."],
+   [25,"Chaque nuit, elle regardait la Terre, tout en bas."],
+   [33,"« Comme ce monde a l'air beau... j'aimerais tant le voir de près ! »"],
+   [43,"Ce soir-là, elle se pencha au bord de son nuage... un peu trop."],
+   [50,"Et soudain... elle glissa du ciel !"]]},
+ {id:'s2', dur:60, subs:[
+   [1,"Étincelle tombait, tombait, tombait..."],
+   [9,"Le vent sifflait autour d'elle."],
+   [17,"Elle traversa un nuage tout doux, puis un autre."],
+   [27,"« Ooooh ! » Un oiseau de nuit la regarda passer, très étonné."],
+   [37,"La Terre se rapprochait à toute vitesse."],
+   [46,"« Pourvu que j'atterrisse en douceur... »"],
+   [54,"Plouf... non : POUF !"]]},
+ {id:'s3', dur:60, subs:[
+   [1,"Étincelle atterrit dans une grande forêt endormie."],
+   [9,"Tout était sombre... mais elle, elle brillait !"],
+   [17,"De petites lumières s'approchèrent : des lucioles !"],
+   [25,"« Bonsoir, petite étoile. Tu es bien loin de chez toi. »"],
+   [33,"Un vieux hibou hulula : « Pour rentrer, suis la rivière. »"],
+   [43,"Alors Étincelle suivit les lucioles à travers les arbres."],
+   [52,"Au bout du chemin, l'eau scintillait..."]]},
+ {id:'s4', dur:60, subs:[
+   [1,"Sur une feuille, Étincelle vogua le long de la rivière."],
+   [11,"La rivière devint fleuve... et le fleuve devint océan !"],
+   [21,"Soudain, une ombre immense monta des profondeurs."],
+   [29,"Une baleine ! « Monte sur mon dos, petite lumière. »"],
+   [39,"« Je connais quelqu'un qui pourra t'aider, très loin d'ici. »"],
+   [49,"Et elles voguèrent ensemble sous les étoiles."]]},
+ {id:'s5', dur:60, subs:[
+   [1,"Mais cette nuit-là, l'océan se mit en colère."],
+   [9,"Le tonnerre gronda. Les vagues devinrent des montagnes."],
+   [19,"« Accroche-toi ! » cria la baleine."],
+   [27,"Étincelle serra fort... et brilla de toutes ses forces."],
+   [37,"Sa lumière perça la tempête comme un petit soleil."],
+   [47,"Peu à peu, les vagues se calmèrent..."],
+   [54,"Le courage d'Étincelle avait apaisé la mer."]]},
+ {id:'s6', dur:60, subs:[
+   [1,"Au loin, une grande tour balayait la nuit de sa lumière."],
+   [11,"« Le phare ! » dit la baleine. « Lui aussi éclaire le monde. »"],
+   [21,"« Petite étoile, dit le phare, ta place est là-haut. »"],
+   [31,"« Va vers la ville. Là-bas, quelqu'un prépare une fête magique. »"],
+   [43,"« Une fête ? » Les yeux d'Étincelle se mirent à pétiller."],
+   [52,"Elle remercia ses amis et reprit la route."]]},
+ {id:'s7', dur:60, subs:[
+   [1,"Étincelle traversa la ville endormie, de toit en toit."],
+   [11,"Un chat noir l'accompagnait sans bruit."],
+   [21,"Derrière les fenêtres, les enfants rêvaient."],
+   [31,"« Regarde », ronronna le chat. « Là-bas... des lumières ! »"],
+   [41,"Au bout de la ville brillait une fête foraine."],
+   [51,"Et une grande montgolfière dorée attendait..."]]},
+ {id:'s8', dur:60, subs:[
+   [1,"« Bienvenue à bord ! » La montgolfière dorée s'éleva doucement."],
+   [12,"Les toits devenaient tout petits, comme des jouets."],
+   [22,"« Plus haut ! Encore plus haut ! » riait Étincelle."],
+   [32,"Un oiseau vint voler un moment à côté d'elle."],
+   [42,"Mais même la montgolfière ne pouvait pas toucher le ciel..."],
+   [51,"« Pour le dernier morceau du voyage, il te faut de la magie. »"]]},
+ {id:'s9', dur:60, subs:[
+   [1,"En bas, le festival brillait de mille couleurs."],
+   [10,"C'était le grand soir : le Festival de l'Animation !"],
+   [20,"« Petite étoile, on t'attendait ! » dirent les artificiers."],
+   [30,"Ils la déposèrent sur la plus belle fusée du feu d'artifice."],
+   [40,"Tout le festival retint son souffle..."],
+   [46,"WOOOSH ! Étincelle fila vers le ciel dans une pluie d'or !"],
+   [54,"Plus haut que les nuages, plus haut que tout !"]]},
+ {id:'s10', dur:60, subs:[
+   [1,"Et cette nuit-là, une nouvelle lumière apparut dans le ciel."],
+   [11,"La plus brillante de toutes les étoiles."],
+   [21,"Étincelle était rentrée chez elle..."],
+   [31,"...mais elle n'oublia jamais ses amis d'en bas."],
+   [41,"Et chaque 15 juillet, elle brille un peu plus fort."],
+   [50,"Pour dire merci... au Festival de l'Animation. ⭐"]]}
+];
+const TOTAL = FILM.reduce(function(a,s){return a+s.dur;},0);
+
+/* ================== LE MOTEUR DU CINÉMA ================== */
+let idx = -1, t = 0, paused = false, horloge = null;
+
+function demarrer(){
+  document.getElementById('finEcran').classList.remove('visible');
+  document.body.classList.add('enCours');
+  document.body.classList.remove('paused');
+  paused = false;
+  document.getElementById('btnPause').textContent = '⏸ Pause';
+  idx = -1;
+  suivant();
+  if(!horloge) horloge = setInterval(tic, 100);
+}
+
+function suivant(){
+  document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active');});
+  idx++;
+  if(idx >= FILM.length){ fin(); return; }
+  t = 0;
+  document.getElementById('soustitre').textContent = '';
+  document.getElementById(FILM[idx].id).classList.add('active');
+  document.getElementById('chapLabel').textContent = 'Chapitre ' + (idx+1) + ' / ' + FILM.length;
+}
+
+function tic(){
+  if(paused || idx < 0 || idx >= FILM.length) return;
+  t += 0.1;
+  const sc = FILM[idx];
+  let texte = '';
+  for(const paire of sc.subs){ if(t >= paire[0]) texte = paire[1]; }
+  const st = document.getElementById('soustitre');
+  if(st.textContent !== texte) st.textContent = texte;
+  let fait = 0;
+  for(let i=0;i<idx;i++) fait += FILM[i].dur;
+  document.getElementById('barrePlein').style.width = ((fait + Math.min(t, sc.dur)) / TOTAL * 100) + '%';
+  if(t >= sc.dur) suivant();
+}
+
+function basculerPause(){
+  paused = !paused;
+  document.body.classList.toggle('paused', paused);
+  document.getElementById('btnPause').textContent = paused ? '▶ Reprendre' : '⏸ Pause';
+}
+
+function passer(){
+  if(paused) basculerPause();
+  suivant();
+}
+
+function fin(){
+  document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active');});
+  document.body.classList.remove('enCours');
+  document.getElementById('barrePlein').style.width = '100%';
+  document.getElementById('finEcran').classList.add('visible');
+}
+</script>
+</body>
+</html>
