@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)file:///C:/Users/RAPHAEL/Downloads/episode2_1.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Aventures d'Étincelle — Épisode 2 · « L’Ombre aux yeux violets »</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% 0%, #232C4C 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 100%, #1E2745 0%, transparent 50%),
+      #101426;
+    color:#F5EFE0;font-family:Georgia,serif;overflow:hidden;
+  }
+  .ecran{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:14px;text-align:center;}
+  .ecran.on{display:flex;}
+  .entete{font-family:sans-serif;font-size:clamp(9px,2.2vw,12px);font-weight:600;letter-spacing:3.5px;color:#F1D687;}
+  .orTitre{
+    font-weight:900;
+    background:linear-gradient(180deg,#F1D687 20%,#D4AF37 60%,#A8842A 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:#D4AF37;
+  }
+  .btnOr{
+    margin-top:24px;font-family:Georgia,serif;font-weight:bold;font-size:clamp(16px,4.2vw,21px);
+    background:linear-gradient(180deg,#F1D687,#D4AF37);color:#101426;
+    border:none;border-radius:999px;padding:14px 38px;cursor:pointer;
+    box-shadow:0 0 24px rgba(241,214,135,.45);
+  }
+  .btnOr:active{transform:scale(.96);}
+  body.enCours .ecran{display:none !important;}
+  #cinema{position:fixed;inset:0;display:none;}
+  body.enCours #cinema{display:block;}
+  .scene{display:none;position:absolute;inset:0;}
+  .scene.active{display:flex;align-items:center;justify-content:center;}
+  .scene svg{width:100%;height:100%;max-height:100vh;}
+  .chapitre{
+    position:absolute;top:12%;left:0;right:0;text-align:center;
+    font-size:clamp(17px,4.4vw,28px);font-weight:bold;color:#F1D687;
+    text-shadow:0 2px 12px rgba(0,0,0,.8);opacity:0;pointer-events:none;
+  }
+  .scene.active .chapitre{animation:chapAff 4.5s ease-in-out forwards;}
+  @keyframes chapAff{0%{opacity:0;transform:translateY(10px);}12%,80%{opacity:1;transform:translateY(0);}100%{opacity:0;}}
+  #bandeau{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
+    padding:14px 18px 42px;text-align:center;
+    background:linear-gradient(180deg,transparent,rgba(7,9,26,.9) 40%);pointer-events:none;
+  }
+  body.enCours #bandeau{display:block;}
+  #soustitre{font-size:clamp(14px,3.4vw,21px);font-style:italic;text-shadow:0 2px 8px rgba(0,0,0,.9);min-height:1.4em;}
+  #controles{
+    position:fixed;top:0;left:0;right:0;z-index:45;display:none;
+    align-items:center;gap:10px;padding:10px 14px;font-family:sans-serif;
+    background:linear-gradient(180deg,rgba(7,9,26,.85),transparent);
+  }
+  body.enCours #controles{display:flex;}
+  #controles button{
+    background:rgba(241,214,135,.14);color:#F1D687;
+    border:1px solid rgba(212,175,55,.5);border-radius:999px;
+    font-size:13.5px;font-weight:bold;padding:7px 14px;cursor:pointer;
+  }
+  #chapLabel{font-size:13px;font-weight:bold;color:#CEC8B8;margin-left:auto;}
+  #barre{position:fixed;top:0;left:0;right:0;height:4px;z-index:46;display:none;background:rgba(255,255,255,.08);}
+  body.enCours #barre{display:block;}
+  #barrePlein{height:100%;width:0%;background:linear-gradient(90deg,#D4AF37,#F1D687);}
+  body.paused .scene *{animation-play-state:paused !important;}
+  #pauseVoile{
+    position:fixed;inset:0;z-index:44;display:none;align-items:center;justify-content:center;
+    background:rgba(7,9,26,.45);font-size:clamp(26px,6vw,44px);font-weight:bold;color:#F1D687;
+  }
+  body.paused #pauseVoile{display:flex;}
+  #vFin .suite{
+    margin-top:16px;font-size:clamp(14px,3.6vw,19px);font-style:italic;color:#F1D687;
+    text-shadow:0 0 12px rgba(241,214,135,.5);
+  }
+  #vFin .gen{margin-top:12px;font-style:italic;color:#CEC8B8;font-size:clamp(12px,3vw,15px);line-height:2;}
+
+  /* ===== héros et ambiance ===== */
+  .corpsEtoile{filter:drop-shadow(0 0 8px rgba(241,214,135,.9));animation:heroLueur 2s ease-in-out infinite;}
+  @keyframes heroLueur{0%,100%{filter:drop-shadow(0 0 6px rgba(241,214,135,.7));}50%{filter:drop-shadow(0 0 14px rgba(241,214,135,1));}}
+  .yeux{transform-box:fill-box;transform-origin:center;animation:heroCligne 4s infinite;}
+  @keyframes heroCligne{0%,92%,100%{transform:scaleY(1);}95%{transform:scaleY(.1);}}
+  .tw{animation:tw 2.4s ease-in-out infinite;}
+  .tw.t2{animation-delay:.8s;}
+  .tw.t3{animation-delay:1.6s;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:1;}}
+  .queueChat{transform-box:fill-box;transform-origin:bottom left;animation:qchat 1.6s ease-in-out infinite;}
+  @keyframes qchat{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(14deg);}}
+  .yeuxOmbre{animation:yo 1.6s ease-in-out infinite;}
+  @keyframes yo{0%,100%{opacity:.7;}50%{opacity:1;}}
+
+
+  /* --- S1 : les étoiles disparaissent --- */
+  .f1 .volee .dispar{animation:f1disp 60s linear forwards;}
+  .f1 .volee .dispar.d2{animation-name:f1disp2;}
+  .f1 .volee .dispar.d3{animation-name:f1disp3;}
+  .f1 .volee .dispar.d4{animation-name:f1disp4;}
+  @keyframes f1disp{0%,14%{opacity:1;}17%,100%{opacity:0;}}
+  @keyframes f1disp2{0%,26%{opacity:1;}29%,100%{opacity:0;}}
+  @keyframes f1disp3{0%,38%{opacity:1;}41%,100%{opacity:0;}}
+  @keyframes f1disp4{0%,50%{opacity:1;}53%,100%{opacity:0;}}
+  .f1 .voile{animation:f1voile 60s linear forwards;opacity:0;}
+  @keyframes f1voile{0%,45%{opacity:0;}70%,100%{opacity:.4;}}
+  .f1 .luneInq{transform-box:fill-box;transform-origin:center;animation:f1lune 60s ease-in-out forwards;}
+  @keyframes f1lune{0%,40%{transform:rotate(0);}50%{transform:rotate(-4deg);}60%{transform:rotate(3deg);}70%,100%{transform:rotate(-2deg);}}
+  .f1 .h1f{animation:f1h 60s ease-in-out forwards;}
+  @keyframes f1h{
+    0%,20%{transform:translate(380px,200px);}
+    30%{transform:translate(300px,180px);}
+    45%{transform:translate(460px,210px);}
+    62%{transform:translate(380px,190px) scale(1.05);}
+    80%{transform:translate(480px,300px);}
+    100%{transform:translate(600px,520px);}
+  }
+  .f1 .filVio{animation:f1fil 60s linear forwards;opacity:0;}
+  @keyframes f1fil{0%,12%{opacity:0;}14%,16%{opacity:.9;}18%{opacity:0;}24%{opacity:0;}26%,28%{opacity:.9;}30%{opacity:0;}36%{opacity:0;}38%,40%{opacity:.8;}42%,100%{opacity:0;}}
+
+  /* --- S2 : la piste violette sur les toits --- */
+  .f2 .h2f{animation:f2h 60s ease-in-out forwards;}
+  @keyframes f2h{
+    0%{transform:translate(60px,290px);}
+    20%{transform:translate(170px,290px);}
+    26%{transform:translate(220px,252px);}
+    46%{transform:translate(330px,252px);}
+    52%{transform:translate(390px,300px);}
+    74%{transform:translate(510px,300px);}
+    100%{transform:translate(640px,296px);}
+  }
+  .f2 .chat2{animation:f2c 60s ease-in-out forwards;}
+  @keyframes f2c{
+    0%{transform:translate(6px,302px);}
+    20%{transform:translate(118px,302px);}
+    26%{transform:translate(168px,264px);}
+    46%{transform:translate(278px,264px);}
+    52%{transform:translate(340px,312px);}
+    74%{transform:translate(460px,312px);}
+    100%{transform:translate(592px,308px);}
+  }
+  .f2 .brume{transform-box:fill-box;transform-origin:center;animation:f2brume 3s ease-in-out infinite;}
+  .f2 .brume.b2{animation-delay:1s;}
+  .f2 .brume.b3{animation-delay:2s;}
+  @keyframes f2brume{0%,100%{opacity:.25;transform:scale(.85);}50%{opacity:.95;transform:scale(1.15);}}
+  .f2 .fen{animation:f2fen 3.4s ease-in-out infinite;}
+  .f2 .fen.ff2{animation-delay:1.4s;}
+  @keyframes f2fen{0%,100%{opacity:.35;}50%{opacity:.9;}}
+
+  /* --- S3 : la lanterne de l'Ombre --- */
+  .f3 .lanterneLu{animation:f3lu 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+  @keyframes f3lu{0%,100%{opacity:.75;transform:scale(1);}50%{opacity:1;transform:scale(1.06);}}
+  .f3 .etoilesPrises{transform-box:fill-box;transform-origin:center;animation:f3ep 2.6s ease-in-out infinite;}
+  @keyframes f3ep{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+  .f3 .ombre3{animation:f3o 60s ease-in-out forwards;}
+  @keyframes f3o{
+    0%{transform:translate(520px,240px);}
+    24%{transform:translate(500px,230px);}
+    48%{transform:translate(530px,244px);}
+    72%{transform:translate(505px,236px);}
+    100%{transform:translate(520px,240px);}
+  }
+  .f3 .duo3{animation:f3d 60s ease-in-out forwards;}
+  @keyframes f3d{
+    0%{transform:translate(-60px,320px);}
+    18%{transform:translate(120px,320px);}
+    32%,100%{transform:translate(185px,322px);}
+  }
+  .f3 .arbreBal{transform-box:fill-box;transform-origin:bottom center;animation:f3a 5s ease-in-out infinite;}
+  @keyframes f3a{0%,100%{transform:rotate(-1deg);}50%{transform:rotate(1.4deg);}}
+
+  /* --- S4 : la poursuite dans le ciel --- */
+  .f4 .h4f{animation:f4h 60s ease-in-out forwards;}
+  @keyframes f4h{
+    0%{transform:translate(700px,140px);}
+    14%{transform:translate(560px,220px) rotate(-12deg);}
+    28%{transform:translate(420px,120px) rotate(10deg);}
+    42%{transform:translate(300px,240px) rotate(-14deg);}
+    56%{transform:translate(200px,140px) rotate(8deg);}
+    70%{transform:translate(300px,300px) rotate(-10deg);}
+    84%{transform:translate(380px,240px) rotate(0);}
+    100%{transform:translate(380px,250px);}
+  }
+  .f4 .ombre4{animation:f4o 60s ease-in-out forwards;}
+  @keyframes f4o{
+    0%{transform:translate(820px,120px);}
+    16%{transform:translate(640px,210px);}
+    30%{transform:translate(500px,130px);}
+    44%{transform:translate(380px,230px);}
+    58%{transform:translate(280px,150px);}
+    72%{transform:translate(350px,290px);}
+    88%{transform:translate(400px,220px) scale(1.25);}
+    100%{transform:translate(390px,240px) scale(1.4);}
+  }
+  .f4 .nuagesFile{animation:f4n 3.2s linear infinite;}
+  @keyframes f4n{0%{transform:translateX(0);}100%{transform:translateX(-760px);}}
+  .f4 .assombri{animation:f4ass 60s linear forwards;opacity:0;}
+  @keyframes f4ass{0%,74%{opacity:0;}90%,100%{opacity:.5;}}
+
+  /* --- S5 : capturée ! --- */
+  .f5 .flashV{animation:f5fl 60s linear forwards;opacity:0;}
+  @keyframes f5fl{0%,28%{opacity:0;}30%,33%{opacity:.95;}36%,100%{opacity:0;}}
+  .f5 .hLibre{animation:f5hl 60s ease-in-out forwards;}
+  @keyframes f5hl{0%{transform:translate(300px,240px);}20%{transform:translate(330px,250px);}30%,100%{transform:translate(360px,262px);opacity:1;}31%,100%{opacity:0;}}
+  .f5 .hPrise{animation:f5hp 60s linear forwards;opacity:0;}
+  @keyframes f5hp{0%,30%{opacity:0;}32%,100%{opacity:1;}}
+  .f5 .lanterne5{animation:f5lan 60s ease-in-out forwards;}
+  @keyframes f5lan{
+    0%,30%{transform:translate(430px,250px);}
+    50%{transform:translate(440px,240px);}
+    66%{transform:translate(500px,200px);}
+    84%{transform:translate(620px,130px);}
+    100%{transform:translate(800px,40px);}
+  }
+  .f5 .ombre5{animation:f5o 60s ease-in-out forwards;}
+  @keyframes f5o{
+    0%{transform:translate(480px,220px) scale(1.2);}
+    30%{transform:translate(460px,230px) scale(1.2);}
+    50%{transform:translate(470px,218px) scale(1.15);}
+    66%{transform:translate(530px,180px);}
+    84%{transform:translate(650px,110px);}
+    100%{transform:translate(830px,20px);}
+  }
+  .f5 .chat5{animation:f5c 60s ease-in-out forwards;}
+  @keyframes f5c{
+    0%,26%{transform:translate(180px,330px);}
+    40%{transform:translate(260px,326px);}
+    60%{transform:translate(330px,322px);}
+    100%{transform:translate(360px,322px);}
+  }
+  .f5 .noir5{animation:f5n 60s linear forwards;opacity:0;}
+  @keyframes f5n{0%,80%{opacity:0;}96%,100%{opacity:.55;}}
+
+</style>
+</head>
+<body>
+
+<div class="ecran on" id="vAccueil">
+  <div class="entete">UNE SÉRIE DU FESTIVAL DE L'ANIMATION</div>
+  <h1 class="orTitre" style="font-size:clamp(30px,8vw,58px);margin:12px 0 4px;">Les Aventures<br>d'Étincelle</h1>
+  <div style="font-size:clamp(16px,4.2vw,24px);font-style:italic;">Épisode 2 · « L’Ombre aux yeux violets »</div>
+  <div style="margin-top:12px;font-size:clamp(12px,3vw,15px);font-style:italic;color:#CEC8B8;">5 minutes · 5 chapitres · par Raphaël</div>
+  <button class="btnOr" onclick="demarrer()">🎬 Commencer l'épisode</button>
+</div>
+
+<div id="barre"><div id="barrePlein"></div></div>
+<div id="controles">
+  <button onclick="basculerPause()" id="btnPause">⏸ Pause</button>
+  <button onclick="passer()">⏭ Chapitre suivant</button>
+  <span id="chapLabel"></span>
+</div>
+<div id="pauseVoile">⏸ PAUSE</div>
+
+<div id="cinema">
+<div class="scene f1" id="f1">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><radialgradient id="gf1" cx=".5" cy=".3" r=".9">
+    <stop offset="0" stop-color="#1E2745"></stop><stop offset="1" stop-color="#07091A"></stop></radialgradient></defs>
+  <rect width="760" height="480" fill="url(#gf1)"></rect>
+  <rect class="voile" width="760" height="480" fill="#05030E"></rect>
+  <g class="volee" fill="#F1D687">
+    <circle class="tw dispar" cx="150" cy="90" r="2.6"></circle>
+    <circle class="tw t2 dispar d2" cx="600" cy="120" r="2.4"></circle>
+    <circle class="tw t3 dispar d3" cx="260" cy="200" r="2.2"></circle>
+    <circle class="tw dispar d4" cx="520" cy="230" r="2.5"></circle>
+    <circle class="tw t2" cx="90" cy="160" r="1.8"></circle>
+    <circle class="tw t3" cx="700" cy="80" r="1.7"></circle>
+    <circle class="tw" cx="330" cy="70" r="1.9"></circle>
+    <circle class="tw t2" cx="440" cy="150" r="1.6"></circle>
+    <circle class="tw t3" cx="170" cy="300" r="1.5"></circle>
+    <circle class="tw" cx="640" cy="310" r="1.6"></circle>
+  </g>
+  <g stroke="#B14AED" stroke-width="2.4" stroke-linecap="round" fill="none">
+    <path class="filVio" d="M150 90 q30 20 60 14"></path>
+    <path class="filVio" d="M600 120 q-26 24 -60 18"></path>
+    <path class="filVio" d="M260 200 q34 10 58 -6"></path>
+  </g>
+  <g class="luneInq">
+    <circle cx="600" cy="330" r="44" fill="#F5EFE0" opacity=".97"></circle>
+    <circle cx="586" cy="318" r="9" fill="#DDD5C0"></circle>
+    <circle cx="588" cy="330" r="3.4" fill="#2B2D42"></circle><circle cx="614" cy="330" r="3.4" fill="#2B2D42"></circle>
+    <path d="M590 346 Q601 340 612 346" stroke="#2B2D42" stroke-width="2.6" fill="none" stroke-linecap="round"></path>
+  </g>
+  <g class="h1f"><g><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g></g>
+</svg>
+<div class="chapitre">Chapitre 1 · Les étoiles s'éteignent</div>
+</div>
+<div class="scene f2" id="f2">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><lineargradient id="gf2" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#101426"></stop><stop offset="1" stop-color="#1E2745"></stop></lineargradient></defs>
+  <rect width="760" height="480" fill="url(#gf2)"></rect>
+  <circle cx="90" cy="80" r="30" fill="#F5EFE0" opacity=".9"></circle>
+  <circle class="tw" cx="300" cy="60" r="1.7" fill="#F1D687"></circle><circle class="tw t3" cx="560" cy="90" r="1.8" fill="#F1D687"></circle>
+  <g>
+    <rect x="30" y="316" width="160" height="164" fill="#151B33"></rect><path d="M22 316 L110 282 L198 316 Z" fill="#0F1430"></path>
+    <rect x="210" y="278" width="140" height="202" fill="#1A2138"></rect><rect x="210" y="266" width="140" height="12" fill="#10162E"></rect>
+    <rect x="370" y="326" width="150" height="154" fill="#151B33"></rect><path d="M362 326 L445 290 L528 326 Z" fill="#0F1430"></path>
+    <rect x="540" y="290" width="130" height="190" fill="#1A2138"></rect><rect x="540" y="278" width="130" height="12" fill="#10162E"></rect>
+    <g fill="#F6B93B">
+      <rect class="fen" x="60" y="350" width="15" height="19" rx="2"></rect>
+      <rect class="fen ff2" x="250" y="316" width="15" height="19" rx="2"></rect>
+      <rect class="fen" x="410" y="366" width="15" height="19" rx="2"></rect>
+      <rect class="fen ff2" x="580" y="326" width="15" height="19" rx="2"></rect>
+    </g>
+  </g>
+  <g fill="#B14AED">
+    <circle class="brume" cx="240" cy="250" r="7"></circle>
+    <circle class="brume b2" cx="400" cy="292" r="8"></circle>
+    <circle class="brume b3" cx="560" cy="280" r="7"></circle>
+    <circle class="brume b2" cx="660" cy="290" r="6"></circle>
+  </g>
+  <g class="chat2"><g class="slotChat"><g><ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"></ellipse><circle cx="15" cy="-8" r="7.5" fill="#181B2C"></circle><path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"></path><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"></path><circle cx="13.5" cy="-9" r="1.5" fill="#C8F169"></circle><circle cx="18.5" cy="-9" r="1.5" fill="#C8F169"></circle><path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"></path></g></g></g>
+  <g class="h2f"><g transform="scale(.9)"><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g></g>
+</svg>
+<div class="chapitre">Chapitre 2 · La piste violette</div>
+</div>
+<div class="scene f3" id="f3">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><lineargradient id="gf3" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0A0F22"></stop><stop offset="1" stop-color="#141026"></stop></lineargradient></defs>
+  <rect width="760" height="480" fill="url(#gf3)"></rect>
+  <circle class="tw" cx="120" cy="60" r="1.6" fill="#F1D687" opacity=".5"></circle>
+  <g fill="#0E1F1A">
+    <g class="arbreBal"><path d="M40 420 L85 170 L130 420 Z"></path></g>
+    <g class="arbreBal" style="animation-delay:2s"><path d="M130 420 L185 120 L240 420 Z"></path></g>
+    <g class="arbreBal" style="animation-delay:1s"><path d="M620 420 L670 160 L720 420 Z"></path></g>
+  </g>
+  <rect x="0" y="412" width="760" height="68" fill="#122A22"></rect>
+  <g class="ombre3">
+    <g class="slotOmbre"><g><path d="M0 0 C-20 -10 -40 -5 -52 10 C-36 7 -21 12 -9 24 C-14 10 -9 3 0 0 Z" fill="#0A0514" stroke="#3A1450" stroke-width="2"></path><g class="yeuxOmbre"><circle cx="-28" cy="8" r="3" fill="#B14AED"></circle><circle cx="-17" cy="11" r="3" fill="#B14AED"></circle></g></g></g>
+    <g transform="translate(-70,44)"><g>
+      <line x1="0" y1="-46" x2="0" y2="-30" stroke="#3A1450" stroke-width="3"></line>
+      <rect x="-24" y="-30" width="48" height="60" rx="8" fill="none" stroke="#3A1450" stroke-width="5"></rect>
+      <circle class="lanterneLu" cx="0" cy="0" r="19" fill="#F1D687" opacity=".85"></circle>
+      <g class="etoilesPrises" fill="#FFF3D6">
+        <circle cx="-8" cy="-6" r="3.4"></circle><circle cx="8" cy="2" r="3"></circle><circle cx="-2" cy="10" r="2.6"></circle>
+      </g>
+      <line x1="-24" y1="-8" x2="24" y2="-8" stroke="#3A1450" stroke-width="3.4"></line>
+      <line x1="-24" y1="10" x2="24" y2="10" stroke="#3A1450" stroke-width="3.4"></line>
+    </g></g>
+  </g>
+  <g class="duo3">
+    <g class="slotChat"><g><ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"></ellipse><circle cx="15" cy="-8" r="7.5" fill="#181B2C"></circle><path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"></path><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"></path><circle cx="13.5" cy="-9" r="1.5" fill="#C8F169"></circle><circle cx="18.5" cy="-9" r="1.5" fill="#C8F169"></circle><path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"></path></g></g>
+    <g transform="translate(50,-16) scale(.85)"><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g>
+  </g>
+</svg>
+<div class="chapitre">Chapitre 3 · La lanterne aux étoiles</div>
+</div>
+<div class="scene f4" id="f4">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><lineargradient id="gf4" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#101426"></stop><stop offset="1" stop-color="#2A3458"></stop></lineargradient></defs>
+  <rect width="760" height="480" fill="url(#gf4)"></rect>
+  <rect class="assombri" width="760" height="480" fill="#0A0514"></rect>
+  <g class="nuagesFile" opacity=".7">
+    <ellipse cx="160" cy="110" rx="70" ry="18" fill="#3A4468"></ellipse>
+    <ellipse cx="480" cy="330" rx="80" ry="20" fill="#3A4468"></ellipse>
+    <ellipse cx="700" cy="180" rx="60" ry="16" fill="#434E78"></ellipse>
+    <ellipse cx="920" cy="110" rx="70" ry="18" fill="#3A4468"></ellipse>
+    <ellipse cx="1240" cy="330" rx="80" ry="20" fill="#3A4468"></ellipse>
+    <ellipse cx="1460" cy="180" rx="60" ry="16" fill="#434E78"></ellipse>
+  </g>
+  <circle class="tw" cx="110" cy="60" r="1.8" fill="#F1D687"></circle><circle class="tw t2" cx="640" cy="70" r="1.7" fill="#F1D687"></circle>
+  <g class="h4f"><g><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g></g>
+  <g class="ombre4"><g transform="scale(1.15)"><g class="slotOmbre"><g><path d="M0 0 C-20 -10 -40 -5 -52 10 C-36 7 -21 12 -9 24 C-14 10 -9 3 0 0 Z" fill="#0A0514" stroke="#3A1450" stroke-width="2"></path><g class="yeuxOmbre"><circle cx="-28" cy="8" r="3" fill="#B14AED"></circle><circle cx="-17" cy="11" r="3" fill="#B14AED"></circle></g></g></g></g></g>
+</svg>
+<div class="chapitre">Chapitre 4 · La poursuite</div>
+</div>
+<div class="scene f5" id="f5">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><lineargradient id="gf5" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0A0F22"></stop><stop offset="1" stop-color="#141026"></stop></lineargradient></defs>
+  <rect width="760" height="480" fill="url(#gf5)"></rect>
+  <circle class="tw" cx="140" cy="70" r="1.6" fill="#F1D687" opacity=".4"></circle>
+  <g fill="#0E1F1A">
+    <path d="M30 420 L80 180 L130 420 Z"></path><path d="M630 420 L680 170 L730 420 Z"></path>
+  </g>
+  <rect x="0" y="412" width="760" height="68" fill="#122A22"></rect>
+  <rect class="flashV" width="760" height="480" fill="#B14AED"></rect>
+  <g class="hLibre"><g><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g></g>
+  <g class="lanterne5">
+    <g><g>
+      <line x1="0" y1="-46" x2="0" y2="-30" stroke="#3A1450" stroke-width="3"></line>
+      <rect x="-24" y="-30" width="48" height="60" rx="8" fill="none" stroke="#3A1450" stroke-width="5"></rect>
+      <circle class="lanterneLu" cx="0" cy="0" r="19" fill="#F1D687" opacity=".85"></circle>
+      <g class="etoilesPrises" fill="#FFF3D6">
+        <circle cx="-8" cy="-6" r="3.4"></circle><circle cx="8" cy="2" r="3"></circle><circle cx="-2" cy="10" r="2.6"></circle>
+      </g>
+      <line x1="-24" y1="-8" x2="24" y2="-8" stroke="#3A1450" stroke-width="3.4"></line>
+      <line x1="-24" y1="10" x2="24" y2="10" stroke="#3A1450" stroke-width="3.4"></line>
+    </g>
+      <g class="hPrise" transform="translate(0,0) scale(.55)"><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g>
+    </g>
+  </g>
+  <g class="ombre5"><g class="slotOmbre"><g><path d="M0 0 C-20 -10 -40 -5 -52 10 C-36 7 -21 12 -9 24 C-14 10 -9 3 0 0 Z" fill="#0A0514" stroke="#3A1450" stroke-width="2"></path><g class="yeuxOmbre"><circle cx="-28" cy="8" r="3" fill="#B14AED"></circle><circle cx="-17" cy="11" r="3" fill="#B14AED"></circle></g></g></g></g>
+  <g class="chat5"><g class="slotChat"><g><ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"></ellipse><circle cx="15" cy="-8" r="7.5" fill="#181B2C"></circle><path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"></path><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"></path><circle cx="13.5" cy="-9" r="1.5" fill="#C8F169"></circle><circle cx="18.5" cy="-9" r="1.5" fill="#C8F169"></circle><path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"></path></g></g></g>
+  <rect class="noir5" width="760" height="480" fill="#02030A"></rect>
+</svg>
+<div class="chapitre">Chapitre 5 · Capturée !</div>
+</div>
+</div>
+
+<div id="bandeau"><div id="soustitre"></div></div>
+
+<div class="ecran" id="vFin">
+  <h1 class="orTitre" style="font-size:clamp(28px,7.5vw,52px)">FIN DE L'ÉPISODE 2</h1>
+  <div class="suite">Étincelle est prisonnière de la lanterne !<br>Le chat noir arrivera-t-il à la sauver ?... À SUIVRE ! 😱</div>
+  <div class="gen">Les Aventures d'Étincelle · une série du Festival de l'Animation<br>Créateur : Raphaël 🎨</div>
+  <button class="btnOr" onclick="demarrer()">🔁 Revoir l'épisode</button>
+</div>
+
+<script>
+const HERO = '<g class="corpsEtoile">'
+  + '<path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"/>'
+  + '<circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"/><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"/>'
+  + '<g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"/><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"/></g>'
+  + '<path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"/>'
+  + '</g>';
+const CHAT = '<g>'
+  + '<ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"/>'
+  + '<circle cx="15" cy="-8" r="7.5" fill="#181B2C"/>'
+  + '<path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"/><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"/>'
+  + '<circle cx="13.5" cy="-9" r="1.5" fill="#C8F169"/><circle cx="18.5" cy="-9" r="1.5" fill="#C8F169"/>'
+  + '<path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"/>'
+  + '</g>';
+const OMBRE = '<g>'
+  + '<path d="M0 0 C-20 -10 -40 -5 -52 10 C-36 7 -21 12 -9 24 C-14 10 -9 3 0 0 Z" fill="#0A0514" stroke="#3A1450" stroke-width="2"/>'
+  + '<g class="yeuxOmbre"><circle cx="-28" cy="8" r="3" fill="#B14AED"/><circle cx="-17" cy="11" r="3" fill="#B14AED"/></g>'
+  + '</g>';
+document.querySelectorAll('.slotHero').forEach(function(s){ s.innerHTML = HERO; });
+document.querySelectorAll('.slotChat').forEach(function(s){ s.innerHTML = CHAT; });
+document.querySelectorAll('.slotOmbre').forEach(function(s){ s.innerHTML = OMBRE; });
+
+const FILM = [
+ {id:'f1', dur:60, subs:[
+   [1,"Quelques nuits après l'aventure de la Lune, le ciel était redevenu paisible."],
+   [10,"Enfin... c'est ce que tout le monde croyait."],
+   [17,"Cette nuit-là, une étoile s'éteignit. Pouf. Sans un bruit."],
+   [25,"Puis une deuxième... une troisième... une quatrième !"],
+   [33,"À chaque fois, une petite fumée violette s'envolait dans le noir."],
+   [42,"« Cette couleur... » frissonna Étincelle. « Je l'ai déjà vue quelque part. »"],
+   [51,"« Les yeux qui nous observaient au lac ! » Et elle plongea vers la Terre."]]},
+ {id:'f2', dur:60, subs:[
+   [1,"En ville, son fidèle ami le chat noir l'attendait déjà."],
+   [9,"« Regarde », souffla-t-il. « Des traces de brume violette... partout. »"],
+   [19,"De toit en toit, la piste violette serpentait dans la nuit."],
+   [29,"« Celui qui vole les étoiles est passé par ici », murmura Étincelle."],
+   [39,"La piste quittait la ville... et s'enfonçait vers la vieille forêt."],
+   [49,"« Reste près de moi », dit le chat. « Cette forêt ne me dit rien de bon. »"]]},
+ {id:'f3', dur:60, subs:[
+   [1,"Au cœur de la forêt, une étrange lumière dansait entre les arbres."],
+   [10,"Cachés derrière un tronc, ils virent alors... l'Ombre."],
+   [19,"Et dans ses mains : une lanterne remplie d'étoiles prisonnières !"],
+   [28,"Les pauvres petites brillaient tristement derrière les barreaux."],
+   [37,"« Il faut les libérer », chuchota Étincelle. « Ce soir. »"],
+   [45,"Elle s'approcha sans bruit, tendit la main vers la lanterne..."],
+   [53,"...et une voix glaciale s'éleva : « On ne touche pas à MA collection. »"]]},
+ {id:'f4', dur:60, subs:[
+   [1,"Étincelle fila dans le ciel comme une comète d'or !"],
+   [9,"L'Ombre s'élança derrière elle, glissant entre les nuages."],
+   [18,"Virage à gauche ! Plongeon ! Remontée en vrille !"],
+   [27,"Mais l'Ombre était rapide... terriblement rapide."],
+   [36,"« Pourquoi voles-tu les étoiles ?! » cria Étincelle dans le vent."],
+   [45,"« Parce que la nuit est à MOI ! » gronda l'Ombre en se rapprochant."],
+   [54,"Et son ombre immense engloutit peu à peu le ciel..."]]},
+ {id:'f5', dur:60, subs:[
+   [1,"Épuisée, Étincelle se posa dans une clairière pour reprendre son souffle."],
+   [11,"Grave erreur. L'Ombre l'y attendait."],
+   [19,"Un éclair violet... et tout devint silencieux."],
+   [28,"Quand la lumière revint, Étincelle était DANS la lanterne !"],
+   [37,"« Une étoile d'or... la plus belle pièce de ma collection », ricana l'Ombre."],
+   [46,"Et elle s'envola dans la nuit, emportant la lanterne... et Étincelle."],
+   [53,"Le chat noir, resté seul, serra les dents : « Tiens bon, petite étoile... »"],
+   [57,"« ...j'ai un plan. » À SUIVRE !"]]}
+];
+const TOTAL = FILM.reduce(function(a,s){return a+s.dur;},0);
+let idx = -1, t = 0, paused = false, horloge = null;
+
+function demarrer(){
+  document.getElementById('vFin').classList.remove('on');
+  document.getElementById('vAccueil').classList.remove('on');
+  document.body.classList.add('enCours');
+  document.body.classList.remove('paused');
+  paused = false;
+  document.getElementById('btnPause').textContent = '⏸ Pause';
+  idx = -1;
+  suivant();
+  if(!horloge) horloge = setInterval(tic, 100);
+}
+function suivant(){
+  document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active');});
+  idx++;
+  if(idx >= FILM.length){ fin(); return; }
+  t = 0;
+  document.getElementById('soustitre').textContent = '';
+  document.getElementById(FILM[idx].id).classList.add('active');
+  document.getElementById('chapLabel').textContent = 'Chapitre ' + (idx+1) + ' / ' + FILM.length;
+}
+function tic(){
+  if(paused || idx < 0 || idx >= FILM.length) return;
+  t += 0.1;
+  const sc = FILM[idx];
+  let texte = '';
+  for(const paire of sc.subs){ if(t >= paire[0]) texte = paire[1]; }
+  const st = document.getElementById('soustitre');
+  if(st.textContent !== texte) st.textContent = texte;
+  let fait = 0;
+  for(let i=0;i<idx;i++) fait += FILM[i].dur;
+  document.getElementById('barrePlein').style.width = ((fait + Math.min(t, sc.dur)) / TOTAL * 100) + '%';
+  if(t >= sc.dur) suivant();
+}
+function basculerPause(){
+  paused = !paused;
+  document.body.classList.toggle('paused', paused);
+  document.getElementById('btnPause').textContent = paused ? '▶ Reprendre' : '⏸ Pause';
+}
+function passer(){ if(paused) basculerPause(); suivant(); }
+function fin(){
+  document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active');});
+  document.body.classList.remove('enCours');
+  document.getElementById('barrePlein').style.width = '100%';
+  document.getElementById('vFin').classList.add('on');
+}
+</script>
+
+</body></html>

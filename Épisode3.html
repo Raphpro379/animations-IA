@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)file:///C:/Users/RAPHAEL/Downloads/episode3_1.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Aventures d'Étincelle — Épisode 3 · « La plus belle des lumières »</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% 0%, #232C4C 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 100%, #1E2745 0%, transparent 50%),
+      #101426;
+    color:#F5EFE0;font-family:Georgia,serif;overflow:hidden;
+  }
+  .ecran{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:14px;text-align:center;}
+  .ecran.on{display:flex;}
+  .entete{font-family:sans-serif;font-size:clamp(9px,2.2vw,12px);font-weight:600;letter-spacing:3.5px;color:#F1D687;}
+  .orTitre{
+    font-weight:900;
+    background:linear-gradient(180deg,#F1D687 20%,#D4AF37 60%,#A8842A 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:#D4AF37;
+  }
+  .btnOr{
+    margin-top:24px;font-family:Georgia,serif;font-weight:bold;font-size:clamp(16px,4.2vw,21px);
+    background:linear-gradient(180deg,#F1D687,#D4AF37);color:#101426;
+    border:none;border-radius:999px;padding:14px 38px;cursor:pointer;
+    box-shadow:0 0 24px rgba(241,214,135,.45);
+  }
+  .btnOr:active{transform:scale(.96);}
+  body.enCours .ecran{display:none !important;}
+  #cinema{position:fixed;inset:0;display:none;}
+  body.enCours #cinema{display:block;}
+  .scene{display:none;position:absolute;inset:0;}
+  .scene.active{display:flex;align-items:center;justify-content:center;}
+  .scene svg{width:100%;height:100%;max-height:100vh;}
+  .chapitre{
+    position:absolute;top:12%;left:0;right:0;text-align:center;
+    font-size:clamp(17px,4.4vw,28px);font-weight:bold;color:#F1D687;
+    text-shadow:0 2px 12px rgba(0,0,0,.8);opacity:0;pointer-events:none;
+  }
+  .scene.active .chapitre{animation:chapAff 4.5s ease-in-out forwards;}
+  @keyframes chapAff{0%{opacity:0;transform:translateY(10px);}12%,80%{opacity:1;transform:translateY(0);}100%{opacity:0;}}
+  #bandeau{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
+    padding:14px 18px 42px;text-align:center;
+    background:linear-gradient(180deg,transparent,rgba(7,9,26,.9) 40%);pointer-events:none;
+  }
+  body.enCours #bandeau{display:block;}
+  #soustitre{font-size:clamp(14px,3.4vw,21px);font-style:italic;text-shadow:0 2px 8px rgba(0,0,0,.9);min-height:1.4em;}
+  #controles{
+    position:fixed;top:0;left:0;right:0;z-index:45;display:none;
+    align-items:center;gap:10px;padding:10px 14px;font-family:sans-serif;
+    background:linear-gradient(180deg,rgba(7,9,26,.85),transparent);
+  }
+  body.enCours #controles{display:flex;}
+  #controles button{
+    background:rgba(241,214,135,.14);color:#F1D687;
+    border:1px solid rgba(212,175,55,.5);border-radius:999px;
+    font-size:13.5px;font-weight:bold;padding:7px 14px;cursor:pointer;
+  }
+  #chapLabel{font-size:13px;font-weight:bold;color:#CEC8B8;margin-left:auto;}
+  #barre{position:fixed;top:0;left:0;right:0;height:4px;z-index:46;display:none;background:rgba(255,255,255,.08);}
+  body.enCours #barre{display:block;}
+  #barrePlein{height:100%;width:0%;background:linear-gradient(90deg,#D4AF37,#F1D687);}
+  body.paused .scene *{animation-play-state:paused !important;}
+  #pauseVoile{
+    position:fixed;inset:0;z-index:44;display:none;align-items:center;justify-content:center;
+    background:rgba(7,9,26,.45);font-size:clamp(26px,6vw,44px);font-weight:bold;color:#F1D687;
+  }
+  body.paused #pauseVoile{display:flex;}
+  #vFin .suite{
+    margin-top:16px;font-size:clamp(14px,3.6vw,19px);font-style:italic;color:#F1D687;
+    text-shadow:0 0 12px rgba(241,214,135,.5);
+  }
+  #vFin .gen{margin-top:12px;font-style:italic;color:#CEC8B8;font-size:clamp(12px,3vw,15px);line-height:2;}
+
+  /* ===== héros et ambiance ===== */
+  .corpsEtoile{filter:drop-shadow(0 0 8px rgba(241,214,135,.9));animation:heroLueur 2s ease-in-out infinite;}
+  @keyframes heroLueur{0%,100%{filter:drop-shadow(0 0 6px rgba(241,214,135,.7));}50%{filter:drop-shadow(0 0 14px rgba(241,214,135,1));}}
+  .yeux{transform-box:fill-box;transform-origin:center;animation:heroCligne 4s infinite;}
+  @keyframes heroCligne{0%,92%,100%{transform:scaleY(1);}95%{transform:scaleY(.1);}}
+  .tw{animation:tw 2.4s ease-in-out infinite;}
+  .tw.t2{animation-delay:.8s;}
+  .tw.t3{animation-delay:1.6s;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:1;}}
+  .queueChat{transform-box:fill-box;transform-origin:bottom left;animation:qchat 1.6s ease-in-out infinite;}
+  @keyframes qchat{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(14deg);}}
+  .yeuxOmbre{animation:yo 1.6s ease-in-out infinite;}
+  @keyframes yo{0%,100%{opacity:.7;}50%{opacity:1;}}
+
+
+  /* --- S1 : l'alliance --- */
+  .g1 .chatG{animation:g1c 60s ease-in-out forwards;}
+  @keyframes g1c{
+    0%{transform:translate(-40px,330px);}
+    14%{transform:translate(200px,330px);}
+    24%,100%{transform:translate(300px,332px);}
+  }
+  .g1 .luneG{animation:g1l 60s ease-in-out forwards;transform-box:fill-box;transform-origin:center;}
+  @keyframes g1l{0%,20%{transform:translateY(0);}34%,100%{transform:translateY(66px);}}
+  .g1 .lucG{transform-box:fill-box;transform-origin:center;animation:g1luc 3.4s ease-in-out infinite;}
+  .g1 .lucG.u2{animation-delay:1.1s;}
+  .g1 .lucG.u3{animation-delay:2.2s;}
+  @keyframes g1luc{0%,100%{opacity:.25;transform:translate(0,0);}50%{opacity:1;transform:translate(9px,-11px);}}
+  .g1 .lucVenue{animation:g1lv 60s ease-in-out forwards;}
+  @keyframes g1lv{0%,40%{transform:translate(-120px,-40px);}58%,100%{transform:translate(0,0);}}
+  .g1 .colline{animation:none;}
+
+  /* --- S2 : le sauvetage --- */
+  .g2 .lanterneP{animation:g2lan 60s ease-in-out forwards;transform-box:fill-box;transform-origin:top center;}
+  @keyframes g2lan{0%,100%{transform:rotate(-2.4deg);}50%{transform:rotate(2.4deg);}}
+  .g2 .ombreDort{animation:g2od 60s ease-in-out forwards;}
+  @keyframes g2od{
+    0%,30%{transform:translate(560px,300px);}
+    36%{transform:translate(560px,296px);}
+    44%{transform:translate(575px,290px) rotate(-8deg);}
+    56%{transform:translate(600px,286px) rotate(-14deg);}
+    70%,100%{transform:translate(610px,284px) rotate(-16deg);}
+  }
+  .g2 .rayonLune{animation:g2rl 60s linear forwards;opacity:0;transform-box:fill-box;transform-origin:top center;}
+  @keyframes g2rl{0%,32%{opacity:0;}38%,64%{opacity:.5;}72%,100%{opacity:0;}}
+  .g2 .nueeLuc{animation:g2nl 60s ease-in-out forwards;}
+  @keyframes g2nl{
+    0%,34%{transform:translate(-100px,60px);}
+    48%{transform:translate(240px,10px);}
+    60%,100%{transform:translate(330px,-20px);}
+  }
+  .g2 .chatMonte{animation:g2cm 60s ease-in-out forwards;}
+  @keyframes g2cm{
+    0%,20%{transform:translate(60px,340px);}
+    38%{transform:translate(230px,336px);}
+    54%{transform:translate(330px,290px);}
+    66%,100%{transform:translate(352px,240px);}
+  }
+  .g2 .porteLan{transform-box:fill-box;transform-origin:left center;animation:g2pl 60s ease-in-out forwards;}
+  @keyframes g2pl{0%,70%{transform:rotate(0);}78%,100%{transform:rotate(-70deg);}}
+  .g2 .heroSort{animation:g2hs 60s ease-in-out forwards;opacity:0;transform-box:fill-box;transform-origin:center;}
+  @keyframes g2hs{
+    0%,71%{opacity:1;transform:translate(0,0) scale(.55);}
+    80%{opacity:1;transform:translate(-40px,-46px) scale(.85);}
+    88%,100%{opacity:1;transform:translate(-70px,-80px) scale(1);}
+  }
+  .g2 .etoilesSorties{animation:g2es 60s ease-out forwards;opacity:0;transform-box:fill-box;transform-origin:center;}
+  @keyframes g2es{0%,72%{opacity:0;transform:scale(.3);}80%{opacity:1;}94%,100%{opacity:1;transform:scale(1.6) translate(0,-46px);}}
+
+  /* --- S3 : le secret de l'Ombre --- */
+  .g3 .ombreTriste{animation:g3ot 60s ease-in-out forwards;}
+  @keyframes g3ot{0%,100%{transform:translate(470px,320px);}50%{transform:translate(470px,326px);}}
+  .g3 .larmeV{animation:g3lv 2.8s linear infinite;opacity:0;}
+  .g3 .larmeV.l2{animation-delay:1.4s;}
+  @keyframes g3lv{0%{transform:translateY(0);opacity:0;}20%{opacity:.9;}80%{opacity:.5;}100%{transform:translateY(22px);opacity:0;}}
+  .g3 .larmesOff{animation:g3loff 60s linear forwards;}
+  @keyframes g3loff{0%,58%{opacity:1;}64%,100%{opacity:0;}}
+  .g3 .heroDonne{animation:g3hd 60s ease-in-out forwards;}
+  @keyframes g3hd{
+    0%{transform:translate(180px,300px);}
+    22%{transform:translate(280px,304px);}
+    40%,100%{transform:translate(370px,308px);}
+  }
+  .g3 .donLumiere{animation:g3dl 60s linear forwards;opacity:0;transform-box:fill-box;transform-origin:center;}
+  @keyframes g3dl{0%,58%{opacity:0;transform:scale(.4);}66%{opacity:.9;transform:scale(1.2);}76%{opacity:.6;transform:scale(1);}84%,100%{opacity:0;}}
+  .g3 .coeurOr{animation:g3co 60s linear forwards;opacity:0;transform-box:fill-box;transform-origin:center;}
+  @keyframes g3co{0%,74%{opacity:0;transform:scale(.3);}82%,100%{opacity:1;transform:scale(1);}}
+  .g3 .chatRegarde{animation:g3cr 60s ease-in-out forwards;}
+  @keyframes g3cr{0%,100%{transform:translate(150px,336px);}}
+
+  /* --- S4 : une nouvelle lumière --- */
+  .g4 .retour{transform-box:fill-box;transform-origin:center;animation:g4r 2.6s ease-in-out infinite;}
+  .g4 .retour.r2{animation-delay:.9s;}
+  .g4 .retour.r3{animation-delay:1.8s;}
+  @keyframes g4r{0%,100%{opacity:.4;}50%{opacity:1;}}
+  .g4 .h4g{animation:g4h 60s ease-in-out forwards;}
+  @keyframes g4h{
+    0%{transform:translate(380px,560px);}
+    14%{transform:translate(380px,200px);}
+    30%,100%{transform:translate(340px,190px);}
+  }
+  .g4 .lueurG{animation:g4lg 60s ease-in-out forwards;}
+  @keyframes g4lg{
+    0%{transform:translate(500px,560px);}
+    18%{transform:translate(440px,220px);}
+    34%,100%{transform:translate(420px,200px);}
+  }
+  .g4 .haloG{transform-box:fill-box;transform-origin:center;animation:g4halo 3s ease-in-out infinite;}
+  @keyframes g4halo{0%,100%{transform:scale(1);opacity:.3;}50%{transform:scale(1.3);opacity:.55;}}
+  .g4 .finT{animation:g4fin 60s linear forwards;opacity:0;}
+  @keyframes g4fin{0%,80%{opacity:0;}90%,100%{opacity:1;}}
+  .g4 .luneFin{transform-box:fill-box;transform-origin:center;animation:g4lf 60s linear forwards;}
+  @keyframes g4lf{0%{transform:rotate(-2deg);}100%{transform:rotate(2deg);}}
+
+</style>
+</head>
+<body>
+
+<div class="ecran on" id="vAccueil">
+  <div class="entete">UNE SÉRIE DU FESTIVAL DE L'ANIMATION</div>
+  <h1 class="orTitre" style="font-size:clamp(30px,8vw,58px);margin:12px 0 4px;">Les Aventures<br>d'Étincelle</h1>
+  <div style="font-size:clamp(16px,4.2vw,24px);font-style:italic;">Épisode 3 · « La plus belle des lumières »</div>
+  <div style="margin-top:12px;font-size:clamp(12px,3vw,15px);font-style:italic;color:#CEC8B8;">4 minutes · 4 chapitres · GRAND FINAL · par Raphaël</div>
+  <button class="btnOr" onclick="demarrer()">🎬 Commencer l'épisode</button>
+</div>
+
+<div id="barre"><div id="barrePlein"></div></div>
+<div id="controles">
+  <button onclick="basculerPause()" id="btnPause">⏸ Pause</button>
+  <button onclick="passer()">⏭ Chapitre suivant</button>
+  <span id="chapLabel"></span>
+</div>
+<div id="pauseVoile">⏸ PAUSE</div>
+
+<div id="cinema">
+<div class="scene g1" id="g1">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><radialgradient id="gg1" cx=".5" cy=".3" r=".9">
+    <stop offset="0" stop-color="#151B33"></stop><stop offset="1" stop-color="#07091A"></stop></radialgradient></defs>
+  <rect width="760" height="480" fill="url(#gg1)"></rect>
+  <circle class="tw" cx="120" cy="70" r="1.7" fill="#F1D687" opacity=".5"></circle>
+  <circle class="tw t3" cx="640" cy="90" r="1.6" fill="#F1D687" opacity=".5"></circle>
+  <path class="colline" d="M0 400 Q190 330 380 396 T760 386 V480 H0 Z" fill="#122A22"></path>
+  <g class="luneG">
+    <circle cx="560" cy="150" r="46" fill="#F5EFE0" opacity=".97"></circle>
+    <circle cx="545" cy="138" r="9" fill="#DDD5C0"></circle>
+    <circle cx="548" cy="150" r="3.4" fill="#2B2D42"></circle><circle cx="574" cy="150" r="3.4" fill="#2B2D42"></circle>
+    <path d="M550 164 Q561 158 572 164" stroke="#2B2D42" stroke-width="2.6" fill="none" stroke-linecap="round"></path>
+  </g>
+  <g class="lucVenue" fill="#C8F169">
+    <circle class="lucG" cx="180" cy="220" r="4"></circle>
+    <circle class="lucG u2" cx="210" cy="200" r="3.4"></circle>
+    <circle class="lucG u3" cx="240" cy="226" r="3.8"></circle>
+    <circle class="lucG u2" cx="270" cy="206" r="3"></circle>
+  </g>
+  <g class="chatG"><g class="slotChat"><g><ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"></ellipse><circle cx="15" cy="-8" r="7.5" fill="#181B2C"></circle><path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"></path><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"></path><circle cx="13.5" cy="-9" r="1.5" fill="#C8F169"></circle><circle cx="18.5" cy="-9" r="1.5" fill="#C8F169"></circle><path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"></path></g></g></g>
+</svg>
+<div class="chapitre">Chapitre 1 · L'alliance de la nuit</div>
+</div>
+<div class="scene g2" id="g2">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><lineargradient id="gg2" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0A0514"></stop><stop offset="1" stop-color="#141026"></stop></lineargradient></defs>
+  <rect width="760" height="480" fill="url(#gg2)"></rect>
+  <path class="rayonLune" d="M60 0 L300 200 L420 200 L180 0 Z" fill="#F5EFE0"></path>
+  <circle cx="110" cy="60" r="34" fill="#F5EFE0" opacity=".95"></circle>
+  <g fill="#0E0820">
+    <path d="M600 480 V240 Q600 200 640 200 Q680 200 680 240 V480 Z"></path>
+    <path d="M640 200 Q610 150 640 110 Q670 150 640 200 Z"></path>
+  </g>
+  <rect x="0" y="410" width="760" height="70" fill="#0E0F1E"></rect>
+  <g transform="translate(380,200)">
+    <g class="lanterneP">
+      <line x1="0" y1="-64" x2="0" y2="-30" stroke="#3A1450" stroke-width="3"></line>
+      <rect x="-24" y="-30" width="48" height="60" rx="8" fill="none" stroke="#3A1450" stroke-width="5"></rect>
+      <line x1="-24" y1="-8" x2="24" y2="-8" stroke="#3A1450" stroke-width="3.4"></line>
+      <line x1="-24" y1="10" x2="24" y2="10" stroke="#3A1450" stroke-width="3.4"></line>
+      <circle class="donLumiere" r="0" fill="none"></circle>
+      <g class="heroSort"><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g>
+      <g class="etoilesSorties" fill="#FFF3D6">
+        <circle cx="-10" cy="-4" r="4"></circle><circle cx="10" cy="4" r="3.4"></circle><circle cx="0" cy="12" r="3"></circle>
+        <circle cx="14" cy="-10" r="2.6"></circle>
+      </g>
+      <g class="porteLan">
+        <rect x="-24" y="-30" width="24" height="60" rx="6" fill="rgba(58,20,80,.25)" stroke="#3A1450" stroke-width="4"></rect>
+      </g>
+    </g>
+  </g>
+  <g class="nueeLuc" fill="#C8F169">
+    <circle class="lucG" cx="0" cy="0" r="4"></circle><circle class="lucG u2" cx="26" cy="-12" r="3.4"></circle>
+    <circle class="lucG u3" cx="50" cy="4" r="3.6"></circle><circle class="lucG u2" cx="74" cy="-8" r="3"></circle>
+  </g>
+  <g class="ombreDort"><g transform="scale(1.1)"><g class="slotOmbre"><g><path d="M0 0 C-20 -10 -40 -5 -52 10 C-36 7 -21 12 -9 24 C-14 10 -9 3 0 0 Z" fill="#0A0514" stroke="#3A1450" stroke-width="2"></path><g class="yeuxOmbre"><circle cx="-28" cy="8" r="3" fill="#B14AED"></circle><circle cx="-17" cy="11" r="3" fill="#B14AED"></circle></g></g></g></g></g>
+  <g class="chatMonte"><g class="slotChat"><g><ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"></ellipse><circle cx="15" cy="-8" r="7.5" fill="#181B2C"></circle><path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"></path><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"></path><circle cx="13.5" cy="-9" r="1.5" fill="#C8F169"></circle><circle cx="18.5" cy="-9" r="1.5" fill="#C8F169"></circle><path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"></path></g></g></g>
+</svg>
+<div class="chapitre">Chapitre 2 · L'évasion de la lanterne</div>
+</div>
+<div class="scene g3" id="g3">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><lineargradient id="gg3" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0A0F22"></stop><stop offset="1" stop-color="#141026"></stop></lineargradient></defs>
+  <rect width="760" height="480" fill="url(#gg3)"></rect>
+  <g fill="#F1D687">
+    <circle class="tw" cx="130" cy="70" r="1.9"></circle><circle class="tw t2" cx="360" cy="50" r="1.7"></circle>
+    <circle class="tw t3" cx="590" cy="80" r="1.8"></circle>
+  </g>
+  <rect x="0" y="400" width="760" height="80" fill="#122A22"></rect>
+  <path d="M0 404 Q190 392 380 404 T760 404" stroke="#1B3327" stroke-width="6" fill="none"></path>
+  <g class="ombreTriste">
+    <g transform="scale(1.15)"><g class="slotOmbre"><g><path d="M0 0 C-20 -10 -40 -5 -52 10 C-36 7 -21 12 -9 24 C-14 10 -9 3 0 0 Z" fill="#0A0514" stroke="#3A1450" stroke-width="2"></path><g class="yeuxOmbre"><circle cx="-28" cy="8" r="3" fill="#B14AED"></circle><circle cx="-17" cy="11" r="3" fill="#B14AED"></circle></g></g></g></g>
+    <g class="larmesOff">
+      <ellipse class="larmeV" cx="-30" cy="18" rx="2.4" ry="4" fill="#B14AED"></ellipse>
+      <ellipse class="larmeV l2" cx="-16" cy="20" rx="2" ry="3.4" fill="#B14AED"></ellipse>
+    </g>
+    <circle class="coeurOr" cx="-26" cy="10" r="7" fill="#F1D687" style="filter:drop-shadow(0 0 8px #F1D687)"></circle>
+  </g>
+  <circle class="donLumiere" cx="420" cy="300" r="60" fill="#F1D687"></circle>
+  <g class="heroDonne"><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g>
+  <g class="chatRegarde"><g class="slotChat"><g><ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"></ellipse><circle cx="15" cy="-8" r="7.5" fill="#181B2C"></circle><path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"></path><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"></path><circle cx="13.5" cy="-9" r="1.5" fill="#C8F169"></circle><circle cx="18.5" cy="-9" r="1.5" fill="#C8F169"></circle><path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"></path></g></g></g>
+</svg>
+<div class="chapitre">Chapitre 3 · Le secret de l'Ombre</div>
+</div>
+<div class="scene g4" id="g4">
+<svg viewBox="0 0 760 480" preserveAspectRatio="xMidYMid slice">
+  <defs><radialgradient id="gg4" cx=".5" cy=".35" r="1">
+    <stop offset="0" stop-color="#1E2745"></stop><stop offset="1" stop-color="#07091A"></stop></radialgradient></defs>
+  <rect width="760" height="480" fill="url(#gg4)"></rect>
+  <g fill="#F1D687">
+    <circle class="tw retour" cx="90" cy="90" r="2.2"></circle><circle class="tw t2 retour r2" cx="200" cy="60" r="1.9"></circle>
+    <circle class="tw t3 retour r3" cx="310" cy="110" r="2"></circle><circle class="tw retour r2" cx="470" cy="70" r="1.8"></circle>
+    <circle class="tw t2 retour" cx="580" cy="120" r="2.2"></circle><circle class="tw t3 retour r3" cx="680" cy="60" r="1.9"></circle>
+    <circle class="tw retour r3" cx="150" cy="260" r="1.7"></circle><circle class="tw retour" cx="620" cy="270" r="1.8"></circle>
+    <circle class="tw t2 retour r2" cx="270" cy="320" r="1.6"></circle><circle class="tw retour r3" cx="520" cy="330" r="1.7"></circle>
+  </g>
+  <g class="luneFin">
+    <circle cx="620" cy="110" r="42" fill="#F5EFE0" opacity=".97"></circle>
+    <circle cx="606" cy="98" r="8" fill="#DDD5C0"></circle>
+    <circle cx="608" cy="110" r="3.2" fill="#2B2D42"></circle><circle cx="632" cy="110" r="3.2" fill="#2B2D42"></circle>
+    <path d="M610 122 Q621 130 632 122" stroke="#2B2D42" stroke-width="2.6" fill="none" stroke-linecap="round"></path>
+  </g>
+  <g class="h4g">
+    <circle class="haloG" r="46" fill="#F1D687" opacity=".3"></circle>
+    <g><g class="slotHero"><g class="corpsEtoile"><path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"></path><circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"></circle><g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"></circle><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"></circle></g><path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"></path></g></g></g>
+  </g>
+  <g class="lueurG">
+    <circle class="haloG" r="40" fill="#B14AED" opacity=".25"></circle>
+    <g>
+      <path d="M0 0 C-16 -8 -32 -4 -42 8 C-29 6 -17 10 -7 19 C-11 8 -7 2 0 0 Z" fill="#1E1035" stroke="#B14AED" stroke-width="2"></path>
+      <circle cx="-24" cy="6" r="5.5" fill="#F1D687" style="filter:drop-shadow(0 0 6px #F1D687)"></circle>
+      <g class="yeuxOmbre"><circle cx="-30" cy="1" r="2.2" fill="#E2C6FF"></circle><circle cx="-16" cy="4" r="2.2" fill="#E2C6FF"></circle></g>
+    </g>
+  </g>
+  <g class="finT">
+    <text x="380" y="400" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="46" fill="#F1D687" style="filter:drop-shadow(0 0 12px rgba(241,214,135,.6))">FIN DE LA SAISON 1</text>
+    <text x="380" y="436" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="17" fill="#CEC8B8">Les Aventures d’Étincelle reviendront...</text>
+  </g>
+</svg>
+<div class="chapitre">Chapitre 4 · Une nouvelle lumière</div>
+</div>
+</div>
+
+<div id="bandeau"><div id="soustitre"></div></div>
+
+<div class="ecran" id="vFin">
+  <h1 class="orTitre" style="font-size:clamp(28px,7.5vw,52px)">FIN DE LA SAISON 1</h1>
+  <div class="suite">L'Ombre est devenue Lueur, la gardienne du soir. 💜💛<br>Étincelle et ses amis reviendront pour la saison 2 !</div>
+  <div class="gen">Les Aventures d'Étincelle · une série du Festival de l'Animation<br>Créateur : Raphaël 🎨</div>
+  <button class="btnOr" onclick="demarrer()">🔁 Revoir l'épisode</button>
+</div>
+
+<script>
+const HERO = '<g class="corpsEtoile">'
+  + '<path d="M0,-26 L7,-8 L26,-8 L11,4 L17,22 L0,11 L-17,22 L-11,4 L-26,-8 L-7,-8 Z" fill="#F1D687" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round"/>'
+  + '<circle cx="-8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"/><circle cx="8" cy="2" r="2.6" fill="#FF9E9E" opacity=".75"/>'
+  + '<g class="yeux"><circle cx="-5" cy="-5" r="2.3" fill="#2B2D42"/><circle cx="5" cy="-5" r="2.3" fill="#2B2D42"/></g>'
+  + '<path d="M-4,5 Q0,9.5 4,5" stroke="#2B2D42" stroke-width="2" fill="none" stroke-linecap="round"/>'
+  + '</g>';
+const CHAT = '<g>'
+  + '<ellipse cx="0" cy="0" rx="17" ry="9" fill="#181B2C"/>'
+  + '<circle cx="15" cy="-8" r="7.5" fill="#181B2C"/>'
+  + '<path d="M10 -13 l2 -6 4 5 Z" fill="#181B2C"/><path d="M16 -14 l3 -5 3 6 Z" fill="#181B2C"/>'
+  + '<circle cx="13.5" cy="-9" r="1.5" fill="#C8F169"/><circle cx="18.5" cy="-9" r="1.5" fill="#C8F169"/>'
+  + '<path class="queueChat" d="M-15 -2 Q-30 -8 -28 -22" stroke="#181B2C" stroke-width="5" fill="none" stroke-linecap="round"/>'
+  + '</g>';
+const OMBRE = '<g>'
+  + '<path d="M0 0 C-20 -10 -40 -5 -52 10 C-36 7 -21 12 -9 24 C-14 10 -9 3 0 0 Z" fill="#0A0514" stroke="#3A1450" stroke-width="2"/>'
+  + '<g class="yeuxOmbre"><circle cx="-28" cy="8" r="3" fill="#B14AED"/><circle cx="-17" cy="11" r="3" fill="#B14AED"/></g>'
+  + '</g>';
+document.querySelectorAll('.slotHero').forEach(function(s){ s.innerHTML = HERO; });
+document.querySelectorAll('.slotChat').forEach(function(s){ s.innerHTML = CHAT; });
+document.querySelectorAll('.slotOmbre').forEach(function(s){ s.innerHTML = OMBRE; });
+
+const FILM = [
+ {id:'g1', dur:60, subs:[
+   [1,"Le chat noir courut toute la nuit pour donner l'alerte."],
+   [9,"« L'Ombre a capturé Étincelle ! Il faut la sauver ! »"],
+   [18,"Alors, pour la première fois, la Lune descendit du ciel pour écouter."],
+   [28,"« Étincelle m'a sauvée autrefois », dit-elle. « C'est mon tour. »"],
+   [37,"Les lucioles de la vieille forêt arrivèrent à leur tour, par dizaines."],
+   [46,"« Voici le plan », murmura le chat. « L'Ombre déteste la lumière trop forte... »"],
+   [55,"Et l'étrange petite armée se mit en route."]]},
+ {id:'g2', dur:60, subs:[
+   [1,"Dans son repaire, l'Ombre dormait près de sa précieuse lanterne."],
+   [10,"Premier signal : la Lune envoya son rayon le plus éblouissant !"],
+   [19,"Aveuglée, l'Ombre recula en grognant, les yeux fermés."],
+   [27,"Deuxième signal : les lucioles tourbillonnèrent autour d'elle comme une tempête verte !"],
+   [37,"Pendant ce temps, à pas de velours... le chat grimpa jusqu'à la lanterne."],
+   [46,"Un coup de patte précis sur le loquet... CLIC !"],
+   [52,"La porte s'ouvrit : Étincelle et toutes les étoiles jaillirent dans la nuit !"]]},
+ {id:'g3', dur:60, subs:[
+   [1,"L'Ombre s'effondra au milieu de la clairière. Vaincue."],
+   [10,"Mais au lieu de fuir, Étincelle s'approcha doucement..."],
+   [19,"L'Ombre pleurait. De grosses larmes violettes."],
+   [27,"« Je n'ai pas de lumière à moi », sanglota-t-elle. « Alors je volais la vôtre... »"],
+   [38,"« Dans le noir, personne ne me voit. Personne ne me parle. Jamais. »"],
+   [48,"Alors Étincelle fit une chose que personne n'attendait..."],
+   [54,"Elle posa sa main sur l'Ombre, et lui offrit un morceau de sa propre lumière."]]},
+ {id:'g4', dur:60, subs:[
+   [1,"Cette nuit-là, toutes les étoiles volées retrouvèrent leur place dans le ciel."],
+   [11,"Et à côté d'Étincelle brillait une lumière toute nouvelle..."],
+   [20,"Mi-violette, mi-dorée : l'Ombre, devenue Lueur, la gardienne du soir."],
+   [30,"« Plus personne ne sera seul dans la nuit », promit Étincelle."],
+   [39,"La Lune souriait. Le chat ronronnait. Les lucioles dansaient."],
+   [47,"Et le ciel ne fut jamais, jamais aussi beau que cette nuit-là."],
+   [54,"FIN DE LA SAISON 1 ⭐ Merci d'avoir regardé !"]]}
+];
+const TOTAL = FILM.reduce(function(a,s){return a+s.dur;},0);
+let idx = -1, t = 0, paused = false, horloge = null;
+
+function demarrer(){
+  document.getElementById('vFin').classList.remove('on');
+  document.getElementById('vAccueil').classList.remove('on');
+  document.body.classList.add('enCours');
+  document.body.classList.remove('paused');
+  paused = false;
+  document.getElementById('btnPause').textContent = '⏸ Pause';
+  idx = -1;
+  suivant();
+  if(!horloge) horloge = setInterval(tic, 100);
+}
+function suivant(){
+  document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active');});
+  idx++;
+  if(idx >= FILM.length){ fin(); return; }
+  t = 0;
+  document.getElementById('soustitre').textContent = '';
+  document.getElementById(FILM[idx].id).classList.add('active');
+  document.getElementById('chapLabel').textContent = 'Chapitre ' + (idx+1) + ' / ' + FILM.length;
+}
+function tic(){
+  if(paused || idx < 0 || idx >= FILM.length) return;
+  t += 0.1;
+  const sc = FILM[idx];
+  let texte = '';
+  for(const paire of sc.subs){ if(t >= paire[0]) texte = paire[1]; }
+  const st = document.getElementById('soustitre');
+  if(st.textContent !== texte) st.textContent = texte;
+  let fait = 0;
+  for(let i=0;i<idx;i++) fait += FILM[i].dur;
+  document.getElementById('barrePlein').style.width = ((fait + Math.min(t, sc.dur)) / TOTAL * 100) + '%';
+  if(t >= sc.dur) suivant();
+}
+function basculerPause(){
+  paused = !paused;
+  document.body.classList.toggle('paused', paused);
+  document.getElementById('btnPause').textContent = paused ? '▶ Reprendre' : '⏸ Pause';
+}
+function passer(){ if(paused) basculerPause(); suivant(); }
+function fin(){
+  document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active');});
+  document.body.classList.remove('enCours');
+  document.getElementById('barrePlein').style.width = '100%';
+  document.getElementById('vFin').classList.add('on');
+}
+</script>
+
+</body></html>
