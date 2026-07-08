@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<!-- saved from url=(0070)file:///C:/Users/RAPHAEL/Downloads/carnet-croisiere-impressions_1.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Impressions — carnet de croisière</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Quicksand:wght@400;500;600&display=swap');
+  :root{--ecume:#fbf9f4;--ecume2:#f3f0e7;--brise:#eaf3f4;--ciel:#cfe6ec;--ciel-fonce:#8fc0cc;--lagon:#5fa3b0;--lagon-profond:#3d7d8a;--corail:#e88a6f;--corail-doux:#f2b3a0;--soleil:#f4c874;--encre:#3a4b52;--encre-doux:#7a8f96;--ligne:rgba(95,163,176,.18);--ombre:0 10px 40px rgba(95,163,176,.14);}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{font-family:'Quicksand',sans-serif;color:var(--encre);line-height:1.7;min-height:100vh;background:radial-gradient(ellipse at 82% 6%, rgba(244,200,116,.18), transparent 44%),radial-gradient(ellipse at 12% 24%, rgba(242,179,160,.14), transparent 42%),radial-gradient(ellipse at 50% 100%, rgba(143,192,204,.22), transparent 55%),var(--ecume);background-attachment:fixed;-webkit-tap-highlight-color:transparent}
+  ::selection{background:var(--ciel);color:var(--encre)}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;line-height:1.12}
+  .wrap{max-width:720px;margin:0 auto;padding:0 18px}
+  header{text-align:center;padding:48px 0 16px}
+  .sunrise{width:88px;height:88px;margin:0 auto 18px;position:relative}
+  .sunrise .glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(244,200,116,.5),rgba(242,179,160,.2) 55%,transparent 72%);animation:shimmer 5s ease-in-out infinite}
+  @keyframes shimmer{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.12);opacity:1}}
+  .sunrise .disc{position:absolute;top:24px;left:24px;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 40% 38%,#fde6c0,#f4c874 62%,#eab45a);box-shadow:0 4px 22px rgba(244,200,116,.5)}
+  .sunrise .ray{position:absolute;inset:0}
+  .eyebrow{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--lagon);margin-bottom:12px;font-weight:600}
+  header h1{font-size:clamp(38px,11vw,60px);color:var(--encre)}
+  header h1 em{font-style:italic;color:var(--corail)}
+  .subtitle{font-style:italic;color:var(--encre-doux);font-size:17px;margin-top:6px;font-family:'Fraunces',serif}
+  .rule{display:flex;align-items:center;gap:14px;max-width:230px;margin:18px auto 0;color:var(--ciel-fonce)}
+  .rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--ciel-fonce),transparent)}
+  .voyage-meta{background:linear-gradient(160deg,var(--brise),#fff);border:1px solid var(--ligne);border-radius:20px;padding:18px 22px;margin:26px 0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;box-shadow:var(--ombre);position:relative}
+  .voyage-meta::before{content:"⛵";position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--ecume);padding:0 12px;font-size:20px}
+  .vm-field label{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--encre-doux);margin-bottom:4px;font-weight:600}
+  .vm-field input{width:100%;background:transparent;border:none;border-bottom:1.5px solid var(--ligne);font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:var(--encre);padding:4px 0;transition:.2s}
+  .vm-field input:focus{outline:none;border-bottom-color:var(--lagon)}
+  .vm-field input::placeholder{color:var(--encre-doux);opacity:.5;font-style:italic;font-weight:400}
+  @media(max-width:520px){.voyage-meta{grid-template-columns:1fr;gap:12px}}
+  .composer{background:linear-gradient(155deg,#fff,var(--brise));border:1px solid var(--ligne);border-radius:22px;padding:24px 22px;margin:26px 0;box-shadow:var(--ombre);border-top:3px solid var(--corail-doux)}
+  .composer h2{font-size:26px;margin-bottom:2px}
+  .composer .hint{color:var(--encre-doux);font-size:15px;font-style:italic;margin-bottom:20px;font-family:'Fraunces',serif}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  @media(max-width:520px){.row{grid-template-columns:1fr}}
+  .field label{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--encre-doux);margin-bottom:6px;font-weight:600}
+  .field input,.field textarea{width:100%;background:rgba(255,255,255,.7);border:1px solid var(--ligne);border-radius:12px;padding:12px 14px;font-family:'Quicksand',sans-serif;font-size:16px;color:var(--encre);transition:.2s}
+  .field textarea{font-family:'Fraunces',serif;font-size:17px;line-height:1.8}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--lagon);background:#fff;box-shadow:0 0 0 4px rgba(95,163,176,.08)}
+  .field textarea{resize:vertical;min-height:120px}
+  .field input::placeholder,.field textarea::placeholder{color:var(--encre-doux);opacity:.55;font-style:italic}
+  .pills-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--encre-doux);margin-bottom:9px;font-weight:600}
+  .pills{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+  .pill{background:rgba(255,255,255,.6);border:1.5px solid var(--ligne);border-radius:22px;padding:9px 15px;font-size:15px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;user-select:none;font-weight:500}
+  .pill:active{border-color:var(--lagon)}
+  .pill.on{background:var(--lagon);color:#fff;border-color:var(--lagon)}
+  .pill .e{font-size:16px}
+  .photo-zone{margin:4px 0 18px}
+  .add-photo{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.7);border:1.5px dashed var(--corail);border-radius:14px;padding:14px 18px;font-size:14px;letter-spacing:.3px;color:var(--encre);cursor:pointer;transition:.2s;width:100%;justify-content:center;font-weight:600}
+  .add-photo:active{background:#fff}
+  .add-photo .ic{font-size:19px}
+  .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .thumb{position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden;border:1px solid var(--ligne)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb button{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(58,75,82,.8);color:#fff;font-size:13px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center}
+  .composer-foot{display:flex;justify-content:flex-end;margin-top:6px}
+  .save{background:var(--corail);color:#fff;border:none;padding:15px 32px;border-radius:30px;font-family:'Quicksand',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:.2s;letter-spacing:.3px;width:100%}
+  .save:active{background:var(--lagon)}
+  @media(min-width:521px){.save{width:auto}}
+  .map-sec{margin:38px 0 18px}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .sec-head h2{font-size:28px}
+  .sec-head .cnt{font-size:13px;color:var(--encre-doux);font-weight:600}
+  .map-note{color:var(--encre-doux);font-size:15px;font-style:italic;margin-bottom:14px;font-family:'Fraunces',serif}
+  .route{background:linear-gradient(160deg,#fff,var(--brise));border:1px solid var(--ligne);border-radius:20px;padding:20px 8px;box-shadow:var(--ombre);overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .route svg{display:block;margin:0 auto;min-width:480px}
+  .route-empty{text-align:center;color:var(--encre-doux);font-style:italic;padding:34px 20px;font-size:16px;font-family:'Fraunces',serif}
+  .log{margin:38px 0 26px}
+  .log h2{font-size:28px;margin-bottom:18px}
+  .page{background:linear-gradient(155deg,#fff,var(--brise));border:1px solid var(--ligne);border-radius:18px;padding:20px 22px;margin-bottom:16px;box-shadow:var(--ombre);position:relative;animation:unfold .4s ease-out}
+  @keyframes unfold{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .page .ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;padding-bottom:10px;border-bottom:1px solid var(--ligne)}
+  .page .daynum{font-size:10px;letter-spacing:1px;color:#fff;background:var(--soleil);padding:4px 11px;border-radius:20px;font-weight:600}
+  .page .port{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--encre)}
+  .page .pdate{font-size:12px;color:var(--encre-doux);margin-left:auto;font-weight:500}
+  .page .tags{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  .page .tags span{font-size:13px;color:var(--lagon-profond);background:var(--brise);border:1px solid var(--ligne);border-radius:16px;padding:4px 12px;display:flex;align-items:center;gap:5px;font-weight:500}
+  .page .txt{font-family:'Fraunces',serif;font-size:18px;line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-top:6px}
+  .page .txt.empty{color:var(--encre-doux);font-style:italic}
+  .page .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-top:14px}
+  .page .gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid var(--ligne);cursor:pointer;transition:.2s}
+  .page .gallery img:active{transform:scale(.97)}
+  .page .del{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--encre-doux);cursor:pointer;font-size:20px;opacity:.4;transition:.2s;line-height:1;padding:6px}
+  .page .del:active{opacity:1;color:var(--corail)}
+  .empty-log{text-align:center;color:var(--encre-doux);font-style:italic;padding:38px;font-size:17px;font-family:'Fraunces',serif;background:linear-gradient(155deg,#fff,var(--brise));border:1px dashed var(--ciel-fonce);border-radius:18px}
+  footer{text-align:center;padding:26px;color:var(--encre-doux);font-size:13px;font-weight:500}
+  footer button{background:none;border:1px solid var(--ligne);color:var(--encre-doux);padding:8px 18px;border-radius:20px;font-family:'Quicksand',sans-serif;font-size:12px;cursor:pointer;margin-top:12px;font-weight:500}
+  footer button:active{border-color:var(--corail);color:var(--corail)}
+  #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--lagon-profond);color:#fff;padding:13px 24px;border-radius:24px;font-size:14px;font-weight:500;box-shadow:0 10px 30px rgba(61,125,138,.3);transition:.4s;z-index:100;max-width:90%;text-align:center}
+  #toast.show{transform:translateX(-50%) translateY(0)}
+  #viewer{position:fixed;inset:0;background:rgba(58,75,82,.92);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+  #viewer.on{display:flex}
+  #viewer img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  #viewer .close{position:absolute;top:16px;right:20px;color:#fff;font-size:34px;cursor:pointer;background:none;border:none;line-height:1}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="sunrise"><div class="glow"></div><div class="ray"><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><g stroke="#f4c874" stroke-width="2" stroke-linecap="round" opacity="0.6"><line x1="48" y1="6" x2="48" y2="16"></line><line x1="48" y1="80" x2="48" y2="90"></line><line x1="6" y1="48" x2="16" y2="48"></line><line x1="80" y1="48" x2="90" y2="48"></line><line x1="18" y1="18" x2="25" y2="25"></line><line x1="71" y1="71" x2="78" y2="78"></line><line x1="78" y1="18" x2="71" y2="25"></line><line x1="25" y1="71" x2="18" y2="78"></line></g></svg></div><div class="disc"></div></div>
+    <div class="eyebrow">impressions &amp; souvenirs</div>
+    <h1>Ma <em>croisière</em></h1>
+    <div class="subtitle">un carnet léger, au gré des jours et des ports</div>
+    <div class="rule">✶</div>
+  </header>
+  <div class="voyage-meta">
+    <div class="vm-field"><label>Nom du navire</label><input id="vm-ship" placeholder="ex. L&#39;Aurore" maxlength="40"></div>
+    <div class="vm-field"><label>Itinéraire</label><input id="vm-route" placeholder="ex. Îles grecques" maxlength="40"></div>
+    <div class="vm-field"><label>Départ le</label><input id="vm-start" type="date"></div>
+    <div class="vm-field"><label>Le carnet de</label><input id="vm-name" placeholder="ton prénom" maxlength="30"></div>
+  </div>
+  <div class="composer">
+    <h2>Une impression du jour</h2>
+    <div class="hint">Un lieu, un instant, ce que tu as ressenti.</div>
+    <div class="row">
+      <div class="field"><label>Escale / lieu</label><input id="c-port" placeholder="ex. Santorin, ou En mer" maxlength="50"></div>
+      <div class="field"><label>Date</label><input id="c-date" type="date"></div>
+    </div>
+    <div class="pills-label">Le temps qu'il faisait</div><div class="pills" id="weatherPills"><button class="pill"><span class="e">☀️</span>Soleil</button><button class="pill"><span class="e">⛅</span>Nuageux</button><button class="pill"><span class="e">🌧️</span>Pluie</button><button class="pill"><span class="e">💨</span>Venté</button><button class="pill"><span class="e">⛈️</span>Orage</button><button class="pill"><span class="e">🌫️</span>Brume</button></div>
+    <div class="pills-label">Ce que tu as ressenti</div><div class="pills" id="moodPills"><button class="pill"><span class="e">🤩</span>Émerveillée</button><button class="pill"><span class="e">😌</span>Détendue</button><button class="pill"><span class="e">😄</span>Joyeuse</button><button class="pill"><span class="e">🌸</span>Rêveuse</button><button class="pill"><span class="e">🥹</span>Émue</button><button class="pill"><span class="e">🕊️</span>Paisible</button></div>
+    <div class="field" style="margin-bottom:14px"><label>Le souvenir du jour · ce que tu veux garder</label><textarea id="c-text" placeholder="Ce matin, la lumière sur l&#39;eau était si douce…"></textarea></div>
+    <div class="photo-zone">
+      <div class="pills-label">Photos</div>
+      <button class="add-photo" id="addPhotoBtn"><span class="ic">📷</span> Ajouter une ou plusieurs photos</button>
+      <input type="file" id="photoInput" accept="image/*" multiple="" style="display:none">
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <div class="composer-foot"><button class="save" id="saveBtn">Garder ce jour</button></div>
+  </div>
+  <div class="map-sec"><div class="sec-head"><h2>La route</h2><span class="cnt" id="routeCount"></span></div><div class="map-note">Chaque escale devient un point sur ta route, comme un collier de souvenirs.</div><div class="route" id="route"><div class="route-empty">Ta route apparaîtra ici dès ta première escale. ⛵</div></div></div>
+  <div class="log"><h2>Le carnet</h2><div id="logList"><div class="empty-log">Ton carnet est tout neuf.<br>Note ta première impression ci-dessus. ☀️</div></div></div>
+</div>
+<footer>Ton carnet reste sur cet appareil. ☀️<br><button id="clearBtn">Effacer tout le carnet</button></footer>
+<div id="toast"></div>
+<div id="viewer"><button class="close" id="viewerClose">✕</button><img id="viewerImg" src="file:///C:/Users/RAPHAEL/Downloads/carnet-croisiere-impressions_1.html" alt=""></div>
+<script>
+const KEY="carnet-croisiere-impressions";
+const WEATHER=[{id:"soleil",nm:"Soleil",e:"☀️"},{id:"nuages",nm:"Nuageux",e:"⛅"},{id:"pluie",nm:"Pluie",e:"🌧️"},{id:"vent",nm:"Venté",e:"💨"},{id:"orage",nm:"Orage",e:"⛈️"},{id:"brume",nm:"Brume",e:"🌫️"}];
+const MOODSET=[{id:"emerveille",nm:"Émerveillée",e:"🤩"},{id:"detendu",nm:"Détendue",e:"😌"},{id:"joyeux",nm:"Joyeuse",e:"😄"},{id:"reveuse",nm:"Rêveuse",e:"🌸"},{id:"emue",nm:"Émue",e:"🥹"},{id:"paisible",nm:"Paisible",e:"🕊️"}];
+let entries=[];let meta={ship:"",route:"",start:"",name:""};let selWeather=null,selMood=null,pendingPhotos=[];
+function load(){try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);entries=d.entries||[];meta=Object.assign(meta,d.meta||{});}}catch(e){entries=[];}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({entries,meta}));}catch(e){toast("Mémoire pleine : retire quelques photos.");}}
+const MOIS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+function fmtDate(str){if(!str)return "—";const d=new Date(str+"T12:00:00");return d.getDate()+" "+MOIS[d.getMonth()]+" "+d.getFullYear();}
+function bindMeta(id,key){const el=document.getElementById(id);el.value=meta[key]||"";el.addEventListener('input',()=>{meta[key]=el.value;save();updateRouteCount();});}
+function buildPills(boxId,data,getSel,setSel){const box=document.getElementById(boxId);box.innerHTML='';data.forEach(o=>{const b=document.createElement('button');b.className='pill';b.innerHTML=`<span class="e">${o.e}</span>${o.nm}`;b.onclick=()=>{const already=getSel()===o.id;box.querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));if(already){setSel(null);}else{b.classList.add('on');setSel(o.id);}};box.appendChild(b);});}
+buildPills('weatherPills',WEATHER,()=>selWeather,v=>selWeather=v);
+buildPills('moodPills',MOODSET,()=>selMood,v=>selMood=v);
+document.getElementById('c-date').value=new Date().toISOString().slice(0,10);
+document.getElementById('addPhotoBtn').onclick=()=>document.getElementById('photoInput').click();
+document.getElementById('photoInput').onchange=async(ev)=>{const files=[...ev.target.files];for(const f of files){if(!f.type.startsWith('image/'))continue;try{const data=await compress(f);pendingPhotos.push(data);}catch(e){toast("Une image n'a pas pu être ajoutée.");}}renderThumbs();ev.target.value='';};
+function compress(file){return new Promise((res,rej)=>{const img=new Image();const url=URL.createObjectURL(file);img.onload=()=>{const max=1000;let w=img.width,h=img.height;if(w>h&&w>max){h=h*max/w;w=max;}else if(h>max){w=w*max/h;h=max;}const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);res(cv.toDataURL('image/jpeg',0.72));};img.onerror=()=>{URL.revokeObjectURL(url);rej();};img.src=url;});}
+function renderThumbs(){document.getElementById('thumbs').innerHTML=pendingPhotos.map((p,i)=>`<div class="thumb"><img src="${p}" alt=""><button onclick="removePending(${i})">✕</button></div>`).join('');}
+function removePending(i){pendingPhotos.splice(i,1);renderThumbs();}
+document.getElementById('saveBtn').onclick=()=>{const port=document.getElementById('c-port').value.trim();const date=document.getElementById('c-date').value;const text=document.getElementById('c-text').value.trim();if(!port&&!text&&pendingPhotos.length===0){toast("Ajoute un lieu, un souvenir ou une photo.");return;}entries.push({id:Date.now(),port,date,text,weather:selWeather,mood:selMood,photos:pendingPhotos.slice()});entries.sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a.id-b.id);save();document.getElementById('c-port').value='';document.getElementById('c-text').value='';document.querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));selWeather=null;selMood=null;pendingPhotos=[];renderThumbs();render();toast("Ce jour est gardé ✶");window.scrollTo({top:document.querySelector('.log').offsetTop-20,behavior:'smooth'});};
+function delEntry(id){if(!confirm("Retirer cette page ?"))return;entries=entries.filter(e=>e.id!==id);save();render();toast("Page retirée.");}
+document.getElementById('clearBtn').onclick=()=>{if(entries.length===0){toast("Le carnet est déjà vide.");return;}if(confirm("Effacer tout le carnet ? Définitif.")){entries=[];meta={ship:"",route:"",start:"",name:""};save();['vm-ship','vm-route','vm-start','vm-name'].forEach(id=>document.getElementById(id).value='');render();toast("Carnet remis à neuf.");}};
+let toastT;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+function updateRouteCount(){const ports=entries.filter(e=>e.port&&!/^en mer$/i.test(e.port.trim()));document.getElementById('routeCount').textContent=ports.length+" escale"+(ports.length>1?'s':'');}
+function renderRoute(){const box=document.getElementById('route');const stops=entries.filter(e=>e.port);if(stops.length===0){box.innerHTML='<div class="route-empty">Ta route apparaîtra ici dès ta première escale. ⛵</div>';return;}const W=Math.max(480,stops.length*130),H=150,padX=60,y=80;const n=stops.length;const pts=stops.map((e,i)=>({x:n===1?W/2:padX+(W-2*padX)*i/(n-1),e}));let path=`M ${pts[0].x} ${y}`;for(let i=1;i<pts.length;i++){const cx=(pts[i-1].x+pts[i].x)/2;path+=` Q ${cx} ${y-22}, ${pts[i].x} ${y}`;}let dots='',labels='';pts.forEach((p,i)=>{const enMer=/^en mer$/i.test(p.e.port.trim());const col=enMer?"#5fa3b0":"#e88a6f";dots+=`<g><circle cx="${p.x}" cy="${y}" r="10" fill="${col}" opacity="0.2"/><circle cx="${p.x}" cy="${y}" r="5" fill="${col}"/></g>`;const nm=p.e.port.length>16?p.e.port.slice(0,15)+'…':p.e.port;const up=i%2===0;labels+=`<text x="${p.x}" y="${up?y-20:y+30}" text-anchor="middle" font-family="'Fraunces',serif" font-size="16" font-weight="600" fill="#3a4b52">${escapeXml(nm)}</text><text x="${p.x}" y="${up?y-34:y+45}" text-anchor="middle" font-family="'Quicksand',sans-serif" font-size="10" fill="#7a8f96">${fmtDate(p.e.date)}</text>`;});box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><path d="${path}" fill="none" stroke="#f4c874" stroke-width="2.5" stroke-dasharray="2 6" stroke-linecap="round" opacity="0.8"/>${dots}${labels}</svg>`;updateRouteCount();}
+function renderLog(){const box=document.getElementById('logList');if(entries.length===0){box.innerHTML='<div class="empty-log">Ton carnet est tout neuf.<br>Note ta première impression ci-dessus. ☀️</div>';return;}box.innerHTML=entries.map((e,i)=>{const w=e.weather?WEATHER.find(x=>x.id===e.weather):null;const m=e.mood?MOODSET.find(x=>x.id===e.mood):null;let tags='';if(w)tags+=`<span><span>${w.e}</span>${w.nm}</span>`;if(m)tags+=`<span><span>${m.e}</span>${m.nm}</span>`;const body=e.text?`<div class="txt">${escapeHtml(e.text)}</div>`:'<div class="txt empty">(pas de souvenir écrit ce jour-là)</div>';const gal=(e.photos&&e.photos.length)?`<div class="gallery">${e.photos.map((p,pi)=>`<img src="${p}" onclick="openViewer(${e.id},${pi})" alt="photo">`).join('')}</div>`:'';return `<div class="page"><button class="del" onclick="delEntry(${e.id})" title="retirer">✕</button><div class="ph"><span class="daynum">JOUR ${i+1}</span><span class="port">${e.port?escapeHtml(e.port):'Sans lieu'}</span><span class="pdate">${fmtDate(e.date)}</span></div>${tags?`<div class="tags">${tags}</div>`:''}${body}${gal}</div>`;}).join('');}
+function openViewer(eid,pi){const e=entries.find(x=>x.id===eid);if(!e||!e.photos[pi])return;document.getElementById('viewerImg').src=e.photos[pi];document.getElementById('viewer').classList.add('on');}
+document.getElementById('viewerClose').onclick=()=>document.getElementById('viewer').classList.remove('on');
+document.getElementById('viewer').onclick=(e)=>{if(e.target.id==='viewer')document.getElementById('viewer').classList.remove('on');};
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escapeXml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function render(){renderRoute();renderLog();}
+load();bindMeta('vm-ship','ship');bindMeta('vm-route','route');bindMeta('vm-start','start');bindMeta('vm-name','name');render();
+</script>
+
+
+</body></html>
