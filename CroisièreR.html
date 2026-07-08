@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/RAPHAEL/Downloads/carnet-croisiere.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carnet de bord — ma croisière</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --parch:#efe6d3;
+    --parch2:#e7dcc4;
+    --parch-fonce:#dccdb0;
+    --encre:#233047;
+    --encre-doux:#5a6478;
+    --laiton:#b0893c;
+    --laiton-clair:#c7a659;
+    --rouge:#a6462f;
+    --vague:#3d6b7a;
+    --ligne:rgba(35,48,71,.14);
+    --ombre:0 8px 30px rgba(80,60,30,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Spectral',serif;color:var(--encre);line-height:1.65;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(176,137,60,.06), transparent 40%),
+      radial-gradient(circle at 88% 92%, rgba(61,107,122,.07), transparent 45%),
+      var(--parch);
+    background-attachment:fixed;
+  }
+  /* texture papier subtile */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;opacity:.5;pointer-events:none;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(35,48,71,.03) 28px);}
+
+  ::selection{background:var(--laiton-clair);color:var(--encre)}
+  h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.1}
+
+  .wrap{max-width:800px;margin:0 auto;padding:0 22px}
+
+  /* ===== en-tête / cartouche ===== */
+  header{text-align:center;padding:56px 0 18px;position:relative}
+  .compass{width:58px;height:58px;margin:0 auto 20px;position:relative}
+  .compass svg{width:100%;height:100%;animation:sway 8s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--laiton);margin-bottom:14px}
+  header h1{font-size:clamp(40px,9vw,74px);color:var(--encre);letter-spacing:.5px}
+  header h1 em{font-style:italic;color:var(--rouge)}
+  .subtitle{font-style:italic;color:var(--encre-doux);font-size:19px;margin-top:6px}
+  .rule{display:flex;align-items:center;gap:14px;max-width:280px;margin:22px auto 0;color:var(--laiton)}
+  .rule::before,.rule::after{content:"";flex:1;height:1px;background:var(--laiton);opacity:.5}
+
+  /* ===== résumé du voyage ===== */
+  .voyage-meta{
+    background:linear-gradient(160deg,var(--parch2),var(--parch-fonce));
+    border:1px solid var(--ligne);border-radius:4px;padding:20px 24px;margin:30px 0;
+    display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;box-shadow:var(--ombre);
+    position:relative;
+  }
+  .voyage-meta::before{content:"⚓";position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+    background:var(--parch);padding:0 10px;font-size:18px;color:var(--laiton)}
+  .vm-field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--encre-doux);margin-bottom:3px}
+  .vm-field input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--ligne);
+    font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;color:var(--encre);padding:2px 0;transition:.2s}
+  .vm-field input:focus{outline:none;border-bottom-color:var(--laiton)}
+  .vm-field input::placeholder{color:var(--encre-doux);opacity:.5;font-style:italic;font-weight:500}
+  @media(max-width:520px){.voyage-meta{grid-template-columns:1fr}}
+
+  /* ===== nouvelle entrée ===== */
+  .composer{
+    background:linear-gradient(155deg,#f4ecdb,var(--parch2));
+    border:1px solid var(--ligne);border-radius:4px;padding:26px 26px 24px;margin:30px 0;
+    box-shadow:var(--ombre);border-left:3px solid var(--laiton);
+  }
+  .composer h2{font-size:26px;margin-bottom:2px}
+  .composer .hint{color:var(--encre-doux);font-size:14px;font-style:italic;margin-bottom:20px}
+
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  @media(max-width:520px){.row{grid-template-columns:1fr}}
+  .field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--encre-doux);margin-bottom:6px}
+  .field input,.field textarea{
+    width:100%;background:rgba(255,255,255,.35);border:1px solid var(--ligne);border-radius:3px;
+    padding:10px 12px;font-family:'Spectral',serif;font-size:16px;color:var(--encre);transition:.2s;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--laiton);background:rgba(255,255,255,.6)}
+  .field textarea{resize:vertical;min-height:120px;line-height:1.7}
+  .field input::placeholder,.field textarea::placeholder{color:var(--encre-doux);opacity:.55;font-style:italic}
+
+  /* météo & humeur en pastilles */
+  .pills-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--encre-doux);margin-bottom:8px}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .pill{background:rgba(255,255,255,.3);border:1.5px solid var(--ligne);border-radius:20px;
+    padding:7px 14px;font-size:14px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;user-select:none}
+  .pill:hover{border-color:var(--laiton)}
+  .pill.on{background:var(--encre);color:var(--parch);border-color:var(--encre)}
+  .pill .e{font-size:16px}
+
+  .composer-foot{display:flex;justify-content:flex-end;align-items:center;gap:14px;margin-top:8px}
+  .save{background:var(--encre);color:var(--parch);border:none;padding:12px 30px;border-radius:3px;
+    font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;cursor:pointer;transition:.2s;letter-spacing:.5px}
+  .save:hover{background:var(--vague);transform:translateY(-2px)}
+
+  /* ===== carte des escales (signature) ===== */
+  .map-sec{margin:44px 0 20px}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .sec-head h2{font-size:30px}
+  .sec-head .cnt{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--encre-doux);letter-spacing:1px}
+  .map-note{color:var(--encre-doux);font-size:14px;font-style:italic;margin-bottom:16px}
+  .route{background:linear-gradient(160deg,#e8f0ef,#dde8e6);border:1px solid var(--ligne);border-radius:4px;
+    padding:24px 10px;box-shadow:var(--ombre);overflow-x:auto}
+  .route svg{display:block;margin:0 auto;min-width:520px}
+  .route-empty{text-align:center;color:var(--encre-doux);font-style:italic;padding:40px 20px;font-size:17px}
+
+  /* ===== pages du journal ===== */
+  .log{margin:44px 0 30px}
+  .log h2{font-size:30px;margin-bottom:20px}
+  .page{
+    background:linear-gradient(155deg,#f4ecdb,var(--parch2));
+    border:1px solid var(--ligne);border-radius:4px;padding:22px 24px;margin-bottom:18px;
+    box-shadow:var(--ombre);position:relative;animation:unfold .4s ease-out;
+  }
+  @keyframes unfold{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .page .ph{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px;padding-bottom:12px;border-bottom:1px dashed var(--ligne)}
+  .page .daynum{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--parch);background:var(--laiton);padding:3px 9px;border-radius:3px}
+  .page .port{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--encre)}
+  .page .pdate{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--encre-doux);margin-left:auto}
+  .page .tags{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .page .tags span{font-size:13px;color:var(--encre-doux);background:rgba(255,255,255,.4);border:1px solid var(--ligne);border-radius:14px;padding:3px 11px;display:flex;align-items:center;gap:5px}
+  .page .txt{font-size:17px;line-height:1.75;white-space:pre-wrap;word-break:break-word;margin-top:8px}
+  .page .txt.empty{color:var(--encre-doux);font-style:italic}
+  .page .del{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--encre-doux);
+    cursor:pointer;font-size:18px;opacity:.4;transition:.2s;line-height:1}
+  .page .del:hover{opacity:1;color:var(--rouge)}
+  .empty-log{text-align:center;color:var(--encre-doux);font-style:italic;padding:44px;font-size:18px;
+    background:linear-gradient(155deg,#f4ecdb,var(--parch2));border:1px dashed var(--ligne);border-radius:4px}
+
+  footer{text-align:center;padding:30px;color:var(--encre-doux);font-size:13px;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px}
+  footer button{background:none;border:1px solid var(--ligne);color:var(--encre-doux);padding:6px 16px;border-radius:3px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;margin-top:12px;transition:.2s}
+  footer button:hover{border-color:var(--rouge);color:var(--rouge)}
+
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+    background:var(--encre);color:var(--parch);padding:12px 24px;border-radius:4px;font-size:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);transition:.4s;z-index:100}
+  #toast.show{transform:translateX(-50%) translateY(0)}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="compass">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#b0893c" stroke-width="2"></circle>
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#b0893c" stroke-width="1" opacity=".5"></circle>
+        <polygon points="50,12 56,50 50,50" fill="#a6462f"></polygon>
+        <polygon points="50,88 44,50 50,50" fill="#233047"></polygon>
+        <polygon points="12,50 50,44 50,50" fill="#233047" opacity=".6"></polygon>
+        <polygon points="88,50 50,56 50,50" fill="#233047" opacity=".6"></polygon>
+        <circle cx="50" cy="50" r="4" fill="#b0893c"></circle>
+      </svg>
+    </div>
+    <div class="eyebrow">Carnet de bord</div>
+    <h1>Ma <em>croisière</em></h1>
+    <div class="subtitle">journal de bord, jour après jour</div>
+    <div class="rule">✦</div>
+  </header>
+
+  <!-- MÉTA VOYAGE -->
+  <div class="voyage-meta">
+    <div class="vm-field">
+      <label>Nom du navire</label>
+      <input id="vm-ship" placeholder="ex. L&#39;Étoile des Mers" maxlength="40">
+    </div>
+    <div class="vm-field">
+      <label>Itinéraire</label>
+      <input id="vm-route" placeholder="ex. Méditerranée" maxlength="40">
+    </div>
+    <div class="vm-field">
+      <label>Départ le</label>
+      <input id="vm-start" type="date">
+    </div>
+    <div class="vm-field">
+      <label>Capitaine de bord (toi !)</label>
+      <input id="vm-name" placeholder="ton prénom" maxlength="30">
+    </div>
+  </div>
+
+  <!-- COMPOSER -->
+  <div class="composer">
+    <h2>Nouvelle page</h2>
+    <div class="hint">Raconte ta journée à bord ou à quai.</div>
+
+    <div class="row">
+      <div class="field">
+        <label>Escale / lieu</label>
+        <input id="c-port" placeholder="ex. Santorin, ou En mer" maxlength="50">
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input id="c-date" type="date">
+      </div>
+    </div>
+
+    <div class="pills-label">Météo</div>
+    <div class="pills" id="weatherPills"><button class="pill"><span class="e">☀️</span>Soleil</button><button class="pill"><span class="e">⛅</span>Nuageux</button><button class="pill"><span class="e">🌧️</span>Pluie</button><button class="pill"><span class="e">💨</span>Venté</button><button class="pill"><span class="e">⛈️</span>Orage</button><button class="pill"><span class="e">🌫️</span>Brume</button></div>
+
+    <div class="pills-label">Humeur du jour</div>
+    <div class="pills" id="moodPills"><button class="pill"><span class="e">🤩</span>Émerveillé</button><button class="pill"><span class="e">😌</span>Détendu</button><button class="pill"><span class="e">😄</span>Joyeux</button><button class="pill"><span class="e">😴</span>Fatigué</button><button class="pill"><span class="e">🤢</span>Mal de mer</button><button class="pill"><span class="e">🥹</span>Nostalgique</button></div>
+
+    <div class="field" style="margin-bottom:8px">
+      <label>Le récit du jour · escales, souvenirs, anecdotes</label>
+      <textarea id="c-text" placeholder="Ce matin, le bateau est entré dans le port au lever du soleil…"></textarea>
+    </div>
+
+    <div class="composer-foot">
+      <button class="save" id="saveBtn">Inscrire au journal</button>
+    </div>
+  </div>
+
+  <!-- CARTE ESCALES -->
+  <div class="map-sec">
+    <div class="sec-head">
+      <h2>La route</h2>
+      <span class="cnt" id="routeCount"></span>
+    </div>
+    <div class="map-note">Chaque escale marquée devient un point sur ta route. Suis le fil de ton voyage.</div>
+    <div class="route" id="route"><div class="route-empty">Ta route apparaîtra ici dès ta première escale. ⚓</div></div>
+  </div>
+
+  <!-- LOG -->
+  <div class="log">
+    <h2>Le journal</h2>
+    <div id="logList"><div class="empty-log">Ton carnet est vierge.<br>Écris ta première page ci-dessus pour commencer le voyage. ⚓</div></div>
+  </div>
+</div>
+
+<footer>
+  Ton carnet reste sur cet appareil — aucune donnée n'est envoyée ailleurs.
+  <br><button id="clearBtn">Effacer tout le carnet</button>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+const KEY="carnet-croisiere";
+const WEATHER=[
+  {id:"soleil",nm:"Soleil",e:"☀️"},{id:"nuages",nm:"Nuageux",e:"⛅"},
+  {id:"pluie",nm:"Pluie",e:"🌧️"},{id:"vent",nm:"Venté",e:"💨"},
+  {id:"orage",nm:"Orage",e:"⛈️"},{id:"brume",nm:"Brume",e:"🌫️"},
+];
+const MOODSET=[
+  {id:"emerveille",nm:"Émerveillé",e:"🤩"},{id:"detendu",nm:"Détendu",e:"😌"},
+  {id:"joyeux",nm:"Joyeux",e:"😄"},{id:"fatigue",nm:"Fatigué",e:"😴"},
+  {id:"malmer",nm:"Mal de mer",e:"🤢"},{id:"nostalgique",nm:"Nostalgique",e:"🥹"},
+];
+
+let entries=[];
+let meta={ship:"",route:"",start:"",name:""};
+let selWeather=null, selMood=null;
+
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){const d=JSON.parse(raw);entries=d.entries||[];meta=Object.assign(meta,d.meta||{});}
+  }catch(e){entries=[];}
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify({entries,meta}));}
+  catch(e){toast("Impossible d'enregistrer sur cet appareil.");}
+}
+
+/* dates FR */
+const MOIS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+const MOISL=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+function fmtDate(str){
+  if(!str)return "—";
+  const d=new Date(str+"T12:00:00");
+  return d.getDate()+" "+MOIS[d.getMonth()]+" "+d.getFullYear();
+}
+
+/* méta : charger + sauver au fil de la frappe */
+function bindMeta(id,key){
+  const el=document.getElementById(id);
+  el.value=meta[key]||"";
+  el.addEventListener('input',()=>{meta[key]=el.value;save();updateRouteCount();});
+}
+
+/* pills */
+function buildPills(boxId,data,getSel,setSel){
+  const box=document.getElementById(boxId);
+  data.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='pill';b.innerHTML=`<span class="e">${o.e}</span>${o.nm}`;
+    b.onclick=()=>{
+      const already=getSel()===o.id;
+      box.querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));
+      if(already){setSel(null);}else{b.classList.add('on');setSel(o.id);}
+    };
+    box.appendChild(b);
+  });
+}
+buildPills('weatherPills',WEATHER,()=>selWeather,v=>selWeather=v);
+buildPills('moodPills',MOODSET,()=>selMood,v=>selMood=v);
+
+/* default date = aujourd'hui */
+(function(){
+  const t=new Date().toISOString().slice(0,10);
+  document.getElementById('c-date').value=t;
+})();
+
+/* save entry */
+document.getElementById('saveBtn').onclick=()=>{
+  const port=document.getElementById('c-port').value.trim();
+  const date=document.getElementById('c-date').value;
+  const text=document.getElementById('c-text').value.trim();
+  if(!port && !text){toast("Ajoute au moins un lieu ou un récit.");return;}
+  entries.push({id:Date.now(),port,date,text,weather:selWeather,mood:selMood});
+  entries.sort((a,b)=>(a.date||"").localeCompare(b.date||"")|| a.id-b.id);
+  save();
+  document.getElementById('c-port').value='';
+  document.getElementById('c-text').value='';
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));
+  selWeather=null;selMood=null;
+  render();toast("Page inscrite au carnet ⚓");
+};
+
+function delEntry(id){entries=entries.filter(e=>e.id!==id);save();render();toast("Page retirée.");}
+document.getElementById('clearBtn').onclick=()=>{
+  if(entries.length===0){toast("Le carnet est déjà vide.");return;}
+  if(confirm("Effacer tout le carnet (pages + infos du voyage) ? Définitif.")){
+    entries=[];meta={ship:"",route:"",start:"",name:""};save();
+    ['vm-ship','vm-route','vm-start','vm-name'].forEach(id=>document.getElementById(id).value='');
+    render();toast("Carnet remis à neuf.");
+  }
+};
+
+let toastT;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2400);}
+
+/* ROUTE (carte des escales) */
+function updateRouteCount(){
+  const ports=entries.filter(e=>e.port && !/^en mer$/i.test(e.port.trim()));
+  document.getElementById('routeCount').textContent=ports.length+" escale"+(ports.length>1?'s':'');
+}
+function renderRoute(){
+  const box=document.getElementById('route');
+  const stops=entries.filter(e=>e.port);
+  if(stops.length===0){
+    box.innerHTML='<div class="route-empty">Ta route apparaîtra ici dès ta première escale. ⚓</div>';
+    return;
+  }
+  const W=Math.max(560, stops.length*130), H=150, padX=60, y=80;
+  const n=stops.length;
+  const pts=stops.map((e,i)=>({x:n===1?W/2:padX+(W-2*padX)*i/(n-1), e}));
+  // ligne ondulée reliant les points
+  let path=`M ${pts[0].x} ${y}`;
+  for(let i=1;i<pts.length;i++){
+    const px=pts[i-1].x, cx=(pts[i-1].x+pts[i].x)/2;
+    path+=` Q ${cx} ${y-22}, ${pts[i].x} ${y}`;
+  }
+  let dots='',labels='';
+  pts.forEach((p,i)=>{
+    const enMer=/^en mer$/i.test(p.e.port.trim());
+    const col=enMer?"#3d6b7a":"#a6462f";
+    dots+=`<g class="star-pt">
+      <circle cx="${p.x}" cy="${y}" r="10" fill="${col}" opacity="0.18"/>
+      <circle cx="${p.x}" cy="${y}" r="5" fill="${col}"/></g>`;
+    const nm=p.e.port.length>16?p.e.port.slice(0,15)+'…':p.e.port;
+    const up=i%2===0;
+    labels+=`<text x="${p.x}" y="${up?y-20:y+30}" text-anchor="middle" font-family="'Cormorant Garamond',serif" font-size="16" font-weight="600" fill="#233047">${escapeXml(nm)}</text>
+      <text x="${p.x}" y="${up?y-34:y+45}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9.5" fill="#5a6478">${fmtDate(p.e.date)}</text>`;
+  });
+  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <path d="${path}" fill="none" stroke="#b0893c" stroke-width="2" stroke-dasharray="3 5" opacity="0.7"/>
+    ${dots}${labels}</svg>`;
+  updateRouteCount();
+}
+
+/* LOG */
+function renderLog(){
+  const box=document.getElementById('logList');
+  if(entries.length===0){
+    box.innerHTML='<div class="empty-log">Ton carnet est vierge.<br>Écris ta première page ci-dessus pour commencer le voyage. ⚓</div>';
+    return;
+  }
+  box.innerHTML=entries.map((e,i)=>{
+    const w=e.weather?WEATHER.find(x=>x.id===e.weather):null;
+    const m=e.mood?MOODSET.find(x=>x.id===e.mood):null;
+    let tags='';
+    if(w)tags+=`<span><span>${w.e}</span>${w.nm}</span>`;
+    if(m)tags+=`<span><span>${m.e}</span>${m.nm}</span>`;
+    const body=e.text?`<div class="txt">${escapeHtml(e.text)}</div>`:'<div class="txt empty">(pas de récit ce jour-là)</div>';
+    return `<div class="page">
+      <button class="del" onclick="delEntry(${e.id})" title="retirer">✕</button>
+      <div class="ph">
+        <span class="daynum">JOUR ${i+1}</span>
+        <span class="port">${e.port?escapeHtml(e.port):'Sans lieu'}</span>
+        <span class="pdate">${fmtDate(e.date)}</span>
+      </div>
+      ${tags?`<div class="tags">${tags}</div>`:''}
+      ${body}
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escapeXml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function render(){renderRoute();renderLog();}
+
+/* init */
+load();
+bindMeta('vm-ship','ship');bindMeta('vm-route','route');bindMeta('vm-start','start');bindMeta('vm-name','name');
+render();
+</script>
+
+
+</body></html>
