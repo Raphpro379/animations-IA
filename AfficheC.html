@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)file:///C:/Users/RAPHAEL/Downloads/affiche-clan.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Clan des 4 Éléments · Affiche</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#0a0410;overflow:hidden;font-family:'Trebuchet MS',sans-serif;}
+  .stage{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
+  .poster{position:relative;width:min(94vw,560px);aspect-ratio:3/4.4;border-radius:22px;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 0 3px rgba(255,255,255,.06);}
+  svg{position:absolute;inset:0;width:100%;height:100%;}
+
+  /* étoiles de fond */
+  .star{fill:#fff;animation:tw 3s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.2;}50%{opacity:.9;}}
+
+  /* halos élémentaires qui pulsent */
+  .halo{transform-box:fill-box;transform-origin:center;animation:hpulse 4s ease-in-out infinite;}
+  .halo.h2{animation-delay:1s;} .halo.h3{animation-delay:2s;} .halo.h4{animation-delay:3s;}
+  @keyframes hpulse{0%,100%{opacity:.35;transform:scale(1);}50%{opacity:.7;transform:scale(1.12);}}
+
+  /* héros qui montent doucement */
+  .hero{transform-box:fill-box;transform-origin:bottom center;animation:hbob 3.4s ease-in-out infinite;}
+  .hero.b2{animation-delay:.5s;} .hero.b3{animation-delay:1s;} .hero.b4{animation-delay:1.5s;}
+  @keyframes hbob{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+  /* ombre du méchant qui grandit */
+  .nyx{transform-box:fill-box;transform-origin:top center;animation:nyxbreath 5s ease-in-out infinite;}
+  @keyframes nyxbreath{0%,100%{transform:scaleY(1) scaleX(1);opacity:.85;}50%{transform:scaleY(1.06) scaleX(1.03);opacity:1;}}
+  .nyxeye{transform-box:fill-box;transform-origin:center;animation:nyxeye 2.5s ease-in-out infinite;}
+  @keyframes nyxeye{0%,100%{opacity:.6;}50%{opacity:1;}}
+
+  /* titre */
+  .titlewrap{position:absolute;left:0;right:0;top:6%;text-align:center;z-index:5;}
+  .kicker{font-size:clamp(11px,3.2vw,15px);letter-spacing:6px;color:#ffd36b;opacity:.9;font-weight:bold;}
+  .title{font-size:clamp(30px,9vw,52px);font-weight:900;line-height:.95;margin-top:6px;
+    background:linear-gradient(180deg,#fff 0%,#ffdca0 60%,#ff9d4d 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 2px 24px rgba(255,150,60,.4);}
+  .sub{font-size:clamp(13px,4vw,20px);letter-spacing:3px;color:#eee;margin-top:8px;font-weight:bold;}
+  .elems{position:absolute;left:0;right:0;bottom:15%;display:flex;justify-content:center;gap:14px;z-index:5;}
+  .chip{font-size:clamp(16px,5vw,26px);}
+  .brand{position:absolute;bottom:4%;left:0;right:0;text-align:center;z-index:5;
+    font-size:clamp(12px,3.4vw,16px);letter-spacing:4px;color:#ff5a5a;font-weight:900;}
+  .comingsoon{position:absolute;bottom:9.5%;left:0;right:0;text-align:center;z-index:5;
+    font-size:clamp(10px,2.8vw,13px);letter-spacing:3px;color:#cfc;opacity:.85;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="poster">
+    <svg viewBox="0 0 600 880" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialgradient id="bg" cx="50%" cy="38%" r="75%">
+          <stop offset="0%" stop-color="#2a1145"></stop>
+          <stop offset="55%" stop-color="#140a26"></stop>
+          <stop offset="100%" stop-color="#060310"></stop>
+        </radialgradient>
+        <radialgradient id="gFire" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ff7a2d"></stop><stop offset="100%" stop-color="#ff2d2d" stop-opacity="0"></stop></radialgradient>
+        <radialgradient id="gWater" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#49c6ff"></stop><stop offset="100%" stop-color="#2d6bff" stop-opacity="0"></stop></radialgradient>
+        <radialgradient id="gEarth" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#7bd66a"></stop><stop offset="100%" stop-color="#3a8f2d" stop-opacity="0"></stop></radialgradient>
+        <radialgradient id="gAir" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#d9f0ff"></stop><stop offset="100%" stop-color="#9fd0ff" stop-opacity="0"></stop></radialgradient>
+        <lineargradient id="ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a0f2e"></stop><stop offset="100%" stop-color="#0a0518"></stop></lineargradient>
+      </defs>
+
+      <rect width="600" height="880" fill="url(#bg)"></rect>
+
+      <!-- étoiles -->
+      <g>
+        <circle class="star" cx="60" cy="120" r="2"></circle>
+        <circle class="star" cx="520" cy="90" r="2.5" style="animation-delay:.6s"></circle>
+        <circle class="star" cx="150" cy="70" r="1.8" style="animation-delay:1.2s"></circle>
+        <circle class="star" cx="440" cy="160" r="2" style="animation-delay:1.8s"></circle>
+        <circle class="star" cx="300" cy="50" r="1.6" style="animation-delay:.9s"></circle>
+        <circle class="star" cx="90" cy="230" r="1.6" style="animation-delay:2.1s"></circle>
+        <circle class="star" cx="540" cy="240" r="1.8" style="animation-delay:1.5s"></circle>
+      </g>
+
+      <!-- grande ombre du méchant Nyx en fond -->
+      <g class="nyx">
+        <path d="M300 250 C210 250 170 360 190 470 C210 560 260 560 300 560 C340 560 390 560 410 470 C430 360 390 250 300 250 Z" fill="#0d0518" opacity="0.9"></path>
+        <path d="M235 300 Q220 240 250 250 M365 300 Q380 240 350 250" stroke="#0d0518" stroke-width="26" fill="none" stroke-linecap="round"></path>
+        <ellipse class="nyxeye" cx="262" cy="360" rx="16" ry="22" fill="#a24bff"></ellipse>
+        <ellipse class="nyxeye" cx="338" cy="360" rx="16" ry="22" fill="#a24bff" style="animation-delay:.4s"></ellipse>
+        <ellipse cx="262" cy="360" rx="6" ry="9" fill="#1a0033"></ellipse>
+        <ellipse cx="338" cy="360" rx="6" ry="9" fill="#1a0033"></ellipse>
+      </g>
+
+      <!-- sol -->
+      <path d="M0 720 Q300 680 600 720 L600 880 L0 880 Z" fill="url(#ground)"></path>
+
+      <!-- halos élémentaires -->
+      <circle class="halo h1" cx="150" cy="640" r="95" fill="url(#gFire)"></circle>
+      <circle class="halo h2" cx="450" cy="640" r="95" fill="url(#gWater)"></circle>
+      <circle class="halo h3" cx="230" cy="700" r="95" fill="url(#gEarth)"></circle>
+      <circle class="halo h4" cx="380" cy="700" r="95" fill="url(#gAir)"></circle>
+
+      <!-- ===== 4 HÉROS ANIMAUX ===== -->
+
+      <!-- BLAZE le renard de feu -->
+      <g class="hero b1" transform="translate(120,600)">
+        <ellipse cx="30" cy="95" rx="34" ry="10" fill="#000" opacity=".3"></ellipse>
+        <path d="M30 30 C8 30 2 55 12 78 C20 96 40 96 48 78 C58 55 52 30 30 30 Z" fill="#ff6a2d"></path>
+        <path d="M30 78 C22 78 20 90 30 92 C40 90 38 78 30 78 Z" fill="#ffe0c2"></path>
+        <path d="M12 34 L2 12 L22 26 Z" fill="#ff6a2d"></path><path d="M48 34 L58 12 L38 26 Z" fill="#ff6a2d"></path>
+        <path d="M14 30 L8 18 L20 27 Z" fill="#ffb37a"></path><path d="M46 30 L52 18 L40 27 Z" fill="#ffb37a"></path>
+        <circle cx="20" cy="52" r="5" fill="#fff"></circle><circle cx="40" cy="52" r="5" fill="#fff"></circle>
+        <circle cx="21" cy="53" r="3" fill="#1a0a00"></circle><circle cx="39" cy="53" r="3" fill="#1a0a00"></circle>
+        <circle cx="30" cy="64" r="3.5" fill="#3a1500"></circle>
+        <path d="M55 70 Q85 60 78 90 Q70 100 58 88 Z" fill="#ff8a4d"></path>
+        <path d="M75 68 Q95 66 88 82" stroke="#ffd36b" stroke-width="4" fill="none" stroke-linecap="round"></path>
+      </g>
+
+      <!-- ONDA la loutre d'eau -->
+      <g class="hero b2" transform="translate(410,600)">
+        <ellipse cx="30" cy="95" rx="34" ry="10" fill="#000" opacity=".3"></ellipse>
+        <path d="M30 32 C10 32 6 56 16 80 C24 98 44 98 52 80 C62 56 50 32 30 32 Z" fill="#4aa3d6"></path>
+        <ellipse cx="30" cy="70" rx="15" ry="14" fill="#cfeaff"></ellipse>
+        <circle cx="16" cy="30" r="8" fill="#4aa3d6"></circle><circle cx="44" cy="30" r="8" fill="#4aa3d6"></circle>
+        <circle cx="21" cy="54" r="5" fill="#fff"></circle><circle cx="39" cy="54" r="5" fill="#fff"></circle>
+        <circle cx="22" cy="55" r="3" fill="#06263a"></circle><circle cx="38" cy="55" r="3" fill="#06263a"></circle>
+        <circle cx="30" cy="66" r="3.5" fill="#06263a"></circle>
+        <path d="M24 72 Q30 78 36 72" stroke="#06263a" stroke-width="2" fill="none" stroke-linecap="round"></path>
+        <circle cx="66" cy="52" r="6" fill="#8fd0ff" opacity=".8"></circle>
+        <circle cx="76" cy="40" r="4" fill="#8fd0ff" opacity=".7"></circle>
+        <circle cx="60" cy="40" r="3" fill="#8fd0ff" opacity=".6"></circle>
+      </g>
+
+      <!-- ROC la tortue de terre -->
+      <g class="hero b3" transform="translate(195,660)">
+        <ellipse cx="35" cy="88" rx="40" ry="11" fill="#000" opacity=".3"></ellipse>
+        <path d="M10 70 Q35 30 60 70 Q60 82 35 82 Q10 82 10 70 Z" fill="#6b8f3d"></path>
+        <path d="M22 58 L30 48 L38 58 L30 66 Z" fill="#3d5f1f"></path>
+        <path d="M42 58 L50 48 L54 60 L46 66 Z" fill="#3d5f1f"></path>
+        <path d="M14 66 L20 58 L26 68 Z" fill="#3d5f1f"></path>
+        <path d="M0 68 Q-4 60 4 58 Q12 60 12 70 Z" fill="#9bbf6a"></path>
+        <circle cx="4" cy="62" r="2.5" fill="#1a2a0a"></circle>
+        <ellipse cx="30" cy="80" rx="6" ry="4" fill="#9bbf6a"></ellipse><ellipse cx="52" cy="80" rx="6" ry="4" fill="#9bbf6a"></ellipse>
+      </g>
+
+      <!-- ZÉPHYR l'oiseau d'air -->
+      <g class="hero b4" transform="translate(345,650)">
+        <ellipse cx="30" cy="90" rx="26" ry="8" fill="#000" opacity=".3"></ellipse>
+        <ellipse cx="30" cy="60" rx="22" ry="26" fill="#e8f4ff"></ellipse>
+        <circle cx="30" cy="34" r="17" fill="#e8f4ff"></circle>
+        <path d="M30 40 L40 46 L30 50 Z" fill="#ffcf5a"></path>
+        <circle cx="24" cy="32" r="4" fill="#fff"></circle><circle cx="36" cy="32" r="4" fill="#fff"></circle>
+        <circle cx="24" cy="33" r="2.2" fill="#123"></circle><circle cx="36" cy="33" r="2.2" fill="#123"></circle>
+        <path d="M8 58 Q-8 64 6 76 Q16 72 18 62 Z" fill="#bfe3ff"></path>
+        <path d="M52 58 Q68 64 54 76 Q44 72 42 62 Z" fill="#bfe3ff"></path>
+        <path d="M20 12 Q30 -2 40 12" stroke="#bfe3ff" stroke-width="5" fill="none" stroke-linecap="round"></path>
+      </g>
+    </svg>
+
+    <div class="titlewrap">
+      <div class="kicker">CINÉÈR PRÉSENTE</div>
+      <div class="title">LE CLAN<br>DES 4 ÉLÉMENTS</div>
+      <div class="sub">FEU · EAU · TERRE · AIR</div>
+    </div>
+
+    <div class="elems">
+      <span class="chip">🔥</span><span class="chip">💧</span><span class="chip">🌍</span><span class="chip">💨</span>
+    </div>
+    <div class="comingsoon">SAISON 1 · L'OMBRE DE NYX APPROCHE</div>
+    <div class="brand">✦ CINÉÈR ✦</div>
+  </div>
+</div>
+
+
+</body></html>

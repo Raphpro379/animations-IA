@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/RAPHAEL/Downloads/clan-episode1.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Clan des 4 Éléments · Épisode 1</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#050208;font-family:'Trebuchet MS',sans-serif;overflow:hidden;color:#fff;}
+  #app{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
+
+  /* ===== ÉCRAN TITRE ===== */
+  #intro{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 35%,#2a1145,#0a0416 70%);text-align:center;padding:20px;}
+  #intro .kick{letter-spacing:6px;color:#ffd36b;font-weight:bold;font-size:clamp(11px,3vw,15px);}
+  #intro h1{font-size:clamp(28px,8vw,54px);font-weight:900;line-height:1;margin:10px 0;
+    background:linear-gradient(180deg,#fff,#ffd7a0,#ff9d4d);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #intro .ep{font-size:clamp(15px,4.4vw,22px);color:#eee;margin-top:6px;letter-spacing:2px;}
+  #intro .dur{color:#9ad;margin-top:6px;font-size:clamp(12px,3.2vw,15px);}
+  .playbtn{margin-top:28px;padding:14px 40px;border:none;border-radius:40px;cursor:pointer;
+    background:linear-gradient(135deg,#ff5a5a,#ff9d4d);color:#fff;font-weight:900;font-size:clamp(15px,4vw,19px);
+    letter-spacing:2px;box-shadow:0 10px 30px rgba(255,90,90,.4);}
+  .playbtn:active{transform:scale(.96);}
+
+  /* ===== SCÈNE ===== */
+  #film{position:relative;width:min(100vw,860px);aspect-ratio:16/10;max-height:100vh;
+    border-radius:14px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+  svg.scene{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .8s;}
+  svg.scene.on{opacity:1;}
+
+  /* sous-titres */
+  #sub{position:absolute;left:0;right:0;bottom:5%;text-align:center;z-index:20;padding:0 8%;
+    font-size:clamp(15px,3.6vw,24px);font-weight:bold;color:#fff;text-shadow:0 2px 10px #000,0 0 18px rgba(0,0,0,.9);
+    min-height:2em;transition:opacity .3s;}
+
+  /* barre de progression */
+  #barwrap{position:absolute;left:0;right:0;top:0;height:5px;background:rgba(255,255,255,.12);z-index:25;}
+  #bar{height:100%;width:0;background:linear-gradient(90deg,#ff5a5a,#ffd36b);transition:width .2s linear;}
+  #chap{position:absolute;top:12px;left:14px;z-index:25;font-size:clamp(11px,2.6vw,14px);
+    color:#ffd36b;font-weight:bold;letter-spacing:1px;text-shadow:0 1px 6px #000;}
+
+  /* boutons de contrôle */
+  #ctrl{position:absolute;top:10px;right:12px;z-index:25;display:flex;gap:8px;}
+  #ctrl button{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;
+    border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;}
+
+  /* ===== ÉCRAN DE FIN ===== */
+  #end{position:absolute;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 40%,#2a1145,#0a0416 70%);text-align:center;padding:24px;}
+  #end.on{display:flex;}
+  #end h2{font-size:clamp(24px,7vw,44px);font-weight:900;
+    background:linear-gradient(180deg,#fff,#ffd7a0,#ff9d4d);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #end p{color:#ddd;margin-top:14px;font-size:clamp(14px,3.6vw,19px);line-height:1.5;max-width:600px;}
+  #end .again{margin-top:26px;padding:12px 34px;border:none;border-radius:36px;cursor:pointer;
+    background:linear-gradient(135deg,#ff5a5a,#ff9d4d);color:#fff;font-weight:900;font-size:16px;letter-spacing:1px;}
+
+  /* ===== ANIMATIONS DE SCÈNE ===== */
+  .star{fill:#fff;animation:tw 3s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:.95;}}
+  .float{transform-box:fill-box;transform-origin:center;animation:fl 3.4s ease-in-out infinite;}
+  @keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .float.d1{animation-delay:.4s;} .float.d2{animation-delay:.9s;} .float.d3{animation-delay:1.4s;}
+  .flame{transform-box:fill-box;transform-origin:bottom;animation:flk .5s ease-in-out infinite;}
+  @keyframes flk{0%,100%{transform:scaleY(1) scaleX(1);}50%{transform:scaleY(1.15) scaleX(.92);}}
+  .wave{animation:wv 4s ease-in-out infinite;}
+  @keyframes wv{0%,100%{transform:translateX(0);}50%{transform:translateX(-14px);}}
+  .nyxeye{transform-box:fill-box;transform-origin:center;animation:eye 2s ease-in-out infinite;}
+  @keyframes eye{0%,100%{opacity:.55;}50%{opacity:1;}}
+  .spin{transform-box:fill-box;transform-origin:center;animation:sp 8s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  .rise{animation:rise 1.2s ease-out forwards;}
+  @keyframes rise{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+  .glowpulse{animation:gp 2.4s ease-in-out infinite;}
+  @keyframes gp{0%,100%{opacity:.4;}50%{opacity:.9;}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="kick">CINÉÈR · SAISON 1</div>
+    <h1>LE CLAN DES<br>4 ÉLÉMENTS</h1>
+    <div class="ep">Épisode 1 — « La rencontre »</div>
+    <div class="dur">⏱️ 4 minutes · 5 chapitres</div>
+    <button class="playbtn" onclick="demarrer()">▶ REGARDER</button>
+  </div>
+
+  <!-- FILM -->
+  <div id="film" style="display:none">
+    <div id="barwrap"><div id="bar"></div></div>
+    <div id="chap"></div>
+    <div id="ctrl"><button onclick="togglePause()" id="pauseBtn">⏸ Pause</button></div>
+
+    <!-- SCÈNE 1 : la forêt paisible, Blaze -->
+    <svg class="scene" id="s1" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <lineargradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff9a56"></stop><stop offset="60%" stop-color="#7a3a8f"></stop><stop offset="100%" stop-color="#2a1145"></stop></lineargradient>
+        <lineargradient id="grd1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2d5016"></stop><stop offset="100%" stop-color="#0f2a08"></stop></lineargradient>
+      </defs>
+      <rect width="860" height="538" fill="url(#sky1)"></rect>
+      <circle cx="680" cy="120" r="55" fill="#ffdf8a" opacity=".9"></circle>
+      <path d="M0 380 Q430 330 860 380 L860 538 L0 538 Z" fill="url(#grd1)"></path>
+      <g opacity=".5"><path d="M120 380 L120 240 M120 300 L90 270 M120 320 L150 290" stroke="#1a3a0a" stroke-width="10" stroke-linecap="round"></path></g>
+      <g opacity=".5"><path d="M740 380 L740 250 M740 310 L710 285 M740 330 L770 300" stroke="#1a3a0a" stroke-width="10" stroke-linecap="round"></path></g>
+      <!-- Blaze renard -->
+      <g class="float" transform="translate(370,300)">
+        <ellipse cx="60" cy="150" rx="60" ry="14" fill="#000" opacity=".3"></ellipse>
+        <ellipse cx="60" cy="110" rx="48" ry="36" fill="#ff6a2d"></ellipse>
+        <path d="M120 100 Q165 80 150 140 Q135 165 108 140 Z" fill="#ff8a4d"></path>
+        <path d="M140 96 Q168 92 156 120" stroke="#ffd36b" stroke-width="6" fill="none" stroke-linecap="round"></path>
+        <path d="M60 40 C30 40 22 78 36 108 C48 130 72 130 84 108 C98 78 90 40 60 40 Z" fill="#ff6a2d"></path>
+        <path d="M60 100 C48 100 44 118 60 122 C76 118 72 100 60 100 Z" fill="#ffe0c2"></path>
+        <path d="M36 44 L22 12 L52 34 Z" fill="#ff6a2d"></path><path d="M84 44 L98 12 L68 34 Z" fill="#ff6a2d"></path>
+        <path d="M39 40 L30 20 L48 34 Z" fill="#ffb37a"></path><path d="M81 40 L90 20 L72 34 Z" fill="#ffb37a"></path>
+        <circle cx="46" cy="72" r="7" fill="#fff"></circle><circle cx="74" cy="72" r="7" fill="#fff"></circle>
+        <circle cx="47" cy="73" r="4" fill="#1a0a00"></circle><circle cx="73" cy="73" r="4" fill="#1a0a00"></circle>
+        <circle cx="60" cy="88" r="5" fill="#3a1500"></circle>
+      </g>
+    </svg>
+
+    <!-- SCÈNE 2 : le tremblement, l'ombre de Nyx -->
+    <svg class="scene" id="s2" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialgradient id="sky2" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#3a1a4d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient>
+      </defs>
+      <rect width="860" height="538" fill="url(#sky2)"></rect>
+      <g><circle class="star" cx="100" cy="80" r="2"></circle><circle class="star" cx="300" cy="50" r="2" style="animation-delay:.7s"></circle><circle class="star" cx="600" cy="70" r="2" style="animation-delay:1.3s"></circle><circle class="star" cx="780" cy="110" r="2" style="animation-delay:.4s"></circle></g>
+      <!-- grande ombre de Nyx -->
+      <g class="glowpulse">
+        <path d="M430 60 C300 60 250 220 280 380 C300 480 380 490 430 490 C480 490 560 480 580 380 C610 220 560 60 430 60 Z" fill="#0d0518"></path>
+        <path d="M340 140 Q315 70 360 90 M520 140 Q545 70 500 90" stroke="#0d0518" stroke-width="34" fill="none" stroke-linecap="round"></path>
+      </g>
+      <ellipse class="nyxeye" cx="378" cy="210" rx="22" ry="30" fill="#a24bff"></ellipse>
+      <ellipse class="nyxeye" cx="482" cy="210" rx="22" ry="30" fill="#a24bff" style="animation-delay:.4s"></ellipse>
+      <ellipse cx="378" cy="212" rx="8" ry="13" fill="#1a0033"></ellipse>
+      <ellipse cx="482" cy="212" rx="8" ry="13" fill="#1a0033"></ellipse>
+      <path d="M355 300 Q430 285 505 300" stroke="#a24bff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".7"></path>
+    </svg>
+
+    <!-- SCÈNE 3 : les 4 héros se rassemblent -->
+    <svg class="scene" id="s3" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialgradient id="sky3" cx="50%" cy="40%" r="80%"><stop offset="0%" stop-color="#241a3d"></stop><stop offset="100%" stop-color="#0a0614"></stop></radialgradient>
+        <lineargradient id="grd3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a1030"></stop><stop offset="100%" stop-color="#0a0618"></stop></lineargradient>
+      </defs>
+      <rect width="860" height="538" fill="url(#sky3)"></rect>
+      <g><circle class="star" cx="120" cy="90" r="2"></circle><circle class="star" cx="740" cy="70" r="2" style="animation-delay:.9s"></circle><circle class="star" cx="430" cy="50" r="2" style="animation-delay:1.5s"></circle></g>
+      <path d="M0 400 Q430 360 860 400 L860 538 L0 538 Z" fill="url(#grd3)"></path>
+      <!-- halos -->
+      <circle class="glowpulse" cx="180" cy="380" r="80" fill="#ff6a2d" opacity=".3"></circle>
+      <circle class="glowpulse" cx="360" cy="390" r="80" fill="#49c6ff" opacity=".3" style="animation-delay:.6s"></circle>
+      <circle class="glowpulse" cx="520" cy="390" r="80" fill="#7bd66a" opacity=".3" style="animation-delay:1.2s"></circle>
+      <circle class="glowpulse" cx="700" cy="380" r="80" fill="#d9f0ff" opacity=".3" style="animation-delay:1.8s"></circle>
+
+      <!-- Blaze -->
+      <g class="float" transform="translate(140,320)">
+        <ellipse cx="40" cy="105" rx="38" ry="10" fill="#000" opacity=".3"></ellipse>
+        <path d="M40 30 C16 30 10 62 22 88 C32 106 56 106 66 88 C78 62 68 30 40 30 Z" fill="#ff6a2d"></path>
+        <path d="M40 82 C30 82 28 96 40 99 C52 96 50 82 40 82 Z" fill="#ffe0c2"></path>
+        <path d="M22 34 L10 8 L34 26 Z" fill="#ff6a2d"></path><path d="M58 34 L70 8 L46 26 Z" fill="#ff6a2d"></path>
+        <circle cx="28" cy="58" r="5.5" fill="#fff"></circle><circle cx="52" cy="58" r="5.5" fill="#fff"></circle>
+        <circle cx="29" cy="59" r="3" fill="#1a0a00"></circle><circle cx="51" cy="59" r="3" fill="#1a0a00"></circle>
+        <circle cx="40" cy="72" r="4" fill="#3a1500"></circle>
+      </g>
+      <!-- Onda -->
+      <g class="float d1" transform="translate(320,330)">
+        <ellipse cx="40" cy="100" rx="36" ry="10" fill="#000" opacity=".3"></ellipse>
+        <path d="M40 30 C18 30 12 58 24 86 C34 106 56 106 66 86 C78 58 62 30 40 30 Z" fill="#4aa3d6"></path>
+        <ellipse cx="40" cy="72" rx="16" ry="15" fill="#cfeaff"></ellipse>
+        <circle cx="24" cy="28" r="8" fill="#4aa3d6"></circle><circle cx="56" cy="28" r="8" fill="#4aa3d6"></circle>
+        <circle cx="30" cy="56" r="5" fill="#fff"></circle><circle cx="50" cy="56" r="5" fill="#fff"></circle>
+        <circle cx="31" cy="57" r="3" fill="#06263a"></circle><circle cx="49" cy="57" r="3" fill="#06263a"></circle>
+        <path d="M33 74 Q40 80 47 74" stroke="#06263a" stroke-width="2" fill="none" stroke-linecap="round"></path>
+      </g>
+      <!-- Roc -->
+      <g class="float d2" transform="translate(490,350)">
+        <ellipse cx="45" cy="88" rx="42" ry="11" fill="#000" opacity=".3"></ellipse>
+        <path d="M14 66 Q45 24 76 66 Q76 82 45 82 Q14 82 14 66 Z" fill="#6b8f3d"></path>
+        <path d="M28 54 L38 42 L48 54 L38 64 Z" fill="#3d5f1f"></path>
+        <path d="M54 54 L64 44 L68 58 L58 64 Z" fill="#3d5f1f"></path>
+        <path d="M2 64 Q-4 56 6 54 Q16 56 16 68 Z" fill="#9bbf6a"></path>
+        <circle cx="6" cy="60" r="2.5" fill="#1a2a0a"></circle>
+      </g>
+      <!-- Zéphyr -->
+      <g class="float d3" transform="translate(660,330)">
+        <ellipse cx="35" cy="98" rx="28" ry="8" fill="#000" opacity=".3"></ellipse>
+        <ellipse cx="35" cy="66" rx="24" ry="28" fill="#e8f4ff"></ellipse>
+        <circle cx="35" cy="36" r="18" fill="#e8f4ff"></circle>
+        <path d="M35 42 L46 48 L35 53 Z" fill="#ffcf5a"></path>
+        <circle cx="28" cy="34" r="4.5" fill="#fff"></circle><circle cx="42" cy="34" r="4.5" fill="#fff"></circle>
+        <circle cx="28" cy="35" r="2.4" fill="#123"></circle><circle cx="42" cy="35" r="2.4" fill="#123"></circle>
+        <path d="M10 64 Q-6 70 8 82 Q18 78 20 68 Z" fill="#bfe3ff"></path>
+        <path d="M60 64 Q76 70 62 82 Q52 78 50 68 Z" fill="#bfe3ff"></path>
+      </g>
+    </svg>
+
+    <!-- SCÈNE 4 : le premier monstre d'ombre -->
+    <svg class="scene" id="s4" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialgradient id="sky4" cx="50%" cy="40%" r="80%"><stop offset="0%" stop-color="#3d1a2d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient>
+      </defs>
+      <rect width="860" height="538" fill="url(#sky4)"></rect>
+      <!-- monstre d'ombre -->
+      <g class="float">
+        <path d="M430 120 C330 120 300 260 340 380 C360 440 500 440 520 380 C560 260 530 120 430 120 Z" fill="#160a24"></path>
+        <path d="M360 180 L340 130 L390 160 Z" fill="#160a24"></path><path d="M500 180 L520 130 L470 160 Z" fill="#160a24"></path>
+        <ellipse class="nyxeye" cx="395" cy="230" rx="18" ry="24" fill="#ff4b6e"></ellipse>
+        <ellipse class="nyxeye" cx="465" cy="230" rx="18" ry="24" fill="#ff4b6e" style="animation-delay:.3s"></ellipse>
+        <path d="M380 320 L400 300 L420 320 L440 300 L460 320 L480 300" stroke="#ff4b6e" stroke-width="5" fill="none"></path>
+        <path d="M355 200 Q430 180 505 200" stroke="#2a1240" stroke-width="8" fill="none" stroke-linecap="round"></path>
+      </g>
+      <!-- petits éclairs feu/eau qui l'attaquent -->
+      <path class="flame" d="M120 420 L150 340 L135 380 L170 320" stroke="#ff6a2d" stroke-width="8" fill="none" stroke-linecap="round"></path>
+      <path class="wave" d="M740 420 Q700 360 730 320 Q760 360 720 400" fill="#49c6ff" opacity=".8"></path>
+    </svg>
+
+    <!-- SCÈNE 5 : la victoire du clan uni -->
+    <svg class="scene" id="s5" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialgradient id="sky5" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#ffd36b"></stop><stop offset="40%" stop-color="#7a3a8f"></stop><stop offset="100%" stop-color="#1a0a2d"></stop></radialgradient>
+      </defs>
+      <rect width="860" height="538" fill="url(#sky5)"></rect>
+      <!-- grand cercle des 4 éléments -->
+      <g class="spin" transform="translate(430,250)">
+        <circle r="150" fill="none" stroke="#fff" stroke-width="2" opacity=".3"></circle>
+        <circle cx="0" cy="-150" r="26" fill="#ff6a2d"></circle>
+        <circle cx="150" cy="0" r="26" fill="#49c6ff"></circle>
+        <circle cx="0" cy="150" r="26" fill="#7bd66a"></circle>
+        <circle cx="-150" cy="0" r="26" fill="#d9f0ff"></circle>
+      </g>
+      <circle class="glowpulse" cx="430" cy="250" r="70" fill="#ffd36b" opacity=".6"></circle>
+      <text x="430" y="265" text-anchor="middle" font-size="46" font-weight="900" fill="#fff">R</text>
+      <!-- 4 héros en bas, unis -->
+      <g transform="translate(430,470)">
+        <circle cx="-90" cy="0" r="22" fill="#ff6a2d"></circle><circle cx="-30" cy="0" r="22" fill="#4aa3d6"></circle>
+        <circle cx="30" cy="0" r="22" fill="#6b8f3d"></circle><circle cx="90" cy="0" r="22" fill="#e8f4ff"></circle>
+      </g>
+    </svg>
+
+    <div id="sub"></div>
+  </div>
+
+  <!-- FIN -->
+  <div id="end">
+    <h2>FIN DE L'ÉPISODE 1</h2>
+    <p id="endtext"></p>
+    <button class="again" onclick="location.reload()">🔁 Revoir l'épisode</button>
+  </div>
+</div>
+
+<script>
+// ====== SCRIPT DU FILM ======
+// Chaque scène a une durée, et des sous-titres avec leur temps d'apparition (en dixièmes de seconde).
+const SCENES = [
+  { id:'s1', chap:'Chapitre 1 · La forêt paisible', dur:420, subs:[
+    [8,"Il était une fois une forêt où vivaient quatre animaux très spéciaux..."],
+    [70,"🔥 Blaze, le renard de feu. Courageux, fougueux, toujours le premier à foncer."],
+    [150,"Chacun vivait seul, sans connaître les trois autres."],
+    [230,"« Une belle journée de plus », soupira Blaze en regardant le soleil."],
+    [320,"Mais ce soir-là, quelque chose d'étrange allait tout changer..."]
+  ]},
+  { id:'s2', chap:'Chapitre 2 · L\'ombre', dur:440, subs:[
+    [8,"Le ciel s'assombrit d'un coup. Le vent se glaça."],
+    [90,"Une immense ombre aux yeux violets apparut au-dessus de la forêt."],
+    [190,"« Je suis Nyx... et bientôt, plus aucune lumière ne brillera. »"],
+    [300,"Puis l'ombre disparut, aussi vite qu'elle était venue."],
+    [370,"Mais elle avait laissé quelque chose derrière elle..."]
+  ]},
+  { id:'s3', chap:'Chapitre 3 · La rencontre', dur:460, subs:[
+    [8,"Effrayés, les quatre animaux coururent vers la clairière..."],
+    [90,"🔥 Blaze le renard. 💧 Onda la loutre. 🌍 Roc la tortue. 💨 Zéphyr l'oiseau."],
+    [210,"Pour la première fois, ils se retrouvaient tous les quatre."],
+    [310,"« On dirait que le danger nous a réunis », dit Onda avec calme."],
+    [390,"Chacun sentait au fond de lui un pouvoir qu'il ne connaissait pas encore."]
+  ]},
+  { id:'s4', chap:'Chapitre 4 · Le premier monstre', dur:460, subs:[
+    [8,"Soudain, l'ombre laissée par Nyx prit vie : un monstre !"],
+    [100,"Blaze lança une flamme. Onda projeta une vague. Le monstre recula !"],
+    [220,"« Ensemble... on est plus forts ! », cria Zéphyr en tournoyant."],
+    [330,"Roc dressa un bouclier de terre pour protéger ses nouveaux amis."],
+    [400,"Le monstre d'ombre éclata en mille poussières."]
+  ]},
+  { id:'s5', chap:'Chapitre 5 · Le Clan est né', dur:360, subs:[
+    [8,"Au centre de la clairière, un symbole de lumière apparut : le R."],
+    [90,"Feu, Eau, Terre, Air... les quatre éléments réunis en un seul clan."],
+    [190,"« Nous sommes le Clan des 4 Éléments ! », déclarèrent-ils ensemble."],
+    [270,"Mais très loin de là, dans le noir, deux yeux violets les observaient encore..."],
+    [330,"L'aventure ne fait que commencer. 🔥💧🌍💨"]
+  ]}
+];
+
+let si=0;            // index scène
+let t=0;             // temps dans la scène (dixièmes)
+let subIdx=0;
+let paused=false;
+let timer=null;
+let totalDur = SCENES.reduce((a,s)=>a+s.dur,0);
+let elapsedBefore=0;
+
+const $ = id => document.getElementById(id);
+
+function demarrer(){
+  $('intro').style.display='none';
+  $('film').style.display='block';
+  si=0; t=0; subIdx=0; elapsedBefore=0;
+  showScene();
+  timer=setInterval(tic,100);
+}
+
+function showScene(){
+  document.querySelectorAll('.scene').forEach(e=>e.classList.remove('on'));
+  const sc=SCENES[si];
+  $(sc.id).classList.add('on');
+  $('chap').textContent=sc.chap;
+  $('sub').textContent='';
+  subIdx=0;
+}
+
+function tic(){
+  if(paused) return;
+  t++;
+  const sc=SCENES[si];
+  // sous-titres
+  while(subIdx<sc.subs.length && t>=sc.subs[subIdx][0]){
+    $('sub').textContent=sc.subs[subIdx][1];
+    subIdx++;
+  }
+  // barre de progression
+  const done=elapsedBefore+t;
+  $('bar').style.width=Math.min(100,(done/totalDur)*100)+'%';
+  // fin de scène
+  if(t>=sc.dur){
+    elapsedBefore+=sc.dur;
+    si++;
+    t=0;
+    if(si>=SCENES.length){ finir(); return; }
+    showScene();
+  }
+}
+
+function togglePause(){
+  paused=!paused;
+  $('pauseBtn').textContent=paused?'▶ Lecture':'⏸ Pause';
+}
+
+function finir(){
+  clearInterval(timer);
+  $('film').style.display='none';
+  $('endtext').innerHTML="Le Clan des 4 Éléments est né !<br>Nyx prépare déjà son prochain monstre...<br>Rendez-vous à l'épisode 2 ! 👀";
+  $('end').classList.add('on');
+}
+</script>
+
+
+</body></html>
