@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/RAPHAEL/Downloads/clan-episode2.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Clan des 4 Éléments · Épisode 2</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#050208;font-family:'Trebuchet MS',sans-serif;overflow:hidden;color:#fff;}
+  #app{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
+
+  #intro{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 35%,#2a1145,#0a0416 70%);text-align:center;padding:20px;}
+  #intro .kick{letter-spacing:6px;color:#ffd36b;font-weight:bold;font-size:clamp(11px,3vw,15px);}
+  #intro h1{font-size:clamp(28px,8vw,54px);font-weight:900;line-height:1;margin:10px 0;
+    background:linear-gradient(180deg,#fff,#ffd7a0,#ff9d4d);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #intro .ep{font-size:clamp(15px,4.4vw,22px);color:#eee;margin-top:6px;letter-spacing:2px;}
+  #intro .dur{color:#9ad;margin-top:6px;font-size:clamp(12px,3.2vw,15px);}
+  .playbtn{margin-top:28px;padding:14px 40px;border:none;border-radius:40px;cursor:pointer;
+    background:linear-gradient(135deg,#ff5a5a,#ff9d4d);color:#fff;font-weight:900;font-size:clamp(15px,4vw,19px);
+    letter-spacing:2px;box-shadow:0 10px 30px rgba(255,90,90,.4);}
+  .playbtn:active{transform:scale(.96);}
+
+  #film{position:relative;width:min(100vw,860px);aspect-ratio:16/10;max-height:100vh;
+    border-radius:14px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+  svg.scene{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .8s;}
+  svg.scene.on{opacity:1;}
+
+  #sub{position:absolute;left:0;right:0;bottom:5%;text-align:center;z-index:20;padding:0 8%;
+    font-size:clamp(15px,3.6vw,24px);font-weight:bold;color:#fff;text-shadow:0 2px 10px #000,0 0 18px rgba(0,0,0,.9);
+    min-height:2em;transition:opacity .3s;}
+
+  #barwrap{position:absolute;left:0;right:0;top:0;height:5px;background:rgba(255,255,255,.12);z-index:25;}
+  #bar{height:100%;width:0;background:linear-gradient(90deg,#ff5a5a,#ffd36b);transition:width .2s linear;}
+  #chap{position:absolute;top:12px;left:14px;z-index:25;font-size:clamp(11px,2.6vw,14px);
+    color:#ffd36b;font-weight:bold;letter-spacing:1px;text-shadow:0 1px 6px #000;}
+
+  #ctrl{position:absolute;top:10px;right:12px;z-index:25;display:flex;gap:8px;}
+  #ctrl button{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;
+    border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;}
+
+  #end{position:absolute;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 40%,#2a1145,#0a0416 70%);text-align:center;padding:24px;}
+  #end.on{display:flex;}
+  #end h2{font-size:clamp(24px,7vw,44px);font-weight:900;
+    background:linear-gradient(180deg,#fff,#ffd7a0,#ff9d4d);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #end p{color:#ddd;margin-top:14px;font-size:clamp(14px,3.6vw,19px);line-height:1.5;max-width:600px;}
+  #end .again{margin-top:26px;padding:12px 34px;border:none;border-radius:36px;cursor:pointer;
+    background:linear-gradient(135deg,#ff5a5a,#ff9d4d);color:#fff;font-weight:900;font-size:16px;letter-spacing:1px;}
+
+  /* ANIMATIONS */
+  .star{fill:#fff;animation:tw 3s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:.95;}}
+  .float{transform-box:fill-box;transform-origin:center;animation:fl 3.4s ease-in-out infinite;}
+  @keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .float.d1{animation-delay:.4s;}.float.d2{animation-delay:.9s;}.float.d3{animation-delay:1.4s;}
+  .flame{transform-box:fill-box;transform-origin:bottom;animation:flk .5s ease-in-out infinite;}
+  @keyframes flk{0%,100%{transform:scaleY(1) scaleX(1);}50%{transform:scaleY(1.15) scaleX(.92);}}
+  .wave{animation:wv 4s ease-in-out infinite;}
+  @keyframes wv{0%,100%{transform:translateX(0);}50%{transform:translateX(-14px);}}
+  .nyxeye{transform-box:fill-box;transform-origin:center;animation:eye 2s ease-in-out infinite;}
+  @keyframes eye{0%,100%{opacity:.55;}50%{opacity:1;}}
+  .spin{transform-box:fill-box;transform-origin:center;animation:sp 8s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  .glowpulse{animation:gp 2.4s ease-in-out infinite;}
+  @keyframes gp{0%,100%{opacity:.4;}50%{opacity:.9;}}
+  .shake{animation:shk .3s ease-in-out infinite;}
+  @keyframes shk{0%,100%{transform:translate(0,0);}25%{transform:translate(-4px,2px);}75%{transform:translate(4px,-2px);}}
+  .stomp{transform-box:fill-box;transform-origin:bottom center;animation:stmp 1.4s ease-in-out infinite;}
+  @keyframes stmp{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-6px) scale(1.02);}}
+  .boom{transform-box:fill-box;transform-origin:center;animation:boomp .8s ease-out infinite;}
+  @keyframes boomp{0%{transform:scale(.6);opacity:0;}30%{opacity:1;}100%{transform:scale(1.6);opacity:0;}}
+  .zap{stroke-dasharray:6 6;animation:zapmove .3s linear infinite;}
+  @keyframes zapmove{to{stroke-dashoffset:-24;}}
+  .grow{animation:grw 1.5s ease-out forwards;}
+  @keyframes grw{from{transform:scale(.3);opacity:.4;}to{transform:scale(1);opacity:1;}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div id="intro">
+    <div class="kick">CINÉÈR · SAISON 1</div>
+    <h1>LE CLAN DES<br>4 ÉLÉMENTS</h1>
+    <div class="ep">Épisode 2 — « Le Général Krâne-Fer »</div>
+    <div class="dur">⏱️ 4 minutes · 6 chapitres</div>
+    <button class="playbtn" onclick="demarrer()">▶ REGARDER</button>
+  </div>
+
+  <div id="film" style="display:none">
+    <div id="barwrap"><div id="bar"></div></div>
+    <div id="chap"></div>
+    <div id="ctrl"><button onclick="togglePause()" id="pauseBtn">⏸ Pause</button></div>
+
+    <!-- SCÈNE 1 : le clan s'entraîne, jour paisible -->
+    <svg class="scene" id="s1" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <lineargradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7ec8ff"></stop><stop offset="60%" stop-color="#4a7fb5"></stop><stop offset="100%" stop-color="#2a4a6d"></stop></lineargradient>
+        <lineargradient id="grd1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2d5016"></stop><stop offset="100%" stop-color="#0f2a08"></stop></lineargradient>
+      </defs>
+      <rect width="860" height="538" fill="url(#sky1)"></rect>
+      <circle cx="140" cy="110" r="48" fill="#fff8d8" opacity=".95"></circle>
+      <path d="M0 390 Q430 350 860 390 L860 538 L0 538 Z" fill="url(#grd1)"></path>
+      <!-- les 4 héros alignés -->
+      <g class="float" transform="translate(150,320)">
+        <ellipse cx="35" cy="95" rx="32" ry="9" fill="#000" opacity=".25"></ellipse>
+        <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+        <path d="M35 80 C26 80 24 92 35 95 C46 92 44 80 35 80 Z" fill="#ffe0c2"></path>
+        <path d="M20 34 L8 8 L32 26 Z" fill="#ff6a2d"></path><path d="M50 34 L62 8 L38 26 Z" fill="#ff6a2d"></path>
+        <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+        <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+        <circle cx="35" cy="70" r="4" fill="#3a1500"></circle>
+      </g>
+      <g class="float d1" transform="translate(330,335)">
+        <ellipse cx="35" cy="92" rx="30" ry="9" fill="#000" opacity=".25"></ellipse>
+        <path d="M35 30 C15 30 10 58 22 84 C32 102 52 102 62 84 C74 58 58 30 35 30 Z" fill="#4aa3d6"></path>
+        <ellipse cx="35" cy="70" rx="15" ry="14" fill="#cfeaff"></ellipse>
+        <circle cx="20" cy="28" r="7" fill="#4aa3d6"></circle><circle cx="50" cy="28" r="7" fill="#4aa3d6"></circle>
+        <circle cx="27" cy="55" r="4.5" fill="#fff"></circle><circle cx="45" cy="55" r="4.5" fill="#fff"></circle>
+        <circle cx="28" cy="56" r="2.6" fill="#06263a"></circle><circle cx="44" cy="56" r="2.6" fill="#06263a"></circle>
+      </g>
+      <g class="float d2" transform="translate(510,350)">
+        <ellipse cx="40" cy="82" rx="38" ry="10" fill="#000" opacity=".25"></ellipse>
+        <path d="M12 62 Q40 24 68 62 Q68 78 40 78 Q12 78 12 62 Z" fill="#6b8f3d"></path>
+        <path d="M26 50 L34 40 L42 50 L34 58 Z" fill="#3d5f1f"></path>
+        <path d="M0 60 Q-4 52 6 50 Q14 52 14 62 Z" fill="#9bbf6a"></path>
+        <circle cx="5" cy="56" r="2.3" fill="#1a2a0a"></circle>
+      </g>
+      <g class="float d3" transform="translate(680,330)">
+        <ellipse cx="32" cy="94" rx="24" ry="7" fill="#000" opacity=".25"></ellipse>
+        <ellipse cx="32" cy="62" rx="22" ry="26" fill="#e8f4ff"></ellipse>
+        <circle cx="32" cy="34" r="16" fill="#e8f4ff"></circle>
+        <path d="M32 40 L42 45 L32 50 Z" fill="#ffcf5a"></path>
+        <circle cx="26" cy="32" r="4" fill="#fff"></circle><circle cx="38" cy="32" r="4" fill="#fff"></circle>
+        <circle cx="26" cy="33" r="2.2" fill="#123"></circle><circle cx="38" cy="33" r="2.2" fill="#123"></circle>
+        <path d="M10 60 Q-4 66 8 78 Q18 74 20 64 Z" fill="#bfe3ff"></path>
+      </g>
+    </svg>
+
+    <!-- SCÈNE 2 : Nyx apparaît et invoque le Général -->
+    <svg class="scene" id="s2" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky2" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#3a1a4d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky2)"></rect>
+      <g><circle class="star" cx="100" cy="80" r="2"></circle><circle class="star" cx="700" cy="70" r="2" style="animation-delay:.7s"></circle><circle class="star" cx="500" cy="110" r="2" style="animation-delay:1.3s"></circle></g>
+      <!-- Nyx en haut -->
+      <g class="glowpulse" transform="translate(0,-60)">
+        <path d="M430 90 C340 90 300 200 320 320 C335 400 380 410 430 410 C480 410 525 400 540 320 C560 200 520 90 430 90 Z" fill="#0d0518"></path>
+      </g>
+      <ellipse class="nyxeye" cx="398" cy="180" rx="16" ry="22" fill="#a24bff"></ellipse>
+      <ellipse class="nyxeye" cx="462" cy="180" rx="16" ry="22" fill="#a24bff" style="animation-delay:.4s"></ellipse>
+      <ellipse cx="398" cy="182" rx="6" ry="9" fill="#1a0033"></ellipse><ellipse cx="462" cy="182" rx="6" ry="9" fill="#1a0033"></ellipse>
+      <!-- rayon violet vers le sol -->
+      <path class="zap" d="M430 260 L430 420" stroke="#a24bff" stroke-width="5" fill="none"></path>
+      <circle class="boom" cx="430" cy="430" r="40" fill="#a24bff" opacity=".5"></circle>
+    </svg>
+
+    <!-- SCÈNE 3 : le Général Krâne-Fer -->
+    <svg class="scene" id="s3" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialgradient id="sky3" cx="50%" cy="40%" r="80%"><stop offset="0%" stop-color="#3d1a2d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient>
+        <lineargradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8a94a6"></stop><stop offset="50%" stop-color="#4a5568"></stop><stop offset="100%" stop-color="#2a3140"></stop></lineargradient>
+      </defs>
+      <rect width="860" height="538" fill="url(#sky3)"></rect>
+      <!-- Général Krâne-Fer : robot crâne métallique -->
+      <g class="float" transform="translate(360,140)">
+        <!-- corps -->
+        <rect x="40" y="180" width="80" height="90" rx="10" fill="url(#metal)"></rect>
+        <rect x="20" y="190" width="24" height="70" rx="8" fill="#4a5568"></rect>
+        <rect x="116" y="190" width="24" height="70" rx="8" fill="#4a5568"></rect>
+        <!-- tête crâne -->
+        <path d="M80 40 C40 40 30 90 40 130 C48 160 112 160 120 130 C130 90 120 40 80 40 Z" fill="url(#metal)"></path>
+        <rect x="55" y="150" width="50" height="24" rx="4" fill="#2a3140"></rect>
+        <!-- dents -->
+        <g fill="#2a3140"><rect x="58" y="150" width="6" height="18"></rect><rect x="70" y="150" width="6" height="18"></rect><rect x="82" y="150" width="6" height="18"></rect><rect x="94" y="150" width="6" height="18"></rect></g>
+        <!-- yeux rouges -->
+        <ellipse class="nyxeye" cx="62" cy="105" rx="14" ry="16" fill="#ff2d2d"></ellipse>
+        <ellipse class="nyxeye" cx="98" cy="105" rx="14" ry="16" fill="#ff2d2d" style="animation-delay:.3s"></ellipse>
+        <circle cx="62" cy="105" r="5" fill="#600"></circle><circle cx="98" cy="105" r="5" fill="#600"></circle>
+        <!-- cornes -->
+        <path d="M45 55 L25 20 L55 42 Z" fill="#6a7488"></path><path d="M115 55 L135 20 L105 42 Z" fill="#6a7488"></path>
+        <!-- épaulettes -->
+        <path d="M20 185 L10 165 L40 175 Z" fill="#6a7488"></path><path d="M140 185 L150 165 L120 175 Z" fill="#6a7488"></path>
+      </g>
+      <path class="zap" d="M200 400 L660 400" stroke="#ff2d2d" stroke-width="3" fill="none" opacity=".6"></path>
+    </svg>
+
+    <!-- SCÈNE 4 : le monstre du jour attaque -->
+    <svg class="scene" id="s4" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky4" cx="50%" cy="40%" r="80%"><stop offset="0%" stop-color="#241a3d"></stop><stop offset="100%" stop-color="#0a0614"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky4)"></rect>
+      <!-- monstre griffu -->
+      <g class="float">
+        <ellipse cx="430" cy="480" rx="90" ry="18" fill="#000" opacity=".3"></ellipse>
+        <path d="M430 150 C350 150 320 260 350 360 C370 430 490 430 510 360 C540 260 510 150 430 150 Z" fill="#3a1a4d"></path>
+        <path d="M360 200 L335 150 L385 180 Z" fill="#3a1a4d"></path><path d="M500 200 L525 150 L475 180 Z" fill="#3a1a4d"></path>
+        <ellipse class="nyxeye" cx="398" cy="250" rx="16" ry="22" fill="#7bff4b"></ellipse>
+        <ellipse class="nyxeye" cx="462" cy="250" rx="16" ry="22" fill="#7bff4b" style="animation-delay:.3s"></ellipse>
+        <path d="M385 330 L405 310 L425 330 L445 310 L465 330" stroke="#7bff4b" stroke-width="6" fill="none"></path>
+        <!-- griffes -->
+        <path d="M330 360 L300 400 M340 380 L315 430" stroke="#5a2a7a" stroke-width="10" stroke-linecap="round"></path>
+        <path d="M530 360 L560 400 M520 380 L545 430" stroke="#5a2a7a" stroke-width="10" stroke-linecap="round"></path>
+      </g>
+      <!-- héros attaquent -->
+      <path class="flame" d="M100 440 L140 350 L120 400 L160 330" stroke="#ff6a2d" stroke-width="9" fill="none" stroke-linecap="round"></path>
+      <path class="wave" d="M760 440 Q710 370 745 320 Q780 370 730 420" fill="#49c6ff" opacity=".8"></path>
+      <circle class="boom" cx="430" cy="300" r="50" fill="#fff" opacity=".4"></circle>
+    </svg>
+
+    <!-- SCÈNE 5 : le monstre devient GÉANT -->
+    <svg class="scene" id="s5" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky5" cx="50%" cy="30%" r="90%"><stop offset="0%" stop-color="#5a1a3d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky5)"></rect>
+      <!-- ville miniature en bas -->
+      <g fill="#1a1030" opacity=".8">
+        <rect x="40" y="440" width="50" height="98"></rect><rect x="110" y="470" width="40" height="68"></rect>
+        <rect x="700" y="450" width="55" height="88"></rect><rect x="770" y="475" width="40" height="63"></rect>
+      </g>
+      <!-- monstre géant -->
+      <g class="stomp">
+        <path d="M430 60 C320 60 280 220 320 380 C350 470 510 470 540 380 C580 220 540 60 430 60 Z" fill="#3a1a4d"></path>
+        <path d="M340 130 L305 60 L375 110 Z" fill="#3a1a4d"></path><path d="M520 130 L555 60 L485 110 Z" fill="#3a1a4d"></path>
+        <ellipse class="nyxeye" cx="392" cy="200" rx="22" ry="30" fill="#7bff4b"></ellipse>
+        <ellipse class="nyxeye" cx="468" cy="200" rx="22" ry="30" fill="#7bff4b" style="animation-delay:.3s"></ellipse>
+        <path d="M375 300 L405 275 L435 300 L465 275 L495 300" stroke="#7bff4b" stroke-width="7" fill="none"></path>
+      </g>
+      <circle class="boom" cx="430" cy="250" r="70" fill="#ff4b6e" opacity=".4"></circle>
+    </svg>
+
+    <!-- SCÈNE 6 : combo final des 4 éléments -->
+    <svg class="scene" id="s6" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky6" cx="50%" cy="35%" r="90%"><stop offset="0%" stop-color="#ffd36b"></stop><stop offset="40%" stop-color="#7a3a8f"></stop><stop offset="100%" stop-color="#1a0a2d"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky6)"></rect>
+      <!-- grand cercle des 4 éléments qui tourne -->
+      <g class="spin" transform="translate(430,250)">
+        <circle r="160" fill="none" stroke="#fff" stroke-width="2" opacity=".3"></circle>
+        <circle cx="0" cy="-160" r="32" fill="#ff6a2d"><animate attributeName="r" values="32;40;32" dur="1s" repeatCount="indefinite"></animate></circle>
+        <circle cx="160" cy="0" r="32" fill="#49c6ff"><animate attributeName="r" values="32;40;32" dur="1s" begin=".25s" repeatCount="indefinite"></animate></circle>
+        <circle cx="0" cy="160" r="32" fill="#7bd66a"><animate attributeName="r" values="32;40;32" dur="1s" begin=".5s" repeatCount="indefinite"></animate></circle>
+        <circle cx="-160" cy="0" r="32" fill="#d9f0ff"><animate attributeName="r" values="32;40;32" dur="1s" begin=".75s" repeatCount="indefinite"></animate></circle>
+      </g>
+      <!-- explosion centrale de lumière -->
+      <circle class="boom" cx="430" cy="250" r="90" fill="#fff" opacity=".6"></circle>
+      <circle class="glowpulse" cx="430" cy="250" r="70" fill="#ffd36b" opacity=".7"></circle>
+      <text x="430" y="272" text-anchor="middle" font-size="60" font-weight="900" fill="#fff">R</text>
+    </svg>
+
+    <div id="sub"></div>
+  </div>
+
+  <div id="end">
+    <h2>FIN DE L'ÉPISODE 2</h2>
+    <p id="endtext"></p>
+    <button class="again" onclick="location.reload()">🔁 Revoir l'épisode</button>
+  </div>
+</div>
+
+<script>
+const SCENES = [
+  { id:'s1', chap:'Chapitre 1 · L\'entraînement', dur:360, subs:[
+    [8,"Depuis leur première victoire, le Clan des 4 Éléments s'entraîne chaque jour."],
+    [80,"🔥 Blaze, 💧 Onda, 🌍 Roc et 💨 Zéphyr sont devenus une vraie équipe."],
+    [170,"« On est prêts pour tout ce que Nyx nous enverra ! », lança Blaze."],
+    [260,"Mais dans l'ombre, un plan bien plus dangereux se préparait..."]
+  ]},
+  { id:'s2', chap:'Chapitre 2 · Le plan de Nyx', dur:360, subs:[
+    [8,"Du fond du Néant, les yeux violets de Nyx s'illuminèrent."],
+    [80,"« Ces petits héros m'agacent... Il me faut un vrai général. »"],
+    [170,"Un rayon de ténèbres frappa le sol dans un éclair violet."],
+    [260,"« Lève-toi... mon lieutenant d'acier ! »"]
+  ]},
+  { id:'s3', chap:'Chapitre 3 · Le Général Krâne-Fer', dur:380, subs:[
+    [8,"D'un nuage de fumée surgit une immense silhouette de métal."],
+    [90,"« Je suis le GÉNÉRAL KRÂNE-FER ! Le bras droit de Nyx ! »"],
+    [190,"Ses yeux rouges se posèrent sur le clan tout entier."],
+    [280,"« Clan des 4 Éléments... je vais tous vous réduire en poussière ! »"]
+  ]},
+  { id:'s4', chap:'Chapitre 4 · Le monstre attaque', dur:400, subs:[
+    [8,"Krâne-Fer envoya son monstre : une bête aux griffes tranchantes !"],
+    [90,"🔥 BOOM ! Blaze lança une boule de feu. 💧 Onda riposta d'une vague."],
+    [190,"« POWER ! », cria Zéphyr en frappant d'une bourrasque, Roc au bouclier."],
+    [290,"Le monstre recula, touché... « On l'a eu ! », crut Onda."],
+    [350,"Mais Krâne-Fer ricana : « Pas si vite, petits héros ! »"]
+  ]},
+  { id:'s5', chap:'Chapitre 5 · Le monstre géant', dur:380, subs:[
+    [8,"Krâne-Fer leva son poing : « RELÈVE-TOI... EN GÉANT ! »"],
+    [90,"Le monstre grandit, grandit, jusqu'à dépasser les immeubles ! 😱"],
+    [190,"« Il est bien trop grand ! », s'écria Roc en levant les yeux."],
+    [280,"« Alors on va frapper encore plus fort... TOUS ENSEMBLE ! », dit Blaze."]
+  ]},
+  { id:'s6', chap:'Chapitre 6 · Le combo des 4 éléments', dur:380, subs:[
+    [8,"Les quatre héros unirent leurs pouvoirs en un cercle de lumière."],
+    [80,"🔥 FEU ! 💧 EAU ! 🌍 TERRE ! 💨 AIR !"],
+    [150,"« COMBO DES 4 ÉLÉMENTS ! », hurlèrent-ils d'une seule voix."],
+    [230,"Un R géant de pure énergie fusa et pulvérisa le monstre géant ! 💥"],
+    [310,"Mais Krâne-Fer disparut dans l'ombre : « Ce n'est que le début... »"]
+  ]}
+];
+
+let si=0,t=0,subIdx=0,paused=false,timer=null;
+let totalDur=SCENES.reduce((a,s)=>a+s.dur,0),elapsedBefore=0;
+const $=id=>document.getElementById(id);
+
+function demarrer(){
+  $('intro').style.display='none';$('film').style.display='block';
+  si=0;t=0;subIdx=0;elapsedBefore=0;showScene();timer=setInterval(tic,100);
+}
+function showScene(){
+  document.querySelectorAll('.scene').forEach(e=>e.classList.remove('on'));
+  const sc=SCENES[si];$(sc.id).classList.add('on');$('chap').textContent=sc.chap;$('sub').textContent='';subIdx=0;
+}
+function tic(){
+  if(paused)return;t++;const sc=SCENES[si];
+  while(subIdx<sc.subs.length&&t>=sc.subs[subIdx][0]){$('sub').textContent=sc.subs[subIdx][1];subIdx++;}
+  const done=elapsedBefore+t;$('bar').style.width=Math.min(100,(done/totalDur)*100)+'%';
+  if(t>=sc.dur){elapsedBefore+=sc.dur;si++;t=0;if(si>=SCENES.length){finir();return;}showScene();}
+}
+function togglePause(){paused=!paused;$('pauseBtn').textContent=paused?'▶ Lecture':'⏸ Pause';}
+function finir(){
+  clearInterval(timer);$('film').style.display='none';
+  $('endtext').innerHTML="Le monstre est détruit, mais le Général Krâne-Fer s'est échappé !<br>Il reviendra, plus dangereux que jamais...<br>Rendez-vous à l'épisode 3 ! 🤖⚡";
+  $('end').classList.add('on');
+}
+</script>
+
+
+</body></html>
