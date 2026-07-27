@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/RAPHAEL/Downloads/clan-episode3.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Clan des 4 Éléments · Épisode 3</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#050208;font-family:'Trebuchet MS',sans-serif;overflow:hidden;color:#fff;}
+  #app{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
+
+  #intro{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 35%,#2a1145,#0a0416 70%);text-align:center;padding:20px;}
+  #intro .kick{letter-spacing:6px;color:#ffd36b;font-weight:bold;font-size:clamp(11px,3vw,15px);}
+  #intro h1{font-size:clamp(28px,8vw,54px);font-weight:900;line-height:1;margin:10px 0;
+    background:linear-gradient(180deg,#fff,#ffd7a0,#ff9d4d);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #intro .ep{font-size:clamp(15px,4.4vw,22px);color:#eee;margin-top:6px;letter-spacing:2px;}
+  #intro .dur{color:#9ad;margin-top:6px;font-size:clamp(12px,3.2vw,15px);}
+  .playbtn{margin-top:28px;padding:14px 40px;border:none;border-radius:40px;cursor:pointer;
+    background:linear-gradient(135deg,#ff5a5a,#ff9d4d);color:#fff;font-weight:900;font-size:clamp(15px,4vw,19px);
+    letter-spacing:2px;box-shadow:0 10px 30px rgba(255,90,90,.4);}
+  .playbtn:active{transform:scale(.96);}
+
+  #film{position:relative;width:min(100vw,860px);aspect-ratio:16/10;max-height:100vh;
+    border-radius:14px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+  svg.scene{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .8s;}
+  svg.scene.on{opacity:1;}
+
+  #sub{position:absolute;left:0;right:0;bottom:5%;text-align:center;z-index:20;padding:0 8%;
+    font-size:clamp(15px,3.6vw,24px);font-weight:bold;color:#fff;text-shadow:0 2px 10px #000,0 0 18px rgba(0,0,0,.9);
+    min-height:2em;transition:opacity .3s;}
+
+  #barwrap{position:absolute;left:0;right:0;top:0;height:5px;background:rgba(255,255,255,.12);z-index:25;}
+  #bar{height:100%;width:0;background:linear-gradient(90deg,#ff5a5a,#ffd36b);transition:width .2s linear;}
+  #chap{position:absolute;top:12px;left:14px;z-index:25;font-size:clamp(11px,2.6vw,14px);
+    color:#ffd36b;font-weight:bold;letter-spacing:1px;text-shadow:0 1px 6px #000;}
+
+  #ctrl{position:absolute;top:10px;right:12px;z-index:25;display:flex;gap:8px;}
+  #ctrl button{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;
+    border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;}
+
+  #end{position:absolute;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 40%,#2a1145,#0a0416 70%);text-align:center;padding:24px;}
+  #end.on{display:flex;}
+  #end h2{font-size:clamp(24px,7vw,44px);font-weight:900;
+    background:linear-gradient(180deg,#fff,#ffd7a0,#ff9d4d);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #end p{color:#ddd;margin-top:14px;font-size:clamp(14px,3.6vw,19px);line-height:1.5;max-width:600px;}
+  #end .again{margin-top:26px;padding:12px 34px;border:none;border-radius:36px;cursor:pointer;
+    background:linear-gradient(135deg,#ff5a5a,#ff9d4d);color:#fff;font-weight:900;font-size:16px;letter-spacing:1px;}
+
+  /* ANIMATIONS */
+  .star{fill:#fff;animation:tw 3s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:.95;}}
+  .float{transform-box:fill-box;transform-origin:center;animation:fl 3.4s ease-in-out infinite;}
+  @keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .float.d1{animation-delay:.4s;}.float.d2{animation-delay:.9s;}.float.d3{animation-delay:1.4s;}
+  .flame{transform-box:fill-box;transform-origin:bottom;animation:flk .5s ease-in-out infinite;}
+  @keyframes flk{0%,100%{transform:scaleY(1) scaleX(1);}50%{transform:scaleY(1.15) scaleX(.92);}}
+  .wave{animation:wv 4s ease-in-out infinite;}
+  @keyframes wv{0%,100%{transform:translateX(0);}50%{transform:translateX(-14px);}}
+  .nyxeye{transform-box:fill-box;transform-origin:center;animation:eye 2s ease-in-out infinite;}
+  @keyframes eye{0%,100%{opacity:.55;}50%{opacity:1;}}
+  .spin{transform-box:fill-box;transform-origin:center;animation:sp 8s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  .glowpulse{animation:gp 2.4s ease-in-out infinite;}
+  @keyframes gp{0%,100%{opacity:.4;}50%{opacity:.9;}}
+  .shake{transform-box:fill-box;transform-origin:center;animation:shk .3s ease-in-out infinite;}
+  @keyframes shk{0%,100%{transform:translate(0,0);}25%{transform:translate(-4px,2px);}75%{transform:translate(4px,-2px);}}
+  .stomp{transform-box:fill-box;transform-origin:bottom center;animation:stmp 1.4s ease-in-out infinite;}
+  @keyframes stmp{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-6px) scale(1.02);}}
+  .boom{transform-box:fill-box;transform-origin:center;animation:boomp .8s ease-out infinite;}
+  @keyframes boomp{0%{transform:scale(.6);opacity:0;}30%{opacity:1;}100%{transform:scale(1.6);opacity:0;}}
+  .zap{stroke-dasharray:6 6;animation:zapmove .3s linear infinite;}
+  @keyframes zapmove{to{stroke-dashoffset:-24;}}
+  .cage{transform-box:fill-box;transform-origin:center;animation:cagepulse 1.5s ease-in-out infinite;}
+  @keyframes cagepulse{0%,100%{opacity:.7;}50%{opacity:1;}}
+  .charge{transform-box:fill-box;transform-origin:center;animation:chg 1.2s ease-in-out infinite;}
+  @keyframes chg{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.3);opacity:1;}}
+  .rockrise{animation:rr 2s ease-out infinite;}
+  @keyframes rr{0%{transform:translateY(20px);opacity:.3;}50%{transform:translateY(-4px);opacity:1;}100%{transform:translateY(20px);opacity:.3;}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div id="intro">
+    <div class="kick">CINÉÈR · SAISON 1</div>
+    <h1>LE CLAN DES<br>4 ÉLÉMENTS</h1>
+    <div class="ep">Épisode 3 — « Le courage de Roc »</div>
+    <div class="dur">⏱️ 6-7 minutes · 8 chapitres</div>
+    <button class="playbtn" onclick="demarrer()">▶ REGARDER</button>
+  </div>
+
+  <div id="film" style="display:none">
+    <div id="barwrap"><div id="bar"></div></div>
+    <div id="chap"></div>
+    <div id="ctrl"><button onclick="togglePause()" id="pauseBtn">⏸ Pause</button></div>
+
+    <!-- SCÈNE 1 : Roc doute de lui -->
+    <svg class="scene" id="s1" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <lineargradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffb86b"></stop><stop offset="55%" stop-color="#a05a8f"></stop><stop offset="100%" stop-color="#3a1a4d"></stop></lineargradient>
+        <lineargradient id="grd1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2d5016"></stop><stop offset="100%" stop-color="#0f2a08"></stop></lineargradient>
+      </defs>
+      <rect width="860" height="538" fill="url(#sky1)"></rect>
+      <circle cx="700" cy="120" r="50" fill="#ffe9a8" opacity=".9"></circle>
+      <path d="M0 400 Q430 360 860 400 L860 538 L0 538 Z" fill="url(#grd1)"></path>
+      <!-- Roc seul, tête basse -->
+      <g transform="translate(360,330)">
+        <ellipse cx="60" cy="130" rx="60" ry="14" fill="#000" opacity=".3"></ellipse>
+        <path d="M14 100 Q75 36 136 100 Q136 124 75 124 Q14 124 14 100 Z" fill="#6b8f3d"></path>
+        <path d="M40 84 L56 64 L72 84 L56 100 Z" fill="#3d5f1f"></path>
+        <path d="M84 84 L100 64 L108 88 L92 100 Z" fill="#3d5f1f"></path>
+        <path d="M22 96 L34 80 L46 100 Z" fill="#3d5f1f"></path>
+        <!-- tête baissée -->
+        <path d="M8 108 Q-2 96 8 90 Q20 94 20 108 Z" fill="#9bbf6a"></path>
+        <circle cx="8" cy="100" r="3" fill="#1a2a0a"></circle>
+      </g>
+      <!-- petite pierre qu'il regarde -->
+      <ellipse cx="360" cy="470" rx="20" ry="14" fill="#5a6f3d"></ellipse>
+    </svg>
+
+    <!-- SCÈNE 2 : le clan réuni, Krâne-Fer revient -->
+    <svg class="scene" id="s2" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky2" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#3a1a2d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient>
+        <lineargradient id="metal2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8a94a6"></stop><stop offset="50%" stop-color="#4a5568"></stop><stop offset="100%" stop-color="#2a3140"></stop></lineargradient></defs>
+      <rect width="860" height="538" fill="url(#sky2)"></rect>
+      <g><circle class="star" cx="120" cy="80" r="2"></circle><circle class="star" cx="740" cy="90" r="2" style="animation-delay:.8s"></circle></g>
+      <!-- Krâne-Fer géant qui revient -->
+      <g class="float" transform="translate(320,90)">
+        <rect x="60" y="200" width="100" height="110" rx="12" fill="url(#metal2)"></rect>
+        <path d="M110 50 C60 50 46 110 58 160 C68 196 152 196 162 160 C176 110 160 50 110 50 Z" fill="url(#metal2)"></path>
+        <rect x="80" y="180" width="60" height="26" rx="4" fill="#2a3140"></rect>
+        <g fill="#2a3140"><rect x="84" y="180" width="7" height="20"></rect><rect x="98" y="180" width="7" height="20"></rect><rect x="112" y="180" width="7" height="20"></rect><rect x="126" y="180" width="7" height="20"></rect></g>
+        <ellipse class="nyxeye" cx="88" cy="128" rx="16" ry="18" fill="#ff2d2d"></ellipse>
+        <ellipse class="nyxeye" cx="132" cy="128" rx="16" ry="18" fill="#ff2d2d" style="animation-delay:.3s"></ellipse>
+        <path d="M62 66 L40 28 L74 52 Z" fill="#6a7488"></path><path d="M158 66 L180 28 L146 52 Z" fill="#6a7488"></path>
+      </g>
+    </svg>
+
+    <!-- SCÈNE 3 : le monstre plus fort + capture de Zéphyr -->
+    <svg class="scene" id="s3" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky3" cx="50%" cy="40%" r="80%"><stop offset="0%" stop-color="#2d1a4d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky3)"></rect>
+      <!-- gros monstre -->
+      <g class="float">
+        <ellipse cx="450" cy="470" rx="100" ry="18" fill="#000" opacity=".3"></ellipse>
+        <path d="M450 130 C350 130 315 250 350 370 C375 450 525 450 550 370 C585 250 550 130 450 130 Z" fill="#2a1a4d"></path>
+        <path d="M370 190 L340 130 L400 170 Z" fill="#2a1a4d"></path><path d="M530 190 L560 130 L500 170 Z" fill="#2a1a4d"></path>
+        <ellipse class="nyxeye" cx="415" cy="240" rx="18" ry="24" fill="#ff4b6e"></ellipse>
+        <ellipse class="nyxeye" cx="485" cy="240" rx="18" ry="24" fill="#ff4b6e" style="animation-delay:.3s"></ellipse>
+        <path d="M400 320 L425 300 L450 320 L475 300 L500 320" stroke="#ff4b6e" stroke-width="6" fill="none"></path>
+      </g>
+      <!-- Zéphyr capturé dans une cage d'ombre -->
+      <g transform="translate(680,300)">
+        <ellipse cx="30" cy="30" rx="26" ry="30" fill="#e8f4ff" opacity=".9"></ellipse>
+        <circle cx="30" cy="12" r="14" fill="#e8f4ff" opacity=".9"></circle>
+        <circle cx="25" cy="10" r="3" fill="#123"></circle><circle cx="35" cy="10" r="3" fill="#123"></circle>
+        <path d="M24 20 Q30 24 36 20" stroke="#123" stroke-width="2" fill="none"></path>
+        <!-- barreaux -->
+        <g class="cage" stroke="#a24bff" stroke-width="4">
+          <line x1="0" y1="-10" x2="0" y2="70"></line><line x1="20" y1="-10" x2="20" y2="70"></line>
+          <line x1="40" y1="-10" x2="40" y2="70"></line><line x1="60" y1="-10" x2="60" y2="70"></line>
+          <line x1="-4" y1="-8" x2="64" y2="-8"></line><line x1="-4" y1="68" x2="64" y2="68"></line>
+        </g>
+      </g>
+    </svg>
+
+    <!-- SCÈNE 4 : le clan en difficulté -->
+    <svg class="scene" id="s4" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky4" cx="50%" cy="45%" r="80%"><stop offset="0%" stop-color="#4d1a2d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky4)"></rect>
+      <!-- 3 héros à terre / reculent -->
+      <g class="shake" transform="translate(180,330)">
+        <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+        <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+        <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+      </g>
+      <g class="shake" transform="translate(380,340)" style="animation-delay:.15s">
+        <path d="M35 30 C15 30 10 58 22 84 C32 102 52 102 62 84 C74 58 58 30 35 30 Z" fill="#4aa3d6"></path>
+        <ellipse cx="35" cy="66" rx="14" ry="13" fill="#cfeaff"></ellipse>
+        <circle cx="27" cy="52" r="4.5" fill="#fff"></circle><circle cx="45" cy="52" r="4.5" fill="#fff"></circle>
+        <circle cx="28" cy="53" r="2.6" fill="#06263a"></circle><circle cx="44" cy="53" r="2.6" fill="#06263a"></circle>
+      </g>
+      <!-- Roc au centre, débout, hésitant -->
+      <g class="float" transform="translate(560,340)">
+        <path d="M14 66 Q45 28 76 66 Q76 82 45 82 Q14 82 14 66 Z" fill="#6b8f3d"></path>
+        <path d="M28 52 L36 42 L44 52 L36 60 Z" fill="#3d5f1f"></path>
+        <path d="M0 62 Q-4 54 6 52 Q14 54 14 64 Z" fill="#9bbf6a"></path>
+        <circle cx="5" cy="58" r="2.4" fill="#1a2a0a"></circle>
+      </g>
+      <path class="zap" d="M700 200 L560 340" stroke="#ff4b6e" stroke-width="4" fill="none"></path>
+    </svg>
+
+    <!-- SCÈNE 5 : Roc trouve son courage - la nouvelle force -->
+    <svg class="scene" id="s5" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky5" cx="50%" cy="45%" r="85%"><stop offset="0%" stop-color="#7bd66a"></stop><stop offset="45%" stop-color="#3a5a2d"></stop><stop offset="100%" stop-color="#0a1a08"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky5)"></rect>
+      <!-- Roc au centre, illuminé, force de la terre -->
+      <g transform="translate(390,220)">
+        <circle class="charge" cx="40" cy="60" r="90" fill="#7bd66a" opacity=".4"></circle>
+        <path d="M4 70 Q45 20 86 70 Q86 90 45 90 Q4 90 4 70 Z" fill="#7bd66a"></path>
+        <path d="M22 56 L32 44 L42 56 L32 66 Z" fill="#3d5f1f"></path>
+        <path d="M52 56 L62 44 L68 60 L58 68 Z" fill="#3d5f1f"></path>
+        <path d="M-8 66 Q-14 56 -2 54 Q8 56 8 68 Z" fill="#9bbf6a"></path>
+        <circle cx="-4" cy="62" r="3" fill="#1a2a0a"></circle>
+      </g>
+      <!-- rochers qui s'élèvent autour -->
+      <g fill="#5a6f3d">
+        <path class="rockrise" d="M150 420 L180 380 L210 420 Z"></path>
+        <path class="rockrise" d="M620 420 L650 375 L685 420 Z" style="animation-delay:.5s"></path>
+        <path class="rockrise" d="M280 460 L305 425 L335 460 Z" style="animation-delay:1s"></path>
+        <path class="rockrise" d="M540 460 L565 428 L595 460 Z" style="animation-delay:1.4s"></path>
+      </g>
+    </svg>
+
+    <!-- SCÈNE 6 : Roc libère Zéphyr -->
+    <svg class="scene" id="s6" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky6" cx="50%" cy="40%" r="80%"><stop offset="0%" stop-color="#3a3a5d"></stop><stop offset="100%" stop-color="#0a0a1a"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky6)"></rect>
+      <!-- cage qui se brise -->
+      <g transform="translate(380,220)">
+        <ellipse cx="40" cy="40" rx="30" ry="34" fill="#e8f4ff"></ellipse>
+        <circle cx="40" cy="16" r="16" fill="#e8f4ff"></circle>
+        <circle cx="34" cy="14" r="3.5" fill="#123"></circle><circle cx="46" cy="14" r="3.5" fill="#123"></circle>
+        <path d="M40 22 L48 27 L40 32 Z" fill="#ffcf5a"></path>
+        <path d="M14 38 Q-2 44 10 58 Q20 54 22 42 Z" fill="#bfe3ff"></path>
+        <path d="M66 38 Q82 44 70 58 Q60 54 58 42 Z" fill="#bfe3ff"></path>
+      </g>
+      <!-- barreaux brisés qui volent -->
+      <g stroke="#a24bff" stroke-width="4" opacity=".7">
+        <line x1="300" y1="200" x2="280" y2="160"></line><line x1="520" y1="210" x2="550" y2="170"></line>
+        <line x1="330" y1="300" x2="300" y2="330"></line><line x1="500" y1="300" x2="540" y2="330"></line>
+      </g>
+      <circle class="boom" cx="420" cy="260" r="60" fill="#fff" opacity=".5"></circle>
+    </svg>
+
+    <!-- SCÈNE 7 : monstre géant + combo, mené par Roc -->
+    <svg class="scene" id="s7" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky7" cx="50%" cy="30%" r="90%"><stop offset="0%" stop-color="#5a1a3d"></stop><stop offset="100%" stop-color="#0a0410"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky7)"></rect>
+      <g fill="#1a1030" opacity=".8"><rect x="40" y="450" width="50" height="88"></rect><rect x="740" y="455" width="50" height="83"></rect></g>
+      <!-- monstre géant -->
+      <g class="stomp">
+        <path d="M430 70 C330 70 295 230 330 380 C355 460 505 460 530 380 C565 230 530 70 430 70 Z" fill="#2a1a4d"></path>
+        <ellipse class="nyxeye" cx="395" cy="210" rx="22" ry="30" fill="#ff4b6e"></ellipse>
+        <ellipse class="nyxeye" cx="465" cy="210" rx="22" ry="30" fill="#ff4b6e" style="animation-delay:.3s"></ellipse>
+        <path d="M378 310 L408 285 L438 310 L468 285 L498 310" stroke="#ff4b6e" stroke-width="7" fill="none"></path>
+      </g>
+      <circle class="boom" cx="430" cy="250" r="70" fill="#7bd66a" opacity=".4"></circle>
+    </svg>
+
+    <!-- SCÈNE 8 : combo final des 4 éléments + R géant -->
+    <svg class="scene" id="s8" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+      <defs><radialgradient id="sky8" cx="50%" cy="35%" r="90%"><stop offset="0%" stop-color="#ffd36b"></stop><stop offset="40%" stop-color="#7a3a8f"></stop><stop offset="100%" stop-color="#1a0a2d"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#sky8)"></rect>
+      <g class="spin" transform="translate(430,250)">
+        <circle r="160" fill="none" stroke="#fff" stroke-width="2" opacity=".3"></circle>
+        <circle cx="0" cy="-160" r="32" fill="#ff6a2d"><animate attributeName="r" values="32;42;32" dur="1s" repeatCount="indefinite"></animate></circle>
+        <circle cx="160" cy="0" r="32" fill="#49c6ff"><animate attributeName="r" values="32;42;32" dur="1s" begin=".25s" repeatCount="indefinite"></animate></circle>
+        <circle cx="0" cy="160" r="42" fill="#7bd66a"><animate attributeName="r" values="42;54;42" dur="1s" begin=".5s" repeatCount="indefinite"></animate></circle>
+        <circle cx="-160" cy="0" r="32" fill="#d9f0ff"><animate attributeName="r" values="32;42;32" dur="1s" begin=".75s" repeatCount="indefinite"></animate></circle>
+      </g>
+      <circle class="boom" cx="430" cy="250" r="95" fill="#fff" opacity=".6"></circle>
+      <circle class="glowpulse" cx="430" cy="250" r="72" fill="#ffd36b" opacity=".7"></circle>
+      <text x="430" y="272" text-anchor="middle" font-size="62" font-weight="900" fill="#fff">R</text>
+    </svg>
+
+    <div id="sub"></div>
+  </div>
+
+  <div id="end">
+    <h2>FIN DE L'ÉPISODE 3</h2>
+    <p id="endtext"></p>
+    <button class="again" onclick="location.reload()">🔁 Revoir l'épisode</button>
+  </div>
+</div>
+
+<script>
+const SCENES = [
+  { id:'s1', chap:'Chapitre 1 · Les doutes de Roc', dur:480, subs:[
+    [8,"Ce matin-là, Roc la tortue de terre s'était éloigné du clan."],
+    [80,"« Blaze est courageux, Onda est maligne, Zéphyr est rapide... »"],
+    [170,"« Et moi ? Je suis juste lent et lourd. À quoi je sers vraiment ? »"],
+    [270,"Roc regardait une petite pierre, le cœur gros de doutes."],
+    [380,"Il ne savait pas encore que ce jour allait tout changer pour lui."]
+  ]},
+  { id:'s2', chap:'Chapitre 2 · Le retour de Krâne-Fer', dur:460, subs:[
+    [8,"Soudain, le ciel s'obscurcit. Un pas de métal fit trembler la terre."],
+    [90,"« ME VOICI DE RETOUR ! », gronda le Général Krâne-Fer."],
+    [190,"« Cette fois, j'ai un monstre bien plus puissant... et un piège ! »"],
+    [290,"Ses yeux rouges brillaient d'une lueur mauvaise."],
+    [390,"Le clan se rassembla en vitesse pour lui faire face."]
+  ]},
+  { id:'s3', chap:'Chapitre 3 · Le piège', dur:480, subs:[
+    [8,"Le monstre surgit, plus grand et plus féroce que les précédents !"],
+    [90,"« 💨 Je fonce ! », cria Zéphyr en s'élançant le premier dans les airs."],
+    [180,"Mais c'était le piège : une cage d'ombre se referma sur lui ! 😱"],
+    [280,"« ZÉPHYR ! », hurla le clan, impuissant."],
+    [380,"« Un de moins... », ricana Krâne-Fer. « À qui le tour ? »"]
+  ]},
+  { id:'s4', chap:'Chapitre 4 · Le clan en danger', dur:460, subs:[
+    [8,"Sans Zéphyr, le clan était déséquilibré. Le monstre frappait fort."],
+    [90,"Blaze et Onda reculèrent, touchés par les attaques d'ombre."],
+    [190,"« On ne peut pas le battre comme ça ! », s'écria Onda."],
+    [290,"Tous les regards se tournèrent vers Roc, resté debout."],
+    [380,"« Roc... c'est à toi maintenant. On a besoin de toi ! »"]
+  ]},
+  { id:'s5', chap:'Chapitre 5 · Le courage de Roc', dur:500, subs:[
+    [8,"Roc sentit son cœur battre. Ses doutes revinrent... puis s'effacèrent."],
+    [100,"« Je ne suis peut-être pas le plus rapide... mais je suis solide. »"],
+    [200,"« Et mes amis comptent sur moi. C'est ça, ma vraie force ! »"],
+    [300,"Une lumière verte jaillit de lui. La terre trembla à son appel !"],
+    [400,"Des rochers s'élevèrent : Roc venait de débloquer un nouveau pouvoir ! ✨"]
+  ]},
+  { id:'s6', chap:'Chapitre 6 · La libération', dur:440, subs:[
+    [8,"Roc frappa le sol de toutes ses forces : « LIBÈRE-TOI, ZÉPHYR ! »"],
+    [90,"Une vague de terre fracassa la cage d'ombre en mille morceaux !"],
+    [190,"Zéphyr s'envola, libre : « Merci Roc ! Je savais que tu y arriverais ! »"],
+    [290,"Le clan était de nouveau au complet, plus soudé que jamais."],
+    [370,"« Maintenant, finissons-en ! », dit Roc avec un sourire confiant."]
+  ]},
+  { id:'s7', chap:'Chapitre 7 · Le monstre géant', dur:440, subs:[
+    [8,"Furieux, Krâne-Fer relança le monstre : « DEVIENS GÉANT ! »"],
+    [90,"Le monstre grandit jusqu'à toucher les nuages, terrifiant. 😱"],
+    [190,"« Ensemble, on est plus forts que n'importe quel géant ! », dit Blaze."],
+    [290,"« Et cette fois, c'est Roc qui ouvre la voie ! », ajouta Onda."]
+  ]},
+  { id:'s8', chap:'Chapitre 8 · Le combo des 4 éléments', dur:440, subs:[
+    [8,"Les quatre héros unirent leurs pouvoirs dans un cercle éclatant."],
+    [90,"🔥 FEU ! 💧 EAU ! 🌍 TERRE ! 💨 AIR !"],
+    [170,"« COMBO DES 4 ÉLÉMENTS ! », crièrent-ils, portés par la force de Roc."],
+    [260,"Un R géant de lumière pulvérisa le monstre géant ! 💥"],
+    [350,"Krâne-Fer s'enfuit dans l'ombre : « Tu as gagné cette fois, la tortue... »"]
+  ]}
+];
+
+let si=0,t=0,subIdx=0,paused=false,timer=null;
+let totalDur=SCENES.reduce((a,s)=>a+s.dur,0),elapsedBefore=0;
+const $=id=>document.getElementById(id);
+
+function demarrer(){
+  $('intro').style.display='none';$('film').style.display='block';
+  si=0;t=0;subIdx=0;elapsedBefore=0;showScene();timer=setInterval(tic,100);
+}
+function showScene(){
+  document.querySelectorAll('.scene').forEach(e=>e.classList.remove('on'));
+  const sc=SCENES[si];$(sc.id).classList.add('on');$('chap').textContent=sc.chap;$('sub').textContent='';subIdx=0;
+}
+function tic(){
+  if(paused)return;t++;const sc=SCENES[si];
+  while(subIdx<sc.subs.length&&t>=sc.subs[subIdx][0]){$('sub').textContent=sc.subs[subIdx][1];subIdx++;}
+  const done=elapsedBefore+t;$('bar').style.width=Math.min(100,(done/totalDur)*100)+'%';
+  if(t>=sc.dur){elapsedBefore+=sc.dur;si++;t=0;if(si>=SCENES.length){finir();return;}showScene();}
+}
+function togglePause(){paused=!paused;$('pauseBtn').textContent=paused?'▶ Lecture':'⏸ Pause';}
+function finir(){
+  clearInterval(timer);$('film').style.display='none';
+  $('endtext').innerHTML="Roc a trouvé son courage et sauvé le clan ! 🌍<br>Mais Krâne-Fer prépare déjà sa revanche...<br>Rendez-vous à l'épisode 4 ! 🤖⚡";
+  $('end').classList.add('on');
+}
+</script>
+
+
+</body></html>
