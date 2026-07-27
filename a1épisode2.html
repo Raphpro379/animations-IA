@@ -79,7 +79,7 @@
 <body>
 <div id="app">
 
-  <div id="intro" style="display: none;">
+  <div id="intro">
     <div class="kick">CINÉÈR · SAISON 1</div>
     <h1>LE CLAN DES<br>4 ÉLÉMENTS</h1>
     <div class="ep">Épisode 2 — « Le Général Krâne-Fer »</div>
@@ -87,9 +87,9 @@
     <button class="playbtn" onclick="demarrer()">▶ REGARDER</button>
   </div>
 
-  <div id="film" style="display: none;">
-    <div id="barwrap"><div id="bar" style="width: 100%;"></div></div>
-    <div id="chap">Chapitre 6 · Le combo des 4 éléments</div>
+  <div id="film" style="display:none">
+    <div id="barwrap"><div id="bar"></div></div>
+    <div id="chap"></div>
     <div id="ctrl"><button onclick="togglePause()" id="pauseBtn">⏸ Pause</button></div>
 
     <!-- SCÈNE 1 : le clan s'entraîne, jour paisible -->
@@ -227,7 +227,7 @@
     </svg>
 
     <!-- SCÈNE 6 : combo final des 4 éléments -->
-    <svg class="scene on" id="s6" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
+    <svg class="scene" id="s6" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice">
       <defs><radialgradient id="sky6" cx="50%" cy="35%" r="90%"><stop offset="0%" stop-color="#ffd36b"></stop><stop offset="40%" stop-color="#7a3a8f"></stop><stop offset="100%" stop-color="#1a0a2d"></stop></radialgradient></defs>
       <rect width="860" height="538" fill="url(#sky6)"></rect>
       <!-- grand cercle des 4 éléments qui tourne -->
@@ -244,12 +244,12 @@
       <text x="430" y="272" text-anchor="middle" font-size="60" font-weight="900" fill="#fff">R</text>
     </svg>
 
-    <div id="sub">Mais Krâne-Fer disparut dans l'ombre : « Ce n'est que le début... »</div>
+    <div id="sub"></div>
   </div>
 
-  <div id="end" class="on">
+  <div id="end">
     <h2>FIN DE L'ÉPISODE 2</h2>
-    <p id="endtext">Le monstre est détruit, mais le Général Krâne-Fer s'est échappé !<br>Il reviendra, plus dangereux que jamais...<br>Rendez-vous à l'épisode 3 ! 🤖⚡</p>
+    <p id="endtext"></p>
     <button class="again" onclick="location.reload()">🔁 Revoir l'épisode</button>
   </div>
 </div>
