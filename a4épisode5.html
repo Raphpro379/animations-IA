@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/RAPHAEL/Downloads/clan-s4-episode5.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Clan des 4 Éléments · Saison 2 · Épisode 5</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#050208;font-family:'Trebuchet MS',sans-serif;overflow:hidden;color:#fff;}
+  #app{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
+  #intro{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 35%,#1a0a3d,#08040f 70%);text-align:center;padding:20px;}
+  #intro .kick{letter-spacing:6px;color:#b98aff;font-weight:bold;font-size:clamp(11px,3vw,15px);}
+  #intro .final{letter-spacing:4px;color:#ff5a5a;font-weight:900;font-size:clamp(13px,3.4vw,17px);margin-top:8px;}
+  #intro h1{font-size:clamp(28px,8vw,54px);font-weight:900;line-height:1;margin:10px 0;
+    background:linear-gradient(180deg,#fff,#d8caff,#8a6aff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #intro .ep{font-size:clamp(15px,4.4vw,22px);color:#eee;margin-top:6px;letter-spacing:2px;}
+  #intro .dur{color:#9ad;margin-top:6px;font-size:clamp(12px,3.2vw,15px);}
+  .playbtn{margin-top:28px;padding:14px 40px;border:none;border-radius:40px;cursor:pointer;
+    background:linear-gradient(135deg,#6a3ad6,#8a6aff);color:#fff;font-weight:900;font-size:clamp(15px,4vw,19px);
+    letter-spacing:2px;box-shadow:0 10px 30px rgba(120,60,220,.5);}
+  .playbtn:active{transform:scale(.96);}
+  #film{position:relative;width:min(100vw,860px);aspect-ratio:16/10;max-height:100vh;
+    border-radius:14px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+  svg.scene{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .8s;}
+  svg.scene.on{opacity:1;}
+  #sub{position:absolute;left:0;right:0;bottom:5%;text-align:center;z-index:20;padding:0 8%;
+    font-size:clamp(15px,3.6vw,24px);font-weight:bold;color:#fff;text-shadow:0 2px 10px #000,0 0 18px rgba(0,0,0,.9);
+    min-height:2em;transition:opacity .3s;}
+  #barwrap{position:absolute;left:0;right:0;top:0;height:5px;background:rgba(255,255,255,.12);z-index:25;}
+  #bar{height:100%;width:0;background:linear-gradient(90deg,#6a3ad6,#b98aff);transition:width .2s linear;}
+  #chap{position:absolute;top:12px;left:14px;z-index:25;font-size:clamp(11px,2.6vw,14px);
+    color:#b98aff;font-weight:bold;letter-spacing:1px;text-shadow:0 1px 6px #000;}
+  /* jauge machine de Blaze */
+  #machine{position:absolute;top:12px;right:12px;z-index:25;display:flex;align-items:center;gap:6px;
+    background:rgba(0,0,0,.5);border:1px solid rgba(255,200,80,.5);border-radius:20px;padding:4px 10px;font-size:11px;color:#ffe08a;font-weight:bold;}
+  #mgauge{width:60px;height:8px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden;}
+  #mfill{height:100%;width:0;background:linear-gradient(90deg,#ff6a2d,#ffd36b);transition:width 1s;}
+  #ctrl{position:absolute;bottom:10px;right:12px;z-index:25;display:flex;gap:8px;}
+  #ctrl button{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;
+    border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;}
+  #end{position:absolute;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 40%,#1a0a3d,#08040f 70%);text-align:center;padding:24px;}
+  #end.on{display:flex;}
+  #end .fin{letter-spacing:4px;color:#ff5a5a;font-weight:900;font-size:clamp(12px,3vw,15px);}
+  #end h2{font-size:clamp(24px,7vw,44px);font-weight:900;margin-top:8px;
+    background:linear-gradient(180deg,#fff,#d8caff,#8a6aff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #end p{color:#ddd;margin-top:14px;font-size:clamp(14px,3.6vw,19px);line-height:1.5;max-width:620px;}
+  #end .again{margin-top:26px;padding:12px 34px;border:none;border-radius:36px;cursor:pointer;
+    background:linear-gradient(135deg,#6a3ad6,#8a6aff);color:#fff;font-weight:900;font-size:16px;letter-spacing:1px;}
+  .star{fill:#fff;animation:tw 3s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:.95;}}
+  .float{transform-box:fill-box;transform-origin:center;animation:fl 3.4s ease-in-out infinite;}
+  @keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .float.d1{animation-delay:.4s;}.float.d2{animation-delay:.9s;}.float.d3{animation-delay:1.4s;}
+  .flame{transform-box:fill-box;transform-origin:bottom;animation:flk .5s ease-in-out infinite;}
+  @keyframes flk{0%,100%{transform:scaleY(1) scaleX(1);}50%{transform:scaleY(1.15) scaleX(.92);}}
+  .wave{animation:wv 4s ease-in-out infinite;}
+  @keyframes wv{0%,100%{transform:translateX(0);}50%{transform:translateX(-14px);}}
+  .nyxeye{transform-box:fill-box;transform-origin:center;animation:eye 2s ease-in-out infinite;}
+  @keyframes eye{0%,100%{opacity:.55;}50%{opacity:1;}}
+  .spin{transform-box:fill-box;transform-origin:center;animation:sp 8s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  .fastspin{transform-box:fill-box;transform-origin:center;animation:sp 3s linear infinite;}
+  .glowpulse{animation:gp 2.4s ease-in-out infinite;}
+  @keyframes gp{0%,100%{opacity:.4;}50%{opacity:.9;}}
+  .shake{transform-box:fill-box;transform-origin:center;animation:shk .3s ease-in-out infinite;}
+  @keyframes shk{0%,100%{transform:translate(0,0);}25%{transform:translate(-4px,2px);}75%{transform:translate(4px,-2px);}}
+  .bigshake{transform-box:fill-box;transform-origin:center;animation:bshk .2s ease-in-out infinite;}
+  @keyframes bshk{0%,100%{transform:translate(0,0);}25%{transform:translate(-7px,4px);}75%{transform:translate(7px,-4px);}}
+  .stomp{transform-box:fill-box;transform-origin:bottom center;animation:stmp 1.4s ease-in-out infinite;}
+  @keyframes stmp{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-8px) scale(1.02);}}
+  .boom{transform-box:fill-box;transform-origin:center;animation:boomp .8s ease-out infinite;}
+  @keyframes boomp{0%{transform:scale(.6);opacity:0;}30%{opacity:1;}100%{transform:scale(1.7);opacity:0;}}
+  .zap{stroke-dasharray:6 6;animation:zapmove .3s linear infinite;}
+  @keyframes zapmove{to{stroke-dashoffset:-24;}}
+  .crumble{transform-box:fill-box;transform-origin:center;animation:crmb 2s ease-in forwards;}
+  @keyframes crmb{0%{opacity:1;transform:scale(1) rotate(0);}100%{opacity:0;transform:scale(.4) rotate(30deg);}}
+  .fadein{animation:fadein 3s ease-in forwards;}
+  @keyframes fadein{from{opacity:0;}to{opacity:1;}}
+  .frost{animation:frostpulse 2.5s ease-in-out infinite;}
+  @keyframes frostpulse{0%,100%{opacity:.4;}50%{opacity:.9;}}
+  .snow{animation:snowfall linear infinite;}
+  @keyframes snowfall{from{transform:translateY(-20px);}to{transform:translateY(560px);}}
+  .buildpulse{transform-box:fill-box;transform-origin:center;animation:bp 1.5s ease-in-out infinite;}
+  @keyframes bp{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.08);}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="intro">
+    <div class="kick">CINÉÈR · SAISON 4</div>
+    <div class="final">★ GRAND FINAL DE LA SAISON 4 ★</div>
+    <h1>LE CLAN DES<br>4 ÉLÉMENTS</h1>
+    <div class="ep">Épisode 5 — « La Lumière des 4 Cœurs »</div>
+    <div class="dur">⏱️ 5 minutes · 8 chapitres</div>
+    <button class="playbtn" onclick="demarrer()">▶ REGARDER</button>
+  </div>
+  <div id="film" style="display:none">
+    <div id="barwrap"><div id="bar"></div></div>
+    <div id="chap"></div>
+    <div id="machine">💛 Cœurs <div id="mgauge"><div id="mfill"></div></div></div>
+    <div id="ctrl"><button onclick="togglePause()" id="pauseBtn">⏸ Pause</button></div>
+    <svg class="scene" id="s1" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="a" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#1a0a3d"></stop><stop offset="100%" stop-color="#000"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#a)"></rect><g><circle class="star" cx="514" cy="135" r="1.7" style="animation-delay:1.4s"></circle>
+<circle class="star" cx="386" cy="168" r="2.1" style="animation-delay:0.7s"></circle>
+<circle class="star" cx="671" cy="50" r="1.7" style="animation-delay:1.9s"></circle>
+<circle class="star" cx="782" cy="148" r="1.7" style="animation-delay:0.2s"></circle>
+<circle class="star" cx="558" cy="56" r="1.9" style="animation-delay:1.5s"></circle>
+<circle class="star" cx="144" cy="114" r="1.7" style="animation-delay:1.6s"></circle>
+<circle class="star" cx="129" cy="108" r="1.9" style="animation-delay:0.7s"></circle>
+<circle class="star" cx="84" cy="91" r="1.5" style="animation-delay:0.8s"></circle></g><g class="glowpulse" transform="translate(260,0) scale(1)">
+      <path d="M150 20 C40 20 -10 200 25 400 C55 520 110 530 150 530 C190 530 245 520 275 400 C310 200 260 20 150 20 Z" fill="#0d0518"></path>
+      <path d="M70 120 Q45 40 90 62 M230 120 Q255 40 210 62" stroke="#0d0518" stroke-width="32" fill="none" stroke-linecap="round"></path><path d="M25 260 Q-60 300 -70 400" stroke="#0d0518" stroke-width="34" fill="none" stroke-linecap="round"></path>
+      <path d="M275 260 Q360 300 370 400" stroke="#0d0518" stroke-width="34" fill="none" stroke-linecap="round"></path><ellipse class="nyxeye" cx="108" cy="210" rx="24" ry="34" fill="#a24bff"></ellipse>
+      <ellipse class="nyxeye" cx="192" cy="210" rx="24" ry="34" fill="#a24bff" style="animation-delay:.4s"></ellipse>
+      <ellipse cx="108" cy="212" rx="9" ry="15" fill="#1a0033"></ellipse><ellipse cx="192" cy="212" rx="9" ry="15" fill="#1a0033"></ellipse>
+      <path d="M100 320 Q150 300 200 320" stroke="#a24bff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".7"></path>
+    </g></svg>
+    <svg class="scene" id="s2" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="b" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#2a1a4d"></stop><stop offset="100%" stop-color="#08040f"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#b)"></rect><g><circle class="star" cx="514" cy="135" r="1.7" style="animation-delay:1.4s"></circle>
+<circle class="star" cx="386" cy="168" r="2.1" style="animation-delay:0.7s"></circle>
+<circle class="star" cx="671" cy="50" r="1.7" style="animation-delay:1.9s"></circle>
+<circle class="star" cx="782" cy="148" r="1.7" style="animation-delay:0.2s"></circle>
+<circle class="star" cx="558" cy="56" r="1.9" style="animation-delay:1.5s"></circle>
+<circle class="star" cx="144" cy="114" r="1.7" style="animation-delay:1.6s"></circle></g><g class="float" transform="translate(120,300) scale(0.75)">
+      <circle class="glowpulse" cx="35" cy="60" r="70" fill="#ffcf5a" opacity=".4"></circle>
+      <g>
+      <ellipse cx="35" cy="100" rx="32" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+      <path d="M35 80 C26 80 24 92 35 95 C46 92 44 80 35 80 Z" fill="#ffe0c2"></path>
+      <path d="M20 34 L8 8 L32 26 Z" fill="#ff6a2d"></path><path d="M50 34 L62 8 L38 26 Z" fill="#ff6a2d"></path>
+      <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+      <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+      <circle cx="35" cy="70" r="4" fill="#3a1500"></circle></g>
+      <path class="flame" d="M20 -6 L28 -22 L36 -6 Z" fill="#ffcf5a"></path>
+      <path class="flame" d="M4 4 L10 -10 L16 4 Z" fill="#ffcf5a" opacity=".8"></path>
+      <path class="flame" d="M54 4 L60 -10 L66 4 Z" fill="#ffcf5a" opacity=".8"></path>
+    </g><g class="float" transform="translate(300,310) scale(0.75)">
+      <circle class="glowpulse" cx="35" cy="60" r="70" fill="#8fd0ff" opacity=".4"></circle>
+      <g>
+      <ellipse cx="35" cy="98" rx="30" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C15 30 10 58 22 84 C32 102 52 102 62 84 C74 58 58 30 35 30 Z" fill="#4aa3d6"></path>
+      <ellipse cx="35" cy="70" rx="15" ry="14" fill="#cfeaff"></ellipse>
+      <circle cx="20" cy="28" r="7" fill="#4aa3d6"></circle><circle cx="50" cy="28" r="7" fill="#4aa3d6"></circle>
+      <circle cx="27" cy="55" r="4.5" fill="#fff"></circle><circle cx="45" cy="55" r="4.5" fill="#fff"></circle>
+      <circle cx="28" cy="56" r="2.6" fill="#06263a"></circle><circle cx="44" cy="56" r="2.6" fill="#06263a"></circle></g>
+      <path class="flame" d="M20 -6 L28 -22 L36 -6 Z" fill="#8fd0ff"></path>
+      <path class="flame" d="M4 4 L10 -10 L16 4 Z" fill="#8fd0ff" opacity=".8"></path>
+      <path class="flame" d="M54 4 L60 -10 L66 4 Z" fill="#8fd0ff" opacity=".8"></path>
+    </g><g class="float" transform="translate(500,315) scale(0.75)">
+      <circle class="glowpulse" cx="35" cy="60" r="70" fill="#a8e08a" opacity=".4"></circle>
+      <g>
+      <ellipse cx="40" cy="82" rx="38" ry="10" fill="#000" opacity=".25"></ellipse>
+      <path d="M12 62 Q40 24 68 62 Q68 78 40 78 Q12 78 12 62 Z" fill="#6b8f3d"></path>
+      <path d="M26 50 L34 40 L42 50 L34 58 Z" fill="#3d5f1f"></path>
+      <path d="M0 60 Q-4 52 6 50 Q14 52 14 62 Z" fill="#9bbf6a"></path>
+      <circle cx="5" cy="56" r="2.4" fill="#1a2a0a"></circle></g>
+      <path class="flame" d="M20 -6 L28 -22 L36 -6 Z" fill="#a8e08a"></path>
+      <path class="flame" d="M4 4 L10 -10 L16 4 Z" fill="#a8e08a" opacity=".8"></path>
+      <path class="flame" d="M54 4 L60 -10 L66 4 Z" fill="#a8e08a" opacity=".8"></path>
+    </g><g class="float" transform="translate(680,300) scale(0.75)">
+      <circle class="glowpulse" cx="35" cy="60" r="70" fill="#e8f4ff" opacity=".4"></circle>
+      <g>
+      <ellipse cx="32" cy="94" rx="24" ry="7" fill="#000" opacity=".25"></ellipse>
+      <ellipse cx="32" cy="62" rx="22" ry="26" fill="#e8f4ff"></ellipse>
+      <circle cx="32" cy="34" r="16" fill="#e8f4ff"></circle>
+      <path d="M32 40 L42 45 L32 50 Z" fill="#ffcf5a"></path>
+      <circle cx="26" cy="32" r="4" fill="#fff"></circle><circle cx="38" cy="32" r="4" fill="#fff"></circle>
+      <circle cx="26" cy="33" r="2.2" fill="#123"></circle><circle cx="38" cy="33" r="2.2" fill="#123"></circle>
+      <path d="M10 60 Q-4 66 8 78 Q18 74 20 64 Z" fill="#bfe3ff"></path>
+      <path d="M54 60 Q68 66 56 78 Q46 74 44 64 Z" fill="#bfe3ff"></path></g>
+      <path class="flame" d="M20 -6 L28 -22 L36 -6 Z" fill="#e8f4ff"></path>
+      <path class="flame" d="M4 4 L10 -10 L16 4 Z" fill="#e8f4ff" opacity=".8"></path>
+      <path class="flame" d="M54 4 L60 -10 L66 4 Z" fill="#e8f4ff" opacity=".8"></path>
+    </g></svg>
+    <svg class="scene" id="s3" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="c" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#3a1a5d"></stop><stop offset="100%" stop-color="#000"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#c)"></rect><g class="glowpulse" transform="translate(500,60) scale(0.7)">
+      <path d="M150 20 C40 20 -10 200 25 400 C55 520 110 530 150 530 C190 530 245 520 275 400 C310 200 260 20 150 20 Z" fill="#0d0518"></path>
+      <path d="M70 120 Q45 40 90 62 M230 120 Q255 40 210 62" stroke="#0d0518" stroke-width="32" fill="none" stroke-linecap="round"></path><path d="M25 260 Q-60 300 -70 400" stroke="#0d0518" stroke-width="34" fill="none" stroke-linecap="round"></path>
+      <path d="M275 260 Q360 300 370 400" stroke="#0d0518" stroke-width="34" fill="none" stroke-linecap="round"></path><ellipse class="nyxeye" cx="108" cy="210" rx="24" ry="34" fill="#a24bff"></ellipse>
+      <ellipse class="nyxeye" cx="192" cy="210" rx="24" ry="34" fill="#a24bff" style="animation-delay:.4s"></ellipse>
+      <ellipse cx="108" cy="212" rx="9" ry="15" fill="#1a0033"></ellipse><ellipse cx="192" cy="212" rx="9" ry="15" fill="#1a0033"></ellipse>
+      <path d="M100 320 Q150 300 200 320" stroke="#a24bff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".7"></path>
+    </g><g class="float" transform="translate(120,320) scale(0.7)">
+      <circle class="glowpulse" cx="35" cy="60" r="70" fill="#ffcf5a" opacity=".4"></circle>
+      <g>
+      <ellipse cx="35" cy="100" rx="32" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+      <path d="M35 80 C26 80 24 92 35 95 C46 92 44 80 35 80 Z" fill="#ffe0c2"></path>
+      <path d="M20 34 L8 8 L32 26 Z" fill="#ff6a2d"></path><path d="M50 34 L62 8 L38 26 Z" fill="#ff6a2d"></path>
+      <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+      <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+      <circle cx="35" cy="70" r="4" fill="#3a1500"></circle></g>
+      <path class="flame" d="M20 -6 L28 -22 L36 -6 Z" fill="#ffcf5a"></path>
+      <path class="flame" d="M4 4 L10 -10 L16 4 Z" fill="#ffcf5a" opacity=".8"></path>
+      <path class="flame" d="M54 4 L60 -10 L66 4 Z" fill="#ffcf5a" opacity=".8"></path>
+    </g><g class="float" transform="translate(260,330) scale(0.7)">
+      <circle class="glowpulse" cx="35" cy="60" r="70" fill="#e8f4ff" opacity=".4"></circle>
+      <g>
+      <ellipse cx="32" cy="94" rx="24" ry="7" fill="#000" opacity=".25"></ellipse>
+      <ellipse cx="32" cy="62" rx="22" ry="26" fill="#e8f4ff"></ellipse>
+      <circle cx="32" cy="34" r="16" fill="#e8f4ff"></circle>
+      <path d="M32 40 L42 45 L32 50 Z" fill="#ffcf5a"></path>
+      <circle cx="26" cy="32" r="4" fill="#fff"></circle><circle cx="38" cy="32" r="4" fill="#fff"></circle>
+      <circle cx="26" cy="33" r="2.2" fill="#123"></circle><circle cx="38" cy="33" r="2.2" fill="#123"></circle>
+      <path d="M10 60 Q-4 66 8 78 Q18 74 20 64 Z" fill="#bfe3ff"></path>
+      <path d="M54 60 Q68 66 56 78 Q46 74 44 64 Z" fill="#bfe3ff"></path></g>
+      <path class="flame" d="M20 -6 L28 -22 L36 -6 Z" fill="#e8f4ff"></path>
+      <path class="flame" d="M4 4 L10 -10 L16 4 Z" fill="#e8f4ff" opacity=".8"></path>
+      <path class="flame" d="M54 4 L60 -10 L66 4 Z" fill="#e8f4ff" opacity=".8"></path>
+    </g><path class="zap" d="M300 300 L520 250" stroke="#fff5d0" stroke-width="5" fill="none"></path><path class="zap" d="M520 280 L320 340" stroke="#a24bff" stroke-width="5" fill="none"></path></svg>
+    <svg class="scene" id="s4" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="d" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#3a2a6d"></stop><stop offset="100%" stop-color="#08040f"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#d)"></rect><g class="glowpulse" transform="translate(430,250)"><path class="glowpulse" d="M-90 0 q-14 -18 -28 -4 q-14 14 28 34 q42 -20 28 -34 q-14 -14 -28 4 Z" fill="#ffcf5a" style="animation-delay:0.0s"></path><path class="glowpulse" d="M-30 0 q-14 -18 -28 -4 q-14 14 28 34 q42 -20 28 -34 q-14 -14 -28 4 Z" fill="#8fd0ff" style="animation-delay:0.2s"></path><path class="glowpulse" d="M30 0 q-14 -18 -28 -4 q-14 14 28 34 q42 -20 28 -34 q-14 -14 -28 4 Z" fill="#a8e08a" style="animation-delay:0.4s"></path><path class="glowpulse" d="M90 0 q-14 -18 -28 -4 q-14 14 28 34 q42 -20 28 -34 q-14 -14 -28 4 Z" fill="#e8f4ff" style="animation-delay:0.6000000000000001s"></path></g><circle class="glowpulse" cx="430" cy="250" r="130" fill="#fff5d0" opacity=".4"></circle></svg>
+    <svg class="scene" id="s5" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="e" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#ffd36b"></stop><stop offset="100%" stop-color="#1a0a2d"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#e)"></rect><g class="fastspin" transform="translate(430,250)"><circle r="185" fill="none" stroke="#fff5d0" stroke-width="6" opacity=".5" stroke-dasharray="40 25"></circle></g><g class="spin" transform="translate(430,250)"><circle r="150" fill="none" stroke="#fff" stroke-width="2" opacity=".3"></circle><circle cx="0" cy="-150" r="40" fill="#ff6a2d"><animate attributeName="r" values="40;54;40" dur="1s" repeatCount="indefinite"></animate></circle><circle cx="150" cy="0" r="40" fill="#49c6ff"><animate attributeName="r" values="40;54;40" dur="1s" begin=".25s" repeatCount="indefinite"></animate></circle><circle cx="0" cy="150" r="40" fill="#7bd66a"><animate attributeName="r" values="40;54;40" dur="1s" begin=".5s" repeatCount="indefinite"></animate></circle><circle cx="-150" cy="0" r="40" fill="#d9f0ff"><animate attributeName="r" values="40;54;40" dur="1s" begin=".75s" repeatCount="indefinite"></animate></circle></g><circle class="boom" cx="430" cy="250" r="110" fill="#fff" opacity=".7"></circle><circle class="glowpulse" cx="430" cy="250" r="80" fill="#fff5d0" opacity=".8"></circle><text x="430" y="274" text-anchor="middle" font-size="66" font-weight="900" fill="#fff">R</text></svg>
+    <svg class="scene" id="s6" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="f" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#fff5d0"></stop><stop offset="100%" stop-color="#2a0a3d"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#f)"></rect><g class="crumble" transform="translate(280,20)"><g class="" transform="translate(0,0) scale(0.9)">
+      <path d="M150 20 C40 20 -10 200 25 400 C55 520 110 530 150 530 C190 530 245 520 275 400 C310 200 260 20 150 20 Z" fill="#0d0518"></path>
+      <path d="M70 120 Q45 40 90 62 M230 120 Q255 40 210 62" stroke="#0d0518" stroke-width="32" fill="none" stroke-linecap="round"></path><path d="M25 260 Q-60 300 -70 400" stroke="#0d0518" stroke-width="34" fill="none" stroke-linecap="round"></path>
+      <path d="M275 260 Q360 300 370 400" stroke="#0d0518" stroke-width="34" fill="none" stroke-linecap="round"></path><ellipse class="nyxeye" cx="108" cy="210" rx="24" ry="34" fill="#a24bff"></ellipse>
+      <ellipse class="nyxeye" cx="192" cy="210" rx="24" ry="34" fill="#a24bff" style="animation-delay:.4s"></ellipse>
+      <ellipse cx="108" cy="212" rx="9" ry="15" fill="#1a0033"></ellipse><ellipse cx="192" cy="212" rx="9" ry="15" fill="#1a0033"></ellipse>
+      <path d="M100 320 Q150 300 200 320" stroke="#a24bff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".7"></path>
+    </g></g><circle class="boom" cx="430" cy="250" r="150" fill="#fff" opacity=".7"></circle><circle class="boom" cx="430" cy="250" r="100" fill="#fff5d0" opacity=".8" style="animation-delay:.2s"></circle></svg>
+    <svg class="scene" id="s7" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="g" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#8fd8ff"></stop><stop offset="100%" stop-color="#3a6a9d"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#g)"></rect><circle cx="680" cy="120" r="55" fill="#fff8d8" opacity=".95"></circle><path d="M0 400 Q430 360 860 400 L860 538 L0 538 Z" fill="#4a8f3d"></path><g class="float" transform="translate(140,300) scale(0.8)">
+      <ellipse cx="35" cy="100" rx="32" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+      <path d="M35 80 C26 80 24 92 35 95 C46 92 44 80 35 80 Z" fill="#ffe0c2"></path>
+      <path d="M20 34 L8 8 L32 26 Z" fill="#ff6a2d"></path><path d="M50 34 L62 8 L38 26 Z" fill="#ff6a2d"></path>
+      <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+      <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+      <circle cx="35" cy="70" r="4" fill="#3a1500"></circle></g><g class="float" transform="translate(320,315) scale(0.8)">
+      <ellipse cx="35" cy="98" rx="30" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C15 30 10 58 22 84 C32 102 52 102 62 84 C74 58 58 30 35 30 Z" fill="#4aa3d6"></path>
+      <ellipse cx="35" cy="70" rx="15" ry="14" fill="#cfeaff"></ellipse>
+      <circle cx="20" cy="28" r="7" fill="#4aa3d6"></circle><circle cx="50" cy="28" r="7" fill="#4aa3d6"></circle>
+      <circle cx="27" cy="55" r="4.5" fill="#fff"></circle><circle cx="45" cy="55" r="4.5" fill="#fff"></circle>
+      <circle cx="28" cy="56" r="2.6" fill="#06263a"></circle><circle cx="44" cy="56" r="2.6" fill="#06263a"></circle></g><g class="float" transform="translate(500,320) scale(0.8)">
+      <ellipse cx="40" cy="82" rx="38" ry="10" fill="#000" opacity=".25"></ellipse>
+      <path d="M12 62 Q40 24 68 62 Q68 78 40 78 Q12 78 12 62 Z" fill="#6b8f3d"></path>
+      <path d="M26 50 L34 40 L42 50 L34 58 Z" fill="#3d5f1f"></path>
+      <path d="M0 60 Q-4 52 6 50 Q14 52 14 62 Z" fill="#9bbf6a"></path>
+      <circle cx="5" cy="56" r="2.4" fill="#1a2a0a"></circle></g><g class="float" transform="translate(660,300) scale(0.8)">
+      <ellipse cx="32" cy="94" rx="24" ry="7" fill="#000" opacity=".25"></ellipse>
+      <ellipse cx="32" cy="62" rx="22" ry="26" fill="#e8f4ff"></ellipse>
+      <circle cx="32" cy="34" r="16" fill="#e8f4ff"></circle>
+      <path d="M32 40 L42 45 L32 50 Z" fill="#ffcf5a"></path>
+      <circle cx="26" cy="32" r="4" fill="#fff"></circle><circle cx="38" cy="32" r="4" fill="#fff"></circle>
+      <circle cx="26" cy="33" r="2.2" fill="#123"></circle><circle cx="38" cy="33" r="2.2" fill="#123"></circle>
+      <path d="M10 60 Q-4 66 8 78 Q18 74 20 64 Z" fill="#bfe3ff"></path>
+      <path d="M54 60 Q68 66 56 78 Q46 74 44 64 Z" fill="#bfe3ff"></path></g></svg>
+    <svg class="scene" id="s8" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="h" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#ffd36b"></stop><stop offset="100%" stop-color="#7a3a8f"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#h)"></rect><g><circle class="star" cx="514" cy="135" r="1.7" style="animation-delay:1.4s"></circle>
+<circle class="star" cx="386" cy="168" r="2.1" style="animation-delay:0.7s"></circle>
+<circle class="star" cx="671" cy="50" r="1.7" style="animation-delay:1.9s"></circle>
+<circle class="star" cx="782" cy="148" r="1.7" style="animation-delay:0.2s"></circle></g><g class="spin" transform="translate(430,230)"><circle r="130" fill="none" stroke="#fff" stroke-width="2" opacity=".3"></circle><circle cx="0" cy="-130" r="26" fill="#ff6a2d"></circle><circle cx="130" cy="0" r="26" fill="#49c6ff"></circle><circle cx="0" cy="130" r="26" fill="#7bd66a"></circle><circle cx="-130" cy="0" r="26" fill="#d9f0ff"></circle></g><circle class="glowpulse" cx="430" cy="230" r="60" fill="#ffd36b" opacity=".6"></circle><text x="430" y="248" text-anchor="middle" font-size="50" font-weight="900" fill="#fff">R</text><text x="430" y="430" text-anchor="middle" font-size="30" font-weight="900" fill="#fff">LE CLAN DES 4 ÉLÉMENTS</text></svg>
+    <div id="sub"></div>
+  </div>
+  <div id="end">
+    <div class="fin">★ FIN DE LA SAISON 4 ★</div>
+    <h2>FIN DE L'ÉPISODE 5</h2>
+    <p id="endtext"></p>
+    <button class="again" onclick="location.reload()">🔁 Revoir l'épisode</button>
+  </div>
+</div>
+<script>
+const SCENES = [
+  { id:'s1', chap:"Chapitre 1 · Le duel final", dur:372, subs:[[8,"L'heure du combat final avait sonné."],[90,"Nyx, dans toute sa puissance, se dressait face au clan."],[200,"« Vos généraux vaincus, vos cœurs éveillés... rien n'y changera. »"],[300,"« Je suis les Ténèbres éternelles. Vous ne pouvez pas me vaincre ! »"]]},
+  { id:'s2', chap:"Chapitre 2 · Le clan uni", dur:374, subs:[[8,"Les quatre héros s'avancèrent, leurs cœurs brillant de mille feux."],[90,"« On a affronté tes généraux, tes épreuves, tes ténèbres... »"],[200,"« ...et on est toujours debout, ENSEMBLE ! », déclara Blaze."],[300,"« Aujourd'hui, on protège notre monde une bonne fois pour toutes ! »"]]},
+  { id:'s3', chap:"Chapitre 3 · Le choc des forces", dur:376, subs:[[8,"Lumière contre ténèbres : le combat fut titanesque."],[90,"Nyx frappait avec des vagues d'ombre, le clan ripostait en pleine lumière."],[200,"« Il est si fort... on ne tiendra pas longtemps ! », dit Onda."],[300,"« Alors donnons TOUT ! Il est temps... de la force ultime ! »"]]},
+  { id:'s4', chap:"Chapitre 4 · La Lumière des 4 Cœurs", dur:376, subs:[[8,"Les quatre héros unirent leurs cœurs éveillés en un seul."],[90,"💛 COURAGE ! 💙 UNITÉ ! 💚 SACRIFICE ! 🤍 ESPOIR !"],[200,"« LUMIÈRE DES 4 CŒURS... ÉVEIL ULTIME ! »"],[300,"Une lumière plus pure que mille soleils emplit le monde. ✨"]]},
+  { id:'s5', chap:"Chapitre 5 · Le combo ultime", dur:376, subs:[[8,"🔥 FEU ! 💧 EAU ! 🌍 TERRE ! 💨 AIR ! + LUMIÈRE DES 4 CŒURS !"],[110,"« COMBO ULTIME... POUR NOTRE MONDE ! »"],[210,"Un R de lumière absolue fusa droit vers les ténèbres de Nyx ! 💥"],[310,"La lumière et l'ombre s'affrontèrent dans un choc immense."]]},
+  { id:'s6', chap:"Chapitre 6 · La chute des Ténèbres", dur:374, subs:[[8,"La Lumière des 4 Cœurs transperça les ténèbres de Nyx."],[90,"« IMPOSSIBLE... la lumière... elle me... CONSUME ! »"],[200,"« Comment... de simples animaux... ont-ils pu... »"],[300,"Dans une explosion de lumière, Nyx fut détruit à jamais ! 💥"]]},
+  { id:'s7', chap:"Chapitre 7 · Le retour de la lumière", dur:374, subs:[[8,"Les ténèbres se dissipèrent. Le soleil revint enfin briller."],[90,"Le monde entier retrouva ses couleurs, sa chaleur, sa paix."],[200,"« On a réussi... Nyx est vaincu. Pour toujours. », souffla Blaze."],[300,"Le clan contempla le monde qu'ils avaient sauvé, émus."]]},
+  { id:'s8', chap:"Chapitre 8 · Le Clan des 4 Éléments", dur:378, subs:[[8,"Feu, Eau, Terre, Air... quatre amis, un seul cœur."],[90,"Le Clan des 4 Éléments avait sauvé le monde des ténèbres."],[200,"Leur légende serait racontée pour toujours, de génération en génération."],[300,"Et si un jour l'ombre revenait... ils seraient là. Ensemble. 🔥💧🌍💨"]]}
+];
+const MACHINE_PCT = 100;
+let si=0,t=0,subIdx=0,paused=false,timer=null;
+let totalDur=SCENES.reduce((a,s)=>a+s.dur,0),elapsedBefore=0;
+const $=id=>document.getElementById(id);
+function demarrer(){
+  $('intro').style.display='none';$('film').style.display='block';
+  si=0;t=0;subIdx=0;elapsedBefore=0;showScene();
+  setTimeout(()=>{$('mfill').style.width=MACHINE_PCT+'%';},400);
+  timer=setInterval(tic,100);
+}
+function showScene(){
+  document.querySelectorAll('.scene').forEach(e=>e.classList.remove('on'));
+  const sc=SCENES[si];$(sc.id).classList.add('on');$('chap').textContent=sc.chap;$('sub').textContent='';subIdx=0;
+}
+function tic(){
+  if(paused)return;t++;const sc=SCENES[si];
+  while(subIdx<sc.subs.length&&t>=sc.subs[subIdx][0]){$('sub').textContent=sc.subs[subIdx][1];subIdx++;}
+  const done=elapsedBefore+t;$('bar').style.width=Math.min(100,(done/totalDur)*100)+'%';
+  if(t>=sc.dur){elapsedBefore+=sc.dur;si++;t=0;if(si>=SCENES.length){finir();return;}showScene();}
+}
+function togglePause(){paused=!paused;$('pauseBtn').textContent=paused?'▶ Lecture':'⏸ Pause';}
+function finir(){
+  clearInterval(timer);$('film').style.display='none';
+  $('endtext').innerHTML="Le Clan des 4 Éléments a vaincu Nyx et sauvé le monde ! 🌟<br>Courage, unité, sacrifice, espoir : leur légende est éternelle.<br><b>★ FIN DE LA SÉRIE ★</b><br>Merci d'avoir suivi le Clan des 4 Éléments ! 🔥💧🌍💨";
+  $('end').classList.add('on');
+}
+</script>
+
+</body></html>
