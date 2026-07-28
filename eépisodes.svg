@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200">
+  <defs>
+    <!-- Ciel cosmique -->
+    <radialGradient id="cosmos" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#3a4a9d"/>
+      <stop offset="35%" stop-color="#2a2a6d"/>
+      <stop offset="70%" stop-color="#1a1240"/>
+      <stop offset="100%" stop-color="#08040f"/>
+    </radialGradient>
+    <radialGradient id="nebula" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7a5cff" stop-opacity=".55"/>
+      <stop offset="60%" stop-color="#c04a9d" stop-opacity=".22"/>
+      <stop offset="100%" stop-color="#c04a9d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity=".4"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="planetBig" cx="38%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#5ac0ff"/>
+      <stop offset="60%" stop-color="#2a5aad"/>
+      <stop offset="100%" stop-color="#1a2a6d"/>
+    </radialGradient>
+    <radialGradient id="cometGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7ac0ff" stop-opacity=".7"/>
+      <stop offset="100%" stop-color="#7ac0ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#aee0ff"/>
+      <stop offset="100%" stop-color="#5a8aff"/>
+    </linearGradient>
+    <linearGradient id="ship" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eaf2fa"/>
+      <stop offset="100%" stop-color="#a8c0d8"/>
+    </linearGradient>
+    <filter id="titleShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#000" flood-opacity=".7"/>
+    </filter>
+    <filter id="glowF" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+
+  <!-- FOND COSMIQUE -->
+  <rect width="800" height="1200" fill="url(#cosmos)"/>
+
+  <!-- Nébuleuses -->
+  <ellipse cx="250" cy="380" rx="320" ry="260" fill="url(#nebula)"/>
+  <ellipse cx="600" cy="260" rx="240" ry="200" fill="url(#nebula2)"/>
+
+  <!-- Étoiles -->
+  <g fill="#fff">
+    <circle cx="70" cy="90" r="2.2" opacity=".9"/>
+    <circle cx="160" cy="200" r="1.4" opacity=".6"/>
+    <circle cx="300" cy="120" r="2" opacity=".85"/>
+    <circle cx="440" cy="70" r="1.6" opacity=".7"/>
+    <circle cx="560" cy="150" r="2.4" opacity=".9"/>
+    <circle cx="680" cy="90" r="1.5" opacity=".6"/>
+    <circle cx="740" cy="220" r="2" opacity=".8"/>
+    <circle cx="120" cy="330" r="1.6" opacity=".6"/>
+    <circle cx="700" cy="380" r="2.2" opacity=".85"/>
+    <circle cx="60" cy="480" r="1.5" opacity=".5"/>
+    <circle cx="760" cy="520" r="1.8" opacity=".6"/>
+    <circle cx="380" cy="240" r="1.3" opacity=".5"/>
+    <circle cx="220" cy="90" r="1.5" opacity=".7"/>
+    <circle cx="500" cy="300" r="1.4" opacity=".5"/>
+    <circle cx="640" cy="460" r="1.6" opacity=".6"/>
+  </g>
+  <!-- étoiles scintillantes (croix) -->
+  <g stroke="#fff" stroke-width="1.5" opacity=".8">
+    <path d="M180 130 L180 150 M170 140 L190 140"/>
+    <path d="M620 340 L620 358 M611 349 L629 349"/>
+    <path d="M400 180 L400 196 M392 188 L408 188"/>
+  </g>
+
+  <!-- Grande planète (bas droite) -->
+  <circle cx="680" cy="760" r="200" fill="url(#planetBig)"/>
+  <ellipse cx="680" cy="760" rx="270" ry="60" fill="none" stroke="#8ab0e8" stroke-width="10" opacity=".45"/>
+  <ellipse cx="620" cy="700" rx="50" ry="60" fill="#fff" opacity=".12"/>
+
+  <!-- Petite planète (haut gauche) -->
+  <circle cx="130" cy="230" r="60" fill="#c0705a"/>
+  <ellipse cx="112" cy="212" rx="18" ry="22" fill="#fff" opacity=".15"/>
+  <circle cx="150" cy="250" r="10" fill="#8a4a3a" opacity=".6"/>
+
+  <!-- Halo du vaisseau -->
+  <circle cx="400" cy="470" r="200" fill="url(#cometGlow)" filter="url(#glowF)"/>
+
+  <!-- ===== LE COMÈTE (vaisseau héros, en vol dynamique) ===== -->
+  <g transform="translate(400,470) rotate(-12)">
+    <!-- traînée lumineuse -->
+    <path d="M-90 40 Q-260 55 -360 40" stroke="#5aa8ff" stroke-width="20" opacity=".25" stroke-linecap="round"/>
+    <path d="M-90 40 Q-220 50 -300 40" stroke="#aee0ff" stroke-width="10" opacity=".45" stroke-linecap="round"/>
+    <!-- corps -->
+    <ellipse cx="0" cy="30" rx="130" ry="46" fill="url(#ship)"/>
+    <!-- ailerons -->
+    <path d="M-40 -6 L-80 -50 L20 -6 Z" fill="#3a6ac0"/>
+    <path d="M-40 66 L-80 110 L20 66 Z" fill="#3a6ac0"/>
+    <!-- bande déco -->
+    <path d="M-120 30 Q0 12 120 30" stroke="#3a6ac0" stroke-width="6" fill="none" opacity=".7"/>
+    <!-- cockpit -->
+    <ellipse cx="66" cy="30" rx="44" ry="32" fill="#1a3a6a"/>
+    <ellipse cx="66" cy="26" rx="34" ry="22" fill="#7ac0ff" opacity=".9"/>
+    <ellipse cx="58" cy="20" rx="12" ry="8" fill="#fff" opacity=".6"/>
+    <!-- nez -->
+    <path d="M110 12 Q160 30 110 48 Z" fill="#eaf2fa"/>
+    <!-- réacteurs -->
+    <ellipse cx="-125" cy="18" rx="14" ry="12" fill="#ff8a4d"/>
+    <ellipse cx="-125" cy="18" rx="7" ry="7" fill="#fff0c0"/>
+    <ellipse cx="-125" cy="44" rx="14" ry="12" fill="#ff8a4d"/>
+    <ellipse cx="-125" cy="44" rx="7" ry="7" fill="#fff0c0"/>
+  </g>
+
+  <!-- ===== BIP (petit robot, à côté) ===== -->
+  <g transform="translate(250,610)">
+    <circle cx="0" cy="0" r="34" fill="#d8e0e8"/>
+    <ellipse cx="-10" cy="-12" rx="10" ry="12" fill="#fff" opacity=".4"/>
+    <circle cx="0" cy="-2" r="19" fill="#1a2a3a"/>
+    <circle cx="0" cy="-2" r="14" fill="#5aa8ff"/>
+    <circle cx="6" cy="-8" r="5" fill="#fff"/>
+    <line x1="-18" y1="-26" x2="-24" y2="-40" stroke="#8aa0b8" stroke-width="3"/><circle cx="-24" cy="-42" r="3.5" fill="#ff5a7a"/>
+    <line x1="18" y1="-26" x2="24" y2="-40" stroke="#8aa0b8" stroke-width="3"/><circle cx="24" cy="-42" r="3.5" fill="#5aff9a"/>
+    <path d="M-30 0 L-46 -10 L-46 10 Z" fill="#3a6ac0"/>
+    <path d="M30 0 L46 -10 L46 10 Z" fill="#3a6ac0"/>
+  </g>
+
+  <!-- Cristaux flottants -->
+  <g>
+    <path d="M560 560 L572 580 L560 620 L548 580 Z" fill="#5aff9a" opacity=".9"/>
+    <path d="M560 560 L572 580 L560 620 L548 580 Z" fill="#fff" opacity=".2"/>
+    <path d="M150 700 L158 714 L150 740 L142 714 Z" fill="#5aa8ff" opacity=".85"/>
+    <path d="M620 540 L626 550 L620 568 L614 550 Z" fill="#ffcf5a" opacity=".85"/>
+  </g>
+
+  <!-- ===== KRAAL (ombre menaçante, en haut) ===== -->
+  <g transform="translate(400,205)" opacity=".92">
+    <ellipse cx="0" cy="0" rx="120" ry="110" fill="#0d0818" opacity=".5" filter="url(#glowF)"/>
+    <!-- casque à cornes silhouette -->
+    <path d="M-70 20 Q0 -70 70 20 L58 46 Q0 20 -58 46 Z" fill="#160b24"/>
+    <path d="M-70 24 L-104 -20 L-40 14 Z" fill="#2a1440"/>
+    <path d="M70 24 L104 -20 L40 14 Z" fill="#2a1440"/>
+    <ellipse cx="0" cy="34" rx="52" ry="40" fill="#160b24"/>
+    <!-- œil rouge cybernétique -->
+    <ellipse cx="-18" cy="32" rx="9" ry="7" fill="#ff2d2d"/>
+    <circle cx="-18" cy="32" r="4" fill="#fff" opacity=".5"/>
+    <circle cx="20" cy="34" r="5" fill="#5a1a1a"/>
+    <path d="M-28 54 Q0 46 28 54" stroke="#ff2d2d" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>
+  </g>
+
+  <!-- ===== TEXTE ===== -->
+  <text x="400" y="960" text-anchor="middle" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="24" letter-spacing="10" fill="#aee0ff" opacity=".9">CINÉÈR PRÉSENTE</text>
+
+  <!-- TITRE -->
+  <text x="400" y="1058" text-anchor="middle" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-weight="bold" font-size="118" fill="url(#title)" filter="url(#titleShadow)" letter-spacing="6">NOVA</text>
+
+  <!-- sous-titre -->
+  <text x="400" y="1108" text-anchor="middle" font-family="'Trebuchet MS', sans-serif" font-size="30" letter-spacing="6" fill="#dce8ff" font-weight="bold">CHASSEUSE DES ÉTOILES</text>
+  <text x="400" y="1152" text-anchor="middle" font-family="'Trebuchet MS', sans-serif" font-size="21" letter-spacing="2" fill="#8ab0e8" font-style="italic">Une exploratrice. Un pirate. Toute une galaxie.</text>
+</svg>
