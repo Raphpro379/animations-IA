@@ -276,6 +276,7 @@
       <div class="pdg-note">Pour synchroniser sur tous les appareils : crée un compte gratuit sur <b>jsonbin.io</b>, copie ta <b>X-MASTER-KEY</b> et colle-la ci-dessous. R App créera sa propre base (séparée de CinéèR et R Radio).</div>
       <div class="field"><label>Clé de synchro (X-Master-Key)</label><input id="setApiKey" placeholder="$2a$10$..." autocomplete="off"></div>
       <div class="field"><label>Identifiant de base (auto)</label><input id="setBinId" placeholder="se remplit tout seul"><div class="hint">Se remplit après la première synchro.</div></div>
+      <button class="btn" onclick="alert('✅ Le bouton fonctionne ! Version FG v4 bien chargée.')" style="margin-bottom:10px;background:linear-gradient(135deg,#12b886,#0ea5e9)">🧪 Tester le bouton</button>
       <button class="btn" onclick="saveSettings()">💾 Enregistrer & Synchroniser</button>
       <div class="divider"></div>
       <button class="btn ghost" onclick="reloadCloud()">🔄 Recharger depuis le cloud</button>
@@ -308,6 +309,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
+<div id="verBadge" style="position:fixed;bottom:70px;right:8px;z-index:60;background:#12b886;color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.2);">FG v4 ✓</div>
 
 <script>
 /* ================= DONNÉES ================= */
@@ -358,8 +360,6 @@ function nav(page){
 /* ================= RENDU ================= */
 function renderAll(){
   $('barName').textContent=data.settings.name;
-  $('authAppName').textContent=data.settings.name;
-  $('authTagline').textContent=data.settings.tagline;
   $('heroTitle').textContent=me?("Bienvenue, "+me.name+" 👋"):"Bienvenue 👋";
   $('heroSub').textContent=data.settings.hero;
   renderApps();renderOffers();renderEvents();
