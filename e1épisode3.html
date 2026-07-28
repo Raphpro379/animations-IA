@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/RAPHAEL/Downloads/nova-episode3.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Clan des 4 Éléments · Saison 2 · Épisode 3</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#050208;font-family:'Trebuchet MS',sans-serif;overflow:hidden;color:#fff;}
+  #app{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
+  #intro{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 35%,#1a0a3d,#08040f 70%);text-align:center;padding:20px;}
+  #intro .kick{letter-spacing:6px;color:#b98aff;font-weight:bold;font-size:clamp(11px,3vw,15px);}
+  #intro .final{letter-spacing:4px;color:#ff5a5a;font-weight:900;font-size:clamp(13px,3.4vw,17px);margin-top:8px;}
+  #intro h1{font-size:clamp(28px,8vw,54px);font-weight:900;line-height:1;margin:10px 0;
+    background:linear-gradient(180deg,#fff,#d8caff,#8a6aff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #intro .ep{font-size:clamp(15px,4.4vw,22px);color:#eee;margin-top:6px;letter-spacing:2px;}
+  #intro .dur{color:#9ad;margin-top:6px;font-size:clamp(12px,3.2vw,15px);}
+  .playbtn{margin-top:28px;padding:14px 40px;border:none;border-radius:40px;cursor:pointer;
+    background:linear-gradient(135deg,#6a3ad6,#8a6aff);color:#fff;font-weight:900;font-size:clamp(15px,4vw,19px);
+    letter-spacing:2px;box-shadow:0 10px 30px rgba(120,60,220,.5);}
+  .playbtn:active{transform:scale(.96);}
+  #film{position:relative;width:min(100vw,860px);aspect-ratio:16/10;max-height:100vh;
+    border-radius:14px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+  svg.scene{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .8s;}
+  svg.scene.on{opacity:1;}
+  #sub{position:absolute;left:0;right:0;bottom:5%;text-align:center;z-index:20;padding:0 8%;
+    font-size:clamp(15px,3.6vw,24px);font-weight:bold;color:#fff;text-shadow:0 2px 10px #000,0 0 18px rgba(0,0,0,.9);
+    min-height:2em;transition:opacity .3s;}
+  #barwrap{position:absolute;left:0;right:0;top:0;height:5px;background:rgba(255,255,255,.12);z-index:25;}
+  #bar{height:100%;width:0;background:linear-gradient(90deg,#6a3ad6,#b98aff);transition:width .2s linear;}
+  #chap{position:absolute;top:12px;left:14px;z-index:25;font-size:clamp(11px,2.6vw,14px);
+    color:#b98aff;font-weight:bold;letter-spacing:1px;text-shadow:0 1px 6px #000;}
+  /* jauge machine de Blaze */
+  #machine{position:absolute;top:12px;right:12px;z-index:25;display:flex;align-items:center;gap:6px;
+    background:rgba(0,0,0,.5);border:1px solid rgba(255,200,80,.5);border-radius:20px;padding:4px 10px;font-size:11px;color:#ffe08a;font-weight:bold;}
+  #mgauge{width:60px;height:8px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden;}
+  #mfill{height:100%;width:0;background:linear-gradient(90deg,#ff6a2d,#ffd36b);transition:width 1s;}
+  #ctrl{position:absolute;bottom:10px;right:12px;z-index:25;display:flex;gap:8px;}
+  #ctrl button{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;
+    border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;}
+  #end{position:absolute;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 40%,#1a0a3d,#08040f 70%);text-align:center;padding:24px;}
+  #end.on{display:flex;}
+  #end .fin{letter-spacing:4px;color:#ff5a5a;font-weight:900;font-size:clamp(12px,3vw,15px);}
+  #end h2{font-size:clamp(24px,7vw,44px);font-weight:900;margin-top:8px;
+    background:linear-gradient(180deg,#fff,#d8caff,#8a6aff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #end p{color:#ddd;margin-top:14px;font-size:clamp(14px,3.6vw,19px);line-height:1.5;max-width:620px;}
+  #end .again{margin-top:26px;padding:12px 34px;border:none;border-radius:36px;cursor:pointer;
+    background:linear-gradient(135deg,#6a3ad6,#8a6aff);color:#fff;font-weight:900;font-size:16px;letter-spacing:1px;}
+  .star{fill:#fff;animation:tw 3s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:.95;}}
+  .float{transform-box:fill-box;transform-origin:center;animation:fl 3.4s ease-in-out infinite;}
+  @keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .float.d1{animation-delay:.4s;}.float.d2{animation-delay:.9s;}.float.d3{animation-delay:1.4s;}
+  .flame{transform-box:fill-box;transform-origin:bottom;animation:flk .5s ease-in-out infinite;}
+  @keyframes flk{0%,100%{transform:scaleY(1) scaleX(1);}50%{transform:scaleY(1.15) scaleX(.92);}}
+  .wave{animation:wv 4s ease-in-out infinite;}
+  @keyframes wv{0%,100%{transform:translateX(0);}50%{transform:translateX(-14px);}}
+  .nyxeye{transform-box:fill-box;transform-origin:center;animation:eye 2s ease-in-out infinite;}
+  @keyframes eye{0%,100%{opacity:.55;}50%{opacity:1;}}
+  .spin{transform-box:fill-box;transform-origin:center;animation:sp 8s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  .fastspin{transform-box:fill-box;transform-origin:center;animation:sp 3s linear infinite;}
+  .glowpulse{animation:gp 2.4s ease-in-out infinite;}
+  @keyframes gp{0%,100%{opacity:.4;}50%{opacity:.9;}}
+  .shake{transform-box:fill-box;transform-origin:center;animation:shk .3s ease-in-out infinite;}
+  @keyframes shk{0%,100%{transform:translate(0,0);}25%{transform:translate(-4px,2px);}75%{transform:translate(4px,-2px);}}
+  .bigshake{transform-box:fill-box;transform-origin:center;animation:bshk .2s ease-in-out infinite;}
+  @keyframes bshk{0%,100%{transform:translate(0,0);}25%{transform:translate(-7px,4px);}75%{transform:translate(7px,-4px);}}
+  .stomp{transform-box:fill-box;transform-origin:bottom center;animation:stmp 1.4s ease-in-out infinite;}
+  @keyframes stmp{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-8px) scale(1.02);}}
+  .boom{transform-box:fill-box;transform-origin:center;animation:boomp .8s ease-out infinite;}
+  @keyframes boomp{0%{transform:scale(.6);opacity:0;}30%{opacity:1;}100%{transform:scale(1.7);opacity:0;}}
+  .zap{stroke-dasharray:6 6;animation:zapmove .3s linear infinite;}
+  @keyframes zapmove{to{stroke-dashoffset:-24;}}
+  .crumble{transform-box:fill-box;transform-origin:center;animation:crmb 2s ease-in forwards;}
+  @keyframes crmb{0%{opacity:1;transform:scale(1) rotate(0);}100%{opacity:0;transform:scale(.4) rotate(30deg);}}
+  .fadein{animation:fadein 3s ease-in forwards;}
+  @keyframes fadein{from{opacity:0;}to{opacity:1;}}
+  .frost{animation:frostpulse 2.5s ease-in-out infinite;}
+  @keyframes frostpulse{0%,100%{opacity:.4;}50%{opacity:.9;}}
+  .snow{animation:snowfall linear infinite;}
+  @keyframes snowfall{from{transform:translateY(-20px);}to{transform:translateY(560px);}}
+  .buildpulse{transform-box:fill-box;transform-origin:center;animation:bp 1.5s ease-in-out infinite;}
+  @keyframes bp{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.08);}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="intro">
+    <div class="kick">CINÉÈR · SAISON 1</div>
+    
+    <h1>LE CLAN DES<br>4 ÉLÉMENTS</h1>
+    <div class="ep">Épisode 3 — « Le piège de la jungle »</div>
+    <div class="dur">⏱️ 5 minutes · 5 chapitres</div>
+    <button class="playbtn" onclick="demarrer()">▶ REGARDER</button>
+  </div>
+  <div id="film" style="display:none">
+    <div id="barwrap"><div id="bar"></div></div>
+    <div id="chap"></div>
+    <div id="machine">💎 Cristaux <div id="mgauge"><div id="mfill"></div></div></div>
+    <div id="ctrl"><button onclick="togglePause()" id="pauseBtn">⏸ Pause</button></div>
+    <svg class="scene" id="s1" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs>
+      <radialgradient id="cometsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+      <radialgradient id="bipsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+    </defs><defs><radialgradient id="a" cx="50%" cy="40%" r="90%"><stop offset="0%" stop-color="#1a4d2a"></stop><stop offset="100%" stop-color="#05030f"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#a)"></rect><g><circle class="star" cx="473" cy="486" r="1.7" style="animation-delay:1.7s"></circle><circle class="star" cx="204" cy="199" r="2.3" style="animation-delay:1.0s"></circle><circle class="star" cx="638" cy="200" r="1.2" style="animation-delay:0.6s"></circle><circle class="star" cx="102" cy="52" r="2.0" style="animation-delay:0.8s"></circle><circle class="star" cx="473" cy="171" r="2.0" style="animation-delay:1.7s"></circle><circle class="star" cx="74" cy="70" r="1.1" style="animation-delay:1.8s"></circle><circle class="star" cx="624" cy="40" r="2.2" style="animation-delay:0.7s"></circle><circle class="star" cx="615" cy="210" r="1.8" style="animation-delay:1.3s"></circle><circle class="star" cx="521" cy="14" r="2.1" style="animation-delay:0.9s"></circle><circle class="star" cx="294" cy="426" r="2.6" style="animation-delay:2.0s"></circle><circle class="star" cx="95" cy="270" r="1.5" style="animation-delay:0.5s"></circle><circle class="star" cx="305" cy="40" r="1.1" style="animation-delay:1.5s"></circle><circle class="star" cx="420" cy="120" r="2.4" style="animation-delay:0.8s"></circle><circle class="star" cx="27" cy="10" r="1.3" style="animation-delay:1.9s"></circle><circle class="star" cx="63" cy="491" r="1.6" style="animation-delay:1.4s"></circle><circle class="star" cx="439" cy="84" r="1.9" style="animation-delay:0.4s"></circle></g><defs><radialgradient id="pl680140" cx="38%" cy="35%" r="75%"><stop offset="0%" stop-color="#5ad87a"></stop><stop offset="100%" stop-color="#2a7d4a"></stop></radialgradient></defs>
+      <circle cx="680" cy="140" r="60" fill="url(#pl680140)"></circle>
+      <ellipse cx="662.0" cy="122.0" rx="18.0" ry="24.0" fill="#fff" opacity=".15"></ellipse><g class="float" transform="translate(280,250) scale(1)">
+      <!-- traînée -->
+      <path d="M-10 30 Q-80 30 -130 30" stroke="#5aa8ff" stroke-width="10" opacity=".3" stroke-linecap="round"></path>
+      <path d="M-10 30 Q-60 30 -95 30" stroke="#aee0ff" stroke-width="5" opacity=".5" stroke-linecap="round"></path>
+      <!-- corps -->
+      <ellipse cx="60" cy="30" rx="70" ry="26" fill="#c8d8e8"></ellipse>
+      <ellipse cx="60" cy="30" rx="70" ry="26" fill="url(#cometsh)" opacity=".4"></ellipse>
+      <!-- ailerons -->
+      <path d="M40 8 L20 -14 L60 8 Z" fill="#3a6ac0"></path>
+      <path d="M40 52 L20 74 L60 52 Z" fill="#3a6ac0"></path>
+      <!-- cockpit -->
+      <ellipse cx="92" cy="30" rx="24" ry="18" fill="#2a4a7a"></ellipse>
+      <ellipse cx="92" cy="28" rx="18" ry="12" fill="#7ac0ff" opacity=".85"></ellipse>
+      <!-- nez -->
+      <path d="M118 18 Q140 30 118 42 Z" fill="#eaf2fa"></path>
+      <!-- réacteur -->
+      <ellipse cx="-8" cy="30" rx="8" ry="14" fill="#ff8a4d"></ellipse>
+      <ellipse cx="-8" cy="30" rx="4" ry="8" fill="#fff0c0"></ellipse>
+    </g></svg>
+    <svg class="scene" id="s2" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs>
+      <radialgradient id="cometsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+      <radialgradient id="bipsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+    </defs><defs><radialgradient id="b" cx="50%" cy="40%" r="90%"><stop offset="0%" stop-color="#2a5d3a"></stop><stop offset="100%" stop-color="#05030f"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#b)"></rect><g><circle class="star" cx="495" cy="285" r="2.1" style="animation-delay:1.3s"></circle><circle class="star" cx="156" cy="400" r="1.0" style="animation-delay:0.7s"></circle><circle class="star" cx="290" cy="481" r="2.1" style="animation-delay:1.2s"></circle><circle class="star" cx="581" cy="11" r="2.1" style="animation-delay:0.3s"></circle><circle class="star" cx="460" cy="386" r="1.3" style="animation-delay:1.8s"></circle><circle class="star" cx="70" cy="214" r="1.1" style="animation-delay:1.4s"></circle><circle class="star" cx="355" cy="424" r="2.3" style="animation-delay:0.2s"></circle><circle class="star" cx="72" cy="238" r="1.1" style="animation-delay:2.0s"></circle><circle class="star" cx="464" cy="125" r="2.1" style="animation-delay:1.9s"></circle><circle class="star" cx="562" cy="330" r="2.4" style="animation-delay:1.1s"></circle><circle class="star" cx="723" cy="62" r="1.9" style="animation-delay:1.0s"></circle><circle class="star" cx="95" cy="420" r="2.0" style="animation-delay:1.3s"></circle></g><g class="shake" transform="translate(360,300) scale(0.9)">
+      <ellipse cx="40" cy="168" rx="34" ry="9" fill="#000" opacity=".3"></ellipse>
+      <!-- jambes combinaison -->
+      <rect x="24" y="112" width="14" height="52" rx="6" fill="#d8e4f0"></rect>
+      <rect x="42" y="112" width="14" height="52" rx="6" fill="#d8e4f0"></rect>
+      <rect x="24" y="150" width="14" height="16" rx="4" fill="#3a6ac0"></rect>
+      <rect x="42" y="150" width="14" height="16" rx="4" fill="#3a6ac0"></rect>
+      <!-- corps combinaison -->
+      <path d="M18 66 Q40 58 62 66 L58 116 Q40 122 22 116 Z" fill="#eef4fb"></path>
+      <!-- ceinture + badge -->
+      <rect x="20" y="100" width="40" height="10" rx="3" fill="#3a6ac0"></rect>
+      <circle cx="40" cy="88" r="9" fill="#5aa8ff"></circle><circle cx="40" cy="88" r="4" fill="#fff"></circle>
+      <!-- bras -->
+      <rect x="8" y="70" width="12" height="40" rx="6" fill="#eef4fb"></rect>
+      <rect x="60" y="70" width="12" height="40" rx="6" fill="#eef4fb"></rect>
+      <circle cx="14" cy="112" r="7" fill="#3a6ac0"></circle><circle cx="66" cy="112" r="7" fill="#3a6ac0"></circle>
+      <!-- tête + casque -->
+      <circle cx="40" cy="42" r="24" fill="#eef4fb"></circle>
+      <path d="M18 42 A22 22 0 0 1 62 42 Z" fill="#bcd4ec" opacity=".5"></path>
+      <!-- visage -->
+      <circle cx="40" cy="46" r="17" fill="#f5cfa0"></circle>
+      <!-- cheveux qui dépassent -->
+      <path d="M23 40 Q24 22 40 22 Q56 22 57 40 Q50 32 40 32 Q30 32 23 40 Z" fill="#7a4a2a"></path>
+      <circle cx="33" cy="46" r="3" fill="#2a1a10"></circle><circle cx="47" cy="46" r="3" fill="#2a1a10"></circle>
+      <path d="M35 55 Q40 59 45 55" stroke="#a05a3a" stroke-width="2" fill="none" stroke-linecap="round"></path>
+      <!-- antenne casque -->
+      <line x1="60" y1="30" x2="66" y2="18" stroke="#3a6ac0" stroke-width="2.5"></line>
+      <circle cx="66" cy="16" r="3" fill="#5aa8ff"></circle>
+    </g><path d="M250 200 Q430 280 610 200" stroke="#6a4a2a" stroke-width="5" fill="none"></path><g transform="translate(600,180)"><g class="float" transform="translate(0,0) scale(0.5)">
+      <ellipse cx="46" cy="180" rx="42" ry="11" fill="#000" opacity=".35"></ellipse>
+      <!-- jambes -->
+      <rect x="30" y="120" width="15" height="54" rx="5" fill="#1a1420"></rect>
+      <rect x="48" y="120" width="15" height="54" rx="5" fill="#1a1420"></rect>
+      <!-- cape/armure -->
+      <path d="M18 64 Q46 54 74 64 L84 130 Q46 142 8 130 Z" fill="#2a1a3a"></path>
+      <path d="M46 64 L46 130" stroke="#1a1028" stroke-width="2"></path>
+      <!-- épaulières -->
+      <ellipse cx="20" cy="70" rx="14" ry="10" fill="#4a2a5d"></ellipse>
+      <ellipse cx="72" cy="70" rx="14" ry="10" fill="#4a2a5d"></ellipse>
+      <!-- bras -->
+      <rect x="8" y="74" width="12" height="46" rx="5" fill="#2a1a3a"></rect>
+      <rect x="72" y="74" width="12" height="46" rx="5" fill="#2a1a3a"></rect>
+      <!-- ceinture -->
+      <rect x="16" y="112" width="60" height="9" fill="#6a3a1a"></rect>
+      <circle cx="46" cy="116" r="6" fill="#ffcf5a"></circle>
+      <!-- tête + casque à cornes -->
+      <circle cx="46" cy="42" r="21" fill="#8a7a6a"></circle>
+      <path d="M25 36 Q46 18 67 36 L70 44 L22 44 Z" fill="#1a1420"></path>
+      <path d="M25 38 L10 18 L32 34 Z" fill="#4a2a5d"></path><path d="M67 38 L82 18 L60 34 Z" fill="#4a2a5d"></path>
+      <!-- œil rouge cybernétique -->
+      <ellipse class="nyxeye" cx="38" cy="46" rx="6" ry="5" fill="#ff2d2d"></ellipse>
+      <circle cx="56" cy="46" r="4" fill="#3a2a2a"></circle>
+      <!-- cicatrice + rictus -->
+      <path d="M54 38 L60 52" stroke="#5a3a3a" stroke-width="2"></path>
+      <path d="M36 58 Q46 54 58 58" stroke="#3a2028" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+    </g></g></svg>
+    <svg class="scene" id="s3" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs>
+      <radialgradient id="cometsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+      <radialgradient id="bipsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+    </defs><defs><radialgradient id="c" cx="50%" cy="40%" r="90%"><stop offset="0%" stop-color="#1a4d2a"></stop><stop offset="100%" stop-color="#05030f"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#c)"></rect><g><circle class="star" cx="275" cy="307" r="2.1" style="animation-delay:1.4s"></circle><circle class="star" cx="200" cy="246" r="2.1" style="animation-delay:1.7s"></circle><circle class="star" cx="666" cy="201" r="1.2" style="animation-delay:1.1s"></circle><circle class="star" cx="229" cy="311" r="1.0" style="animation-delay:0.3s"></circle><circle class="star" cx="710" cy="24" r="2.6" style="animation-delay:1.7s"></circle><circle class="star" cx="96" cy="278" r="2.3" style="animation-delay:1.5s"></circle><circle class="star" cx="152" cy="272" r="1.6" style="animation-delay:0.5s"></circle><circle class="star" cx="783" cy="449" r="2.1" style="animation-delay:1.8s"></circle><circle class="star" cx="663" cy="331" r="2.0" style="animation-delay:0.7s"></circle><circle class="star" cx="618" cy="279" r="2.1" style="animation-delay:1.1s"></circle><circle class="star" cx="776" cy="148" r="1.7" style="animation-delay:1.5s"></circle><circle class="star" cx="558" cy="190" r="1.5" style="animation-delay:0.4s"></circle><circle class="star" cx="374" cy="269" r="1.6" style="animation-delay:0.5s"></circle><circle class="star" cx="296" cy="415" r="2.4" style="animation-delay:1.2s"></circle></g><g class="float" transform="translate(300,310) scale(0.85)">
+      <ellipse cx="40" cy="168" rx="34" ry="9" fill="#000" opacity=".3"></ellipse>
+      <!-- jambes combinaison -->
+      <rect x="24" y="112" width="14" height="52" rx="6" fill="#d8e4f0"></rect>
+      <rect x="42" y="112" width="14" height="52" rx="6" fill="#d8e4f0"></rect>
+      <rect x="24" y="150" width="14" height="16" rx="4" fill="#3a6ac0"></rect>
+      <rect x="42" y="150" width="14" height="16" rx="4" fill="#3a6ac0"></rect>
+      <!-- corps combinaison -->
+      <path d="M18 66 Q40 58 62 66 L58 116 Q40 122 22 116 Z" fill="#eef4fb"></path>
+      <!-- ceinture + badge -->
+      <rect x="20" y="100" width="40" height="10" rx="3" fill="#3a6ac0"></rect>
+      <circle cx="40" cy="88" r="9" fill="#5aa8ff"></circle><circle cx="40" cy="88" r="4" fill="#fff"></circle>
+      <!-- bras -->
+      <rect x="8" y="70" width="12" height="40" rx="6" fill="#eef4fb"></rect>
+      <rect x="60" y="70" width="12" height="40" rx="6" fill="#eef4fb"></rect>
+      <circle cx="14" cy="112" r="7" fill="#3a6ac0"></circle><circle cx="66" cy="112" r="7" fill="#3a6ac0"></circle>
+      <!-- tête + casque -->
+      <circle cx="40" cy="42" r="24" fill="#eef4fb"></circle>
+      <path d="M18 42 A22 22 0 0 1 62 42 Z" fill="#bcd4ec" opacity=".5"></path>
+      <!-- visage -->
+      <circle cx="40" cy="46" r="17" fill="#f5cfa0"></circle>
+      <!-- cheveux qui dépassent -->
+      <path d="M23 40 Q24 22 40 22 Q56 22 57 40 Q50 32 40 32 Q30 32 23 40 Z" fill="#7a4a2a"></path>
+      <circle cx="33" cy="46" r="3" fill="#2a1a10"></circle><circle cx="47" cy="46" r="3" fill="#2a1a10"></circle>
+      <path d="M35 55 Q40 59 45 55" stroke="#a05a3a" stroke-width="2" fill="none" stroke-linecap="round"></path>
+      <!-- antenne casque -->
+      <line x1="60" y1="30" x2="66" y2="18" stroke="#3a6ac0" stroke-width="2.5"></line>
+      <circle cx="66" cy="16" r="3" fill="#5aa8ff"></circle>
+    </g><g class="float" transform="translate(480,240) scale(1.2)">
+      <ellipse cx="30" cy="66" rx="22" ry="6" fill="#000" opacity=".25"></ellipse>
+      <circle cx="30" cy="34" r="26" fill="#d8e0e8"></circle>
+      <circle cx="30" cy="34" r="26" fill="url(#bipsh)" opacity=".4"></circle>
+      <!-- œil unique -->
+      <circle cx="30" cy="32" r="15" fill="#1a2a3a"></circle>
+      <circle cx="30" cy="32" r="11" fill="#5aa8ff"></circle>
+      <circle cx="34" cy="28" r="4" fill="#fff"></circle>
+      <!-- antennes -->
+      <line x1="16" y1="14" x2="10" y2="2" stroke="#8aa0b8" stroke-width="2.5"></line><circle cx="10" cy="0" r="2.5" fill="#ff5a7a"></circle>
+      <line x1="44" y1="14" x2="50" y2="2" stroke="#8aa0b8" stroke-width="2.5"></line><circle cx="50" cy="0" r="2.5" fill="#5aff9a"></circle>
+      <!-- petites ailettes latérales -->
+      <path d="M6 34 L-6 26 L-6 42 Z" fill="#3a6ac0"></path>
+      <path d="M54 34 L66 26 L66 42 Z" fill="#3a6ac0"></path>
+    </g><path class="zap" d="M480 260 L360 300" stroke="#5aff9a" stroke-width="3" fill="none"></path></svg>
+    <svg class="scene" id="s4" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs>
+      <radialgradient id="cometsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+      <radialgradient id="bipsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+    </defs><defs><radialgradient id="d" cx="50%" cy="40%" r="90%"><stop offset="0%" stop-color="#2a5d3a"></stop><stop offset="100%" stop-color="#05030f"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#d)"></rect><g><circle class="star" cx="119" cy="262" r="1.4" style="animation-delay:0.5s"></circle><circle class="star" cx="761" cy="84" r="2.1" style="animation-delay:0.6s"></circle><circle class="star" cx="710" cy="416" r="1.6" style="animation-delay:1.8s"></circle><circle class="star" cx="279" cy="238" r="2.4" style="animation-delay:0.6s"></circle><circle class="star" cx="837" cy="276" r="1.6" style="animation-delay:1.3s"></circle><circle class="star" cx="538" cy="163" r="1.3" style="animation-delay:1.3s"></circle><circle class="star" cx="291" cy="178" r="1.0" style="animation-delay:0.1s"></circle><circle class="star" cx="619" cy="355" r="1.0" style="animation-delay:0.5s"></circle><circle class="star" cx="401" cy="423" r="1.9" style="animation-delay:1.9s"></circle><circle class="star" cx="632" cy="106" r="2.4" style="animation-delay:1.4s"></circle></g><g class="shake" transform="translate(200,280) scale(0.8)">
+      <ellipse cx="46" cy="180" rx="42" ry="11" fill="#000" opacity=".35"></ellipse>
+      <!-- jambes -->
+      <rect x="30" y="120" width="15" height="54" rx="5" fill="#1a1420"></rect>
+      <rect x="48" y="120" width="15" height="54" rx="5" fill="#1a1420"></rect>
+      <!-- cape/armure -->
+      <path d="M18 64 Q46 54 74 64 L84 130 Q46 142 8 130 Z" fill="#2a1a3a"></path>
+      <path d="M46 64 L46 130" stroke="#1a1028" stroke-width="2"></path>
+      <!-- épaulières -->
+      <ellipse cx="20" cy="70" rx="14" ry="10" fill="#4a2a5d"></ellipse>
+      <ellipse cx="72" cy="70" rx="14" ry="10" fill="#4a2a5d"></ellipse>
+      <!-- bras -->
+      <rect x="8" y="74" width="12" height="46" rx="5" fill="#2a1a3a"></rect>
+      <rect x="72" y="74" width="12" height="46" rx="5" fill="#2a1a3a"></rect>
+      <!-- ceinture -->
+      <rect x="16" y="112" width="60" height="9" fill="#6a3a1a"></rect>
+      <circle cx="46" cy="116" r="6" fill="#ffcf5a"></circle>
+      <!-- tête + casque à cornes -->
+      <circle cx="46" cy="42" r="21" fill="#8a7a6a"></circle>
+      <path d="M25 36 Q46 18 67 36 L70 44 L22 44 Z" fill="#1a1420"></path>
+      <path d="M25 38 L10 18 L32 34 Z" fill="#4a2a5d"></path><path d="M67 38 L82 18 L60 34 Z" fill="#4a2a5d"></path>
+      <!-- œil rouge cybernétique -->
+      <ellipse class="nyxeye" cx="38" cy="46" rx="6" ry="5" fill="#ff2d2d"></ellipse>
+      <circle cx="56" cy="46" r="4" fill="#3a2a2a"></circle>
+      <!-- cicatrice + rictus -->
+      <path d="M54 38 L60 52" stroke="#5a3a3a" stroke-width="2"></path>
+      <path d="M36 58 Q46 54 58 58" stroke="#3a2028" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+    </g><g class="shake" transform="translate(500,300) scale(0.8)">
+      <ellipse cx="40" cy="168" rx="34" ry="9" fill="#000" opacity=".3"></ellipse>
+      <!-- jambes combinaison -->
+      <rect x="24" y="112" width="14" height="52" rx="6" fill="#d8e4f0"></rect>
+      <rect x="42" y="112" width="14" height="52" rx="6" fill="#d8e4f0"></rect>
+      <rect x="24" y="150" width="14" height="16" rx="4" fill="#3a6ac0"></rect>
+      <rect x="42" y="150" width="14" height="16" rx="4" fill="#3a6ac0"></rect>
+      <!-- corps combinaison -->
+      <path d="M18 66 Q40 58 62 66 L58 116 Q40 122 22 116 Z" fill="#eef4fb"></path>
+      <!-- ceinture + badge -->
+      <rect x="20" y="100" width="40" height="10" rx="3" fill="#3a6ac0"></rect>
+      <circle cx="40" cy="88" r="9" fill="#5aa8ff"></circle><circle cx="40" cy="88" r="4" fill="#fff"></circle>
+      <!-- bras -->
+      <rect x="8" y="70" width="12" height="40" rx="6" fill="#eef4fb"></rect>
+      <rect x="60" y="70" width="12" height="40" rx="6" fill="#eef4fb"></rect>
+      <circle cx="14" cy="112" r="7" fill="#3a6ac0"></circle><circle cx="66" cy="112" r="7" fill="#3a6ac0"></circle>
+      <!-- tête + casque -->
+      <circle cx="40" cy="42" r="24" fill="#eef4fb"></circle>
+      <path d="M18 42 A22 22 0 0 1 62 42 Z" fill="#bcd4ec" opacity=".5"></path>
+      <!-- visage -->
+      <circle cx="40" cy="46" r="17" fill="#f5cfa0"></circle>
+      <!-- cheveux qui dépassent -->
+      <path d="M23 40 Q24 22 40 22 Q56 22 57 40 Q50 32 40 32 Q30 32 23 40 Z" fill="#7a4a2a"></path>
+      <circle cx="33" cy="46" r="3" fill="#2a1a10"></circle><circle cx="47" cy="46" r="3" fill="#2a1a10"></circle>
+      <path d="M35 55 Q40 59 45 55" stroke="#a05a3a" stroke-width="2" fill="none" stroke-linecap="round"></path>
+      <!-- antenne casque -->
+      <line x1="60" y1="30" x2="66" y2="18" stroke="#3a6ac0" stroke-width="2.5"></line>
+      <circle cx="66" cy="16" r="3" fill="#5aa8ff"></circle>
+    </g><g fill="#1a3a1a" opacity=".5"><rect x="60" y="200" width="18" height="200"></rect><rect x="760" y="180" width="18" height="220"></rect></g></svg>
+    <svg class="scene" id="s5" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs>
+      <radialgradient id="cometsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+      <radialgradient id="bipsh" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity=".7"></stop><stop offset="100%" stop-color="#fff" stop-opacity="0"></stop></radialgradient>
+    </defs><defs><radialgradient id="e" cx="50%" cy="40%" r="90%"><stop offset="0%" stop-color="#1a2a5d"></stop><stop offset="100%" stop-color="#05030f"></stop></radialgradient></defs>
+      <rect width="860" height="538" fill="url(#e)"></rect><g><circle class="star" cx="223" cy="21" r="1.8" style="animation-delay:0.1s"></circle><circle class="star" cx="254" cy="27" r="1.1" style="animation-delay:1.6s"></circle><circle class="star" cx="160" cy="386" r="1.4" style="animation-delay:0.7s"></circle><circle class="star" cx="735" cy="374" r="1.4" style="animation-delay:0.5s"></circle><circle class="star" cx="244" cy="221" r="2.4" style="animation-delay:1.6s"></circle><circle class="star" cx="238" cy="322" r="2.5" style="animation-delay:1.0s"></circle><circle class="star" cx="246" cy="476" r="2.3" style="animation-delay:1.0s"></circle><circle class="star" cx="482" cy="378" r="1.7" style="animation-delay:0.6s"></circle><circle class="star" cx="720" cy="471" r="1.6" style="animation-delay:1.7s"></circle><circle class="star" cx="77" cy="512" r="2.5" style="animation-delay:1.7s"></circle><circle class="star" cx="210" cy="153" r="1.9" style="animation-delay:1.2s"></circle><circle class="star" cx="813" cy="27" r="1.5" style="animation-delay:1.0s"></circle><circle class="star" cx="112" cy="129" r="1.6" style="animation-delay:0.1s"></circle><circle class="star" cx="752" cy="312" r="1.6" style="animation-delay:1.0s"></circle><circle class="star" cx="193" cy="522" r="1.6" style="animation-delay:0.5s"></circle><circle class="star" cx="328" cy="178" r="2.3" style="animation-delay:0.6s"></circle><circle class="star" cx="497" cy="354" r="2.4" style="animation-delay:1.6s"></circle><circle class="star" cx="785" cy="288" r="1.8" style="animation-delay:0.2s"></circle></g><g class="float" transform="translate(280,310) scale(0.85)">
+      <ellipse cx="40" cy="168" rx="34" ry="9" fill="#000" opacity=".3"></ellipse>
+      <!-- jambes combinaison -->
+      <rect x="24" y="112" width="14" height="52" rx="6" fill="#d8e4f0"></rect>
+      <rect x="42" y="112" width="14" height="52" rx="6" fill="#d8e4f0"></rect>
+      <rect x="24" y="150" width="14" height="16" rx="4" fill="#3a6ac0"></rect>
+      <rect x="42" y="150" width="14" height="16" rx="4" fill="#3a6ac0"></rect>
+      <!-- corps combinaison -->
+      <path d="M18 66 Q40 58 62 66 L58 116 Q40 122 22 116 Z" fill="#eef4fb"></path>
+      <!-- ceinture + badge -->
+      <rect x="20" y="100" width="40" height="10" rx="3" fill="#3a6ac0"></rect>
+      <circle cx="40" cy="88" r="9" fill="#5aa8ff"></circle><circle cx="40" cy="88" r="4" fill="#fff"></circle>
+      <!-- bras -->
+      <rect x="8" y="70" width="12" height="40" rx="6" fill="#eef4fb"></rect>
+      <rect x="60" y="70" width="12" height="40" rx="6" fill="#eef4fb"></rect>
+      <circle cx="14" cy="112" r="7" fill="#3a6ac0"></circle><circle cx="66" cy="112" r="7" fill="#3a6ac0"></circle>
+      <!-- tête + casque -->
+      <circle cx="40" cy="42" r="24" fill="#eef4fb"></circle>
+      <path d="M18 42 A22 22 0 0 1 62 42 Z" fill="#bcd4ec" opacity=".5"></path>
+      <!-- visage -->
+      <circle cx="40" cy="46" r="17" fill="#f5cfa0"></circle>
+      <!-- cheveux qui dépassent -->
+      <path d="M23 40 Q24 22 40 22 Q56 22 57 40 Q50 32 40 32 Q30 32 23 40 Z" fill="#7a4a2a"></path>
+      <circle cx="33" cy="46" r="3" fill="#2a1a10"></circle><circle cx="47" cy="46" r="3" fill="#2a1a10"></circle>
+      <path d="M35 55 Q40 59 45 55" stroke="#a05a3a" stroke-width="2" fill="none" stroke-linecap="round"></path>
+      <!-- antenne casque -->
+      <line x1="60" y1="30" x2="66" y2="18" stroke="#3a6ac0" stroke-width="2.5"></line>
+      <circle cx="66" cy="16" r="3" fill="#5aa8ff"></circle>
+    </g><g transform="translate(560,150)"><g class="float" transform="translate(0,0) scale(0.7)">
+      <!-- traînée -->
+      <path d="M-10 30 Q-80 30 -130 30" stroke="#5aa8ff" stroke-width="10" opacity=".3" stroke-linecap="round"></path>
+      <path d="M-10 30 Q-60 30 -95 30" stroke="#aee0ff" stroke-width="5" opacity=".5" stroke-linecap="round"></path>
+      <!-- corps -->
+      <ellipse cx="60" cy="30" rx="70" ry="26" fill="#c8d8e8"></ellipse>
+      <ellipse cx="60" cy="30" rx="70" ry="26" fill="url(#cometsh)" opacity=".4"></ellipse>
+      <!-- ailerons -->
+      <path d="M40 8 L20 -14 L60 8 Z" fill="#3a6ac0"></path>
+      <path d="M40 52 L20 74 L60 52 Z" fill="#3a6ac0"></path>
+      <!-- cockpit -->
+      <ellipse cx="92" cy="30" rx="24" ry="18" fill="#2a4a7a"></ellipse>
+      <ellipse cx="92" cy="28" rx="18" ry="12" fill="#7ac0ff" opacity=".85"></ellipse>
+      <!-- nez -->
+      <path d="M118 18 Q140 30 118 42 Z" fill="#eaf2fa"></path>
+      <!-- réacteur -->
+      <ellipse cx="-8" cy="30" rx="8" ry="14" fill="#ff8a4d"></ellipse>
+      <ellipse cx="-8" cy="30" rx="4" ry="8" fill="#fff0c0"></ellipse>
+    </g></g><circle class="glowpulse" cx="320" cy="330" r="40" fill="#5aff9a" opacity=".4"></circle></svg>
+    <div id="sub"></div>
+  </div>
+  <div id="end">
+    
+    <h2>FIN DE L'ÉPISODE 3</h2>
+    <p id="endtext"></p>
+    <button class="again" onclick="location.reload()">🔁 Revoir l'épisode</button>
+  </div>
+</div>
+<script>
+const SCENES = [
+  { id:'s1', chap:"Chapitre 1 · La planète-jungle", dur:590, subs:[[8,"La piste mena Nova sur Verda, une planète-jungle luxuriante."],[100,"« Kraal veut piller les cristaux-plantes d'ici. Pas question ! »"],[220,"« Attention Nova, mes capteurs détectent... un piège ! », bipa BIP."],[340,"Mais l'avertissement arriva une seconde trop tard."]]},
+  { id:'s2', chap:"Chapitre 2 · Le piège", dur:600, subs:[[8,"Un filet de lianes jaillit du sol et emprisonna Nova !"],[110,"« Ha ha ! Tu es tombée dans mon piège, petite exploratrice ! »"],[230,"Kraal ricanait, observant depuis les hauteurs de la jungle."],[340,"« Reste donc là pendant que je pille cette planète ! »"]]},
+  { id:'s3', chap:"Chapitre 3 · BIP à la rescousse", dur:600, subs:[[8,"« BIP ! Vite, coupe ces lianes ! », cria Nova."],[100,"Le petit robot fonça et trancha le filet avec son laser."],[220,"« Sauvetage réussi ! Un point pour BIP ! », claironna le robot."],[340,"« Merci mon ami ! Maintenant, rattrapons ce pirate ! »"]]},
+  { id:'s4', chap:"Chapitre 4 · Course dans la jungle", dur:610, subs:[[8,"Nova poursuivit Kraal à travers les arbres géants de Verda."],[110,"« Tu es plus coriace que je pensais ! », grogna le pirate."],[230,"« Et je ne fais que commencer, Kraal ! », répondit Nova."],[340,"Elle gagnait du terrain grâce au Comète amélioré."]]},
+  { id:'s5', chap:"Chapitre 5 · Le deuxième cristal", dur:600, subs:[[8,"Encore une fois, Kraal s'échappa de justesse dans son vaisseau."],[100,"Mais Nova récupéra un deuxième cristal d'énergie tombé au sol."],[200,"« Deux cristaux ! Le Comète est de plus en plus puissant ! »"],[300,"« La prochaine fois, tu ne t'échapperas pas, Kraal. »"],[420,"« On approche du but, BIP. Je le sens. » 💎💎"]]}
+];
+const MACHINE_PCT = 60;
+let si=0,t=0,subIdx=0,paused=false,timer=null;
+let totalDur=SCENES.reduce((a,s)=>a+s.dur,0),elapsedBefore=0;
+const $=id=>document.getElementById(id);
+function demarrer(){
+  $('intro').style.display='none';$('film').style.display='block';
+  si=0;t=0;subIdx=0;elapsedBefore=0;showScene();
+  setTimeout(()=>{$('mfill').style.width=MACHINE_PCT+'%';},400);
+  timer=setInterval(tic,100);
+}
+function showScene(){
+  document.querySelectorAll('.scene').forEach(e=>e.classList.remove('on'));
+  const sc=SCENES[si];$(sc.id).classList.add('on');$('chap').textContent=sc.chap;$('sub').textContent='';subIdx=0;
+}
+function tic(){
+  if(paused)return;t++;const sc=SCENES[si];
+  while(subIdx<sc.subs.length&&t>=sc.subs[subIdx][0]){$('sub').textContent=sc.subs[subIdx][1];subIdx++;}
+  const done=elapsedBefore+t;$('bar').style.width=Math.min(100,(done/totalDur)*100)+'%';
+  if(t>=sc.dur){elapsedBefore+=sc.dur;si++;t=0;if(si>=SCENES.length){finir();return;}showScene();}
+}
+function togglePause(){paused=!paused;$('pauseBtn').textContent=paused?'▶ Lecture':'⏸ Pause';}
+function finir(){
+  clearInterval(timer);$('film').style.display='none';
+  $('endtext').innerHTML="Nova a échappé au piège et récupéré un deuxième cristal !<br>Le Comète est presque assez rapide pour rattraper Kraal...<br>Rendez-vous à l'épisode 4 ! 🚀💎";
+  $('end').classList.add('on');
+}
+</script>
+
+</body></html>
