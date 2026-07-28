@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/RAPHAEL/Downloads/clan-s2-episode4.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Clan des 4 Éléments · Saison 2 · Épisode 4</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#050208;font-family:'Trebuchet MS',sans-serif;overflow:hidden;color:#fff;}
+  #app{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
+  #intro{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 35%,#123a5a,#050a16 70%);text-align:center;padding:20px;}
+  #intro .kick{letter-spacing:6px;color:#8fd8ff;font-weight:bold;font-size:clamp(11px,3vw,15px);}
+  #intro .final{letter-spacing:4px;color:#ff5a5a;font-weight:900;font-size:clamp(13px,3.4vw,17px);margin-top:8px;}
+  #intro h1{font-size:clamp(28px,8vw,54px);font-weight:900;line-height:1;margin:10px 0;
+    background:linear-gradient(180deg,#fff,#c8e8ff,#6ab8ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #intro .ep{font-size:clamp(15px,4.4vw,22px);color:#eee;margin-top:6px;letter-spacing:2px;}
+  #intro .dur{color:#9ad;margin-top:6px;font-size:clamp(12px,3.2vw,15px);}
+  .playbtn{margin-top:28px;padding:14px 40px;border:none;border-radius:40px;cursor:pointer;
+    background:linear-gradient(135deg,#3a9fd6,#6ad8ff);color:#fff;font-weight:900;font-size:clamp(15px,4vw,19px);
+    letter-spacing:2px;box-shadow:0 10px 30px rgba(60,160,220,.4);}
+  .playbtn:active{transform:scale(.96);}
+  #film{position:relative;width:min(100vw,860px);aspect-ratio:16/10;max-height:100vh;
+    border-radius:14px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+  svg.scene{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .8s;}
+  svg.scene.on{opacity:1;}
+  #sub{position:absolute;left:0;right:0;bottom:5%;text-align:center;z-index:20;padding:0 8%;
+    font-size:clamp(15px,3.6vw,24px);font-weight:bold;color:#fff;text-shadow:0 2px 10px #000,0 0 18px rgba(0,0,0,.9);
+    min-height:2em;transition:opacity .3s;}
+  #barwrap{position:absolute;left:0;right:0;top:0;height:5px;background:rgba(255,255,255,.12);z-index:25;}
+  #bar{height:100%;width:0;background:linear-gradient(90deg,#3a9fd6,#8fd8ff);transition:width .2s linear;}
+  #chap{position:absolute;top:12px;left:14px;z-index:25;font-size:clamp(11px,2.6vw,14px);
+    color:#8fd8ff;font-weight:bold;letter-spacing:1px;text-shadow:0 1px 6px #000;}
+  /* jauge machine de Blaze */
+  #machine{position:absolute;top:12px;right:12px;z-index:25;display:flex;align-items:center;gap:6px;
+    background:rgba(0,0,0,.5);border:1px solid rgba(255,140,60,.4);border-radius:20px;padding:4px 10px;font-size:11px;color:#ffb37a;font-weight:bold;}
+  #mgauge{width:60px;height:8px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden;}
+  #mfill{height:100%;width:0;background:linear-gradient(90deg,#ff6a2d,#ffd36b);transition:width 1s;}
+  #ctrl{position:absolute;bottom:10px;right:12px;z-index:25;display:flex;gap:8px;}
+  #ctrl button{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;
+    border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;}
+  #end{position:absolute;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 40%,#123a5a,#050a16 70%);text-align:center;padding:24px;}
+  #end.on{display:flex;}
+  #end .fin{letter-spacing:4px;color:#ff5a5a;font-weight:900;font-size:clamp(12px,3vw,15px);}
+  #end h2{font-size:clamp(24px,7vw,44px);font-weight:900;margin-top:8px;
+    background:linear-gradient(180deg,#fff,#c8e8ff,#6ab8ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #end p{color:#ddd;margin-top:14px;font-size:clamp(14px,3.6vw,19px);line-height:1.5;max-width:620px;}
+  #end .again{margin-top:26px;padding:12px 34px;border:none;border-radius:36px;cursor:pointer;
+    background:linear-gradient(135deg,#3a9fd6,#6ad8ff);color:#fff;font-weight:900;font-size:16px;letter-spacing:1px;}
+  .star{fill:#fff;animation:tw 3s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.25;}50%{opacity:.95;}}
+  .float{transform-box:fill-box;transform-origin:center;animation:fl 3.4s ease-in-out infinite;}
+  @keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .float.d1{animation-delay:.4s;}.float.d2{animation-delay:.9s;}.float.d3{animation-delay:1.4s;}
+  .flame{transform-box:fill-box;transform-origin:bottom;animation:flk .5s ease-in-out infinite;}
+  @keyframes flk{0%,100%{transform:scaleY(1) scaleX(1);}50%{transform:scaleY(1.15) scaleX(.92);}}
+  .wave{animation:wv 4s ease-in-out infinite;}
+  @keyframes wv{0%,100%{transform:translateX(0);}50%{transform:translateX(-14px);}}
+  .nyxeye{transform-box:fill-box;transform-origin:center;animation:eye 2s ease-in-out infinite;}
+  @keyframes eye{0%,100%{opacity:.55;}50%{opacity:1;}}
+  .spin{transform-box:fill-box;transform-origin:center;animation:sp 8s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  .fastspin{transform-box:fill-box;transform-origin:center;animation:sp 3s linear infinite;}
+  .glowpulse{animation:gp 2.4s ease-in-out infinite;}
+  @keyframes gp{0%,100%{opacity:.4;}50%{opacity:.9;}}
+  .shake{transform-box:fill-box;transform-origin:center;animation:shk .3s ease-in-out infinite;}
+  @keyframes shk{0%,100%{transform:translate(0,0);}25%{transform:translate(-4px,2px);}75%{transform:translate(4px,-2px);}}
+  .bigshake{transform-box:fill-box;transform-origin:center;animation:bshk .2s ease-in-out infinite;}
+  @keyframes bshk{0%,100%{transform:translate(0,0);}25%{transform:translate(-7px,4px);}75%{transform:translate(7px,-4px);}}
+  .stomp{transform-box:fill-box;transform-origin:bottom center;animation:stmp 1.4s ease-in-out infinite;}
+  @keyframes stmp{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-8px) scale(1.02);}}
+  .boom{transform-box:fill-box;transform-origin:center;animation:boomp .8s ease-out infinite;}
+  @keyframes boomp{0%{transform:scale(.6);opacity:0;}30%{opacity:1;}100%{transform:scale(1.7);opacity:0;}}
+  .zap{stroke-dasharray:6 6;animation:zapmove .3s linear infinite;}
+  @keyframes zapmove{to{stroke-dashoffset:-24;}}
+  .crumble{transform-box:fill-box;transform-origin:center;animation:crmb 2s ease-in forwards;}
+  @keyframes crmb{0%{opacity:1;transform:scale(1) rotate(0);}100%{opacity:0;transform:scale(.4) rotate(30deg);}}
+  .fadein{animation:fadein 3s ease-in forwards;}
+  @keyframes fadein{from{opacity:0;}to{opacity:1;}}
+  .frost{animation:frostpulse 2.5s ease-in-out infinite;}
+  @keyframes frostpulse{0%,100%{opacity:.4;}50%{opacity:.9;}}
+  .snow{animation:snowfall linear infinite;}
+  @keyframes snowfall{from{transform:translateY(-20px);}to{transform:translateY(560px);}}
+  .buildpulse{transform-box:fill-box;transform-origin:center;animation:bp 1.5s ease-in-out infinite;}
+  @keyframes bp{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.08);}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="intro">
+    <div class="kick">CINÉÈR · SAISON 2</div>
+    
+    <h1>LE CLAN DES<br>4 ÉLÉMENTS</h1>
+    <div class="ep">Épisode 4 — « Le grand gel »</div>
+    <div class="dur">⏱️ 5 minutes · 5 chapitres</div>
+    <button class="playbtn" onclick="demarrer()">▶ REGARDER</button>
+  </div>
+  <div id="film" style="display:none">
+    <div id="barwrap"><div id="bar"></div></div>
+    <div id="chap"></div>
+    <div id="machine">🔧 Machine <div id="mgauge"><div id="mfill"></div></div></div>
+    <div id="ctrl"><button onclick="togglePause()" id="pauseBtn">⏸ Pause</button></div>
+    <svg class="scene" id="s1" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="b1" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#7ab5e0"></stop><stop offset="100%" stop-color="#2a4a6d"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#b1)"></rect><g class="buildpulse" transform="translate(320,230)">
+      <rect x="0" y="60" width="120" height="60" rx="8" fill="#5a4a3a"></rect>
+      <rect x="10" y="70" width="100" height="40" rx="4" fill="#3a2f22"></rect><circle class="buildpulse" cx="60" cy="90" r="18" fill="#ff8a4d"></circle><rect x="110" y="80" width="50" height="20" rx="6" fill="#7a6a5a"></rect><ellipse cx="162" cy="90" rx="8" ry="12" fill="#ffb37a"></ellipse><rect x="20" y="30" width="80" height="30" rx="6" fill="#6a5a4a"></rect><circle cx="40" cy="45" r="6" fill="#ffd36b"></circle><circle cx="60" cy="45" r="6" fill="#ff6a2d"></circle><circle cx="80" cy="45" r="6" fill="#ffb37a"></circle></g><g class="float" transform="translate(180,290) scale(0.8)">
+      <ellipse cx="35" cy="100" rx="32" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+      <path d="M35 80 C26 80 24 92 35 95 C46 92 44 80 35 80 Z" fill="#ffe0c2"></path>
+      <path d="M20 34 L8 8 L32 26 Z" fill="#ff6a2d"></path><path d="M50 34 L62 8 L38 26 Z" fill="#ff6a2d"></path>
+      <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+      <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+      <circle cx="35" cy="70" r="4" fill="#3a1500"></circle></g><g class="float" transform="translate(600,310) scale(0.7)">
+      <ellipse cx="35" cy="98" rx="30" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C15 30 10 58 22 84 C32 102 52 102 62 84 C74 58 58 30 35 30 Z" fill="#4aa3d6"></path>
+      <ellipse cx="35" cy="70" rx="15" ry="14" fill="#cfeaff"></ellipse>
+      <circle cx="20" cy="28" r="7" fill="#4aa3d6"></circle><circle cx="50" cy="28" r="7" fill="#4aa3d6"></circle>
+      <circle cx="27" cy="55" r="4.5" fill="#fff"></circle><circle cx="45" cy="55" r="4.5" fill="#fff"></circle>
+      <circle cx="28" cy="56" r="2.6" fill="#06263a"></circle><circle cx="44" cy="56" r="2.6" fill="#06263a"></circle></g></svg>
+    <svg class="scene" id="s2" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="b2" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#3a5a8d"></stop><stop offset="100%" stop-color="#0a1a3d"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#b2)"></rect><circle class="snow" cx="674" cy="0" r="2.5" fill="#eafaff" opacity=".8" style="animation-duration:4.6s;animation-delay:3.4s"></circle>
+<circle class="snow" cx="162" cy="0" r="3.8" fill="#eafaff" opacity=".8" style="animation-duration:7.7s;animation-delay:5.2s"></circle>
+<circle class="snow" cx="109" cy="0" r="2.2" fill="#eafaff" opacity=".8" style="animation-duration:7.0s;animation-delay:0.2s"></circle>
+<circle class="snow" cx="258" cy="0" r="2.4" fill="#eafaff" opacity=".8" style="animation-duration:6.5s;animation-delay:0.2s"></circle>
+<circle class="snow" cx="685" cy="0" r="2.9" fill="#eafaff" opacity=".8" style="animation-duration:7.5s;animation-delay:3.1s"></circle>
+<circle class="snow" cx="304" cy="0" r="3.6" fill="#eafaff" opacity=".8" style="animation-duration:8.0s;animation-delay:0.1s"></circle>
+<circle class="snow" cx="734" cy="0" r="2.4" fill="#eafaff" opacity=".8" style="animation-duration:6.1s;animation-delay:1.7s"></circle>
+<circle class="snow" cx="801" cy="0" r="2.2" fill="#eafaff" opacity=".8" style="animation-duration:5.7s;animation-delay:0.5s"></circle>
+<circle class="snow" cx="372" cy="0" r="3.5" fill="#eafaff" opacity=".8" style="animation-duration:7.0s;animation-delay:5.7s"></circle>
+<circle class="snow" cx="569" cy="0" r="2.2" fill="#eafaff" opacity=".8" style="animation-duration:4.6s;animation-delay:4.3s"></circle>
+<circle class="snow" cx="320" cy="0" r="3.7" fill="#eafaff" opacity=".8" style="animation-duration:8.1s;animation-delay:5.0s"></circle>
+<circle class="snow" cx="611" cy="0" r="3.3" fill="#eafaff" opacity=".8" style="animation-duration:5.0s;animation-delay:0.3s"></circle>
+<circle class="snow" cx="811" cy="0" r="2.5" fill="#eafaff" opacity=".8" style="animation-duration:5.4s;animation-delay:0.4s"></circle>
+<circle class="snow" cx="123" cy="0" r="3.7" fill="#eafaff" opacity=".8" style="animation-duration:5.9s;animation-delay:2.7s"></circle>
+<circle class="snow" cx="186" cy="0" r="2.5" fill="#eafaff" opacity=".8" style="animation-duration:5.9s;animation-delay:1.2s"></circle>
+<circle class="snow" cx="719" cy="0" r="2.3" fill="#eafaff" opacity=".8" style="animation-duration:7.2s;animation-delay:4.4s"></circle><g class="float" transform="translate(300,120) scale(1)">
+      <ellipse cx="80" cy="290" rx="70" ry="14" fill="#000" opacity=".25"></ellipse>
+      <rect x="45" y="180" width="70" height="100" rx="10" fill="#6ec8e8"></rect>
+      <rect x="24" y="192" width="22" height="80" rx="8" fill="#4aa8d0"></rect>
+      <rect x="114" y="192" width="22" height="80" rx="8" fill="#4aa8d0"></rect>
+      <path d="M80 44 C42 44 32 100 44 148 C52 180 108 180 116 148 C128 100 118 44 80 44 Z" fill="#8fd8f0"></path>
+      <path d="M44 60 L26 16 L58 46 Z" fill="#cfeeff"></path><path d="M116 60 L134 16 L102 46 Z" fill="#cfeeff"></path>
+      <path d="M62 44 L58 10 L74 40 Z" fill="#eafaff"></path><path d="M98 44 L102 10 L86 40 Z" fill="#eafaff"></path>
+      <ellipse class="nyxeye" cx="60" cy="108" rx="14" ry="16" fill="#1ad8ff"></ellipse>
+      <ellipse class="nyxeye" cx="100" cy="108" rx="14" ry="16" fill="#1ad8ff" style="animation-delay:.3s"></ellipse>
+      <circle cx="60" cy="108" r="5" fill="#0a5a7a"></circle><circle cx="100" cy="108" r="5" fill="#0a5a7a"></circle>
+      <path d="M58 150 L66 138 L74 150 L82 138 L90 150 L98 138" stroke="#0a5a7a" stroke-width="4" fill="none"></path>
+      <!-- cape de givre -->
+      <path d="M45 185 Q20 240 30 285 L50 285 Q42 235 55 195 Z" fill="#5ab8dc" opacity=".7"></path>
+      <path d="M115 185 Q140 240 130 285 L110 285 Q118 235 105 195 Z" fill="#5ab8dc" opacity=".7"></path>
+    </g></svg>
+    <svg class="scene" id="s3" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="b3" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#6a9ac5"></stop><stop offset="100%" stop-color="#1a2a4d"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#b3)"></rect><g opacity=".8"><g class="float" transform="translate(200,330) scale(0.8)">
+      <ellipse cx="35" cy="98" rx="30" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C15 30 10 58 22 84 C32 102 52 102 62 84 C74 58 58 30 35 30 Z" fill="#4aa3d6"></path>
+      <ellipse cx="35" cy="70" rx="15" ry="14" fill="#cfeaff"></ellipse>
+      <circle cx="20" cy="28" r="7" fill="#4aa3d6"></circle><circle cx="50" cy="28" r="7" fill="#4aa3d6"></circle>
+      <circle cx="27" cy="55" r="4.5" fill="#fff"></circle><circle cx="45" cy="55" r="4.5" fill="#fff"></circle>
+      <circle cx="28" cy="56" r="2.6" fill="#06263a"></circle><circle cx="44" cy="56" r="2.6" fill="#06263a"></circle></g><g class="float" transform="translate(400,350) scale(0.8)">
+      <ellipse cx="40" cy="82" rx="38" ry="10" fill="#000" opacity=".25"></ellipse>
+      <path d="M12 62 Q40 24 68 62 Q68 78 40 78 Q12 78 12 62 Z" fill="#6b8f3d"></path>
+      <path d="M26 50 L34 40 L42 50 L34 58 Z" fill="#3d5f1f"></path>
+      <path d="M0 60 Q-4 52 6 50 Q14 52 14 62 Z" fill="#9bbf6a"></path>
+      <circle cx="5" cy="56" r="2.4" fill="#1a2a0a"></circle></g><g class="float" transform="translate(560,320) scale(0.8)">
+      <ellipse cx="32" cy="94" rx="24" ry="7" fill="#000" opacity=".25"></ellipse>
+      <ellipse cx="32" cy="62" rx="22" ry="26" fill="#e8f4ff"></ellipse>
+      <circle cx="32" cy="34" r="16" fill="#e8f4ff"></circle>
+      <path d="M32 40 L42 45 L32 50 Z" fill="#ffcf5a"></path>
+      <circle cx="26" cy="32" r="4" fill="#fff"></circle><circle cx="38" cy="32" r="4" fill="#fff"></circle>
+      <circle cx="26" cy="33" r="2.2" fill="#123"></circle><circle cx="38" cy="33" r="2.2" fill="#123"></circle>
+      <path d="M10 60 Q-4 66 8 78 Q18 74 20 64 Z" fill="#bfe3ff"></path>
+      <path d="M54 60 Q68 66 56 78 Q46 74 44 64 Z" fill="#bfe3ff"></path></g></g><path class="frost" d="M150 400 Q430 380 720 400" stroke="#eafaff" stroke-width="6" fill="none" opacity=".6"></path><g class="float" transform="translate(660,300) scale(0.8)">
+      <ellipse cx="35" cy="100" rx="32" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+      <path d="M35 80 C26 80 24 92 35 95 C46 92 44 80 35 80 Z" fill="#ffe0c2"></path>
+      <path d="M20 34 L8 8 L32 26 Z" fill="#ff6a2d"></path><path d="M50 34 L62 8 L38 26 Z" fill="#ff6a2d"></path>
+      <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+      <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+      <circle cx="35" cy="70" r="4" fill="#3a1500"></circle></g></svg>
+    <svg class="scene" id="s4" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="b4" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#2a3a5d"></stop><stop offset="100%" stop-color="#0a0a1a"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#b4)"></rect><g class="buildpulse" transform="translate(330,230)">
+      <rect x="0" y="60" width="120" height="60" rx="8" fill="#5a4a3a"></rect>
+      <rect x="10" y="70" width="100" height="40" rx="4" fill="#3a2f22"></rect><circle class="buildpulse" cx="60" cy="90" r="18" fill="#ff8a4d"></circle><rect x="110" y="80" width="50" height="20" rx="6" fill="#7a6a5a"></rect><ellipse cx="162" cy="90" rx="8" ry="12" fill="#ffb37a"></ellipse><rect x="20" y="30" width="80" height="30" rx="6" fill="#6a5a4a"></rect><circle cx="40" cy="45" r="6" fill="#ffd36b"></circle><circle cx="60" cy="45" r="6" fill="#ff6a2d"></circle><circle cx="80" cy="45" r="6" fill="#ffb37a"></circle><path class="buildpulse" d="M60 20 L54 40 L66 40 Z" fill="#ffd36b"></path></g><g class="float" transform="translate(200,300) scale(0.9)">
+      <ellipse cx="35" cy="100" rx="32" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+      <path d="M35 80 C26 80 24 92 35 95 C46 92 44 80 35 80 Z" fill="#ffe0c2"></path>
+      <path d="M20 34 L8 8 L32 26 Z" fill="#ff6a2d"></path><path d="M50 34 L62 8 L38 26 Z" fill="#ff6a2d"></path>
+      <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+      <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+      <circle cx="35" cy="70" r="4" fill="#3a1500"></circle></g><g transform="translate(470,170)"><circle cx="0" cy="0" r="20" fill="#ffe98a"><animate attributeName="opacity" values="0.5;1;0.5" dur="1s" repeatCount="indefinite"></animate></circle><text x="0" y="9" text-anchor="middle" font-size="24">⚡</text></g></svg>
+    <svg class="scene" id="s5" viewBox="0 0 860 538" preserveAspectRatio="xMidYMid slice"><defs><radialgradient id="b5" cx="50%" cy="35%" r="85%"><stop offset="0%" stop-color="#ffb86b"></stop><stop offset="100%" stop-color="#1a0a2d"></stop></radialgradient></defs><rect width="860" height="538" fill="url(#b5)"></rect><g class="buildpulse" transform="translate(330,240)">
+      <rect x="0" y="60" width="120" height="60" rx="8" fill="#5a4a3a"></rect>
+      <rect x="10" y="70" width="100" height="40" rx="4" fill="#3a2f22"></rect><circle class="buildpulse" cx="60" cy="90" r="18" fill="#ff8a4d"></circle><rect x="110" y="80" width="50" height="20" rx="6" fill="#7a6a5a"></rect><ellipse cx="162" cy="90" rx="8" ry="12" fill="#ffb37a"></ellipse><rect x="20" y="30" width="80" height="30" rx="6" fill="#6a5a4a"></rect><circle cx="40" cy="45" r="6" fill="#ffd36b"></circle><circle cx="60" cy="45" r="6" fill="#ff6a2d"></circle><circle cx="80" cy="45" r="6" fill="#ffb37a"></circle><path class="buildpulse" d="M60 20 L54 40 L66 40 Z" fill="#ffd36b"></path></g><g class="flame" transform="translate(180,300) scale(0.9)">
+      <ellipse cx="35" cy="100" rx="32" ry="9" fill="#000" opacity=".25"></ellipse>
+      <path d="M35 30 C14 30 8 60 20 84 C30 102 52 102 62 84 C74 60 62 30 35 30 Z" fill="#ff6a2d"></path>
+      <path d="M35 80 C26 80 24 92 35 95 C46 92 44 80 35 80 Z" fill="#ffe0c2"></path>
+      <path d="M20 34 L8 8 L32 26 Z" fill="#ff6a2d"></path><path d="M50 34 L62 8 L38 26 Z" fill="#ff6a2d"></path>
+      <circle cx="26" cy="56" r="5" fill="#fff"></circle><circle cx="46" cy="56" r="5" fill="#fff"></circle>
+      <circle cx="27" cy="57" r="3" fill="#1a0a00"></circle><circle cx="45" cy="57" r="3" fill="#1a0a00"></circle>
+      <circle cx="35" cy="70" r="4" fill="#3a1500"></circle></g><circle class="glowpulse" cx="400" cy="260" r="80" fill="#ff8a4d" opacity=".4"></circle></svg>
+    <div id="sub"></div>
+  </div>
+  <div id="end">
+    
+    <h2>FIN DE L'ÉPISODE 4</h2>
+    <p id="endtext"></p>
+    <button class="again" onclick="location.reload()">🔁 Revoir l'épisode</button>
+  </div>
+</div>
+<script>
+const SCENES = [
+  { id:'s1', chap:"Chapitre 1 · La reconstruction", dur:576, subs:[[8,"Jour et nuit, Blaze reconstruisit sa machine, aidé par tout le clan."],[90,"« La console de contrôle est installée ! On y est presque ! »"],[190,"« Plus qu'une pièce et elle sera terminée ! », s'enthousiasma Blaze."],[290,"Mais Givros décida de lancer son attaque la plus terrible."]]},
+  { id:'s2', chap:"Chapitre 2 · Le grand gel", dur:596, subs:[[8,"« Assez joué ! », gronda Givros. « LE GRAND GEL ! »"],[90,"Une vague de froid absolu déferla sur toute la ville."],[190,"Tout se figea dans la glace en quelques secondes."],[290,"« Bientôt, plus rien ne bougera... pour l'éternité ! »"]]},
+  { id:'s3', chap:"Chapitre 3 · Le clan presque gelé", dur:606, subs:[[8,"Onda, Roc et Zéphyr furent pris dans la glace de Givros ! 😱"],[100,"« Mes amis ! Je dois finir la machine, c'est notre seule chance ! »"],[200,"Seul Blaze, réchauffé par son feu, résistait encore au gel."],[300,"« Tenez bon ! Je vais tous vous sauver ! »"]]},
+  { id:'s4', chap:"Chapitre 4 · La dernière pièce", dur:606, subs:[[8,"Blaze posa l'antenne d'énergie sur la machine."],[90,"« Il ne manque plus qu'une seule chose : l'étincelle finale ! »"],[190,"« Mais je n'ai plus assez de feu pour l'allumer tout seul... »"],[290,"« Il me faut la force de tout le clan. Vite, réveillez-vous ! »"]]},
+  { id:'s5', chap:"Chapitre 5 · Un espoir de feu", dur:616, subs:[[8,"Blaze concentra toute sa flamme sur la machine."],[90,"« Résiste, Blaze ! Pense à tes amis ! », se répéta-t-il."],[190,"La machine s'illumina peu à peu : elle était presque prête !"],[290,"« Demain, tout se jouera. La machine sera terminée... »"],[380,"« ...et Givros connaîtra enfin la défaite ! »"]]}
+];
+const MACHINE_PCT = 80;
+let si=0,t=0,subIdx=0,paused=false,timer=null;
+let totalDur=SCENES.reduce((a,s)=>a+s.dur,0),elapsedBefore=0;
+const $=id=>document.getElementById(id);
+function demarrer(){
+  $('intro').style.display='none';$('film').style.display='block';
+  si=0;t=0;subIdx=0;elapsedBefore=0;showScene();
+  setTimeout(()=>{$('mfill').style.width=MACHINE_PCT+'%';},400);
+  timer=setInterval(tic,100);
+}
+function showScene(){
+  document.querySelectorAll('.scene').forEach(e=>e.classList.remove('on'));
+  const sc=SCENES[si];$(sc.id).classList.add('on');$('chap').textContent=sc.chap;$('sub').textContent='';subIdx=0;
+}
+function tic(){
+  if(paused)return;t++;const sc=SCENES[si];
+  while(subIdx<sc.subs.length&&t>=sc.subs[subIdx][0]){$('sub').textContent=sc.subs[subIdx][1];subIdx++;}
+  const done=elapsedBefore+t;$('bar').style.width=Math.min(100,(done/totalDur)*100)+'%';
+  if(t>=sc.dur){elapsedBefore+=sc.dur;si++;t=0;if(si>=SCENES.length){finir();return;}showScene();}
+}
+function togglePause(){paused=!paused;$('pauseBtn').textContent=paused?'▶ Lecture':'⏸ Pause';}
+function finir(){
+  clearInterval(timer);$('film').style.display='none';
+  $('endtext').innerHTML="La machine est presque finie, le clan est gelé !<br>Blaze donnera tout au prochain épisode...<br>GRAND FINAL de la Saison 2 à l'épisode 5 ! ❄️🔧";
+  $('end').classList.add('on');
+}
+</script>
+
+</body></html>
