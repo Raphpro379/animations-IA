@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R News — le journal de R</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --rouge:#e50914; --rouge-fonce:#b0060f;
+    --fond:#0d0d12; --fond2:#16161d; --carte:#1d1d26;
+    --ligne:#2a2a36; --texte:#f4f4f6; --gris:#9a9aa8;
+    --violet:#6b4de5; --or:#ffd66b; --vert:#2ec26a; --bleu:#00b8d4;
+  }
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;background:var(--fond);color:var(--texte);
+    height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+  header{background:linear-gradient(135deg,var(--rouge),var(--rouge-fonce));padding:14px 18px;
+    display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 2px 14px rgba(0,0,0,.4)}
+  header .logo{width:40px;height:40px;background:#fff;border-radius:11px;display:flex;align-items:center;
+    justify-content:center;font-weight:bold;font-size:22px;color:var(--rouge)}
+  header .titre{flex:1}
+  header .titre h1{font-size:20px;letter-spacing:.5px}
+  header .titre p{font-size:12px;opacity:.85}
+  #syncBadge{font-size:11px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.18);white-space:nowrap}
+  #syncBadge.ok{background:rgba(46,194,106,.3)}
+  #syncBadge.err{background:rgba(0,0,0,.3)}
+  .ico-btn{background:rgba(255,255,255,.18);border:none;color:#fff;width:34px;height:34px;border-radius:10px;
+    cursor:pointer;font-size:16px;flex-shrink:0}
+
+  /* filtres catégories */
+  .filtres{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;background:var(--fond2);
+    border-bottom:1px solid var(--ligne);flex-shrink:0}
+  .filtre{background:var(--carte);border:1px solid var(--ligne);color:var(--gris);padding:7px 14px;
+    border-radius:20px;font-size:13px;cursor:pointer;white-space:nowrap;transition:.15s}
+  .filtre.actif{background:var(--rouge);color:#fff;border-color:var(--rouge)}
+
+  /* liste articles */
+  #liste{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+  .article{background:var(--carte);border:1px solid var(--ligne);border-radius:18px;overflow:hidden;cursor:pointer;transition:.18s}
+  .article:hover{transform:translateY(-3px);border-color:var(--rouge);box-shadow:0 10px 26px rgba(0,0,0,.4)}
+  .article .banniere{height:120px;display:flex;align-items:center;justify-content:center;font-size:60px;position:relative}
+  .article .cat{position:absolute;top:10px;left:10px;font-size:11px;font-weight:bold;padding:4px 10px;
+    border-radius:10px;background:rgba(0,0,0,.5);backdrop-filter:blur(4px)}
+  .article .neuf{position:absolute;top:10px;right:10px;font-size:11px;font-weight:bold;padding:4px 10px;
+    border-radius:10px;background:var(--rouge);color:#fff}
+  .article .corps{padding:14px 16px}
+  .article h2{font-size:18px;margin-bottom:6px;line-height:1.25}
+  .article .apercu{font-size:14px;color:var(--gris);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .article .pied{display:flex;align-items:center;gap:14px;margin-top:12px;font-size:13px;color:var(--gris)}
+  .article .pied .like{display:flex;align-items:center;gap:5px;cursor:pointer}
+  .article .pied .like.aime{color:var(--rouge)}
+  .vide{margin:auto;text-align:center;color:var(--gris);padding:40px}
+  .vide .ico{font-size:50px;margin-bottom:12px}
+
+  /* bouton flottant PDG */
+  #fab{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:var(--rouge);
+    color:#fff;border:none;font-size:30px;cursor:pointer;box-shadow:0 8px 24px rgba(229,9,20,.5);display:none;z-index:20}
+  #fab:hover{transform:scale(1.08)}
+
+  /* lecture article plein écran */
+  #lecture{position:fixed;inset:0;z-index:30;background:var(--fond);display:none;flex-direction:column}
+  #lecture .banniere{height:200px;display:flex;align-items:center;justify-content:center;font-size:90px;position:relative;flex-shrink:0}
+  #lecture .retour{position:absolute;top:16px;left:16px;background:rgba(0,0,0,.5);border:none;color:#fff;
+    width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:20px;backdrop-filter:blur(4px)}
+  #lecture .contenu{flex:1;overflow-y:auto;padding:20px}
+  #lecture .cat-lec{display:inline-block;font-size:12px;font-weight:bold;padding:4px 12px;border-radius:10px;
+    background:var(--rouge);color:#fff;margin-bottom:12px}
+  #lecture h1{font-size:26px;line-height:1.2;margin-bottom:8px}
+  #lecture .meta{font-size:13px;color:var(--gris);margin-bottom:18px}
+  #lecture .texte{font-size:16px;line-height:1.7;white-space:pre-wrap}
+  #lecture .actions{display:flex;gap:12px;padding:14px 20px;border-top:1px solid var(--ligne);flex-shrink:0}
+  #lecture .actions button{flex:1;padding:12px;border-radius:12px;border:1px solid var(--ligne);
+    background:var(--carte);color:var(--texte);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+  #lecture .actions .like-btn.aime{background:rgba(229,9,20,.15);color:var(--rouge);border-color:var(--rouge)}
+  #lecture .actions .pdg-only{display:none}
+
+  /* modales */
+  .modale{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px}
+  .modale.on{display:flex}
+  .modale .boite{background:var(--fond2);border:1px solid var(--ligne);border-radius:18px;padding:22px;
+    max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
+  .modale h3{margin-bottom:14px;font-size:20px}
+  .modale label{display:block;font-size:13px;color:var(--gris);margin:12px 0 5px}
+  .modale input,.modale textarea,.modale select{width:100%;padding:11px 14px;border-radius:10px;
+    border:1px solid var(--ligne);background:var(--carte);color:var(--texte);font-size:14px;font-family:inherit}
+  .modale textarea{min-height:120px;resize:vertical}
+  .modale input:focus,.modale textarea:focus,.modale select:focus{outline:none;border-color:var(--rouge)}
+  .emoji-choix{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .emoji-choix span{font-size:26px;padding:6px;border-radius:10px;cursor:pointer;border:2px solid transparent}
+  .emoji-choix span.sel{border-color:var(--rouge);background:var(--carte)}
+  .note{font-size:12px;color:var(--gris);background:var(--carte);padding:12px;border-radius:10px;margin:12px 0;line-height:1.5;border:1px solid var(--ligne)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .btn-r{background:var(--rouge);color:#fff;border:none;padding:11px 20px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px}
+  .btn-or{background:var(--or);color:#000;border:none;padding:11px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px}
+  .btn-gris{background:var(--carte);color:var(--texte);border:1px solid var(--ligne);padding:11px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .btn-del{background:rgba(229,9,20,.15);color:#ff6b6b;border:1px solid rgba(229,9,20,.3);padding:11px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--carte);
+    border:1px solid var(--ligne);color:var(--texte);padding:12px 20px;border-radius:12px;font-size:14px;
+    opacity:0;pointer-events:none;transition:.25s;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">R</div>
+  <div class="titre">
+    <h1>R News</h1>
+    <p>Le journal de l'Entreprise R</p>
+  </div>
+  <span id="syncBadge"></span>
+  <button class="ico-btn" id="btn-reglages">⚙️</button>
+</header>
+
+<div class="filtres" id="filtres"></div>
+
+<div id="liste"></div>
+
+<button id="fab">✍️</button>
+
+<!-- LECTURE ARTICLE -->
+<div id="lecture">
+  <div class="banniere" id="lec-banniere">
+    <button class="retour" id="lec-retour">←</button>
+    <span id="lec-emoji">📰</span>
+  </div>
+  <div class="contenu">
+    <span class="cat-lec" id="lec-cat">Nouveautés</span>
+    <h1 id="lec-titre"></h1>
+    <div class="meta" id="lec-meta"></div>
+    <div class="texte" id="lec-texte"></div>
+  </div>
+  <div class="actions">
+    <button class="like-btn" id="lec-like">❤️ <span id="lec-like-nb">0</span></button>
+    <button class="pdg-only" id="lec-modifier">✏️ Modifier</button>
+    <button class="pdg-only btn-del" id="lec-supprimer" style="flex:0 0 auto">🗑️</button>
+  </div>
+</div>
+
+<!-- MODALE ÉDITION ARTICLE -->
+<div class="modale" id="modale-edit">
+  <div class="boite">
+    <h3 id="edit-titre-modale">✍️ Nouvel article</h3>
+    <label>Titre</label>
+    <input id="edit-titre" placeholder="Titre de l'article" maxlength="90">
+    <label>Catégorie</label>
+    <select id="edit-cat">
+      <option>Nouveautés</option>
+      <option>Événements</option>
+      <option>Mises à jour</option>
+      <option>Annonces</option>
+      <option>Coulisses</option>
+    </select>
+    <label>Image (emoji)</label>
+    <div class="emoji-choix" id="edit-emojis"></div>
+    <label>Couleur de la bannière</label>
+    <div class="emoji-choix" id="edit-couleurs"></div>
+    <label>Texte de l'article</label>
+    <textarea id="edit-texte" placeholder="Écris ton article ici…"></textarea>
+    <div class="row">
+      <button class="btn-r" id="edit-publier">📢 Publier</button>
+      <button class="btn-gris" id="edit-annuler">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE RÉGLAGES -->
+<div class="modale" id="modale-reglages">
+  <div class="boite">
+    <h3>⚙️ Réglages</h3>
+    <div id="zone-pdg-login">
+      <label>Code PDG (pour écrire des articles)</label>
+      <input id="inp-pdgcode" placeholder="Code secret…" type="password">
+      <div class="row"><button class="btn-or" id="btn-pdg-valider">👑 Devenir PDG</button></div>
+    </div>
+    <div id="zone-pdg-actif" style="display:none">
+      <div class="note">👑 Tu es <b>PDG</b>. Tu peux écrire, modifier et supprimer les articles avec le bouton ✍️ en bas à droite.</div>
+      <label>Changer le code PDG</label>
+      <input id="inp-newpdg" placeholder="Nouveau code">
+      <div class="row"><button class="btn-or" id="btn-save-pdg">💾 Enregistrer</button>
+      <button class="btn-gris" id="btn-quitter-pdg">Quitter le mode PDG</button></div>
+    </div>
+    <hr style="border:none;border-top:1px solid var(--ligne);margin:20px 0">
+    <h3 style="font-size:17px">☁️ Synchronisation</h3>
+    <div class="note">Pour que tous les clients voient les mêmes news : crée un compte gratuit sur <b>jsonbin.io</b>, copie ta <b>X-MASTER-KEY</b>, colle-la ici. R News créera sa propre base en ligne.</div>
+    <label>Clé de synchro (X-Master-Key)</label>
+    <input id="inp-apikey" placeholder="$2a$10$...">
+    <label id="lab-binid" style="display:none">Identifiant de base (auto)</label>
+    <input id="inp-binid" placeholder="créé automatiquement" style="display:none">
+    <div class="row">
+      <button class="btn-or" id="btn-sync-save">☁️ Activer</button>
+      <button class="btn-gris" id="btn-sync-pull">↓ Recharger</button>
+    </div>
+    <hr style="border:none;border-top:1px solid var(--ligne);margin:20px 0">
+    <div class="row"><button class="btn-gris" id="btn-fermer-reglages">Fermer</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ CONFIG ============ */
+const KEY="r-news-data";
+const CFG_KEY="r-news-cloud-cfg";
+const LIKES_KEY="r-news-mes-likes";
+/* Après avoir activé la synchro, colle ici pour que tous partagent les news : */
+const SHARED_CLOUD={ apiKey:"$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K", binId:"6a69c3eeda38895dfe9f0761" };
+const DEFAULT_SETTINGS={ pdgCode:"PDG2026" };
+
+const EMOJIS=['📰','🎬','📻','🎮','💬','🚀','🎉','⭐','🔥','💡','🏆','📢','✨','🎨','🌊','👑'];
+const COULEURS=['#e50914','#6b4de5','#00b8d4','#2ec26a','#ff8c42','#e5399a','#ffd66b','#0d6a94'];
+const CAT_COULEUR={'Nouveautés':'#e50914','Événements':'#6b4de5','Mises à jour':'#00b8d4','Annonces':'#ff8c42','Coulisses':'#2ec26a'};
+
+let data={ settings:Object.assign({},DEFAULT_SETTINGS), articles:[] };
+let estPDG=false, filtreActuel='Tout', articleOuvert=null, editionId=null;
+let editEmoji='📰', editCouleur='#e50914';
+let mesLikes={};
+
+/* ============ EXEMPLES DE DÉPART ============ */
+const EXEMPLES=[
+  {id:'ex1',titre:'🌊 Le Gardien des Océans débarque sur CinéèR !',cat:'Nouveautés',emoji:'🌊',couleur:'#0d6a94',
+   texte:"Grande nouvelle ! Notre tout premier long-métrage animé, « Le Gardien des Océans », est maintenant disponible sur CinéèR.\n\nSuis Léo, un jeune garçon qui découvre qu'il peut parler aux animaux marins, dans son aventure pour sauver l'océan d'une mystérieuse machine. Une heure d'aventure, d'amitié et de courage !\n\nÀ voir absolument en famille. 🐢🐙🐋",
+   ts:Date.now()-86400000*2,likes:12},
+  {id:'ex2',titre:'💬 R Chat est arrivé !',cat:'Annonces',emoji:'💬',couleur:'#6b4de5',
+   texte:"Vous pouvez désormais discuter entre clients grâce à R Chat, notre toute nouvelle messagerie !\n\nUn salon public pour parler tous ensemble, des messages privés pour discuter en tête-à-tête, et même la possibilité d'écrire directement au PDG. 👑\n\nRejoignez la communauté R dès maintenant !",
+   ts:Date.now()-86400000,likes:8},
+  {id:'ex3',titre:'🎮 4 nouveaux jeux sur R Play',cat:'Mises à jour',emoji:'🎮',couleur:'#2ec26a',
+   texte:"R Play s'enrichit ! Découvrez 4 jeux gratuits avec plein de niveaux :\n\n🧱 Casse-briques (8 niveaux)\n🧠 Memory (6 niveaux)\n🎯 Attrape\n🚀 Fusée\n\nBattez vos records et défiez vos amis. Bon jeu à tous ! 🏆",
+   ts:Date.now()-3600000,likes:15},
+];
+
+/* ============ OUTILS ============ */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200);}
+function escap(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function ilya(ts){const d=(Date.now()-ts)/1000;
+  if(d<60)return "à l'instant";if(d<3600)return Math.floor(d/60)+' min';
+  if(d<86400)return Math.floor(d/3600)+' h';const j=Math.floor(d/86400);
+  return j===1?'hier':j+' jours';}
+function estNeuf(ts){return (Date.now()-ts)<86400000;} // moins de 24h
+
+/* ============ STOCKAGE ============ */
+function load(){
+  try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);
+    data.settings=Object.assign({},DEFAULT_SETTINGS,d.settings||{});
+    data.articles=d.articles||[];
+  }}catch(e){}
+  if(!data.articles.length)data.articles=EXEMPLES.slice();
+  try{mesLikes=JSON.parse(localStorage.getItem(LIKES_KEY)||"{}");}catch(e){}
+  estPDG=localStorage.getItem('r-news-pdg')==='1';
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}if(cloudOn())pushCloudSoon();}
+function saveLikes(){try{localStorage.setItem(LIKES_KEY,JSON.stringify(mesLikes));}catch(e){}}
+
+/* ============ SYNCHRO JSONBIN ============ */
+let cloud={apiKey:"",binId:""}, syncing=false, pushTimer=null;
+function loadCloudCfg(){
+  try{const c=JSON.parse(localStorage.getItem(CFG_KEY)||"{}");cloud.apiKey=c.apiKey||"";cloud.binId=c.binId||"";}catch(e){}
+  if(SHARED_CLOUD.apiKey)cloud.apiKey=SHARED_CLOUD.apiKey;
+  if(SHARED_CLOUD.binId)cloud.binId=SHARED_CLOUD.binId;
+}
+function saveCloudCfg(){try{localStorage.setItem(CFG_KEY,JSON.stringify(cloud));}catch(e){}}
+function cloudOn(){return !!cloud.apiKey;}
+function badge(state){const b=document.getElementById('syncBadge');if(!b)return;b.className=state||'';
+  b.textContent=state==='ok'?'● Synchronisé':state==='sync'?'○ Synchro…':state==='err'?'⚠ Hors ligne':'⚡ Local';}
+async function creerBin(){
+  const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',
+    headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey,'X-Bin-Private':'false','X-Bin-Name':'r-news'},
+    body:JSON.stringify(data)});
+  if(!r.ok)throw new Error();const j=await r.json();return j.metadata.id;}
+async function pushCloud(){
+  if(!cloudOn())return;if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}
+  syncing=true;badge('sync');
+  try{const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId,{method:'PUT',
+    headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey},body:JSON.stringify(data)});
+    if(!r.ok)throw new Error();badge('ok');}catch(e){badge('err');}
+  syncing=false;}
+function pushCloudSoon(){clearTimeout(pushTimer);pushTimer=setTimeout(pushCloud,800);}
+async function pullCloud(silencieux){
+  if(!cloudOn()||!cloud.binId)return;badge('sync');
+  try{const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId+'/latest',{headers:{'X-Master-Key':cloud.apiKey}});
+    if(!r.ok)throw new Error();const j=await r.json();const d=j.record||{};
+    if(d.articles){data.articles=d.articles;data.settings=Object.assign({},DEFAULT_SETTINGS,d.settings||{});
+      try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
+    badge('ok');if(!silencieux)toast('News rechargées ☁️');rendre();
+  }catch(e){badge('err');if(!silencieux)toast('Synchro impossible');}}
+
+/* ============ RENDU LISTE ============ */
+function categories(){return ['Tout','Nouveautés','Événements','Mises à jour','Annonces','Coulisses'];}
+function rendreFiltres(){
+  const f=document.getElementById('filtres');
+  f.innerHTML=categories().map(c=>'<button class="filtre'+(c===filtreActuel?' actif':'')+'" data-c="'+c+'">'+c+'</button>').join('');
+  f.querySelectorAll('.filtre').forEach(b=>b.onclick=()=>{filtreActuel=b.dataset.c;rendre();});
+}
+function articlesTries(){
+  let a=data.articles.slice().sort((x,y)=>y.ts-x.ts);
+  if(filtreActuel!=='Tout')a=a.filter(x=>x.cat===filtreActuel);
+  return a;
+}
+function rendre(){
+  rendreFiltres();
+  const box=document.getElementById('liste');
+  const arts=articlesTries();
+  if(!arts.length){box.innerHTML='<div class="vide"><div class="ico">📭</div>Aucun article dans cette catégorie.</div>';return;}
+  box.innerHTML=arts.map(a=>{
+    const aime=mesLikes[a.id];
+    return '<div class="article" data-id="'+a.id+'">'+
+      '<div class="banniere" style="background:linear-gradient(135deg,'+a.couleur+','+ombre(a.couleur)+')">'+
+        '<span class="cat" style="color:'+(CAT_COULEUR[a.cat]||'#fff')+'">'+a.cat+'</span>'+
+        (estNeuf(a.ts)?'<span class="neuf">● Nouveau</span>':'')+
+        a.emoji+'</div>'+
+      '<div class="corps"><h2>'+escap(a.titre)+'</h2>'+
+        '<div class="apercu">'+escap(a.texte)+'</div>'+
+        '<div class="pied">'+
+          '<span class="like'+(aime?' aime':'')+'" data-like="'+a.id+'">❤️ '+(a.likes||0)+'</span>'+
+          '<span>🕒 '+ilya(a.ts)+'</span>'+
+        '</div></div></div>';
+  }).join('');
+  box.querySelectorAll('.article').forEach(el=>{
+    el.onclick=(e)=>{if(e.target.dataset.like){toggleLike(e.target.dataset.like);e.stopPropagation();return;}
+      ouvrirArticle(el.dataset.id);};
+  });
+}
+function ombre(hex){ // couleur un peu plus foncée pour le dégradé
+  const n=parseInt(hex.slice(1),16);let r=(n>>16)-40,g=((n>>8)&255)-40,b=(n&255)-40;
+  r=Math.max(0,r);g=Math.max(0,g);b=Math.max(0,b);
+  return '#'+(r<<16|g<<8|b).toString(16).padStart(6,'0');}
+
+/* ============ LIKES ============ */
+function toggleLike(id){
+  const a=data.articles.find(x=>x.id===id);if(!a)return;
+  if(mesLikes[id]){a.likes=Math.max(0,(a.likes||0)-1);delete mesLikes[id];}
+  else{a.likes=(a.likes||0)+1;mesLikes[id]=true;}
+  saveLikes();save();rendre();
+  if(articleOuvert===id)majLikeLecture(a);
+}
+function majLikeLecture(a){
+  document.getElementById('lec-like-nb').textContent=a.likes||0;
+  document.getElementById('lec-like').classList.toggle('aime',!!mesLikes[a.id]);
+}
+
+/* ============ LECTURE ============ */
+function ouvrirArticle(id){
+  const a=data.articles.find(x=>x.id===id);if(!a)return;
+  articleOuvert=id;
+  document.getElementById('lec-banniere').style.background='linear-gradient(135deg,'+a.couleur+','+ombre(a.couleur)+')';
+  document.getElementById('lec-emoji').textContent=a.emoji;
+  document.getElementById('lec-cat').textContent=a.cat;
+  document.getElementById('lec-cat').style.background=CAT_COULEUR[a.cat]||'#e50914';
+  document.getElementById('lec-titre').textContent=a.titre;
+  document.getElementById('lec-meta').textContent='Publié '+ilya(a.ts)+' · Entreprise R';
+  document.getElementById('lec-texte').textContent=a.texte;
+  majLikeLecture(a);
+  document.querySelectorAll('#lecture .pdg-only').forEach(e=>e.style.display=estPDG?'flex':'none');
+  document.getElementById('lecture').style.display='flex';
+}
+function fermerLecture(){document.getElementById('lecture').style.display='none';articleOuvert=null;}
+
+/* ============ ÉDITION (PDG) ============ */
+function ouvrirEdition(id){
+  editionId=id||null;
+  const modale=document.getElementById('modale-edit');
+  document.getElementById('edit-titre-modale').textContent=id?'✏️ Modifier l\'article':'✍️ Nouvel article';
+  // remplir les choix emoji + couleur
+  const be=document.getElementById('edit-emojis');
+  be.innerHTML=EMOJIS.map(e=>'<span data-e="'+e+'">'+e+'</span>').join('');
+  const bc=document.getElementById('edit-couleurs');
+  bc.innerHTML=COULEURS.map(c=>'<span data-c="'+c+'" style="background:'+c+';width:34px;height:34px;display:inline-block;border-radius:8px"></span>').join('');
+  if(id){const a=data.articles.find(x=>x.id===id);
+    document.getElementById('edit-titre').value=a.titre;
+    document.getElementById('edit-cat').value=a.cat;
+    document.getElementById('edit-texte').value=a.texte;
+    editEmoji=a.emoji;editCouleur=a.couleur;
+  }else{document.getElementById('edit-titre').value='';document.getElementById('edit-texte').value='';
+    document.getElementById('edit-cat').value='Nouveautés';editEmoji='📰';editCouleur='#e50914';}
+  majSelEmoji();majSelCouleur();
+  be.querySelectorAll('span').forEach(s=>s.onclick=()=>{editEmoji=s.dataset.e;majSelEmoji();});
+  bc.querySelectorAll('span').forEach(s=>s.onclick=()=>{editCouleur=s.dataset.c;majSelCouleur();});
+  modale.classList.add('on');
+}
+function majSelEmoji(){document.querySelectorAll('#edit-emojis span').forEach(s=>s.classList.toggle('sel',s.dataset.e===editEmoji));}
+function majSelCouleur(){document.querySelectorAll('#edit-couleurs span').forEach(s=>s.style.outline=s.dataset.c===editCouleur?'3px solid #fff':'none');}
+function publier(){
+  const titre=document.getElementById('edit-titre').value.trim();
+  const texte=document.getElementById('edit-texte').value.trim();
+  const cat=document.getElementById('edit-cat').value;
+  if(!titre){toast('Ajoute un titre');return;}
+  if(!texte){toast('Écris le texte');return;}
+  if(editionId){const a=data.articles.find(x=>x.id===editionId);
+    a.titre=titre;a.texte=texte;a.cat=cat;a.emoji=editEmoji;a.couleur=editCouleur;
+    toast('Article modifié ✏️');
+  }else{
+    data.articles.push({id:'a'+Date.now(),titre,texte,cat,emoji:editEmoji,couleur:editCouleur,ts:Date.now(),likes:0});
+    toast('Article publié 📢');
+  }
+  save();document.getElementById('modale-edit').classList.remove('on');
+  fermerLecture();rendre();
+}
+function supprimerArticle(id){
+  if(!confirm('Supprimer cet article ?'))return;
+  data.articles=data.articles.filter(x=>x.id!==id);
+  save();fermerLecture();rendre();toast('Article supprimé 🗑️');
+}
+
+/* ============ PDG ============ */
+function majModePDG(){
+  document.getElementById('fab').style.display=estPDG?'block':'none';
+  document.getElementById('zone-pdg-login').style.display=estPDG?'none':'block';
+  document.getElementById('zone-pdg-actif').style.display=estPDG?'block':'none';
+}
+
+/* ============ INIT ============ */
+function init(){
+  load();loadCloudCfg();badge(cloudOn()?'ok':'');
+  rendre();majModePDG();
+
+  // filtres/liste déjà branchés dans rendre()
+  document.getElementById('lec-retour').onclick=fermerLecture;
+  document.getElementById('lec-like').onclick=()=>{if(articleOuvert)toggleLike(articleOuvert);};
+  document.getElementById('lec-modifier').onclick=()=>{if(articleOuvert)ouvrirEdition(articleOuvert);};
+  document.getElementById('lec-supprimer').onclick=()=>{if(articleOuvert)supprimerArticle(articleOuvert);};
+
+  document.getElementById('fab').onclick=()=>ouvrirEdition(null);
+  document.getElementById('edit-publier').onclick=publier;
+  document.getElementById('edit-annuler').onclick=()=>document.getElementById('modale-edit').classList.remove('on');
+
+  // réglages
+  document.getElementById('btn-reglages').onclick=()=>{document.getElementById('modale-reglages').classList.add('on');majReglages();};
+  document.getElementById('btn-fermer-reglages').onclick=()=>document.getElementById('modale-reglages').classList.remove('on');
+  document.getElementById('btn-pdg-valider').onclick=()=>{
+    const c=document.getElementById('inp-pdgcode').value.trim();
+    if(c===data.settings.pdgCode){estPDG=true;localStorage.setItem('r-news-pdg','1');
+      toast('👑 Bienvenue, PDG !');majModePDG();majReglages();}
+    else toast('Code incorrect');};
+  document.getElementById('btn-save-pdg').onclick=()=>{
+    const v=document.getElementById('inp-newpdg').value.trim();
+    if(v){data.settings.pdgCode=v;save();toast('Code changé');document.getElementById('inp-newpdg').value='';}};
+  document.getElementById('btn-quitter-pdg').onclick=()=>{estPDG=false;localStorage.removeItem('r-news-pdg');majModePDG();majReglages();toast('Mode PDG quitté');};
+
+  document.getElementById('btn-sync-save').onclick=async()=>{
+    const k=document.getElementById('inp-apikey').value.trim();
+    if(!k){toast('Colle ta clé jsonbin');return;}
+    cloud.apiKey=k;const bid=document.getElementById('inp-binid').value.trim();if(bid)cloud.binId=bid;
+    saveCloudCfg();badge('sync');
+    try{if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}await pushCloud();
+      toast('☁️ Synchro activée !');majReglages();}catch(e){badge('err');toast('Erreur : vérifie ta clé');}};
+  document.getElementById('btn-sync-pull').onclick=()=>pullCloud(false);
+
+  // rafraîchissement auto
+  setInterval(()=>{if(cloudOn()&&!syncing&&document.getElementById('modale-edit').className.indexOf('on')<0)pullCloud(true);},8000);
+  if(cloudOn())pullCloud(true);
+}
+function majReglages(){
+  document.getElementById('inp-apikey').value=cloud.apiKey||'';
+  document.getElementById('inp-binid').value=cloud.binId||'';
+  const montrer=!!cloud.binId;
+  document.getElementById('lab-binid').style.display=montrer?'block':'none';
+  document.getElementById('inp-binid').style.display=montrer?'block':'none';
+}
+init();
+</script>
+</body>
+</html>
