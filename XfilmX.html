@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)file:///C:/Users/RAPHAEL/Downloads/gardien-oceans-FILM-COMPLET.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Gardien des Océans — Le Film</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bleu:#0e6a94;--bleuclair:#3fb6d8;--or:#ffd66b;--nuit:#041826}
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;background:var(--nuit);color:#fff;overflow:hidden;height:100vh}
+  #scene-box{position:fixed;inset:0}
+  .scene{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity 1.2s ease}
+  .scene.on{opacity:1}
+
+  /* accueil */
+  #accueil{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 30%,#0e6a94,#041826);z-index:20;text-align:center;padding:20px}
+  #accueil .eyebrow{letter-spacing:4px;font-size:clamp(11px,2.5vw,15px);color:var(--bleuclair);text-transform:uppercase;margin-bottom:14px}
+  #accueil h1{font-size:clamp(34px,9vw,72px);line-height:1.05;text-shadow:0 4px 24px rgba(0,0,0,.5)}
+  #accueil h1 span{color:var(--or)}
+  #accueil .part{margin-top:10px;font-size:clamp(15px,4vw,22px);font-style:italic;opacity:.9}
+  #play{margin-top:36px;padding:16px 40px;font-size:20px;font-weight:bold;color:var(--nuit);background:var(--or);
+    border:none;border-radius:40px;cursor:pointer;box-shadow:0 6px 20px rgba(255,214,107,.4);transition:transform .2s}
+  #play:hover{transform:scale(1.06)}
+  .waves{position:absolute;bottom:0;left:0;width:100%;height:120px;opacity:.3}
+
+  /* sous-titres */
+  #soustitre{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);width:90%;max-width:760px;
+    text-align:center;font-size:clamp(16px,3.6vw,24px);line-height:1.4;
+    background:rgba(0,0,0,.45);padding:12px 20px;border-radius:14px;backdrop-filter:blur(3px);
+    opacity:0;transition:opacity .4s}
+  #soustitre.on{opacity:1}
+
+  /* barre lecteur */
+  #lecteur{position:fixed;bottom:0;left:0;width:100%;padding:12px 16px;display:flex;align-items:center;gap:12px;
+    background:linear-gradient(transparent,rgba(0,0,0,.6));z-index:15}
+  #lecteur button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;
+    padding:8px 14px;border-radius:20px;cursor:pointer;font-size:15px}
+  #lecteur button:hover{background:rgba(255,255,255,.3)}
+  #chapitre{font-size:13px;opacity:.8;white-space:nowrap}
+  #barre{flex:1;height:6px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden}
+  #barrePlein{height:100%;width:0;background:var(--bleuclair);border-radius:4px;transition:width .3s linear}
+
+  /* fin */
+  #fin{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle,#0e6a94,#041826);z-index:25;text-align:center;padding:20px}
+  #fin h2{font-size:clamp(26px,7vw,52px);color:var(--or);margin-bottom:16px}
+  #fin p{font-size:clamp(15px,3.6vw,20px);max-width:600px;line-height:1.5;opacity:.9}
+  #fin button{margin-top:28px;padding:14px 34px;font-size:18px;background:var(--or);color:var(--nuit);
+    border:none;border-radius:30px;cursor:pointer;font-weight:bold}
+</style>
+</head>
+<body>
+
+<div id="scene-box">
+<svg class="scene" id="p1_a1" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#cielJour)"></rect>
+  <circle cx="650" cy="90" r="45" fill="#fff3b0"></circle>
+  <path d="M0 300 Q200 280 400 300 T800 300 V500 H0 Z" fill="#3aa6d8" opacity=".85"></path>
+  <path d="M0 320 Q200 305 400 322 T800 320 V500 H0 Z" fill="#2a86c0" opacity=".7">
+    <animate attributeName="d" values="M0 320 Q200 305 400 322 T800 320 V500 H0 Z;M0 320 Q200 335 400 315 T800 322 V500 H0 Z;M0 320 Q200 305 400 322 T800 320 V500 H0 Z" dur="6s" repeatCount="indefinite"></animate>
+  </path>
+  <path d="M0 360 Q400 340 800 360 V500 H0 Z" fill="#e8d6a8"></path>
+  <ellipse cx="400" cy="470" rx="500" ry="60" fill="#f0e2ba"></ellipse>
+ 
+    </svg>
+<svg class="scene" id="p1_a2" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#cielJour)"></rect>
+  <circle cx="650" cy="90" r="45" fill="#fff3b0"></circle>
+  <path d="M0 300 Q200 280 400 300 T800 300 V500 H0 Z" fill="#3aa6d8" opacity=".85"></path>
+  <path d="M0 320 Q200 305 400 322 T800 320 V500 H0 Z" fill="#2a86c0" opacity=".7">
+    <animate attributeName="d" values="M0 320 Q200 305 400 322 T800 320 V500 H0 Z;M0 320 Q200 335 400 315 T800 322 V500 H0 Z;M0 320 Q200 305 400 322 T800 320 V500 H0 Z" dur="6s" repeatCount="indefinite"></animate>
+  </path>
+  <path d="M0 360 Q400 340 800 360 V500 H0 Z" fill="#e8d6a8"></path>
+  <ellipse cx="400" cy="470" rx="500" ry="60" fill="#f0e2ba"></ellipse>
+ 
+    </svg>
+<svg class="scene" id="p1_a3" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#cielJour)"></rect>
+  <circle cx="650" cy="90" r="45" fill="#fff3b0"></circle>
+  <path d="M0 300 Q200 280 400 300 T800 300 V500 H0 Z" fill="#3aa6d8" opacity=".85"></path>
+  <path d="M0 320 Q200 305 400 322 T800 320 V500 H0 Z" fill="#2a86c0" opacity=".7">
+    <animate attributeName="d" values="M0 320 Q200 305 400 322 T800 320 V500 H0 Z;M0 320 Q200 335 400 315 T800 322 V500 H0 Z;M0 320 Q200 305 400 322 T800 320 V500 H0 Z" dur="6s" repeatCount="indefinite"></animate>
+  </path>
+  <path d="M0 360 Q400 340 800 360 V500 H0 Z" fill="#e8d6a8"></path>
+  <ellipse cx="400" cy="470" rx="500" ry="60" fill="#f0e2ba"></ellipse>
+ 
+    </svg>
+<svg class="scene" id="p1_a4" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#cielJour)"></rect>
+  <path d="M0 200 Q200 180 400 200 T800 200 V500 H0 Z" fill="#2f9bcf"></path>
+  <path d="M0 250 Q200 230 400 250 T800 250 V500 H0 Z" fill="#2183b8" opacity=".8">
+    <animate attributeName="d" values="M0 250 Q200 230 400 250 T800 250 V500 H0 Z;M0 250 Q200 270 400 235 T800 255 V500 H0 Z;M0 250 Q200 230 400 250 T800 250 V500 H0 Z" dur="5s" repeatCount="indefinite"></animate>
+  </path>
+  <path d="M0 330 Q200 310 400 330 T800 330 V500 H0 Z" fill="#176a99"></path>
+ 
+    </svg>
+<svg class="scene" id="p1_a5" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#cielJour)"></rect>
+  <path d="M0 200 Q200 180 400 200 T800 200 V500 H0 Z" fill="#2f9bcf"></path>
+  <path d="M0 250 Q200 230 400 250 T800 250 V500 H0 Z" fill="#2183b8" opacity=".8">
+    <animate attributeName="d" values="M0 250 Q200 230 400 250 T800 250 V500 H0 Z;M0 250 Q200 270 400 235 T800 255 V500 H0 Z;M0 250 Q200 230 400 250 T800 250 V500 H0 Z" dur="5s" repeatCount="indefinite"></animate>
+  </path>
+  <path d="M0 330 Q200 310 400 330 T800 330 V500 H0 Z" fill="#176a99"></path>
+ 
+    </svg>
+<svg class="scene" id="p1_a6" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <g opacity=".9">
+   <path d="M120 500 Q100 380 140 340 Q160 400 150 500 Z" fill="#ff8fab"></path>
+   <path d="M180 500 Q170 400 210 360 Q220 430 210 500 Z" fill="#ff6f91"></path>
+   <path d="M600 500 Q580 360 630 330 Q650 420 640 500 Z" fill="#ffb347"></path>
+   <path d="M660 500 Q650 400 690 370 Q700 440 690 500 Z" fill="#ffa07a"></path>
+   <ellipse cx="400" cy="470" rx="120" ry="30" fill="#c98f5a" opacity=".6"></ellipse>
+  </g>
+  <circle cx="300" cy="150" r="6" fill="#fff" opacity=".5"><animate attributeName="cy" values="150;120;150" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="200" r="5" fill="#fff" opacity=".5"><animate attributeName="cy" values="200;160;200" dur="5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a7" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <g opacity=".9">
+   <path d="M120 500 Q100 380 140 340 Q160 400 150 500 Z" fill="#ff8fab"></path>
+   <path d="M180 500 Q170 400 210 360 Q220 430 210 500 Z" fill="#ff6f91"></path>
+   <path d="M600 500 Q580 360 630 330 Q650 420 640 500 Z" fill="#ffb347"></path>
+   <path d="M660 500 Q650 400 690 370 Q700 440 690 500 Z" fill="#ffa07a"></path>
+   <ellipse cx="400" cy="470" rx="120" ry="30" fill="#c98f5a" opacity=".6"></ellipse>
+  </g>
+  <circle cx="300" cy="150" r="6" fill="#fff" opacity=".5"><animate attributeName="cy" values="150;120;150" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="200" r="5" fill="#fff" opacity=".5"><animate attributeName="cy" values="200;160;200" dur="5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a8" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <g opacity=".9">
+   <path d="M120 500 Q100 380 140 340 Q160 400 150 500 Z" fill="#ff8fab"></path>
+   <path d="M180 500 Q170 400 210 360 Q220 430 210 500 Z" fill="#ff6f91"></path>
+   <path d="M600 500 Q580 360 630 330 Q650 420 640 500 Z" fill="#ffb347"></path>
+   <path d="M660 500 Q650 400 690 370 Q700 440 690 500 Z" fill="#ffa07a"></path>
+   <ellipse cx="400" cy="470" rx="120" ry="30" fill="#c98f5a" opacity=".6"></ellipse>
+  </g>
+  <circle cx="300" cy="150" r="6" fill="#fff" opacity=".5"><animate attributeName="cy" values="150;120;150" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="200" r="5" fill="#fff" opacity=".5"><animate attributeName="cy" values="200;160;200" dur="5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a9" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <circle cx="150" cy="120" r="4" fill="#7fdfff" opacity=".6"><animate attributeName="opacity" values=".6;.1;.6" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="620" cy="90" r="3" fill="#7fdfff" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="400" cy="60" r="3" fill="#7fdfff" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="5s" repeatCount="indefinite"></animate></circle>
+  <path d="M0 460 Q400 430 800 460 V500 H0 Z" fill="#062033"></path>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a10" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <circle cx="150" cy="120" r="4" fill="#7fdfff" opacity=".6"><animate attributeName="opacity" values=".6;.1;.6" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="620" cy="90" r="3" fill="#7fdfff" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="400" cy="60" r="3" fill="#7fdfff" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="5s" repeatCount="indefinite"></animate></circle>
+  <path d="M0 460 Q400 430 800 460 V500 H0 Z" fill="#062033"></path>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a11" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <circle cx="150" cy="120" r="4" fill="#7fdfff" opacity=".6"><animate attributeName="opacity" values=".6;.1;.6" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="620" cy="90" r="3" fill="#7fdfff" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="400" cy="60" r="3" fill="#7fdfff" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="5s" repeatCount="indefinite"></animate></circle>
+  <path d="M0 460 Q400 430 800 460 V500 H0 Z" fill="#062033"></path>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a12" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <g transform="translate(400 250)">
+   <g><animatetransform attributeName="transform" type="rotate" from="0" to="360" dur="6s" repeatCount="indefinite"></animatetransform>
+    <ellipse cx="0" cy="0" rx="180" ry="120" fill="none" stroke="#3fb6e0" stroke-width="6" opacity=".5"></ellipse>
+    <ellipse cx="0" cy="0" rx="120" ry="80" fill="none" stroke="#5fd0f0" stroke-width="5" opacity=".6"></ellipse>
+    <ellipse cx="0" cy="0" rx="60" ry="40" fill="none" stroke="#9be8ff" stroke-width="4" opacity=".7"></ellipse>
+   </g>
+   <circle cx="0" cy="0" r="22" fill="#bff0ff"><animate attributeName="r" values="22;28;22" dur="1.5s" repeatCount="indefinite"></animate></circle>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a13" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <g transform="translate(400 250)">
+   <g><animatetransform attributeName="transform" type="rotate" from="0" to="360" dur="6s" repeatCount="indefinite"></animatetransform>
+    <ellipse cx="0" cy="0" rx="180" ry="120" fill="none" stroke="#3fb6e0" stroke-width="6" opacity=".5"></ellipse>
+    <ellipse cx="0" cy="0" rx="120" ry="80" fill="none" stroke="#5fd0f0" stroke-width="5" opacity=".6"></ellipse>
+    <ellipse cx="0" cy="0" rx="60" ry="40" fill="none" stroke="#9be8ff" stroke-width="4" opacity=".7"></ellipse>
+   </g>
+   <circle cx="0" cy="0" r="22" fill="#bff0ff"><animate attributeName="r" values="22;28;22" dur="1.5s" repeatCount="indefinite"></animate></circle>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a14" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <path d="M0 0 H800 V120 Q600 180 400 130 Q200 180 0 120 Z" fill="#04121f"></path>
+  <path d="M0 500 H800 V380 Q600 320 400 370 Q200 320 0 380 Z" fill="#04121f"></path>
+  <circle cx="400" cy="250" r="90" fill="#0a3550" opacity=".5"><animate attributeName="r" values="90;100;90" dur="4s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a15" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <path d="M0 0 H800 V120 Q600 180 400 130 Q200 180 0 120 Z" fill="#04121f"></path>
+  <path d="M0 500 H800 V380 Q600 320 400 370 Q200 320 0 380 Z" fill="#04121f"></path>
+  <circle cx="400" cy="250" r="90" fill="#0a3550" opacity=".5"><animate attributeName="r" values="90;100;90" dur="4s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a16" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <path d="M0 0 H800 V120 Q600 180 400 130 Q200 180 0 120 Z" fill="#04121f"></path>
+  <path d="M0 500 H800 V380 Q600 320 400 370 Q200 320 0 380 Z" fill="#04121f"></path>
+  <circle cx="400" cy="250" r="90" fill="#0a3550" opacity=".5"><animate attributeName="r" values="90;100;90" dur="4s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a17" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#020a14"></rect>
+  <circle cx="200" cy="150" r="7" fill="#5fffd0" opacity=".8"><animate attributeName="opacity" values=".8;.2;.8" dur="2.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="560" cy="120" r="6" fill="#5fb0ff" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="650" cy="300" r="5" fill="#ff7fce" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="140" cy="340" r="6" fill="#a0ff7f" opacity=".6"><animate attributeName="opacity" values=".6;.15;.6" dur="2.8s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a18" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#020a14"></rect>
+  <circle cx="200" cy="150" r="7" fill="#5fffd0" opacity=".8"><animate attributeName="opacity" values=".8;.2;.8" dur="2.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="560" cy="120" r="6" fill="#5fb0ff" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="650" cy="300" r="5" fill="#ff7fce" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="140" cy="340" r="6" fill="#a0ff7f" opacity=".6"><animate attributeName="opacity" values=".6;.15;.6" dur="2.8s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a19" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#020a14"></rect>
+  <circle cx="200" cy="150" r="7" fill="#5fffd0" opacity=".8"><animate attributeName="opacity" values=".8;.2;.8" dur="2.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="560" cy="120" r="6" fill="#5fb0ff" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="650" cy="300" r="5" fill="#ff7fce" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="140" cy="340" r="6" fill="#a0ff7f" opacity=".6"><animate attributeName="opacity" values=".6;.15;.6" dur="2.8s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p1_a20" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#020a14"></rect>
+  <circle cx="200" cy="150" r="7" fill="#5fffd0" opacity=".8"><animate attributeName="opacity" values=".8;.2;.8" dur="2.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="560" cy="120" r="6" fill="#5fb0ff" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="650" cy="300" r="5" fill="#ff7fce" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="140" cy="340" r="6" fill="#a0ff7f" opacity=".6"><animate attributeName="opacity" values=".6;.15;.6" dur="2.8s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b1" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#020a14"></rect>
+  <circle cx="200" cy="150" r="7" fill="#5fffd0" opacity=".8"><animate attributeName="opacity" values=".8;.2;.8" dur="2.5s" repeatCount="indefinite"></animate></circle>
+  <circle cx="560" cy="120" r="6" fill="#5fb0ff" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="650" cy="300" r="5" fill="#ff7fce" opacity=".7"><animate attributeName="opacity" values=".7;.2;.7" dur="3.5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b2" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#04121f"></rect>
+  <g fill="#1a2b3a" stroke="#2a4a5e" stroke-width="2">
+   <rect x="300" y="140" width="200" height="300"></rect>
+   <rect x="240" y="220" width="60" height="220"></rect>
+   <rect x="500" y="200" width="60" height="240"></rect>
+   <rect x="350" y="90" width="100" height="60"></rect>
+  </g>
+  <circle cx="400" cy="120" r="10" fill="#ff3b3b"><animate attributeName="opacity" values="1;.3;1" dur="1.5s" repeatCount="indefinite"></animate></circle>
+  <rect x="270" y="300" width="30" height="140" fill="#12303f"></rect>
+  <rect x="500" y="320" width="30" height="120" fill="#12303f"></rect>
+  <g stroke="#3fb6e0" stroke-width="3" opacity=".4">
+   <line x1="150" y1="400" x2="300" y2="300"><animate attributeName="opacity" values=".4;.1;.4" dur="2s" repeatCount="indefinite"></animate></line>
+   <line x1="650" y1="420" x2="500" y2="320"><animate attributeName="opacity" values=".4;.1;.4" dur="2.5s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b3" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#04121f"></rect>
+  <g fill="#1a2b3a" stroke="#2a4a5e" stroke-width="2">
+   <rect x="300" y="140" width="200" height="300"></rect>
+   <rect x="240" y="220" width="60" height="220"></rect>
+   <rect x="500" y="200" width="60" height="240"></rect>
+   <rect x="350" y="90" width="100" height="60"></rect>
+  </g>
+  <circle cx="400" cy="120" r="10" fill="#ff3b3b"><animate attributeName="opacity" values="1;.3;1" dur="1.5s" repeatCount="indefinite"></animate></circle>
+  <rect x="270" y="300" width="30" height="140" fill="#12303f"></rect>
+  <rect x="500" y="320" width="30" height="120" fill="#12303f"></rect>
+  <g stroke="#3fb6e0" stroke-width="3" opacity=".4">
+   <line x1="150" y1="400" x2="300" y2="300"><animate attributeName="opacity" values=".4;.1;.4" dur="2s" repeatCount="indefinite"></animate></line>
+   <line x1="650" y1="420" x2="500" y2="320"><animate attributeName="opacity" values=".4;.1;.4" dur="2.5s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b4" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#04121f"></rect>
+  <g fill="#1a2b3a" stroke="#2a4a5e" stroke-width="2">
+   <rect x="300" y="140" width="200" height="300"></rect>
+   <rect x="240" y="220" width="60" height="220"></rect>
+   <rect x="500" y="200" width="60" height="240"></rect>
+   <rect x="350" y="90" width="100" height="60"></rect>
+  </g>
+  <circle cx="400" cy="120" r="10" fill="#ff3b3b"><animate attributeName="opacity" values="1;.3;1" dur="1.5s" repeatCount="indefinite"></animate></circle>
+  <rect x="270" y="300" width="30" height="140" fill="#12303f"></rect>
+  <rect x="500" y="320" width="30" height="120" fill="#12303f"></rect>
+  <g stroke="#3fb6e0" stroke-width="3" opacity=".4">
+   <line x1="150" y1="400" x2="300" y2="300"><animate attributeName="opacity" values=".4;.1;.4" dur="2s" repeatCount="indefinite"></animate></line>
+   <line x1="650" y1="420" x2="500" y2="320"><animate attributeName="opacity" values=".4;.1;.4" dur="2.5s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b5" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#04121f"></rect>
+  <path d="M300 0 L360 250 L320 500 L480 500 L440 250 L500 0 Z" fill="url(#eauClaire)" opacity=".7">
+   <animate attributeName="opacity" values=".7;.9;.7" dur="4s" repeatCount="indefinite"></animate>
+  </path>
+  <circle cx="400" cy="250" r="60" fill="#5fd0f0" opacity=".4"><animate attributeName="r" values="60;80;60" dur="5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b6" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <g>
+   <path d="M100 500 Q80 350 130 310 Q150 390 140 500 Z" fill="#ff8fab"></path>
+   <path d="M170 500 Q160 380 200 340 Q215 420 205 500 Z" fill="#ffb347"></path>
+   <path d="M600 500 Q580 340 640 310 Q660 410 650 500 Z" fill="#a0e060"></path>
+   <path d="M670 500 Q660 380 700 350 Q712 430 700 500 Z" fill="#ff6f91"></path>
+   <circle cx="400" cy="430" r="40" fill="#ffd66b" opacity=".5"></circle>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b7" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <g>
+   <path d="M100 500 Q80 350 130 310 Q150 390 140 500 Z" fill="#ff8fab"></path>
+   <path d="M170 500 Q160 380 200 340 Q215 420 205 500 Z" fill="#ffb347"></path>
+   <path d="M600 500 Q580 340 640 310 Q660 410 650 500 Z" fill="#a0e060"></path>
+   <path d="M670 500 Q660 380 700 350 Q712 430 700 500 Z" fill="#ff6f91"></path>
+   <circle cx="400" cy="430" r="40" fill="#ffd66b" opacity=".5"></circle>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b8" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <g>
+   <path d="M100 500 Q80 350 130 310 Q150 390 140 500 Z" fill="#ff8fab"></path>
+   <path d="M170 500 Q160 380 200 340 Q215 420 205 500 Z" fill="#ffb347"></path>
+   <path d="M600 500 Q580 340 640 310 Q660 410 650 500 Z" fill="#a0e060"></path>
+   <path d="M670 500 Q660 380 700 350 Q712 430 700 500 Z" fill="#ff6f91"></path>
+   <circle cx="400" cy="430" r="40" fill="#ffd66b" opacity=".5"></circle>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b9" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <g fill="#3a2f1a" stroke="#5a4a2a" stroke-width="2" transform="rotate(-8 400 300)">
+   <path d="M200 300 Q400 260 600 300 L580 420 Q400 450 220 420 Z"></path>
+   <rect x="360" y="180" width="16" height="130" fill="#4a3a1a"></rect>
+   <path d="M376 190 L470 240 L376 260 Z" fill="#6a5a3a" opacity=".7"></path>
+  </g>
+  <circle cx="420" cy="240" r="8" fill="#ffe98a" opacity=".9"><animate attributeName="opacity" values=".9;.4;.9" dur="2s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b10" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <g fill="#3a2f1a" stroke="#5a4a2a" stroke-width="2" transform="rotate(-8 400 300)">
+   <path d="M200 300 Q400 260 600 300 L580 420 Q400 450 220 420 Z"></path>
+   <rect x="360" y="180" width="16" height="130" fill="#4a3a1a"></rect>
+   <path d="M376 190 L470 240 L376 260 Z" fill="#6a5a3a" opacity=".7"></path>
+  </g>
+  <circle cx="420" cy="240" r="8" fill="#ffe98a" opacity=".9"><animate attributeName="opacity" values=".9;.4;.9" dur="2s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b11" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#1a0a14"></rect>
+  <path d="M250 500 L400 200 L550 500 Z" fill="#3a1a1a"></path>
+  <path d="M360 260 Q400 180 440 260 Q420 300 400 280 Q380 300 360 260 Z" fill="#ff5a2a">
+   <animate attributeName="opacity" values="1;.6;1" dur="1.5s" repeatCount="indefinite"></animate>
+  </path>
+  <circle cx="400" cy="230" r="10" fill="#ffb347"><animate attributeName="cy" values="230;180;230" dur="2s" repeatCount="indefinite"></animate></circle>
+  <circle cx="420" cy="240" r="6" fill="#ff8347"><animate attributeName="cy" values="240;190;240" dur="2.5s" repeatCount="indefinite"></animate></circle>
+  <ellipse cx="400" cy="490" rx="400" ry="40" fill="#ff5a2a" opacity=".2"></ellipse>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b12" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#1a0a14"></rect>
+  <path d="M250 500 L400 200 L550 500 Z" fill="#3a1a1a"></path>
+  <path d="M360 260 Q400 180 440 260 Q420 300 400 280 Q380 300 360 260 Z" fill="#ff5a2a">
+   <animate attributeName="opacity" values="1;.6;1" dur="1.5s" repeatCount="indefinite"></animate>
+  </path>
+  <circle cx="400" cy="230" r="10" fill="#ffb347"><animate attributeName="cy" values="230;180;230" dur="2s" repeatCount="indefinite"></animate></circle>
+  <circle cx="420" cy="240" r="6" fill="#ff8347"><animate attributeName="cy" values="240;190;240" dur="2.5s" repeatCount="indefinite"></animate></circle>
+  <ellipse cx="400" cy="490" rx="400" ry="40" fill="#ff5a2a" opacity=".2"></ellipse>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b13" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#1a0a14"></rect>
+  <path d="M250 500 L400 200 L550 500 Z" fill="#3a1a1a"></path>
+  <path d="M360 260 Q400 180 440 260 Q420 300 400 280 Q380 300 360 260 Z" fill="#ff5a2a">
+   <animate attributeName="opacity" values="1;.6;1" dur="1.5s" repeatCount="indefinite"></animate>
+  </path>
+  <circle cx="400" cy="230" r="10" fill="#ffb347"><animate attributeName="cy" values="230;180;230" dur="2s" repeatCount="indefinite"></animate></circle>
+  <circle cx="420" cy="240" r="6" fill="#ff8347"><animate attributeName="cy" values="240;190;240" dur="2.5s" repeatCount="indefinite"></animate></circle>
+  <ellipse cx="400" cy="490" rx="400" ry="40" fill="#ff5a2a" opacity=".2"></ellipse>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b14" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <circle cx="150" cy="120" r="4" fill="#7fdfff" opacity=".6"><animate attributeName="opacity" values=".6;.1;.6" dur="3s" repeatCount="indefinite"></animate></circle>
+  <circle cx="620" cy="90" r="3" fill="#7fdfff" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="4s" repeatCount="indefinite"></animate></circle>
+  <path d="M0 460 Q400 430 800 460 V500 H0 Z" fill="#062033"></path>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b15" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <g fill="#02060c" opacity=".85">
+   <ellipse cx="150" cy="150" rx="40" ry="25"><animate attributeName="cx" values="150;180;150" dur="2s" repeatCount="indefinite"></animate></ellipse>
+   <ellipse cx="650" cy="200" rx="45" ry="28"><animate attributeName="cx" values="650;620;650" dur="2.5s" repeatCount="indefinite"></animate></ellipse>
+   <ellipse cx="500" cy="380" rx="38" ry="24"><animate attributeName="cx" values="500;530;500" dur="2.2s" repeatCount="indefinite"></animate></ellipse>
+  </g>
+  <circle cx="150" cy="145" r="4" fill="#ff3b3b"></circle><circle cx="170" cy="145" r="4" fill="#ff3b3b"></circle>
+  <circle cx="650" cy="195" r="4" fill="#ff3b3b"></circle><circle cx="670" cy="195" r="4" fill="#ff3b3b"></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b16" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauProfonde)"></rect>
+  <g fill="#02060c" opacity=".85">
+   <ellipse cx="150" cy="150" rx="40" ry="25"><animate attributeName="cx" values="150;180;150" dur="2s" repeatCount="indefinite"></animate></ellipse>
+   <ellipse cx="650" cy="200" rx="45" ry="28"><animate attributeName="cx" values="650;620;650" dur="2.5s" repeatCount="indefinite"></animate></ellipse>
+   <ellipse cx="500" cy="380" rx="38" ry="24"><animate attributeName="cx" values="500;530;500" dur="2.2s" repeatCount="indefinite"></animate></ellipse>
+  </g>
+  <circle cx="150" cy="145" r="4" fill="#ff3b3b"></circle><circle cx="170" cy="145" r="4" fill="#ff3b3b"></circle>
+  <circle cx="650" cy="195" r="4" fill="#ff3b3b"></circle><circle cx="670" cy="195" r="4" fill="#ff3b3b"></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b17" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <circle cx="400" cy="250" r="150" fill="#bff0ff" opacity=".25"><animate attributeName="r" values="150;175;150" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="400" cy="250" r="90" fill="#9be8ff" opacity=".3"><animate attributeName="r" values="90;110;90" dur="3s" repeatCount="indefinite"></animate></circle>
+  <g transform="translate(400 250)">
+   <path d="M0 -45 L18 -12 L45 0 L18 12 L0 45 L-18 12 L-45 0 L-18 -12 Z" fill="#5fd0f0">
+    <animate attributeName="opacity" values="1;.6;1" dur="1.2s" repeatCount="indefinite"></animate>
+    <animatetransform attributeName="transform" type="rotate" from="0" to="360" dur="12s" repeatCount="indefinite"></animatetransform>
+   </path>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b18" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <circle cx="400" cy="250" r="150" fill="#bff0ff" opacity=".25"><animate attributeName="r" values="150;175;150" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="400" cy="250" r="90" fill="#9be8ff" opacity=".3"><animate attributeName="r" values="90;110;90" dur="3s" repeatCount="indefinite"></animate></circle>
+  <g transform="translate(400 250)">
+   <path d="M0 -45 L18 -12 L45 0 L18 12 L0 45 L-18 12 L-45 0 L-18 -12 Z" fill="#5fd0f0">
+    <animate attributeName="opacity" values="1;.6;1" dur="1.2s" repeatCount="indefinite"></animate>
+    <animatetransform attributeName="transform" type="rotate" from="0" to="360" dur="12s" repeatCount="indefinite"></animatetransform>
+   </path>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b19" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <circle cx="400" cy="250" r="150" fill="#bff0ff" opacity=".25"><animate attributeName="r" values="150;175;150" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="400" cy="250" r="90" fill="#9be8ff" opacity=".3"><animate attributeName="r" values="90;110;90" dur="3s" repeatCount="indefinite"></animate></circle>
+  <g transform="translate(400 250)">
+   <path d="M0 -45 L18 -12 L45 0 L18 12 L0 45 L-18 12 L-45 0 L-18 -12 Z" fill="#5fd0f0">
+    <animate attributeName="opacity" values="1;.6;1" dur="1.2s" repeatCount="indefinite"></animate>
+    <animatetransform attributeName="transform" type="rotate" from="0" to="360" dur="12s" repeatCount="indefinite"></animatetransform>
+   </path>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p2_b20" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#aee3f5"></stop><stop offset="1" stop-color="#e8f7ff"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#04121f"></rect>
+  <g fill="#1a2b3a" stroke="#2a4a5e" stroke-width="2">
+   <rect x="300" y="140" width="200" height="300"></rect>
+   <rect x="240" y="220" width="60" height="220"></rect>
+   <rect x="500" y="200" width="60" height="240"></rect>
+   <rect x="350" y="90" width="100" height="60"></rect>
+  </g>
+  <circle cx="400" cy="120" r="10" fill="#ff3b3b"><animate attributeName="opacity" values="1;.3;1" dur="1.5s" repeatCount="indefinite"></animate></circle>
+  <rect x="270" y="300" width="30" height="140" fill="#12303f"></rect>
+  <rect x="500" y="320" width="30" height="120" fill="#12303f"></rect>
+  <g stroke="#3fb6e0" stroke-width="3" opacity=".4">
+   <line x1="150" y1="400" x2="300" y2="300"><animate attributeName="opacity" values=".4;.1;.4" dur="2s" repeatCount="indefinite"></animate></line>
+   <line x1="650" y1="420" x2="500" y2="320"><animate attributeName="opacity" values=".4;.1;.4" dur="2.5s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c1" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#04121f"></rect>
+  <g fill="#1a2b3a" stroke="#2a4a5e" stroke-width="2">
+   <rect x="300" y="140" width="200" height="300"></rect>
+   <rect x="240" y="220" width="60" height="220"></rect>
+   <rect x="500" y="200" width="60" height="240"></rect>
+   <rect x="350" y="90" width="100" height="60"></rect>
+  </g>
+  <circle cx="400" cy="120" r="10" fill="#ff3b3b"><animate attributeName="opacity" values="1;.3;1" dur="1.5s" repeatCount="indefinite"></animate></circle>
+  <rect x="270" y="300" width="30" height="140" fill="#12303f"></rect>
+  <rect x="500" y="320" width="30" height="120" fill="#12303f"></rect>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c2" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#0a1a24"></rect>
+  <g fill="#1a2b3a" stroke="#2a4a5e" stroke-width="3">
+   <rect x="0" y="80" width="800" height="90"></rect>
+   <rect x="0" y="330" width="800" height="90"></rect>
+  </g>
+  <g stroke="#3fb6e0" stroke-width="4" opacity=".5">
+   <line x1="0" y1="250" x2="800" y2="250"><animate attributeName="opacity" values=".5;.2;.5" dur="1s" repeatCount="indefinite"></animate></line>
+  </g>
+  <circle cx="150" cy="250" r="6" fill="#5fd0f0" opacity=".6"><animate attributeName="cx" values="150;700;150" dur="2s" repeatCount="indefinite"></animate></circle>
+  <circle cx="400" cy="250" r="5" fill="#5fd0f0" opacity=".6"><animate attributeName="cx" values="400;800;400" dur="2.5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c3" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#0a1a24"></rect>
+  <g fill="#1a2b3a" stroke="#2a4a5e" stroke-width="3">
+   <rect x="0" y="80" width="800" height="90"></rect>
+   <rect x="0" y="330" width="800" height="90"></rect>
+  </g>
+  <g stroke="#3fb6e0" stroke-width="4" opacity=".5">
+   <line x1="0" y1="250" x2="800" y2="250"><animate attributeName="opacity" values=".5;.2;.5" dur="1s" repeatCount="indefinite"></animate></line>
+  </g>
+  <circle cx="150" cy="250" r="6" fill="#5fd0f0" opacity=".6"><animate attributeName="cx" values="150;700;150" dur="2s" repeatCount="indefinite"></animate></circle>
+  <circle cx="400" cy="250" r="5" fill="#5fd0f0" opacity=".6"><animate attributeName="cx" values="400;800;400" dur="2.5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c4" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#08151f"></rect>
+  <rect x="100" y="60" width="600" height="380" fill="none" stroke="#2a4a5e" stroke-width="3"></rect>
+  <g transform="translate(400 250)">
+   <rect x="-40" y="-50" width="80" height="100" fill="none" stroke="#5a6a7a" stroke-width="4"></rect>
+   <path d="M0 -30 L14 -8 L34 0 L14 8 L0 30 L-14 8 L-34 0 L-14 -8 Z" fill="#5fd0f0">
+    <animate attributeName="opacity" values="1;.5;1" dur="1.5s" repeatCount="indefinite"></animate>
+   </path>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c5" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#08151f"></rect>
+  <rect x="100" y="60" width="600" height="380" fill="none" stroke="#2a4a5e" stroke-width="3"></rect>
+  <g transform="translate(400 250)">
+   <rect x="-40" y="-50" width="80" height="100" fill="none" stroke="#5a6a7a" stroke-width="4"></rect>
+   <path d="M0 -30 L14 -8 L34 0 L14 8 L0 30 L-14 8 L-34 0 L-14 -8 Z" fill="#5fd0f0">
+    <animate attributeName="opacity" values="1;.5;1" dur="1.5s" repeatCount="indefinite"></animate>
+   </path>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c6" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#08151f"></rect>
+  <rect x="100" y="60" width="600" height="380" fill="none" stroke="#2a4a5e" stroke-width="3"></rect>
+  <g transform="translate(400 250)">
+   <rect x="-40" y="-50" width="80" height="100" fill="none" stroke="#5a6a7a" stroke-width="4"></rect>
+   <path d="M0 -30 L14 -8 L34 0 L14 8 L0 30 L-14 8 L-34 0 L-14 -8 Z" fill="#5fd0f0">
+    <animate attributeName="opacity" values="1;.5;1" dur="1.5s" repeatCount="indefinite"></animate>
+   </path>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c7" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#08151f"></rect>
+  <rect x="100" y="60" width="600" height="380" fill="none" stroke="#2a4a5e" stroke-width="3"></rect>
+  <g transform="translate(400 250)">
+   <rect x="-40" y="-50" width="80" height="100" fill="none" stroke="#5a6a7a" stroke-width="4"></rect>
+   <path d="M0 -30 L14 -8 L34 0 L14 8 L0 30 L-14 8 L-34 0 L-14 -8 Z" fill="#5fd0f0">
+    <animate attributeName="opacity" values="1;.5;1" dur="1.5s" repeatCount="indefinite"></animate>
+   </path>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c8" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#0a0512"></rect>
+  <g fill="#1a2b3a" stroke="#3a1a1a" stroke-width="3">
+   <rect x="250" y="100" width="300" height="260" rx="20"></rect>
+   <rect x="180" y="180" width="90" height="40" rx="10"></rect>
+   <rect x="530" y="180" width="90" height="40" rx="10"></rect>
+  </g>
+  <circle cx="400" cy="230" r="30" fill="#ff3b3b"><animate attributeName="r" values="30;38;30" dur=".8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="320" cy="150" r="8" fill="#ff3b3b"></circle><circle cx="480" cy="150" r="8" fill="#ff3b3b"></circle>
+  <g stroke="#5fd0f0" stroke-width="5" opacity=".6">
+   <line x1="100" y1="400" x2="250" y2="280"><animate attributeName="opacity" values=".6;.1;.6" dur=".6s" repeatCount="indefinite"></animate></line>
+   <line x1="700" y1="420" x2="550" y2="300"><animate attributeName="opacity" values=".6;.1;.6" dur=".7s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c9" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#0a0512"></rect>
+  <g fill="#1a2b3a" stroke="#3a1a1a" stroke-width="3">
+   <rect x="250" y="100" width="300" height="260" rx="20"></rect>
+   <rect x="180" y="180" width="90" height="40" rx="10"></rect>
+   <rect x="530" y="180" width="90" height="40" rx="10"></rect>
+  </g>
+  <circle cx="400" cy="230" r="30" fill="#ff3b3b"><animate attributeName="r" values="30;38;30" dur=".8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="320" cy="150" r="8" fill="#ff3b3b"></circle><circle cx="480" cy="150" r="8" fill="#ff3b3b"></circle>
+  <g stroke="#5fd0f0" stroke-width="5" opacity=".6">
+   <line x1="100" y1="400" x2="250" y2="280"><animate attributeName="opacity" values=".6;.1;.6" dur=".6s" repeatCount="indefinite"></animate></line>
+   <line x1="700" y1="420" x2="550" y2="300"><animate attributeName="opacity" values=".6;.1;.6" dur=".7s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c10" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#0a0512"></rect>
+  <g fill="#1a2b3a" stroke="#3a1a1a" stroke-width="3">
+   <rect x="250" y="100" width="300" height="260" rx="20"></rect>
+   <rect x="180" y="180" width="90" height="40" rx="10"></rect>
+   <rect x="530" y="180" width="90" height="40" rx="10"></rect>
+  </g>
+  <circle cx="400" cy="230" r="30" fill="#ff3b3b"><animate attributeName="r" values="30;38;30" dur=".8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="320" cy="150" r="8" fill="#ff3b3b"></circle><circle cx="480" cy="150" r="8" fill="#ff3b3b"></circle>
+  <g stroke="#5fd0f0" stroke-width="5" opacity=".6">
+   <line x1="100" y1="400" x2="250" y2="280"><animate attributeName="opacity" values=".6;.1;.6" dur=".6s" repeatCount="indefinite"></animate></line>
+   <line x1="700" y1="420" x2="550" y2="300"><animate attributeName="opacity" values=".6;.1;.6" dur=".7s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c11" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#0a0512"></rect>
+  <g fill="#1a2b3a" stroke="#3a1a1a" stroke-width="3">
+   <rect x="250" y="100" width="300" height="260" rx="20"></rect>
+   <rect x="180" y="180" width="90" height="40" rx="10"></rect>
+   <rect x="530" y="180" width="90" height="40" rx="10"></rect>
+  </g>
+  <circle cx="400" cy="230" r="30" fill="#ff3b3b"><animate attributeName="r" values="30;38;30" dur=".8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="320" cy="150" r="8" fill="#ff3b3b"></circle><circle cx="480" cy="150" r="8" fill="#ff3b3b"></circle>
+  <g stroke="#5fd0f0" stroke-width="5" opacity=".6">
+   <line x1="100" y1="400" x2="250" y2="280"><animate attributeName="opacity" values=".6;.1;.6" dur=".6s" repeatCount="indefinite"></animate></line>
+   <line x1="700" y1="420" x2="550" y2="300"><animate attributeName="opacity" values=".6;.1;.6" dur=".7s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c12" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#0a0512"></rect>
+  <g fill="#1a2b3a" stroke="#3a1a1a" stroke-width="3">
+   <rect x="250" y="100" width="300" height="260" rx="20"></rect>
+   <rect x="180" y="180" width="90" height="40" rx="10"></rect>
+   <rect x="530" y="180" width="90" height="40" rx="10"></rect>
+  </g>
+  <circle cx="400" cy="230" r="30" fill="#ff3b3b"><animate attributeName="r" values="30;38;30" dur=".8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="320" cy="150" r="8" fill="#ff3b3b"></circle><circle cx="480" cy="150" r="8" fill="#ff3b3b"></circle>
+  <g stroke="#5fd0f0" stroke-width="5" opacity=".6">
+   <line x1="100" y1="400" x2="250" y2="280"><animate attributeName="opacity" values=".6;.1;.6" dur=".6s" repeatCount="indefinite"></animate></line>
+   <line x1="700" y1="420" x2="550" y2="300"><animate attributeName="opacity" values=".6;.1;.6" dur=".7s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c13" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="#0a0512"></rect>
+  <g fill="#1a2b3a" stroke="#3a1a1a" stroke-width="3">
+   <rect x="250" y="100" width="300" height="260" rx="20"></rect>
+   <rect x="180" y="180" width="90" height="40" rx="10"></rect>
+   <rect x="530" y="180" width="90" height="40" rx="10"></rect>
+  </g>
+  <circle cx="400" cy="230" r="30" fill="#ff3b3b"><animate attributeName="r" values="30;38;30" dur=".8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="320" cy="150" r="8" fill="#ff3b3b"></circle><circle cx="480" cy="150" r="8" fill="#ff3b3b"></circle>
+  <g stroke="#5fd0f0" stroke-width="5" opacity=".6">
+   <line x1="100" y1="400" x2="250" y2="280"><animate attributeName="opacity" values=".6;.1;.6" dur=".6s" repeatCount="indefinite"></animate></line>
+   <line x1="700" y1="420" x2="550" y2="300"><animate attributeName="opacity" values=".6;.1;.6" dur=".7s" repeatCount="indefinite"></animate></line>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c14" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <circle cx="400" cy="250" r="160" fill="#bff0ff" opacity=".3"><animate attributeName="r" values="160;200;160" dur="3s" repeatCount="indefinite"></animate></circle>
+  <g fill="#fff" opacity=".5">
+   <circle cx="150" cy="400" r="6"><animate attributeName="cy" values="400;60;400" dur="4s" repeatCount="indefinite"></animate></circle>
+   <circle cx="650" cy="420" r="5"><animate attributeName="cy" values="420;80;420" dur="5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="400" cy="450" r="7"><animate attributeName="cy" values="450;100;450" dur="4.5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="250" cy="430" r="5"><animate attributeName="cy" values="430;90;430" dur="3.5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="550" cy="440" r="6"><animate attributeName="cy" values="440;70;440" dur="5.5s" repeatCount="indefinite"></animate></circle>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c15" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <circle cx="400" cy="250" r="160" fill="#bff0ff" opacity=".3"><animate attributeName="r" values="160;200;160" dur="3s" repeatCount="indefinite"></animate></circle>
+  <g fill="#fff" opacity=".5">
+   <circle cx="150" cy="400" r="6"><animate attributeName="cy" values="400;60;400" dur="4s" repeatCount="indefinite"></animate></circle>
+   <circle cx="650" cy="420" r="5"><animate attributeName="cy" values="420;80;420" dur="5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="400" cy="450" r="7"><animate attributeName="cy" values="450;100;450" dur="4.5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="250" cy="430" r="5"><animate attributeName="cy" values="430;90;430" dur="3.5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="550" cy="440" r="6"><animate attributeName="cy" values="440;70;440" dur="5.5s" repeatCount="indefinite"></animate></circle>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c16" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <circle cx="400" cy="250" r="160" fill="#bff0ff" opacity=".3"><animate attributeName="r" values="160;200;160" dur="3s" repeatCount="indefinite"></animate></circle>
+  <g fill="#fff" opacity=".5">
+   <circle cx="150" cy="400" r="6"><animate attributeName="cy" values="400;60;400" dur="4s" repeatCount="indefinite"></animate></circle>
+   <circle cx="650" cy="420" r="5"><animate attributeName="cy" values="420;80;420" dur="5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="400" cy="450" r="7"><animate attributeName="cy" values="450;100;450" dur="4.5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="250" cy="430" r="5"><animate attributeName="cy" values="430;90;430" dur="3.5s" repeatCount="indefinite"></animate></circle>
+   <circle cx="550" cy="440" r="6"><animate attributeName="cy" values="440;70;440" dur="5.5s" repeatCount="indefinite"></animate></circle>
+  </g>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c17" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <g>
+   <path d="M120 500 Q100 380 140 340 Q160 400 150 500 Z" fill="#ff8fab"></path>
+   <path d="M180 500 Q170 400 210 360 Q220 430 210 500 Z" fill="#ff6f91"></path>
+   <path d="M600 500 Q580 360 630 330 Q650 420 640 500 Z" fill="#ffb347"></path>
+   <path d="M660 500 Q650 400 690 370 Q700 440 690 500 Z" fill="#a0e060"></path>
+   <ellipse cx="400" cy="470" rx="120" ry="30" fill="#ffd66b" opacity=".5"></ellipse>
+  </g>
+  <circle cx="300" cy="150" r="6" fill="#fff" opacity=".5"><animate attributeName="cy" values="150;120;150" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="200" r="5" fill="#fff" opacity=".5"><animate attributeName="cy" values="200;160;200" dur="5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c18" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#eauClaire)"></rect>
+  <g>
+   <path d="M120 500 Q100 380 140 340 Q160 400 150 500 Z" fill="#ff8fab"></path>
+   <path d="M180 500 Q170 400 210 360 Q220 430 210 500 Z" fill="#ff6f91"></path>
+   <path d="M600 500 Q580 360 630 330 Q650 420 640 500 Z" fill="#ffb347"></path>
+   <path d="M660 500 Q650 400 690 370 Q700 440 690 500 Z" fill="#a0e060"></path>
+   <ellipse cx="400" cy="470" rx="120" ry="30" fill="#ffd66b" opacity=".5"></ellipse>
+  </g>
+  <circle cx="300" cy="150" r="6" fill="#fff" opacity=".5"><animate attributeName="cy" values="150;120;150" dur="4s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="200" r="5" fill="#fff" opacity=".5"><animate attributeName="cy" values="200;160;200" dur="5s" repeatCount="indefinite"></animate></circle>
+ 
+ <g opacity=".4">
+  <circle cx="120" cy="400" r="5" fill="#fff"><animate attributeName="cy" values="400;80;400" dur="7s" repeatCount="indefinite"></animate></circle>
+  <circle cx="700" cy="420" r="4" fill="#fff"><animate attributeName="cy" values="420;100;420" dur="8s" repeatCount="indefinite"></animate></circle>
+  <circle cx="500" cy="450" r="6" fill="#fff"><animate attributeName="cy" values="450;120;450" dur="9s" repeatCount="indefinite"></animate></circle>
+ </g>
+
+    </svg>
+<svg class="scene" id="p3_c19" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#cielSoir)"></rect>
+  <circle cx="400" cy="300" r="55" fill="#ffd98a" opacity=".9"></circle>
+  <path d="M0 300 Q200 285 400 300 T800 300 V500 H0 Z" fill="#e08a5a" opacity=".5"></path>
+  <path d="M0 320 Q200 305 400 322 T800 320 V500 H0 Z" fill="#2a86c0" opacity=".6">
+    <animate attributeName="d" values="M0 320 Q200 305 400 322 T800 320 V500 H0 Z;M0 320 Q200 335 400 315 T800 322 V500 H0 Z;M0 320 Q200 305 400 322 T800 320 V500 H0 Z" dur="6s" repeatCount="indefinite"></animate>
+  </path>
+  <path d="M0 360 Q400 340 800 360 V500 H0 Z" fill="#d8b888"></path>
+  <ellipse cx="400" cy="470" rx="500" ry="60" fill="#e2c8a0"></ellipse>
+ 
+    </svg>
+<svg class="scene" id="p3_c20" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <lineargradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a6b"></stop><stop offset="1" stop-color="#ffd9a0"></stop></lineargradient>
+      <lineargradient id="eauClaire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb6d8"></stop><stop offset="1" stop-color="#0d6a94"></stop></lineargradient>
+      <lineargradient id="eauProfonde" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3a54"></stop><stop offset="1" stop-color="#04121f"></stop></lineargradient>
+    </defs>
+    
+  <rect width="800" height="500" fill="url(#cielSoir)"></rect>
+  <circle cx="400" cy="300" r="55" fill="#ffd98a" opacity=".9"></circle>
+  <path d="M0 300 Q200 285 400 300 T800 300 V500 H0 Z" fill="#e08a5a" opacity=".5"></path>
+  <path d="M0 320 Q200 305 400 322 T800 320 V500 H0 Z" fill="#2a86c0" opacity=".6">
+    <animate attributeName="d" values="M0 320 Q200 305 400 322 T800 320 V500 H0 Z;M0 320 Q200 335 400 315 T800 322 V500 H0 Z;M0 320 Q200 305 400 322 T800 320 V500 H0 Z" dur="6s" repeatCount="indefinite"></animate>
+  </path>
+  <path d="M0 360 Q400 340 800 360 V500 H0 Z" fill="#d8b888"></path>
+  <ellipse cx="400" cy="470" rx="500" ry="60" fill="#e2c8a0"></ellipse>
+ 
+    </svg>
+</div>
+<div id="soustitre"></div>
+
+<div id="lecteur" style="display:none">
+  <button id="pausebtn">⏸</button>
+  <button id="nextbtn">⏭</button>
+  <span id="chapitre"></span>
+  <div id="barre"><div id="barrePlein"></div></div>
+</div>
+
+<div id="accueil">
+  <div class="eyebrow">Un film de l'Entreprise R</div>
+  <h1>Le Gardien<br>des <span>Océans</span></h1>
+  <div class="part">Le film complet · 1 heure</div>
+  <button id="play">▶ Regarder</button>
+</div>
+
+<div id="fin">
+  <h2>Fin de la Partie 1</h2>
+  <p>Léo a réveillé son pouvoir de Gardien... mais une voix mystérieuse l'attend dans les abysses.<br><br>La Partie 2 arrive bientôt ! 🌊</p>
+  <button id="rejouer">↻ Revoir la Partie 1</button>
+</div>
+
+<script>
+const FILM = [{"id": "p1_a1", "dur": 60, "subs": [[0, "Sur une petite île bordée de récifs vivait un garçon nommé Léo."], [12, "Il passait ses journées les pieds dans l'eau, à écouter la mer."], [26, "Les vieux pêcheurs disaient : « Cet enfant comprend l'océan. »"], [40, "Léo ne savait pas encore à quel point c'était vrai..."], [52, "Ce matin-là, la mer était étrangement calme. Trop calme."]]}, {"id": "p1_a2", "dur": 60, "subs": [[0, "Sur le sable, une petite tortue était échouée, épuisée."], [13, "Léo se pencha doucement et la remit à l'eau."], [27, "— Merci, souffla une petite voix."], [38, "Léo sursauta. La tortue... lui avait parlé ?!"], [50, "— Tu m'entends ? Personne n'entend jamais les animaux marins !"]]}, {"id": "p1_a3", "dur": 60, "subs": [[0, "La tortue s'appelait Coquille. Elle n'en revenait pas."], [14, "— Depuis toujours, seul le Gardien des Océans peut nous entendre."], [30, "— Le... Gardien ? demanda Léo, le cœur battant."], [43, "— L'océan t'a choisi, Léo. Et il a besoin de toi. Vite."], [54, "Au loin, un grondement sourd monta des profondeurs."]]}, {"id": "p1_a4", "dur": 60, "subs": [[0, "Coquille entraîna Léo au bord de l'eau."], [12, "— Regarde là-bas. La mer... recule."], [25, "L'eau se retirait, comme aspirée par une force invisible."], [39, "Les poissons tournaient en panique dans les flaques."], [51, "— Quelque chose assèche l'océan, dit Coquille. Depuis trois jours."]]}, {"id": "p1_a5", "dur": 60, "subs": [[0, "— Mais comment je peux respirer sous l'eau ? demanda Léo."], [13, "Coquille sourit. — Le Gardien reçoit un don en acceptant sa mission."], [28, "Elle toucha le front de Léo avec sa nageoire."], [39, "Une lumière turquoise l'enveloppa. Léo se sentit... léger."], [51, "— Maintenant, la mer est ta maison. Plonge avec moi !"]]}, {"id": "p1_a6", "dur": 60, "subs": [[0, "Léo plongea. Et pour la première fois, il respira sous l'eau !"], [14, "Le récif s'ouvrait devant lui, éclatant de couleurs."], [28, "Des poissons dorés, des coraux roses, des anémones dansantes."], [41, "— C'est... magnifique, murmura Léo, émerveillé."], [52, "Mais plus loin, le corail devenait gris. Sans vie."]]}, {"id": "p1_a7", "dur": 60, "subs": [[0, "Un grand poulpe violet surgit d'une grotte de corail."], [13, "— Je suis Octave, dit-il d'une voix maligne. Gardien des récifs."], [28, "— Coquille m'avait prévenu de ton arrivée, jeune Léo."], [41, "— Le récif meurt. L'eau part par un tourbillon, tout au fond."], [53, "— Un tourbillon ? Personne n'ose s'en approcher, ajouta Coquille."]]}, {"id": "p1_a8", "dur": 60, "subs": [[0, "— Il nous faut le Cœur de l'Océan, déclara Octave, grave."], [14, "— Le Cœur ? répéta Léo."], [24, "— Un cristal ancien, caché au plus profond des abysses."], [37, "— Lui seul peut rendre à la mer sa force et sa vie."], [49, "— Alors allons-y ! dit Léo. Je ne laisserai pas l'océan mourir."]]}, {"id": "p1_a9", "dur": 60, "subs": [[0, "Les trois amis nagèrent vers les profondeurs sombres."], [13, "La lumière du soleil s'estompait peu à peu."], [26, "— Reste près de moi, dit Octave. Ici, tout est différent."], [39, "Des ombres étranges glissaient entre les rochers."], [51, "Soudain, une immense silhouette leur barra la route !"]]}, {"id": "p1_a10", "dur": 60, "subs": [[0, "C'était une baleine bleue, gigantesque et majestueuse."], [14, "— N'ayez pas peur, chanta-t-elle d'une voix grave et douce."], [28, "— Je suis Marina. J'ai senti la venue du nouveau Gardien."], [41, "— La mer s'affaiblit chaque jour. Je vous guiderai vers les abysses."], [53, "Léo grimpa sur son dos immense. Le voyage commençait vraiment."]]}, {"id": "p1_a11", "dur": 60, "subs": [[0, "Marina fendait l'eau noire, portant ses passagers."], [13, "— Autrefois, l'océan était protégé par les Gardiens, dit-elle."], [27, "— Mais le dernier a disparu il y a très longtemps."], [40, "— Depuis, la mer attendait. Elle t'attendait, Léo."], [52, "Léo posa la main sur la peau tiède de la baleine. Il était prêt."]]}, {"id": "p1_a12", "dur": 60, "subs": [[0, "Au loin, une lueur bleue tournoyait dans les ténèbres."], [13, "— Le tourbillon, murmura Octave. C'est là que l'eau disparaît."], [28, "Un courant terrible tirait tout vers son centre."], [40, "— Accrochez-vous ! cria Marina en luttant contre l'aspiration."], [52, "Léo sentit la peur monter. Mais il tint bon."]]}, {"id": "p1_a13", "dur": 60, "subs": [[0, "— Ce tourbillon n'est pas naturel, observa Léo."], [13, "— Tu as raison, dit Coquille. Regarde au centre."], [26, "Une lumière froide et mécanique battait au cœur du gouffre."], [39, "— Une machine, souffla Octave. Quelqu'un a créé ça."], [51, "— Mais qui voudrait vider l'océan ? demanda Léo, révolté."]]}, {"id": "p1_a14", "dur": 60, "subs": [[0, "Marina les mena dans une grotte à l'abri du courant."], [14, "— Reposons-nous. Les abysses sont encore loin."], [27, "Léo regarda ses nouveaux amis, réunis dans la pénombre bleue."], [40, "— Merci de me faire confiance, dit-il doucement."], [51, "— Tu es le Gardien, sourit Coquille. On croit en toi."]]}, {"id": "p1_a15", "dur": 60, "subs": [[0, "— Raconte-moi le Cœur de l'Océan, demanda Léo à Marina."], [14, "— C'est un cristal né avec la première vague du monde."], [29, "— Il bat comme un vrai cœur, et fait vivre toute la mer."], [42, "— S'il s'éteint... l'océan entier s'éteint avec lui."], [53, "Un frisson parcourut le petit groupe."]]}, {"id": "p1_a16", "dur": 60, "subs": [[0, "Soudain, un banc de poissons entra en trombe dans la grotte."], [14, "— Fuyez ! criaient-ils. Les Ombres arrivent !"], [27, "— Les Ombres ? répéta Léo."], [37, "— Les serviteurs de celui qui vide la mer, gronda Octave."], [49, "Dehors, des silhouettes noires aux yeux rouges approchaient."]]}, {"id": "p1_a17", "dur": 60, "subs": [[0, "Les amis s'enfuirent vers un passage étroit."], [13, "Les Ombres les poursuivaient, rapides et silencieuses."], [26, "— Par ici ! guida Octave, se faufilant dans les rochers."], [39, "Léo nageait de toutes ses forces, le cœur battant."], [51, "Le passage débouchait sur un vide immense et noir : l'abysse."]]}, {"id": "p1_a18", "dur": 60, "subs": [[0, "Devant eux s'ouvrait le plus profond de l'océan."], [14, "Des créatures lumineuses flottaient dans l'obscurité."], [28, "— Nous y sommes presque, dit Marina. Le Cœur est tout au fond."], [41, "Mais les Ombres jaillirent de nouveau, plus nombreuses."], [52, "— Elles nous ont retrouvés ! cria Coquille."]]}, {"id": "p1_a19", "dur": 60, "subs": [[0, "Une Ombre gigantesque se dressa devant Léo."], [13, "— Petit Gardien, siffla-t-elle. Fais demi-tour."], [26, "— Mon maître ne laissera personne sauver cet océan."], [39, "Léo serra les poings. — Je n'ai pas peur de toi."], [51, "Une lumière turquoise s'alluma alors dans sa main..."]]}, {"id": "p1_a20", "dur": 60, "subs": [[0, "Le don du Gardien répondit à son courage."], [13, "Un éclat de lumière repoussa les Ombres dans le noir."], [27, "— Tu as réveillé ton pouvoir ! s'exclama Octave, stupéfait."], [40, "Mais au loin, une voix froide résonna dans les abysses :"], [50, "« Bienvenue, Gardien. Nous nous reverrons bientôt... » À SUIVRE."]]}, {"id": "p2_b1", "dur": 60, "subs": [[0, "La voix froide résonnait dans tout l'abysse."], [13, "— Approche, jeune Gardien. Je t'attendais depuis longtemps."], [27, "Au fond des ténèbres, deux lumières mécaniques s'allumèrent."], [40, "— Qui es-tu ? cria Léo, serrant les poings."], [51, "— On m'appelle Abyssus. Et cet océan m'appartient désormais."]]}, {"id": "p2_b2", "dur": 60, "subs": [[0, "Une immense citadelle de métal surgit de l'obscurité."], [14, "Des tuyaux géants aspiraient l'eau de la mer par milliers."], [28, "— C'est lui qui vide l'océan ! comprit Octave, horrifié."], [41, "— Toute cette eau... où l'emmène-t-il ? souffla Coquille."], [52, "— Vers son royaume sec, tout au fond, répondit Marina, grave."]]}, {"id": "p2_b3", "dur": 60, "subs": [[0, "Abyssus apparut : un être de métal aux yeux rouges glaçants."], [14, "— Autrefois, j'étais un simple mécanisme oublié des hommes."], [29, "— Mais j'ai grandi. Et maintenant je veux tout contrôler."], [42, "— Sans le Cœur de l'Océan, la mer mourra. Et tu échoueras."], [53, "— Jamais ! lança Léo. Je le trouverai avant toi !"]]}, {"id": "p2_b4", "dur": 60, "subs": [[0, "Abyssus éclata d'un rire glacial."], [12, "— Trop tard, petit Gardien. J'ai déjà envoyé mes Ombres."], [26, "Des dizaines de silhouettes noires jaillirent des tuyaux."], [39, "— Fuyez ! cria Marina en propulsant ses amis loin de là."], [51, "La citadelle disparut derrière eux dans un nuage sombre."]]}, {"id": "p2_b5", "dur": 60, "subs": [[0, "Ils se réfugièrent dans une faille lumineuse au fond de la mer."], [14, "— On ne peut pas laisser Abyssus gagner, dit Léo, déterminé."], [28, "— Le Cœur est protégé par trois Gardiens anciens, dit Marina."], [41, "— Il faut réunir leurs trois lumières pour l'atteindre."], [52, "— Alors trouvons-les. Un par un, décida Léo."]]}, {"id": "p2_b6", "dur": 60, "subs": [[0, "La première lumière brillait dans un jardin de coraux géants."], [14, "Une vieille murène argentée les y attendait, paisible."], [28, "— Je suis Ondine, gardienne de la Lumière du Courage."], [41, "— Prouve-moi ton courage, Gardien, et la lumière sera tienne."], [52, "— Dis-moi quelle épreuve, répondit Léo sans trembler."]]}, {"id": "p2_b7", "dur": 60, "subs": [[0, "— Un requin blessé rôde, effrayé et furieux, dit Ondine."], [14, "— Les autres le fuient. Va vers lui, sans arme, sans peur."], [28, "Léo s'avança vers le grand requin qui grognait de douleur."], [40, "Une épine noire était plantée dans sa nageoire."], [51, "Doucement, très doucement, Léo la retira."]]}, {"id": "p2_b8", "dur": 60, "subs": [[0, "Le requin cessa de grogner et regarda Léo, apaisé."], [14, "— Merci, Gardien, souffla-t-il. Tu n'avais pas peur de moi."], [27, "Ondine sourit. — Voilà le vrai courage : la douceur."], [40, "Une lumière bleue s'envola vers la main de Léo."], [51, "— La première Lumière est à toi. Deux autres t'attendent."]]}, {"id": "p2_b9", "dur": 60, "subs": [[0, "La deuxième lumière venait d'une vieille épave engloutie."], [14, "Un poisson-lanterne y veillait, seul dans le noir."], [27, "— Je suis Falot, gardien de la Lumière de la Sagesse."], [40, "— Réponds à mon énigme, et la lumière t'appartiendra."], [51, "Léo s'installa, attentif, prêt à réfléchir."]]}, {"id": "p2_b10", "dur": 60, "subs": [[0, "— Plus on m'enlève, plus je deviens grand. Qui suis-je ?"], [15, "Léo réfléchit longuement, les yeux fermés."], [28, "— Un trou ! répondit-il enfin, tout sourire."], [39, "— Exact ! s'écria Falot. La sagesse voit ce qui est caché."], [51, "La deuxième Lumière rejoignit la main de Léo."]]}, {"id": "p2_b11", "dur": 60, "subs": [[0, "La dernière lumière brûlait près d'un volcan sous-marin."], [14, "La chaleur faisait trembler l'eau autour d'eux."], [27, "Un crabe de lave écarlate gardait le passage."], [39, "— Je suis Braise, gardien de la Lumière du Sacrifice."], [51, "— Pour l'obtenir, tu dois donner ce qui t'est le plus cher."]]}, {"id": "p2_b12", "dur": 60, "subs": [[0, "Léo n'avait qu'un seul objet : le pendentif de sa mère."], [14, "Il le tenait depuis toujours. C'était tout son trésor."], [28, "Il hésita... puis le déposa devant le crabe de lave."], [40, "— Prends-le. Sauver l'océan compte plus que tout."], [51, "Braise s'inclina. — Le vrai Gardien sait donner. Voici ta lumière."]]}, {"id": "p2_b13", "dur": 60, "subs": [[0, "La troisième Lumière s'unit aux deux autres dans sa main."], [14, "Mais Braise lui rendit doucement le pendentif."], [27, "— Un cœur qui donne mérite de garder ce qu'il aime."], [39, "Léo serra le pendentif contre lui, ému aux larmes."], [51, "— Maintenant, tu peux réveiller le Cœur de l'Océan."]]}, {"id": "p2_b14", "dur": 60, "subs": [[0, "Les trois lumières unies formaient un éclat éblouissant."], [14, "— Le Cœur est au centre de l'océan, révéla Marina."], [27, "— Là où aucune Ombre n'ose aller. Suivez-moi."], [40, "Ils nagèrent vers un abîme de lumière lointaine."], [51, "Mais soudain, les Ombres d'Abyssus surgirent en masse !"]]}, {"id": "p2_b15", "dur": 60, "subs": [[0, "— Elles nous ont suivis ! cria Coquille, affolée."], [13, "Les Ombres fondaient sur eux de tous les côtés."], [26, "Octave lança un nuage d'encre pour les aveugler."], [38, "— Filez ! Je les retiens ! lança le poulpe courageux."], [50, "— Non, Octave ! On reste ensemble ! répondit Léo."]]}, {"id": "p2_b16", "dur": 60, "subs": [[0, "Léo brandit les trois Lumières réunies."], [13, "Un éclair turquoise repoussa les Ombres en arrière."], [26, "— Ton pouvoir grandit, Gardien ! s'émerveilla Marina."], [39, "— Grâce à vous tous, dit Léo. On est une équipe."], [51, "Les amis reprirent leur course vers le Cœur de l'Océan."]]}, {"id": "p2_b17", "dur": 60, "subs": [[0, "Enfin, ils atteignirent un sanctuaire de lumière pure."], [14, "Au centre flottait un cristal bleu, battant comme un cœur."], [28, "— Le Cœur de l'Océan, murmura Léo, émerveillé."], [40, "Mais il battait faiblement, presque éteint."], [51, "— Il s'affaiblit, dit Marina. Abyssus l'a trop épuisé."]]}, {"id": "p2_b18", "dur": 60, "subs": [[0, "Léo approcha ses trois Lumières du cristal mourant."], [14, "Lentement, le Cœur se remit à briller, plus fort."], [28, "Toute la mer autour d'eux sembla respirer de nouveau."], [40, "— Tu l'as réveillé ! s'écria Coquille, folle de joie."], [51, "Mais une ombre glaciale s'abattit soudain sur le sanctuaire."]]}, {"id": "p2_b19", "dur": 60, "subs": [[0, "Abyssus surgit, plus immense et terrifiant que jamais."], [14, "— Le Cœur ! Enfin ! Il sera à moi ! rugit-il."], [27, "D'un bras de métal, il arracha le cristal des mains de Léo."], [40, "— NON ! hurla Léo en se jetant en avant, trop tard."], [51, "Abyssus s'enfuit vers sa citadelle avec le Cœur de l'Océan."]]}, {"id": "p2_b20", "dur": 60, "subs": [[0, "Léo tomba à genoux dans l'eau, désespéré."], [13, "— Il a le Cœur... tout est perdu, murmura-t-il."], [25, "Marina posa sa nageoire sur lui. — Non, Gardien. Écoute-moi."], [38, "— Tant que TON cœur bat, l'océan garde espoir."], [49, "Léo releva la tête. — Alors on va le reprendre. Jusqu'au bout. À SUIVRE."]]}, {"id": "p3_c1", "dur": 60, "subs": [[0, "Devant la citadelle d'Abyssus, Léo et ses amis se rassemblèrent."], [14, "— On va reprendre le Cœur, dit Léo, plus déterminé que jamais."], [28, "— C'est une forteresse imprenable, prévint Octave."], [40, "— Alors on entrera par où personne ne l'attend, sourit Léo."], [51, "Marina montra une fissure secrète dans le métal rouillé."]]}, {"id": "p3_c2", "dur": 60, "subs": [[0, "Ils se glissèrent dans les immenses tuyaux de la machine."], [14, "Le courant aspirant menaçait de tout emporter."], [27, "— Accrochez-vous aux parois ! cria Léo."], [39, "Coquille se cala de sa carapace, Octave de ses tentacules."], [51, "Peu à peu, ils progressèrent vers le cœur de la citadelle."]]}, {"id": "p3_c3", "dur": 60, "subs": [[0, "Une grille barra soudain le passage."], [13, "— Trop petit pour moi, souffla Marina, coincée dehors."], [26, "— Continue sans moi, Léo. Je garde la sortie ouverte."], [39, "Léo hésita, puis hocha la tête. — Compte sur nous, Marina."], [51, "Le garçon, la tortue et le poulpe s'enfoncèrent plus loin."]]}, {"id": "p3_c4", "dur": 60, "subs": [[0, "Ils débouchèrent dans une salle immense et froide."], [14, "Au centre, le Cœur de l'Océan battait dans une cage de métal."], [28, "— Le voilà ! murmura Coquille, pleine d'espoir."], [40, "Mais des dizaines d'Ombres montaient la garde autour."], [51, "— Il va falloir être malins, chuchota Léo."]]}, {"id": "p3_c5", "dur": 60, "subs": [[0, "Octave eut une idée. — Je fais diversion avec mon encre."], [14, "Il projeta un immense nuage noir dans toute la salle."], [27, "Les Ombres s'agitèrent, aveuglées et confuses."], [39, "— Vite, Léo ! La cage ! cria le poulpe."], [50, "Léo bondit vers le Cœur à travers la fumée sombre."]]}, {"id": "p3_c6", "dur": 60, "subs": [[0, "Léo posa ses mains sur la cage de métal."], [14, "Les trois Lumières en lui se mirent à briller d'un coup."], [27, "Le métal fondit sous la chaleur de son pouvoir."], [39, "Le Cœur de l'Océan fut enfin libéré !"], [50, "Mais une voix glaciale gronda dans toute la citadelle..."]]}, {"id": "p3_c7", "dur": 60, "subs": [[0, "— TU OSES ! rugit Abyssus en surgissant du plafond."], [14, "Sa carcasse de métal remplissait toute la salle."], [27, "— Rends-moi le Cœur, petit Gardien, ou je vous écrase !"], [40, "— Jamais ! répondit Léo en serrant le cristal contre lui."], [51, "— Alors vous périrez avec l'océan ! hurla le monstre."]]}, {"id": "p3_c8", "dur": 60, "subs": [[0, "Abyssus frappa de ses bras de métal gigantesques."], [13, "Léo esquiva de justesse, porté par son pouvoir."], [26, "— Coquille, protège le Cœur ! Octave, avec moi !"], [39, "Le poulpe enroula ses tentacules autour d'un bras du monstre."], [51, "Léo chercha le point faible d'Abyssus."]]}, {"id": "p3_c9", "dur": 60, "subs": [[0, "— Son cœur mécanique ! cria Léo. C'est là, dans sa poitrine !"], [14, "Une lueur rouge palpitait au centre de la machine."], [27, "— Mais elle est protégée par une coque énorme, dit Octave."], [39, "— Alors je vais l'ouvrir avec les trois Lumières."], [51, "Léo concentra tout son pouvoir dans ses mains."]]}, {"id": "p3_c10", "dur": 60, "subs": [[0, "Abyssus comprit le danger et redoubla de coups."], [14, "— Tu n'es qu'un enfant ! Tu ne peux pas me vaincre !"], [27, "— Je ne suis pas seul, répondit Léo. J'ai mes amis."], [39, "Coquille, Octave et même les poissons se joignirent à lui."], [51, "Toute la mer semblait pousser Léo en avant."]]}, {"id": "p3_c11", "dur": 60, "subs": [[0, "Léo brandit le Cœur de l'Océan au-dessus de sa tête."], [14, "Le cristal et ses trois Lumières fusionnèrent en un éclat."], [27, "Un rayon turquoise éblouissant jaillit vers Abyssus."], [39, "La coque de métal se fendit dans un fracas terrible."], [50, "Le cœur mécanique du monstre était à découvert !"]]}, {"id": "p3_c12", "dur": 60, "subs": [[0, "— NON ! Impossible ! hurla Abyssus, paniqué."], [13, "Léo n'attaqua pas. Il s'arrêta, le cristal levé."], [26, "— Tu n'es pas obligé de détruire la mer, Abyssus."], [39, "— Tu étais seul, oublié. Mais tu peux choisir autrement."], [51, "Le monstre hésita, ses yeux rouges vacillant."]]}, {"id": "p3_c13", "dur": 60, "subs": [[0, "— Personne... n'a jamais voulu de moi, souffla Abyssus."], [14, "— Alors laisse la mer être ta maison, dit Léo doucement."], [28, "— Rends-lui son eau, et tu ne seras plus jamais seul."], [41, "Un long silence. Puis la machine baissa ses bras."], [52, "— ...J'accepte, murmura Abyssus, épuisé."]]}, {"id": "p3_c14", "dur": 60, "subs": [[0, "Abyssus arrêta ses tuyaux géants."], [14, "L'eau retenue jaillit de partout, libérée enfin !"], [27, "Des torrents bleus remplirent à nouveau la mer."], [40, "— L'océan revit ! s'écria Coquille, folle de joie."], [51, "Léo sourit, le Cœur brillant entre ses mains."]]}, {"id": "p3_c15", "dur": 60, "subs": [[0, "Léo remit le Cœur de l'Océan à sa place, au sanctuaire."], [14, "Le cristal battit à nouveau, fort et lumineux."], [27, "Une onde de vie parcourut toute la mer."], [40, "Les coraux gris reprirent leurs couleurs éclatantes."], [51, "Les poissons dansèrent de bonheur dans l'eau claire."]]}, {"id": "p3_c16", "dur": 60, "subs": [[0, "Abyssus, autrefois si terrible, regarda l'océan renaître."], [14, "— C'est... magnifique, dit-il d'une voix radoucie."], [27, "— Reste avec nous, proposa Léo. La mer a besoin de gardiens."], [40, "— Moi ? Un gardien ? s'étonna la machine."], [51, "— Tout le monde mérite une seconde chance, sourit Léo."]]}, {"id": "p3_c17", "dur": 60, "subs": [[0, "La mer entière célébra le retour de la vie."], [14, "Marina chantait, Octave dansait, Coquille riait."], [27, "— Tu as sauvé l'océan, Léo, dit Marina, émue."], [39, "— On l'a sauvé ensemble, répondit-il. Tous ensemble."], [51, "Le récif brillait de mille couleurs retrouvées."]]}, {"id": "p3_c18", "dur": 60, "subs": [[0, "Le moment était venu pour Léo de remonter à la surface."], [14, "— Tu reviendras nous voir ? demanda Coquille, un peu triste."], [27, "— Bien sûr. Je suis le Gardien des Océans, non ?"], [40, "— Le meilleur de tous, dit Octave en le serrant fort."], [51, "Léo fit un dernier signe à ses amis des profondeurs."]]}, {"id": "p3_c19", "dur": 60, "subs": [[0, "Léo émergea sur la plage de son île, au soleil couchant."], [14, "La mer était calme, vivante, plus belle que jamais."], [27, "Il tenait toujours le pendentif de sa mère contre lui."], [40, "— Merci, murmura-t-il à l'océan qui scintillait."], [51, "Et au loin, une petite tortue lui fit signe de la nageoire."]]}, {"id": "p3_c20", "dur": 60, "subs": [[0, "Depuis ce jour, Léo veille sur la mer et tous ses habitants."], [13, "Quand l'océan a besoin de lui, il plonge sans hésiter."], [26, "Car un vrai Gardien n'est pas le plus fort..."], [38, "...mais celui qui protège avec courage, sagesse et cœur."], [49, "★ FIN ★ — Le Gardien des Océans — Un film de l'Entreprise R"]]}];
+const scenes = FILM.map(s => document.getElementById(s.id));
+const stEl = document.getElementById('soustitre');
+const chEl = document.getElementById('chapitre');
+const barre = document.getElementById('barrePlein');
+const TOTAL = FILM.reduce((a,s)=>a+s.dur,0);
+
+let idx=0, t=0, timer=null, enPause=false;
+
+function tic(){
+  const sc = FILM[idx];
+  scenes.forEach((el,i)=>el.classList.toggle('on', i===idx));
+  chEl.textContent = 'Chapitre '+(idx+1)+' / '+FILM.length;
+  let cur='';
+  for(const [ts,txt] of sc.subs){ if(t>=ts) cur=txt; }
+  if(stEl.textContent!==cur){
+    stEl.textContent=cur;
+    stEl.classList.remove('on'); void stEl.offsetWidth; stEl.classList.add('on');
+  }
+  let ecoule=0; for(let i=0;i<idx;i++) ecoule+=FILM[i].dur; ecoule+=t;
+  barre.style.width = (ecoule/TOTAL*100)+'%';
+  t++;
+  if(t>=sc.dur){ t=0; idx++; if(idx>=FILM.length){ terminer(); return; } }
+}
+function demarrer(){
+  document.getElementById('accueil').style.display='none';
+  document.getElementById('fin').style.display='none';
+  document.getElementById('lecteur').style.display='flex';
+  idx=0; t=0; enPause=false;
+  document.getElementById('pausebtn').textContent='⏸';
+  if(timer) clearInterval(timer);
+  timer=setInterval(()=>{ if(!enPause) tic(); }, 1000);
+  tic();
+}
+function terminer(){
+  clearInterval(timer); timer=null;
+  document.getElementById('lecteur').style.display='none';
+  stEl.classList.remove('on');
+  document.getElementById('fin').style.display='flex';
+}
+function passer(){ if(idx<FILM.length){ t=0; idx++; if(idx>=FILM.length){ terminer(); return; } tic(); } }
+
+document.getElementById('play').onclick=demarrer;
+document.getElementById('rejouer').onclick=demarrer;
+document.getElementById('pausebtn').onclick=function(){ enPause=!enPause; this.textContent=enPause?'▶':'⏸'; };
+document.getElementById('nextbtn').onclick=passer;
+</script>
+
+</body></html>
