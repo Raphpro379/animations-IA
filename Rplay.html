@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)file:///C:/Users/RAPHAEL/Downloads/rplay_1.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Play — les jeux de R</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --rouge:#e50914; --rouge-fonce:#b0060f;
+    --fond:#0d0d12; --fond2:#16161d; --carte:#1d1d26;
+    --ligne:#2a2a36; --texte:#f4f4f6; --gris:#9a9aa8;
+    --violet:#6b4de5; --or:#ffd66b; --vert:#2ec26a; --bleu:#00b8d4;
+  }
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;background:var(--fond);color:var(--texte);
+    height:100vh;display:flex;flex-direction:column;overflow:hidden;user-select:none;-webkit-user-select:none}
+  header{background:linear-gradient(135deg,var(--rouge),var(--rouge-fonce));padding:14px 18px;
+    display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 2px 14px rgba(0,0,0,.4)}
+  header .logo{width:40px;height:40px;background:#fff;border-radius:11px;display:flex;align-items:center;
+    justify-content:center;font-weight:bold;font-size:22px;color:var(--rouge)}
+  header .titre{flex:1}
+  header .titre h1{font-size:20px;letter-spacing:.5px}
+  header .titre p{font-size:12px;opacity:.85}
+  header .retour{background:rgba(255,255,255,.18);border:none;color:#fff;padding:8px 14px;border-radius:20px;
+    cursor:pointer;font-size:14px;display:none}
+  #menu{flex:1;overflow-y:auto;padding:18px}
+  .accueil-txt{text-align:center;margin-bottom:20px;color:var(--gris);font-size:14px}
+  .grille{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:520px;margin:0 auto}
+  .jeu-carte{background:var(--carte);border:1px solid var(--ligne);border-radius:18px;padding:22px 16px;
+    text-align:center;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
+  .jeu-carte:hover{transform:translateY(-4px);border-color:var(--rouge);box-shadow:0 10px 26px rgba(229,9,20,.25)}
+  .jeu-carte .ico{font-size:52px;margin-bottom:10px}
+  .jeu-carte h3{font-size:18px;margin-bottom:4px}
+  .jeu-carte p{font-size:12px;color:var(--gris);line-height:1.35}
+  .jeu-carte .best{margin-top:10px;font-size:12px;color:var(--or);font-weight:bold}
+  .jeu-carte .halo{position:absolute;top:-40px;right:-40px;width:100px;height:100px;border-radius:50%;
+    background:radial-gradient(circle,rgba(229,9,20,.25),transparent 70%)}
+  #zone-jeu{flex:1;display:none;flex-direction:column;overflow:hidden;padding:14px}
+  .jeu-tete{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .jeu-tete .score-box{display:flex;gap:10px}
+  .jeu-tete .sc{background:var(--carte);border:1px solid var(--ligne);border-radius:12px;padding:7px 13px;text-align:center;min-width:66px}
+  .jeu-tete .sc .lab{font-size:11px;color:var(--gris)}
+  .jeu-tete .sc .val{font-size:20px;font-weight:bold}
+  .jeu-tete .sc .val.or{color:var(--or)}
+  .jeu-tete .sc .val.vt{color:var(--vert)}
+  .plateau{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+  canvas{background:var(--fond2);border-radius:14px;border:1px solid var(--ligne);touch-action:none;max-width:100%;max-height:100%}
+  .btn-r{background:var(--rouge);color:#fff;border:none;padding:12px 26px;font-size:15px;font-weight:bold;
+    border-radius:12px;cursor:pointer;transition:transform .15s}
+  .btn-r:hover{transform:scale(1.04)}
+  .btn-gris{background:var(--carte);color:var(--texte);border:1px solid var(--ligne);padding:12px 22px;
+    border-radius:12px;cursor:pointer;font-size:15px}
+  .overlay{position:absolute;inset:0;background:rgba(13,13,18,.92);border-radius:14px;display:none;
+    flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;z-index:5}
+  .overlay.on{display:flex}
+  .overlay h2{font-size:28px;margin-bottom:8px}
+  .overlay .big-score{font-size:44px;font-weight:bold;color:var(--or);margin:6px 0}
+  .overlay p{color:var(--gris);margin-bottom:14px}
+  .overlay .record{color:var(--vert);font-weight:bold;margin-bottom:14px}
+  .overlay .niv-info{color:var(--bleu);font-size:15px;margin-bottom:16px}
+  .dpad{display:none;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(2,54px);gap:6px;
+    justify-content:center;margin-top:12px}
+  .dpad button{background:var(--carte);border:1px solid var(--ligne);color:var(--texte);font-size:22px;border-radius:12px;cursor:pointer}
+  .dpad button:active{background:var(--rouge)}
+  .dpad .up{grid-column:2;grid-row:1}.dpad .left{grid-column:1;grid-row:2}
+  .dpad .down{grid-column:2;grid-row:2}.dpad .right{grid-column:3;grid-row:2}
+  .aide{text-align:center;font-size:12px;color:var(--gris);margin-top:8px}
+  #gmemory{display:grid;gap:8px;width:min(92vw,400px);margin:0 auto}
+  .carte-mem{aspect-ratio:1;background:var(--rouge);border-radius:12px;display:flex;align-items:center;
+    justify-content:center;font-size:clamp(18px,6vw,32px);cursor:pointer;transition:.2s}
+  .carte-mem.retournee{background:var(--carte);border:1px solid var(--ligne)}
+  .carte-mem.trouvee{background:var(--vert);opacity:.85}
+  .carte-mem .face{opacity:0}
+  .carte-mem.retournee .face,.carte-mem.trouvee .face{opacity:1}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="retour" id="btn-retour">← Menu</button>
+  <div class="logo">R</div>
+  <div class="titre">
+    <h1>R Play</h1>
+    <p id="sous-titre">Les jeux gratuits de R</p>
+  </div>
+</header>
+
+<div id="menu">
+  <div class="accueil-txt">🎮 Choisis un jeu, passe les niveaux et bats ton record !</div>
+  <div class="grille" id="grille-jeux"><div class="jeu-carte" data-id="briques"><div class="halo"></div><div class="ico">🧱</div><h3>Casse-briques</h3><p>8 niveaux de plus en plus durs !</p><div class="best">🏆 Record : 240</div></div><div class="jeu-carte" data-id="memory"><div class="halo"></div><div class="ico">🧠</div><h3>Memory</h3><p>6 niveaux, de plus en plus de paires.</p><div class="best" style="color:var(--gris)">Pas encore joué</div></div><div class="jeu-carte" data-id="attrape"><div class="halo"></div><div class="ico">🎯</div><h3>Attrape</h3><p>Attrape le bon, évite la bombe !</p><div class="best" style="color:var(--gris)">Pas encore joué</div></div><div class="jeu-carte" data-id="fusee"><div class="halo"></div><div class="ico">🚀</div><h3>Fusée</h3><p>Esquive les astéroïdes, va le plus loin !</p><div class="best" style="color:var(--gris)">Pas encore joué</div></div></div>
+</div>
+
+<div id="zone-jeu">
+  <div class="jeu-tete">
+    <div class="score-box">
+      <div class="sc"><div class="lab">Score</div><div class="val" id="score-actuel">0</div></div>
+      <div class="sc"><div class="lab">Niveau</div><div class="val vt" id="niveau-actuel">1</div></div>
+      <div class="sc"><div class="lab">Record</div><div class="val or" id="score-record">0</div></div>
+    </div>
+    <button class="btn-gris" id="btn-rejouer">↻ Recommencer</button>
+  </div>
+  <div class="plateau" id="plateau"></div>
+  <div class="dpad" id="dpad">
+    <button class="up" data-dir="up">▲</button>
+    <button class="left" data-dir="left">◀</button>
+    <button class="down" data-dir="down">▼</button>
+    <button class="right" data-dir="right">▶</button>
+  </div>
+  <div class="aide" id="aide-jeu"></div>
+</div>
+
+<script>
+const JEUX=[
+  {id:'briques',ico:'🧱',nom:'Casse-briques',desc:'8 niveaux de plus en plus durs !'},
+  {id:'memory',ico:'🧠',nom:'Memory',desc:'6 niveaux, de plus en plus de paires.'},
+  {id:'attrape',ico:'🎯',nom:'Attrape',desc:'Attrape le bon, évite la bombe !'},
+  {id:'fusee',ico:'🚀',nom:'Fusée',desc:'Esquive les astéroïdes, va le plus loin !'},
+];
+function record(id){return parseInt(localStorage.getItem('rplay-best-'+id)||'0');}
+function setRecord(id,v){if(v>record(id)){localStorage.setItem('rplay-best-'+id,v);return true;}return false;}
+
+let jeuActuel=null, boucle=null, cleanup=null, niveau=1, scoreTot=0;
+
+function rendreMenu(){
+  const g=document.getElementById('grille-jeux');
+  g.innerHTML=JEUX.map(j=>{
+    const best=record(j.id);
+    return '<div class="jeu-carte" data-id="'+j.id+'"><div class="halo"></div>'+
+      '<div class="ico">'+j.ico+'</div><h3>'+j.nom+'</h3><p>'+j.desc+'</p>'+
+      (best>0?'<div class="best">🏆 Record : '+best+'</div>':'<div class="best" style="color:var(--gris)">Pas encore joué</div>')+
+      '</div>';
+  }).join('');
+  g.querySelectorAll('.jeu-carte').forEach(el=>el.onclick=()=>demarrerJeu(el.dataset.id));
+}
+function afficherMenu(){
+  if(cleanup){cleanup();cleanup=null;}
+  if(boucle){cancelAnimationFrame(boucle);clearInterval(boucle);boucle=null;}
+  jeuActuel=null;
+  document.getElementById('menu').style.display='block';
+  document.getElementById('zone-jeu').style.display='none';
+  document.getElementById('btn-retour').style.display='none';
+  document.getElementById('sous-titre').textContent='Les jeux gratuits de R';
+  rendreMenu();
+}
+function demarrerJeu(id){
+  jeuActuel=id; niveau=1; scoreTot=0;
+  const j=JEUX.find(x=>x.id===id);
+  document.getElementById('menu').style.display='none';
+  document.getElementById('zone-jeu').style.display='flex';
+  document.getElementById('btn-retour').style.display='block';
+  document.getElementById('sous-titre').textContent=j.ico+' '+j.nom;
+  document.getElementById('score-record').textContent=record(id);
+  chargerNiveau();
+}
+function chargerNiveau(){
+  if(cleanup){cleanup();cleanup=null;}
+  if(boucle){cancelAnimationFrame(boucle);clearInterval(boucle);boucle=null;}
+  document.getElementById('score-actuel').textContent=scoreTot;
+  document.getElementById('niveau-actuel').textContent=niveau;
+  document.getElementById('plateau').innerHTML='';
+  document.getElementById('dpad').style.display='none';
+  ({briques:jeuBriques,memory:jeuMemory,attrape:jeuAttrape,fusee:jeuFusee})[jeuActuel]();
+}
+function setScore(v){scoreTot=v;document.getElementById('score-actuel').textContent=v;}
+function addScore(n){setScore(scoreTot+n);}
+function majRecord(){const neuf=setRecord(jeuActuel,scoreTot);
+  document.getElementById('score-record').textContent=record(jeuActuel);return neuf;}
+
+function overlayNiveauFini(gagne){
+  const plat=document.getElementById('plateau');
+  const ov=document.createElement('div');ov.className='overlay on';
+  const maxNiv=({briques:8,memory:6,attrape:99,fusee:99})[jeuActuel];
+  if(gagne && niveau<maxNiv){
+    ov.innerHTML='<h2>Niveau '+niveau+' réussi ! 🎉</h2><div class="niv-info">Prêt pour le niveau '+(niveau+1)+' ?</div>'+
+      '<div class="big-score">'+scoreTot+'</div>'+
+      '<button class="btn-r" id="ov-suite">Niveau suivant →</button>';
+    plat.appendChild(ov);
+    document.getElementById('ov-suite').onclick=()=>{niveau++;chargerNiveau();};
+  } else if(gagne){
+    const neuf=majRecord();
+    ov.innerHTML='<h2>🏆 Tous les niveaux finis !</h2><div class="big-score">'+scoreTot+'</div>'+
+      (neuf?'<div class="record">🎉 Nouveau record !</div>':'<p>Record : '+record(jeuActuel)+'</p>')+
+      '<button class="btn-r" id="ov-rejouer">↻ Recommencer</button>';
+    plat.appendChild(ov);
+    document.getElementById('ov-rejouer').onclick=()=>demarrerJeu(jeuActuel);
+  } else {
+    const neuf=majRecord();
+    ov.innerHTML='<h2>Perdu !</h2><div class="niv-info">Niveau '+niveau+' atteint</div><div class="big-score">'+scoreTot+'</div>'+
+      (neuf?'<div class="record">🎉 Nouveau record !</div>':'<p>Record : '+record(jeuActuel)+'</p>')+
+      '<button class="btn-r" id="ov-rejouer">↻ Rejouer</button>';
+    plat.appendChild(ov);
+    document.getElementById('ov-rejouer').onclick=()=>demarrerJeu(jeuActuel);
+  }
+}
+
+/* 🧱 CASSE-BRIQUES (8 niveaux) */
+function jeuBriques(){
+  const plat=document.getElementById('plateau');
+  const cv=document.createElement('canvas');
+  const W=Math.min(window.innerWidth-40,430), H=Math.min(window.innerHeight-300,470);
+  cv.width=W;cv.height=H;plat.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  document.getElementById('aide-jeu').textContent='Souris ou doigt pour bouger la raquette. Niveau '+niveau+'/8.';
+  const themes=[
+    {bg:'#16161d',cols:['#e50914','#6b4de5','#00b8d4','#ffd66b']},
+    {bg:'#161d18',cols:['#2ec26a','#ffd66b','#00b8d4','#e5399a']},
+    {bg:'#1d1616',cols:['#e50914','#ff8c42','#ffd66b','#e5399a']},
+    {bg:'#16181d',cols:['#00b8d4','#6b4de5','#2ec26a','#e50914']},
+    {bg:'#1a1622',cols:['#6b4de5','#e5399a','#00b8d4','#ffd66b']},
+    {bg:'#221616',cols:['#e50914','#ff8c42','#e5399a','#6b4de5']},
+    {bg:'#16221c',cols:['#2ec26a','#00b8d4','#ffd66b','#e50914']},
+    {bg:'#1d1d26',cols:['#ffd66b','#e50914','#6b4de5','#2ec26a']},
+  ];
+  const th=themes[niveau-1];
+  const cols=4+Math.min(niveau,4), rangs=2+niveau;
+  const bw=(W-40)/cols, bh=16;
+  let briques=[];
+  for(let r=0;r<rangs;r++)for(let c=0;c<cols;c++){
+    if(niveau>=4 && Math.random()<0.12) continue;
+    briques.push({x:20+c*bw,y:40+r*(bh+6),v:true,col:th.cols[r%th.cols.length]});
+  }
+  const RL=Math.max(60,W/7), RH=12; let rx=W/2-RL/2;
+  const vitesse=3+niveau*0.5;
+  let bx=W/2,by=H-40,vx=vitesse*(Math.random()<.5?1:-1),vy=-vitesse,R=7;
+  let fini=false;
+  function bouge(clientX){const rect=cv.getBoundingClientRect();rx=clientX-rect.left-RL/2;rx=Math.max(0,Math.min(W-RL,rx));}
+  const mv=e=>bouge(e.clientX);
+  const tc=e=>{if(e.touches[0]){bouge(e.touches[0].clientX);e.preventDefault();}};
+  cv.addEventListener('mousemove',mv);cv.addEventListener('touchmove',tc,{passive:false});
+  function tick(){
+    if(fini)return;
+    bx+=vx;by+=vy;
+    if(bx<R||bx>W-R)vx=-vx;
+    if(by<R)vy=-vy;
+    if(by>H-30-RH&&by<H-16&&bx>rx&&bx<rx+RL){vy=-Math.abs(vy);vx+=(bx-(rx+RL/2))/14;}
+    if(by>H){fini=true;overlayNiveauFini(false);return;}
+    briques.forEach(b=>{if(b.v&&bx>b.x&&bx<b.x+bw-4&&by>b.y&&by<b.y+bh){b.v=false;vy=-vy;addScore(10);}});
+    if(briques.every(b=>!b.v)){fini=true;overlayNiveauFini(true);return;}
+    dessine();boucle=requestAnimationFrame(tick);
+  }
+  function dessine(){
+    ctx.fillStyle=th.bg;ctx.fillRect(0,0,W,H);
+    briques.forEach(b=>{if(b.v){ctx.fillStyle=b.col;ctx.fillRect(b.x,b.y,bw-4,bh);}});
+    ctx.fillStyle='#f4f4f6';ctx.fillRect(rx,H-30,RL,RH);
+    ctx.fillStyle='#e50914';ctx.beginPath();ctx.arc(bx,by,R,0,7);ctx.fill();
+  }
+  boucle=requestAnimationFrame(tick);
+  cleanup=()=>{cv.removeEventListener('mousemove',mv);cv.removeEventListener('touchmove',tc);cancelAnimationFrame(boucle);};
+}
+
+/* 🧠 MEMORY (6 niveaux) */
+function jeuMemory(){
+  const plat=document.getElementById('plateau');
+  const g=document.createElement('div');g.id='gmemory';plat.appendChild(g);
+  const themes=[
+    ['🐶','🐱','🦊','🐼'],
+    ['🍎','🍌','🍓','🍇','🍊'],
+    ['⚽','🏀','🎾','🏈','⚾','🎱'],
+    ['🚗','🚕','🚙','🚌','🏎️','🚓','🚑'],
+    ['🌟','⚡','🔥','❄️','🌈','☀️','🌙','⭐'],
+    ['🐶','🐱','🦊','🐼','🦁','🐸','🐧','🐙','🐷','🐵'],
+  ];
+  const emojis=themes[niveau-1];
+  const nbPaires=emojis.length;
+  const cols=nbPaires<=4?4:(nbPaires<=6?4:(nbPaires<=8?4:5));
+  g.style.gridTemplateColumns='repeat('+cols+',1fr)';
+  document.getElementById('aide-jeu').textContent='Niveau '+niveau+'/6 · '+nbPaires+' paires à trouver. Le moins de coups possible !';
+  let cartes=[...emojis,...emojis].sort(()=>Math.random()-.5);
+  let retournees=[], trouvees=0, coups=0, bloque=false;
+  cartes.forEach((em)=>{
+    const c=document.createElement('div');c.className='carte-mem';
+    c.innerHTML='<span class="face">'+em+'</span>';c.dataset.em=em;
+    c.onclick=()=>{
+      if(bloque||c.classList.contains('retournee')||c.classList.contains('trouvee'))return;
+      c.classList.add('retournee');retournees.push(c);
+      if(retournees.length===2){
+        coups++;bloque=true;
+        const [a,b]=retournees;
+        if(a.dataset.em===b.dataset.em){
+          setTimeout(()=>{a.classList.add('trouvee');b.classList.add('trouvee');
+            retournees=[];bloque=false;trouvees++;addScore(20);
+            if(trouvees===nbPaires){
+              const bonus=Math.max(0,(nbPaires*2-coups)*5);addScore(bonus);
+              setTimeout(()=>overlayNiveauFini(true),300);
+            }
+          },320);
+        }else{setTimeout(()=>{a.classList.remove('retournee');b.classList.remove('retournee');
+          retournees=[];bloque=false;},650);}
+      }
+    };
+    g.appendChild(c);
+  });
+  cleanup=()=>{};
+}
+
+/* 🎯 ATTRAPE (niveaux progressifs) */
+function jeuAttrape(){
+  const plat=document.getElementById('plateau');
+  const cv=document.createElement('canvas');
+  const W=Math.min(window.innerWidth-40,420), H=Math.min(window.innerHeight-300,470);
+  cv.width=W;cv.height=H;plat.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  document.getElementById('aide-jeu').textContent='Attrape les fruits, évite la 💣 ! Souris/doigt. Niveau '+niveau+'.';
+  const bons=['🍎','🍌','⭐','🍓','🍇'], mauvais='💣';
+  const objectif=8+niveau*2;
+  const vitesse=1.6+niveau*0.5;
+  const cadence=Math.max(28,70-niveau*5);
+  let px=W/2, PL=Math.max(54,W/7);
+  let objets=[], attrapes=0, vies=3, t=0, fini=false;
+  function bouge(clientX){const rect=cv.getBoundingClientRect();px=clientX-rect.left;px=Math.max(PL/2,Math.min(W-PL/2,px));}
+  const mv=e=>bouge(e.clientX);
+  const tc=e=>{if(e.touches[0]){bouge(e.touches[0].clientX);e.preventDefault();}};
+  cv.addEventListener('mousemove',mv);cv.addEventListener('touchmove',tc,{passive:false});
+  function tick(){
+    if(fini)return;t++;
+    if(t%cadence===0){
+      const mechant=Math.random()<0.25;
+      objets.push({x:20+Math.random()*(W-40),y:-20,
+        emo:mechant?mauvais:bons[(Math.random()*bons.length)|0],bad:mechant});
+    }
+    objets.forEach(o=>o.y+=vitesse);
+    objets=objets.filter(o=>{
+      if(o.y>H-50 && o.y<H-10 && Math.abs(o.x-px)<PL/2+14){
+        if(o.bad){vies--;if(vies<=0){fini=true;overlayNiveauFini(false);}}
+        else{attrapes++;addScore(10);
+          if(attrapes>=objectif){fini=true;overlayNiveauFini(true);}}
+        return false;
+      }
+      if(o.y>H+20){return false;}
+      return true;
+    });
+    dessine();
+    if(!fini)boucle=requestAnimationFrame(tick);
+  }
+  function dessine(){
+    ctx.fillStyle='#16161d';ctx.fillRect(0,0,W,H);
+    ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    objets.forEach(o=>ctx.fillText(o.emo,o.x,o.y));
+    ctx.font='34px serif';ctx.fillText('🧺',px,H-28);
+    ctx.font='18px serif';ctx.textAlign='left';
+    ctx.fillText('❤️'.repeat(Math.max(0,vies)),8,18);
+    ctx.textAlign='right';ctx.fillStyle='#9a9aa8';ctx.font='13px sans-serif';
+    ctx.fillText(attrapes+'/'+objectif,W-8,16);
+  }
+  boucle=requestAnimationFrame(tick);
+  cleanup=()=>{cv.removeEventListener('mousemove',mv);cv.removeEventListener('touchmove',tc);cancelAnimationFrame(boucle);};
+}
+
+/* 🚀 FUSÉE (niveaux progressifs) */
+function jeuFusee(){
+  const plat=document.getElementById('plateau');
+  const cv=document.createElement('canvas');
+  const W=Math.min(window.innerWidth-40,420), H=Math.min(window.innerHeight-300,470);
+  cv.width=W;cv.height=H;plat.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  document.getElementById('dpad').style.display='grid';
+  document.getElementById('aide-jeu').textContent='Esquive les ☄️ ! Flèches ◀▶ ou glisse. Niveau '+niveau+'.';
+  const scoreDepart=scoreTot;
+  let fx=W/2, FL=30;
+  const vitesse=2.2+niveau*0.6, cadence=Math.max(24,60-niveau*5);
+  const objectif=600+niveau*200;
+  let aster=[], dist=0, t=0, fini=false, gauche=false, droite=false, etoiles=[];
+  for(let i=0;i<30;i++)etoiles.push({x:Math.random()*W,y:Math.random()*H,v:1+Math.random()*2});
+  function bouge(clientX){const rect=cv.getBoundingClientRect();fx=clientX-rect.left;fx=Math.max(FL/2,Math.min(W-FL/2,fx));}
+  const mv=e=>bouge(e.clientX);
+  const tc=e=>{if(e.touches[0]){bouge(e.touches[0].clientX);e.preventDefault();}};
+  cv.addEventListener('mousemove',mv);cv.addEventListener('touchmove',tc,{passive:false});
+  const kd=e=>{if(e.key==='ArrowLeft'||e.key==='q')gauche=true;if(e.key==='ArrowRight'||e.key==='d')droite=true;};
+  const ku=e=>{if(e.key==='ArrowLeft'||e.key==='q')gauche=false;if(e.key==='ArrowRight'||e.key==='d')droite=false;};
+  document.addEventListener('keydown',kd);document.addEventListener('keyup',ku);
+  const dp=document.getElementById('dpad');
+  const dpDown=e=>{const d=e.target.dataset.dir;if(d==='left')gauche=true;if(d==='right')droite=true;};
+  const dpUp=()=>{gauche=false;droite=false;};
+  dp.addEventListener('touchstart',dpDown);dp.addEventListener('mousedown',dpDown);
+  dp.addEventListener('touchend',dpUp);dp.addEventListener('mouseup',dpUp);
+  function tick(){
+    if(fini)return;t++;dist+=vitesse;
+    if(gauche)fx=Math.max(FL/2,fx-5);
+    if(droite)fx=Math.min(W-FL/2,fx+5);
+    setScore(Math.floor(dist/10)+scoreDepart);
+    if(t%cadence===0)aster.push({x:20+Math.random()*(W-40),y:-24,r:12+Math.random()*10});
+    aster.forEach(a=>a.y+=vitesse);
+    etoiles.forEach(s=>{s.y+=s.v;if(s.y>H){s.y=0;s.x=Math.random()*W;}});
+    for(const a of aster){
+      const dx=a.x-fx, dy=a.y-(H-46);
+      if(Math.sqrt(dx*dx+dy*dy)<a.r+13){fini=true;overlayNiveauFini(false);return;}
+    }
+    aster=aster.filter(a=>a.y<H+30);
+    if(dist>=objectif){fini=true;overlayNiveauFini(true);return;}
+    dessine();boucle=requestAnimationFrame(tick);
+  }
+  function dessine(){
+    ctx.fillStyle='#0a0a16';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#ffffff';etoiles.forEach(s=>ctx.fillRect(s.x,s.y,2,2));
+    ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    aster.forEach(a=>ctx.fillText('☄️',a.x,a.y));
+    ctx.font='30px serif';ctx.fillText('🚀',fx,H-46);
+    ctx.fillStyle='#2a2a36';ctx.fillRect(8,8,W-16,6);
+    ctx.fillStyle='#2ec26a';ctx.fillRect(8,8,(W-16)*Math.min(1,dist/objectif),6);
+  }
+  boucle=requestAnimationFrame(tick);
+  cleanup=()=>{cv.removeEventListener('mousemove',mv);cv.removeEventListener('touchmove',tc);
+    document.removeEventListener('keydown',kd);document.removeEventListener('keyup',ku);
+    dp.removeEventListener('touchstart',dpDown);dp.removeEventListener('mousedown',dpDown);
+    dp.removeEventListener('touchend',dpUp);dp.removeEventListener('mouseup',dpUp);
+    cancelAnimationFrame(boucle);};
+}
+
+document.getElementById('btn-retour').onclick=afficherMenu;
+document.getElementById('btn-rejouer').onclick=()=>{if(jeuActuel)demarrerJeu(jeuActuel);};
+rendreMenu();
+</script>
+
+
+</body></html>
