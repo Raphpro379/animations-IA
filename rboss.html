@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Boss — l'app du PDG</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --rouge:#e50914; --rouge-fonce:#b0060f;
+    --fond:#0d0d12; --fond2:#16161d; --carte:#1d1d26;
+    --ligne:#2a2a36; --texte:#f4f4f6; --gris:#9a9aa8;
+    --violet:#6b4de5; --or:#ffd66b; --vert:#2ec26a; --bleu:#00b8d4; --rose:#e5399a;
+  }
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;background:var(--fond);color:var(--texte);
+    height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+  header{background:linear-gradient(135deg,#1a1a2e,#0d0d12);padding:14px 18px;display:flex;align-items:center;gap:12px;
+    flex-shrink:0;box-shadow:0 2px 14px rgba(0,0,0,.5);border-bottom:1px solid var(--or)}
+  header .logo{width:40px;height:40px;background:var(--or);border-radius:11px;display:flex;align-items:center;
+    justify-content:center;font-weight:bold;font-size:22px;color:#000}
+  header .titre{flex:1}
+  header .titre h1{font-size:20px;letter-spacing:.5px}
+  header .titre p{font-size:12px;color:var(--or)}
+  #syncBadge{font-size:11px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.12);white-space:nowrap}
+  #syncBadge.ok{background:rgba(46,194,106,.3)}
+  #syncBadge.err{background:rgba(229,9,20,.3)}
+  .ico-btn{background:rgba(255,255,255,.12);border:none;color:#fff;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:16px}
+
+  /* verrou */
+  #verrou{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 30%,#1a1a2e,#0d0d12);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+  #verrou .bigR{width:84px;height:84px;background:var(--or);border-radius:22px;display:flex;align-items:center;justify-content:center;
+    font-size:46px;font-weight:bold;color:#000;margin-bottom:18px;box-shadow:0 10px 30px rgba(255,214,107,.4)}
+  #verrou h2{font-size:30px;margin-bottom:4px}
+  #verrou .slogan{color:var(--gris);margin-bottom:26px;font-size:15px}
+  #verrou input{width:100%;max-width:280px;padding:15px;font-size:20px;border-radius:14px;border:1px solid var(--ligne);
+    background:var(--carte);color:var(--texte);text-align:center;margin-bottom:14px;letter-spacing:3px}
+  #verrou input:focus{outline:none;border-color:var(--or)}
+  .btn-or{background:var(--or);color:#000;border:none;padding:14px 32px;font-size:16px;font-weight:bold;border-radius:14px;cursor:pointer}
+  #verrou-msg{margin-top:12px;color:#ff6b6b;font-size:14px;min-height:20px}
+
+  /* app */
+  #app{display:none;flex:1;flex-direction:column;overflow:hidden}
+  .onglets{display:flex;background:var(--fond2);flex-shrink:0;border-bottom:1px solid var(--ligne)}
+  .onglet{flex:1;padding:13px 4px;text-align:center;cursor:pointer;font-size:13px;color:var(--gris);
+    border-bottom:3px solid transparent;transition:.15s}
+  .onglet.actif{color:var(--texte);border-bottom-color:var(--or)}
+  .vue{flex:1;display:none;flex-direction:column;overflow-y:auto;padding:16px}
+  .vue.actif{display:flex}
+
+  /* cartes résumé */
+  .resume{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat{background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:14px}
+  .stat .lab{font-size:12px;color:var(--gris)}
+  .stat .val{font-size:24px;font-weight:bold;margin-top:4px}
+  .stat .val.vert{color:var(--vert)}
+  .stat .val.rouge{color:var(--rouge)}
+  .stat .val.or{color:var(--or)}
+
+  /* liste dettes */
+  .item{background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:14px;margin-bottom:10px}
+  .item.paye{opacity:.55}
+  .item .haut{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .item .nom{font-size:16px;font-weight:bold}
+  .item .nom.barre{text-decoration:line-through}
+  .item .montant{font-size:20px;font-weight:bold;color:var(--or);white-space:nowrap}
+  .item .desc{font-size:13px;color:var(--gris);margin-top:4px}
+  .item .bas{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .item .bas button{flex:1;min-width:70px;padding:8px;border-radius:10px;border:1px solid var(--ligne);
+    background:var(--fond2);color:var(--texte);cursor:pointer;font-size:13px}
+  .item .bas .ok{background:rgba(46,194,106,.15);color:var(--vert);border-color:rgba(46,194,106,.3)}
+  .item .bas .ok.actif{background:var(--vert);color:#000}
+  .item .bas .del{background:rgba(229,9,20,.12);color:#ff6b6b;border-color:rgba(229,9,20,.25);flex:0 0 auto;min-width:44px}
+  .item .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:8px;margin-top:6px}
+  .tag-paye{background:rgba(46,194,106,.2);color:var(--vert)}
+  .tag-du{background:rgba(229,9,20,.2);color:#ff8b8b}
+
+  /* revenus par mois */
+  .mois-barre{background:var(--carte);border:1px solid var(--ligne);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+  .mois-barre .haut{display:flex;justify-content:space-between;margin-bottom:8px}
+  .mois-barre .nom-mois{font-weight:bold}
+  .mois-barre .total{color:var(--vert);font-weight:bold}
+  .jauge{height:10px;background:var(--fond2);border-radius:6px;overflow:hidden}
+  .jauge div{height:100%;background:linear-gradient(90deg,var(--vert),var(--bleu));border-radius:6px}
+
+  /* notes */
+  .note-item{background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:14px;margin-bottom:10px;position:relative}
+  .note-item.fait{opacity:.5}
+  .note-item .txt{font-size:15px;line-height:1.4;padding-right:60px;white-space:pre-wrap;word-wrap:break-word}
+  .note-item.fait .txt{text-decoration:line-through}
+  .note-item .actions{position:absolute;top:12px;right:12px;display:flex;gap:6px}
+  .note-item .actions button{background:var(--fond2);border:1px solid var(--ligne);color:var(--texte);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:14px}
+  .note-item .date{font-size:11px;color:var(--gris);margin-top:8px}
+
+  .vide{margin:30px auto;text-align:center;color:var(--gris);padding:20px}
+  .vide .ico{font-size:44px;margin-bottom:10px}
+
+  #fab{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:var(--or);
+    color:#000;border:none;font-size:30px;cursor:pointer;box-shadow:0 8px 24px rgba(255,214,107,.5);z-index:20}
+  #fab:hover{transform:scale(1.08)}
+
+  /* modales */
+  .modale{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:16px}
+  .modale.on{display:flex}
+  .modale .boite{background:var(--fond2);border:1px solid var(--ligne);border-radius:18px;padding:22px;max-width:440px;width:100%;max-height:90vh;overflow-y:auto}
+  .modale h3{margin-bottom:14px;font-size:20px}
+  .modale label{display:block;font-size:13px;color:var(--gris);margin:12px 0 5px}
+  .modale input,.modale textarea{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--ligne);background:var(--carte);color:var(--texte);font-size:15px;font-family:inherit}
+  .modale textarea{min-height:80px;resize:vertical}
+  .modale input:focus,.modale textarea:focus{outline:none;border-color:var(--or)}
+  .note{font-size:12px;color:var(--gris);background:var(--carte);padding:12px;border-radius:10px;margin:12px 0;line-height:1.5;border:1px solid var(--ligne)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .btn-r{background:var(--rouge);color:#fff;border:none;padding:12px 20px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px}
+  .btn-gris{background:var(--carte);color:var(--texte);border:1px solid var(--ligne);padding:12px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--carte);border:1px solid var(--ligne);
+    color:var(--texte);padding:12px 20px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.5);text-align:center}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- VERROU -->
+<div id="verrou">
+  <div class="bigR">R</div>
+  <h2>R Boss 👑</h2>
+  <div class="slogan">L'espace privé du PDG</div>
+  <input id="inp-code" type="password" placeholder="• • • •" inputmode="numeric">
+  <button class="btn-or" id="btn-entrer">Déverrouiller</button>
+  <div id="verrou-msg"></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="logo">R</div>
+    <div class="titre"><h1>R Boss</h1><p>👑 Espace PDG privé</p></div>
+    <span id="syncBadge"></span>
+    <button class="ico-btn" id="btn-reglages">⚙️</button>
+  </header>
+
+  <div class="onglets">
+    <div class="onglet actif" data-v="dettes">💰 On me doit</div>
+    <div class="onglet" data-v="revenus">📊 Revenus</div>
+    <div class="onglet" data-v="notes">📝 Notes</div>
+  </div>
+
+  <!-- VUE DETTES -->
+  <div class="vue actif" id="vue-dettes">
+    <div class="resume">
+      <div class="stat"><div class="lab">💸 On me doit</div><div class="val rouge" id="total-du">0 €</div></div>
+      <div class="stat"><div class="lab">✅ Déjà encaissé</div><div class="val vert" id="total-paye">0 €</div></div>
+    </div>
+    <div id="liste-dettes"></div>
+  </div>
+
+  <!-- VUE REVENUS -->
+  <div class="vue" id="vue-revenus">
+    <div class="resume">
+      <div class="stat"><div class="lab">💰 Total encaissé</div><div class="val or" id="rev-total">0 €</div></div>
+      <div class="stat"><div class="lab">📅 Ce mois-ci</div><div class="val vert" id="rev-mois">0 €</div></div>
+    </div>
+    <h3 style="font-size:16px;margin-bottom:12px">Revenus par mois</h3>
+    <div id="liste-revenus"></div>
+    <div class="note" style="margin-top:16px">💡 Les revenus se calculent tout seuls à partir des dettes marquées « payé ». Tu peux aussi ajouter un revenu manuel avec le bouton +.</div>
+  </div>
+
+  <!-- VUE NOTES -->
+  <div class="vue" id="vue-notes">
+    <div id="liste-notes"></div>
+  </div>
+
+  <button id="fab">+</button>
+</div>
+
+<!-- MODALE AJOUT (dette / revenu / note selon onglet) -->
+<div class="modale" id="modale-ajout">
+  <div class="boite">
+    <h3 id="ajout-titre">Ajouter</h3>
+    <!-- dette -->
+    <div id="form-dette">
+      <label>Nom du client / qui</label>
+      <input id="d-nom" placeholder="Ex. Lucas" maxlength="40">
+      <label>Montant (€)</label>
+      <input id="d-montant" type="number" inputmode="decimal" placeholder="Ex. 7.50">
+      <label>Pour quoi ? (optionnel)</label>
+      <input id="d-desc" placeholder="Ex. abonnement R Radio" maxlength="60">
+      <label>Type</label>
+      <select id="d-type" style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--ligne);background:var(--carte);color:var(--texte);font-size:15px">
+        <option value="unique">Paiement unique</option>
+        <option value="mois">Tous les mois</option>
+      </select>
+    </div>
+    <!-- revenu manuel -->
+    <div id="form-revenu" style="display:none">
+      <label>Montant encaissé (€)</label>
+      <input id="r-montant" type="number" inputmode="decimal" placeholder="Ex. 20">
+      <label>D'où ça vient ? (optionnel)</label>
+      <input id="r-desc" placeholder="Ex. vente app" maxlength="60">
+    </div>
+    <!-- note -->
+    <div id="form-note" style="display:none">
+      <label>Ta note / chose à faire</label>
+      <textarea id="n-txt" placeholder="Ex. Appeler le fournisseur, sortir un nouvel épisode…"></textarea>
+    </div>
+    <div class="row">
+      <button class="btn-r" id="ajout-valider">Ajouter</button>
+      <button class="btn-gris" id="ajout-annuler">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE RÉGLAGES -->
+<div class="modale" id="modale-reglages">
+  <div class="boite">
+    <h3>⚙️ Réglages</h3>
+    <label>Changer le code PDG</label>
+    <input id="inp-newcode" placeholder="Nouveau code (chiffres)" inputmode="numeric">
+    <div class="row"><button class="btn-r" id="btn-save-code">💾 Changer le code</button></div>
+    <hr style="border:none;border-top:1px solid var(--ligne);margin:18px 0">
+    <h3 style="font-size:17px">☁️ Synchronisation</h3>
+    <div class="note">Pour retrouver tes données sur tous tes appareils : colle ta clé jsonbin. R Boss crée sa propre base privée.</div>
+    <label>Clé (X-Master-Key)</label><input id="inp-apikey" placeholder="$2a$10$...">
+    <label id="lab-binid" style="display:none">BinId (auto)</label>
+    <input id="inp-binid" placeholder="créé automatiquement" style="display:none">
+    <div class="row"><button class="btn-r" id="btn-sync-save">☁️ Activer</button>
+    <button class="btn-gris" id="btn-sync-pull">↓ Recharger</button></div>
+    <hr style="border:none;border-top:1px solid var(--ligne);margin:18px 0">
+    <div class="row"><button class="btn-gris" id="btn-fermer-reglages">Fermer</button>
+    <button class="btn-gris" id="btn-verrouiller">🔒 Verrouiller</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ CONFIG ============ */
+const DATA_KEY="r-boss-data";
+const CFG_KEY="r-boss-cloud-cfg";
+const SHARED_CLOUD={ apiKey:"$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K", binId:"6a6a05b7f5f4af5e29d1683b" };
+const DEFAULT={ code:"1234", dettes:[], revenus:[], notes:[] };
+
+let data=JSON.parse(JSON.stringify(DEFAULT));
+let vueActive='dettes';
+
+/* ============ OUTILS ============ */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200);}
+function escap(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function euro(n){return (Math.round(n*100)/100).toLocaleString('fr-FR')+' €';}
+function moisNom(cle){const [a,m]=cle.split('-');const noms=['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];return noms[parseInt(m)]+' '+a;}
+function moisCle(ts){const d=new Date(ts);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function moisCourant(){return moisCle(Date.now());}
+
+/* ============ STOCKAGE ============ */
+function load(){try{const d=JSON.parse(localStorage.getItem(DATA_KEY)||"null");if(d){data=Object.assign({},DEFAULT,d);data.dettes=d.dettes||[];data.revenus=d.revenus||[];data.notes=d.notes||[];}}catch(e){}}
+function save(){try{localStorage.setItem(DATA_KEY,JSON.stringify(data));}catch(e){}if(cloudOn())pushCloudSoon();}
+
+/* ============ SYNCHRO ============ */
+let cloud={apiKey:"",binId:""},syncing=false,pushTimer=null;
+function loadCloudCfg(){try{const c=JSON.parse(localStorage.getItem(CFG_KEY)||"{}");cloud.apiKey=c.apiKey||"";cloud.binId=c.binId||"";}catch(e){}
+  if(SHARED_CLOUD.apiKey)cloud.apiKey=SHARED_CLOUD.apiKey;if(SHARED_CLOUD.binId)cloud.binId=SHARED_CLOUD.binId;}
+function saveCloudCfg(){try{localStorage.setItem(CFG_KEY,JSON.stringify(cloud));}catch(e){}}
+function cloudOn(){return !!cloud.apiKey;}
+function badge(s){const b=document.getElementById('syncBadge');if(!b)return;b.className=s||'';b.textContent=s==='ok'?'● Sync':s==='sync'?'○ …':s==='err'?'⚠':'⚡';}
+async function creerBin(){const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey,'X-Bin-Private':'true','X-Bin-Name':'r-boss'},body:JSON.stringify(data)});if(!r.ok)throw new Error();const j=await r.json();return j.metadata.id;}
+async function pushCloud(){if(!cloudOn())return;if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}syncing=true;badge('sync');
+  try{const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey},body:JSON.stringify(data)});if(!r.ok)throw new Error();badge('ok');}catch(e){badge('err');}syncing=false;}
+function pushCloudSoon(){clearTimeout(pushTimer);pushTimer=setTimeout(pushCloud,800);}
+async function pullCloud(silencieux){if(!cloudOn()||!cloud.binId)return;badge('sync');
+  try{const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId+'/latest',{headers:{'X-Master-Key':cloud.apiKey}});if(!r.ok)throw new Error();const j=await r.json();const d=j.record||{};
+    if(d.dettes||d.revenus||d.notes){data=Object.assign({},DEFAULT,d);data.dettes=d.dettes||[];data.revenus=d.revenus||[];data.notes=d.notes||[];
+      try{localStorage.setItem(DATA_KEY,JSON.stringify(data));}catch(e){}}
+    badge('ok');if(!silencieux)toast('Rechargé ☁️');rendreTout();}catch(e){badge('err');if(!silencieux)toast('Synchro impossible');}}
+
+/* ============ VERROU ============ */
+function entrer(){
+  document.getElementById('verrou').style.display='none';
+  document.getElementById('app').style.display='flex';
+  rendreTout();
+  if(cloudOn())pullCloud(true);
+}
+function verrouiller(){sessionStorage.removeItem('r-boss-ok');document.getElementById('app').style.display='none';
+  document.getElementById('verrou').style.display='flex';document.getElementById('inp-code').value='';
+  document.getElementById('modale-reglages').classList.remove('on');}
+
+/* ============ DETTES ============ */
+function rendreDettes(){
+  const box=document.getElementById('liste-dettes');
+  let du=0,paye=0;
+  data.dettes.forEach(d=>{if(d.paye)paye+=d.montant;else du+=d.montant;});
+  document.getElementById('total-du').textContent=euro(du);
+  document.getElementById('total-paye').textContent=euro(paye);
+  if(!data.dettes.length){box.innerHTML='<div class="vide"><div class="ico">💰</div>Personne ne te doit d\'argent.<br>Appuie sur + pour ajouter.</div>';return;}
+  // pas payés d'abord
+  const tri=data.dettes.slice().sort((a,b)=>(a.paye?1:0)-(b.paye?1:0)||b.ts-a.ts);
+  box.innerHTML=tri.map(d=>
+    '<div class="item'+(d.paye?' paye':'')+'"><div class="haut">'+
+      '<div><div class="nom'+(d.paye?' barre':'')+'">'+escap(d.nom)+'</div>'+
+      (d.desc?'<div class="desc">'+escap(d.desc)+'</div>':'')+
+      '<span class="tag '+(d.paye?'tag-paye">✅ Payé':'tag-du">⏳ À payer')+'</span>'+
+      (d.type==='mois'?'<span class="tag tag-du" style="background:rgba(107,77,229,.2);color:#a58bff">🔁 Mensuel</span>':'')+
+      '</div>'+
+      '<div class="montant">'+euro(d.montant)+'</div></div>'+
+      '<div class="bas">'+
+        '<button class="ok'+(d.paye?' actif':'')+'" data-paye="'+d.id+'">'+(d.paye?'✅ Payé':'Marquer payé')+'</button>'+
+        '<button class="del" data-del="'+d.id+'">🗑️</button>'+
+      '</div></div>'
+  ).join('');
+  box.querySelectorAll('[data-paye]').forEach(b=>b.onclick=()=>togglePaye(b.dataset.paye));
+  box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>supprDette(b.dataset.del));
+}
+function togglePaye(id){
+  const d=data.dettes.find(x=>x.id===id);if(!d)return;
+  d.paye=!d.paye;
+  if(d.paye){d.tsPaye=Date.now();
+    // enregistrer comme revenu
+    data.revenus.push({id:'r'+Date.now(),montant:d.montant,desc:'De '+d.nom+(d.desc?' ('+d.desc+')':''),ts:Date.now(),auto:true,dette:d.id});
+    toast('💰 '+euro(d.montant)+' encaissé !');
+  }else{
+    data.revenus=data.revenus.filter(r=>r.dette!==d.id); // retirer le revenu auto
+  }
+  save();rendreTout();
+}
+function supprDette(id){if(!confirm('Supprimer ?'))return;
+  data.dettes=data.dettes.filter(x=>x.id!==id);
+  data.revenus=data.revenus.filter(r=>r.dette!==id);
+  save();rendreTout();toast('Supprimé');}
+
+/* ============ REVENUS ============ */
+function rendreRevenus(){
+  const total=data.revenus.reduce((s,r)=>s+r.montant,0);
+  const mc=moisCourant();
+  const ceMois=data.revenus.filter(r=>moisCle(r.ts)===mc).reduce((s,r)=>s+r.montant,0);
+  document.getElementById('rev-total').textContent=euro(total);
+  document.getElementById('rev-mois').textContent=euro(ceMois);
+  // grouper par mois
+  const parMois={};
+  data.revenus.forEach(r=>{const c=moisCle(r.ts);parMois[c]=(parMois[c]||0)+r.montant;});
+  const cles=Object.keys(parMois).sort().reverse();
+  const box=document.getElementById('liste-revenus');
+  if(!cles.length){box.innerHTML='<div class="vide"><div class="ico">📊</div>Aucun revenu encore.<br>Marque une dette « payé » ou ajoute un revenu avec +.</div>';return;}
+  const max=Math.max(...cles.map(c=>parMois[c]));
+  box.innerHTML=cles.map(c=>
+    '<div class="mois-barre"><div class="haut"><span class="nom-mois">'+moisNom(c)+'</span><span class="total">'+euro(parMois[c])+'</span></div>'+
+    '<div class="jauge"><div style="width:'+(max?parMois[c]/max*100:0)+'%"></div></div></div>'
+  ).join('');
+}
+
+/* ============ NOTES ============ */
+function rendreNotes(){
+  const box=document.getElementById('liste-notes');
+  if(!data.notes.length){box.innerHTML='<div class="vide"><div class="ico">📝</div>Aucune note.<br>Appuie sur + pour en ajouter une.</div>';return;}
+  const tri=data.notes.slice().sort((a,b)=>(a.fait?1:0)-(b.fait?1:0)||b.ts-a.ts);
+  box.innerHTML=tri.map(n=>
+    '<div class="note-item'+(n.fait?' fait':'')+'">'+
+      '<div class="actions"><button data-fait="'+n.id+'">'+(n.fait?'↩️':'✅')+'</button>'+
+      '<button data-deln="'+n.id+'">🗑️</button></div>'+
+      '<div class="txt">'+escap(n.txt)+'</div>'+
+      '<div class="date">'+new Date(n.ts).toLocaleDateString('fr-FR')+'</div></div>'
+  ).join('');
+  box.querySelectorAll('[data-fait]').forEach(b=>b.onclick=()=>{const n=data.notes.find(x=>x.id===b.dataset.fait);n.fait=!n.fait;save();rendreNotes();});
+  box.querySelectorAll('[data-deln]').forEach(b=>b.onclick=()=>{if(confirm('Supprimer cette note ?')){data.notes=data.notes.filter(x=>x.id!==b.dataset.deln);save();rendreNotes();}});
+}
+
+function rendreTout(){rendreDettes();rendreRevenus();rendreNotes();}
+
+/* ============ AJOUT ============ */
+function ouvrirAjout(){
+  document.getElementById('form-dette').style.display=vueActive==='dettes'?'block':'none';
+  document.getElementById('form-revenu').style.display=vueActive==='revenus'?'block':'none';
+  document.getElementById('form-note').style.display=vueActive==='notes'?'block':'none';
+  document.getElementById('ajout-titre').textContent=
+    vueActive==='dettes'?'💰 Qui me doit ?':vueActive==='revenus'?'💵 Ajouter un revenu':'📝 Nouvelle note';
+  document.getElementById('d-nom').value='';document.getElementById('d-montant').value='';document.getElementById('d-desc').value='';
+  document.getElementById('r-montant').value='';document.getElementById('r-desc').value='';
+  document.getElementById('n-txt').value='';
+  document.getElementById('modale-ajout').classList.add('on');
+}
+function valider(){
+  if(vueActive==='dettes'){
+    const nom=document.getElementById('d-nom').value.trim();
+    const m=parseFloat(document.getElementById('d-montant').value);
+    if(!nom){toast('Mets un nom');return;}
+    if(!m||m<=0){toast('Mets un montant');return;}
+    data.dettes.push({id:'d'+Date.now(),nom,montant:m,desc:document.getElementById('d-desc').value.trim(),
+      type:document.getElementById('d-type').value,paye:false,ts:Date.now()});
+    toast('Ajouté 💰');
+  }else if(vueActive==='revenus'){
+    const m=parseFloat(document.getElementById('r-montant').value);
+    if(!m||m<=0){toast('Mets un montant');return;}
+    data.revenus.push({id:'r'+Date.now(),montant:m,desc:document.getElementById('r-desc').value.trim()||'Revenu manuel',ts:Date.now()});
+    toast('Revenu ajouté 💵');
+  }else{
+    const t=document.getElementById('n-txt').value.trim();
+    if(!t){toast('Écris quelque chose');return;}
+    data.notes.push({id:'n'+Date.now(),txt:t,fait:false,ts:Date.now()});
+    toast('Note ajoutée 📝');
+  }
+  save();document.getElementById('modale-ajout').classList.remove('on');rendreTout();
+}
+
+/* ============ INIT ============ */
+function init(){
+  load();loadCloudCfg();badge(cloudOn()?'ok':'');
+  if(sessionStorage.getItem('r-boss-ok')==='1')entrer();
+
+  document.getElementById('btn-entrer').onclick=()=>{
+    if(document.getElementById('inp-code').value===data.code){sessionStorage.setItem('r-boss-ok','1');entrer();}
+    else{document.getElementById('verrou-msg').textContent='❌ Code incorrect';}
+  };
+  document.getElementById('inp-code').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('btn-entrer').click();});
+
+  document.querySelectorAll('.onglet').forEach(o=>o.onclick=()=>{
+    vueActive=o.dataset.v;
+    document.querySelectorAll('.onglet').forEach(x=>x.classList.toggle('actif',x===o));
+    document.querySelectorAll('.vue').forEach(v=>v.classList.toggle('actif',v.id==='vue-'+vueActive));
+  });
+
+  document.getElementById('fab').onclick=ouvrirAjout;
+  document.getElementById('ajout-valider').onclick=valider;
+  document.getElementById('ajout-annuler').onclick=()=>document.getElementById('modale-ajout').classList.remove('on');
+
+  document.getElementById('btn-reglages').onclick=()=>{document.getElementById('modale-reglages').classList.add('on');majReglages();};
+  document.getElementById('btn-fermer-reglages').onclick=()=>document.getElementById('modale-reglages').classList.remove('on');
+  document.getElementById('btn-verrouiller').onclick=verrouiller;
+  document.getElementById('btn-save-code').onclick=()=>{const v=document.getElementById('inp-newcode').value.trim();
+    if(v.length<4){toast('Code trop court (min 4)');return;}data.code=v;save();toast('Code changé 🔒');document.getElementById('inp-newcode').value='';};
+
+  document.getElementById('btn-sync-save').onclick=async()=>{
+    const k=document.getElementById('inp-apikey').value.trim();if(!k){toast('Colle ta clé');return;}
+    cloud.apiKey=k;const bid=document.getElementById('inp-binid').value.trim();if(bid)cloud.binId=bid;saveCloudCfg();badge('sync');
+    try{if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}await pushCloud();toast('☁️ Synchro activée !');majReglages();}catch(e){badge('err');toast('Erreur : vérifie ta clé');}};
+  document.getElementById('btn-sync-pull').onclick=()=>pullCloud(false);
+
+  setInterval(()=>{if(cloudOn()&&!syncing&&document.getElementById('app').style.display==='flex'&&!document.querySelector('.modale.on'))pullCloud(true);},10000);
+}
+function majReglages(){
+  document.getElementById('inp-apikey').value=cloud.apiKey||'';
+  document.getElementById('inp-binid').value=cloud.binId||'';
+  const mb=!!cloud.binId;document.getElementById('lab-binid').style.display=mb?'block':'none';document.getElementById('inp-binid').style.display=mb?'block':'none';
+}
+init();
+</script>
+</body>
+</html>
