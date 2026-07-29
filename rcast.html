@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Cast — crée tes podcasts</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --rouge:#e50914; --rouge-fonce:#b0060f;
+    --fond:#0d0d12; --fond2:#16161d; --carte:#1d1d26;
+    --ligne:#2a2a36; --texte:#f4f4f6; --gris:#9a9aa8;
+    --violet:#6b4de5; --or:#ffd66b; --vert:#2ec26a; --bleu:#00b8d4;
+  }
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;background:var(--fond);color:var(--texte);
+    height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+  header{background:linear-gradient(135deg,var(--rouge),var(--rouge-fonce));padding:14px 18px;
+    display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 2px 14px rgba(0,0,0,.4)}
+  header .logo{width:40px;height:40px;background:#fff;border-radius:11px;display:flex;align-items:center;
+    justify-content:center;font-weight:bold;font-size:22px;color:var(--rouge)}
+  header .titre{flex:1}
+  header .titre h1{font-size:20px;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+  header .titre p{font-size:12px;opacity:.85}
+  .prem-badge{font-size:10px;background:var(--or);color:#000;padding:2px 8px;border-radius:8px;font-weight:bold}
+  #syncBadge{font-size:11px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.18);white-space:nowrap}
+  #syncBadge.ok{background:rgba(46,194,106,.3)}
+  #syncBadge.err{background:rgba(0,0,0,.3)}
+  .ico-btn{background:rgba(255,255,255,.18);border:none;color:#fff;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:16px;flex-shrink:0}
+
+  /* ===== VERROU (accès par code) ===== */
+  #verrou{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 30%,#1a1a24,#0d0d12);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+  #verrou .bigR{width:80px;height:80px;background:var(--rouge);border-radius:22px;display:flex;align-items:center;
+    justify-content:center;font-size:44px;font-weight:bold;color:#fff;margin-bottom:18px;box-shadow:0 10px 30px rgba(229,9,20,.4)}
+  #verrou h2{font-size:30px;margin-bottom:6px}
+  #verrou .slogan{color:var(--gris);margin-bottom:24px;max-width:340px;font-size:15px}
+  #verrou input{width:100%;max-width:300px;padding:14px 18px;font-size:17px;border-radius:14px;border:1px solid var(--ligne);
+    background:var(--carte);color:var(--texte);text-align:center;margin-bottom:12px;text-transform:uppercase}
+  #verrou input:focus{outline:none;border-color:var(--rouge)}
+  .btn-r{background:var(--rouge);color:#fff;border:none;padding:14px 32px;font-size:16px;font-weight:bold;border-radius:14px;cursor:pointer;transition:transform .15s}
+  .btn-r:hover{transform:scale(1.04)}
+  #verrou-msg{margin-top:12px;font-size:14px;min-height:20px}
+  .offres{margin-top:24px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px}
+  .offre{background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:14px;text-align:left}
+  .offre.prem{border-color:var(--or)}
+  .offre h4{font-size:15px;display:flex;justify-content:space-between;align-items:center}
+  .offre .prix{color:var(--or);font-weight:bold}
+  .offre p{font-size:12px;color:var(--gris);margin-top:5px;line-height:1.4}
+  .mini-pdg{margin-top:20px;background:none;border:none;color:var(--gris);font-size:12px;text-decoration:underline;cursor:pointer}
+
+  /* ===== APP ===== */
+  #app{display:none;flex:1;flex-direction:column;overflow:hidden}
+  .quota{background:var(--fond2);padding:10px 16px;font-size:13px;color:var(--gris);border-bottom:1px solid var(--ligne);
+    display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+  .quota b{color:var(--texte)}
+  .quota .prem-txt{color:var(--or)}
+
+  #liste-casts{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .cast{background:var(--carte);border:1px solid var(--ligne);border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center}
+  .cast .pochette{width:60px;height:60px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
+  .cast .infos{flex:1;min-width:0}
+  .cast .infos h3{font-size:16px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cast .infos .meta{font-size:12px;color:var(--gris)}
+  .cast .actions{display:flex;gap:6px;flex-shrink:0}
+  .cast .actions button{background:var(--fond2);border:1px solid var(--ligne);color:var(--texte);width:38px;height:38px;
+    border-radius:10px;cursor:pointer;font-size:16px}
+  .cast .actions button:hover{background:var(--rouge)}
+  .vide{margin:auto;text-align:center;color:var(--gris);padding:40px}
+  .vide .ico{font-size:50px;margin-bottom:12px}
+
+  #fab{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:var(--rouge);
+    color:#fff;border:none;font-size:28px;cursor:pointer;box-shadow:0 8px 24px rgba(229,9,20,.5);z-index:20}
+  #fab:hover{transform:scale(1.08)}
+
+  /* ===== STUDIO (création) ===== */
+  #studio{position:fixed;inset:0;z-index:30;background:var(--fond);display:none;flex-direction:column}
+  #studio .studio-tete{background:var(--fond2);padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--ligne);flex-shrink:0}
+  #studio .studio-tete .retour{background:none;border:none;color:#fff;font-size:22px;cursor:pointer}
+  #studio .studio-tete h2{flex:1;font-size:18px}
+  #studio .contenu{flex:1;overflow-y:auto;padding:18px}
+  .champ{margin-bottom:16px}
+  .champ label{display:block;font-size:13px;color:var(--gris);margin-bottom:6px}
+  .champ input,.champ textarea,.champ select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--ligne);
+    background:var(--carte);color:var(--texte);font-size:15px;font-family:inherit}
+  .champ textarea{min-height:90px;resize:vertical}
+  .champ input:focus,.champ textarea:focus{outline:none;border-color:var(--rouge)}
+  .emoji-choix{display:flex;gap:8px;flex-wrap:wrap}
+  .emoji-choix span{font-size:26px;padding:6px 8px;border-radius:10px;cursor:pointer;border:2px solid transparent}
+  .emoji-choix span.sel{border-color:var(--rouge);background:var(--carte)}
+  .couleur-choix span{width:36px;height:36px;border-radius:9px;cursor:pointer;display:inline-block;margin-right:8px}
+
+  /* enregistreur */
+  .rec-box{background:var(--carte);border:1px solid var(--ligne);border-radius:16px;padding:20px;text-align:center;margin-bottom:16px}
+  .rec-cercle{width:90px;height:90px;border-radius:50%;background:var(--rouge);margin:0 auto 14px;display:flex;
+    align-items:center;justify-content:center;font-size:40px;cursor:pointer;transition:.2s;border:4px solid transparent}
+  .rec-cercle.rec{animation:pulse 1s infinite;border-color:#fff}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  .rec-temps{font-size:26px;font-weight:bold;font-variant-numeric:tabular-nums;margin-bottom:8px}
+  .rec-etat{font-size:13px;color:var(--gris);margin-bottom:12px}
+  .rec-box audio{width:100%;margin-top:12px}
+  .premium-lock{background:rgba(255,214,107,.1);border:1px dashed var(--or);border-radius:12px;padding:12px;
+    font-size:13px;color:var(--or);margin-bottom:16px;text-align:center}
+
+  .btn-plein{width:100%;background:var(--rouge);color:#fff;border:none;padding:15px;font-size:16px;font-weight:bold;border-radius:14px;cursor:pointer;margin-top:8px}
+  .btn-plein:disabled{opacity:.5}
+
+  /* modales */
+  .modale{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px}
+  .modale.on{display:flex}
+  .modale .boite{background:var(--fond2);border:1px solid var(--ligne);border-radius:18px;padding:22px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto}
+  .modale h3{margin-bottom:14px;font-size:20px}
+  .modale label{display:block;font-size:13px;color:var(--gris);margin:12px 0 5px}
+  .modale input{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--ligne);background:var(--carte);color:var(--texte);font-size:14px}
+  .modale input:focus{outline:none;border-color:var(--rouge)}
+  .note{font-size:12px;color:var(--gris);background:var(--carte);padding:12px;border-radius:10px;margin:12px 0;line-height:1.5;border:1px solid var(--ligne)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .btn-or{background:var(--or);color:#000;border:none;padding:11px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px}
+  .btn-gris{background:var(--carte);color:var(--texte);border:1px solid var(--ligne);padding:11px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .btn-del{background:rgba(229,9,20,.15);color:#ff6b6b;border:1px solid rgba(229,9,20,.3);padding:11px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--carte);border:1px solid var(--ligne);
+    color:var(--texte);padding:12px 20px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.5);text-align:center;max-width:90%}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .pdg-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .pdg-tab{background:var(--carte);border:1px solid var(--ligne);color:var(--gris);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:13px}
+  .pdg-tab.on{background:var(--rouge);color:#fff;border-color:var(--rouge)}
+  .pdg-vue{display:none}.pdg-vue.on{display:block}
+  .code-item{display:flex;justify-content:space-between;align-items:center;background:var(--carte);border:1px solid var(--ligne);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- ===== VERROU ===== -->
+<div id="verrou">
+  <div class="bigR">R</div>
+  <h2>R Cast 🎙️</h2>
+  <div class="slogan">Crée tes propres podcasts et enregistre ta voix, directement depuis ton téléphone !</div>
+  <input id="inp-code" placeholder="Entre ton code" maxlength="12">
+  <button class="btn-r" id="btn-deverrouiller">Déverrouiller R Cast</button>
+  <div id="verrou-msg"></div>
+  <div class="offres" id="offres"></div>
+  <button class="mini-pdg" id="mini-pdg">🔑 Espace PDG</button>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+  <header>
+    <div class="logo">R</div>
+    <div class="titre">
+      <h1>R Cast <span class="prem-badge" id="prem-badge" style="display:none">PREMIUM</span></h1>
+      <p>Crée tes podcasts</p>
+    </div>
+    <span id="syncBadge"></span>
+    <button class="ico-btn" id="btn-reglages">⚙️</button>
+  </header>
+
+  <div class="quota" id="quota"></div>
+
+  <div id="liste-casts"></div>
+
+  <button id="fab">🎙️</button>
+</div>
+
+<!-- ===== STUDIO ===== -->
+<div id="studio">
+  <div class="studio-tete">
+    <button class="retour" id="studio-retour">←</button>
+    <h2 id="studio-titre">Nouveau podcast</h2>
+  </div>
+  <div class="contenu">
+    <div class="champ">
+      <label>Titre du podcast</label>
+      <input id="st-titre" placeholder="Ex. Mon avis sur…" maxlength="80">
+    </div>
+    <div class="champ">
+      <label>Description (optionnel)</label>
+      <textarea id="st-desc" placeholder="De quoi parle ton épisode ?"></textarea>
+    </div>
+    <div class="champ">
+      <label>Pochette (emoji)</label>
+      <div class="emoji-choix" id="st-emojis"></div>
+    </div>
+    <div class="champ">
+      <label>Couleur</label>
+      <div class="emoji-choix couleur-choix" id="st-couleurs"></div>
+    </div>
+
+    <!-- premium : chapitres -->
+    <div id="zone-chapitres"></div>
+
+    <!-- ENREGISTREUR -->
+    <label style="font-size:13px;color:var(--gris);margin-bottom:6px;display:block">🎤 Enregistrement</label>
+    <div class="rec-box">
+      <div class="rec-cercle" id="rec-cercle">🎤</div>
+      <div class="rec-temps" id="rec-temps">00:00</div>
+      <div class="rec-etat" id="rec-etat">Appuie sur le micro pour enregistrer</div>
+      <audio id="rec-audio" controls style="display:none"></audio>
+    </div>
+
+    <div id="zone-premium-extra"></div>
+
+    <button class="btn-plein" id="st-sauver">💾 Sauvegarder le podcast</button>
+  </div>
+</div>
+
+<!-- MODALE RÉGLAGES / PDG -->
+<div class="modale" id="modale-reglages">
+  <div class="boite">
+    <h3>⚙️ Réglages</h3>
+    <div id="zone-pdg-login">
+      <label>Code PDG</label>
+      <input id="inp-pdgcode" placeholder="Code administrateur" type="password">
+      <div class="row"><button class="btn-or" id="btn-pdg-valider">👑 Entrer en PDG</button></div>
+    </div>
+    <div id="zone-pdg-panel" style="display:none">
+      <div class="pdg-tabs">
+        <div class="pdg-tab on" data-v="codes">🔐 Codes</div>
+        <div class="pdg-tab" data-v="prix">💶 Offres</div>
+        <div class="pdg-tab" data-v="sync">☁️ Synchro</div>
+        <div class="pdg-tab" data-v="params">⚙️ Params</div>
+      </div>
+
+      <div class="pdg-vue on" data-v="codes">
+        <div class="note">Crée des codes à donner à tes clients. Chaque code donne accès (base) ou premium.</div>
+        <label>Nouveau code</label>
+        <input id="new-code" placeholder="Ex. CAST01" style="text-transform:uppercase">
+        <label>Type</label>
+        <select id="new-code-type" style="width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--ligne);background:var(--carte);color:var(--texte);font-size:14px">
+          <option value="base">Base (3 podcasts/mois)</option>
+          <option value="premium">Premium (illimité + bonus)</option>
+        </select>
+        <div class="row"><button class="btn-or" id="btn-add-code">+ Créer le code</button></div>
+        <div id="liste-codes" style="margin-top:14px"></div>
+      </div>
+
+      <div class="pdg-vue" data-v="prix">
+        <div class="note">Modifie les textes et prix affichés sur l'écran d'accueil.</div>
+        <label>Prix base</label><input id="prix-base" placeholder="Ex. 2 €">
+        <label>Prix premium</label><input id="prix-prem" placeholder="Ex. 5 €/mois">
+        <div class="row"><button class="btn-or" id="btn-save-prix">💾 Enregistrer</button></div>
+      </div>
+
+      <div class="pdg-vue" data-v="sync">
+        <div class="note">Pour partager les codes entre appareils : colle ta clé jsonbin. R Cast crée sa propre base.</div>
+        <label>Clé (X-Master-Key)</label><input id="inp-apikey" placeholder="$2a$10$...">
+        <label id="lab-binid" style="display:none">BinId (auto)</label>
+        <input id="inp-binid" placeholder="créé automatiquement" style="display:none">
+        <div class="row"><button class="btn-or" id="btn-sync-save">☁️ Activer</button>
+        <button class="btn-gris" id="btn-sync-pull">↓ Recharger</button></div>
+      </div>
+
+      <div class="pdg-vue" data-v="params">
+        <label>Changer le code PDG</label><input id="inp-newpdg" placeholder="Nouveau code PDG">
+        <div class="row"><button class="btn-or" id="btn-save-pdg">💾 Enregistrer</button>
+        <button class="btn-gris" id="btn-quitter-pdg">Quitter PDG</button></div>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid var(--ligne);margin:18px 0">
+    <div class="row">
+      <button class="btn-gris" id="btn-fermer-reglages">Fermer</button>
+      <button class="btn-del" id="btn-deco">Se déconnecter</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ CONFIG ============ */
+const CASTS_KEY="r-cast-podcasts";     // podcasts (local, car l'audio est lourd)
+const DATA_KEY="r-cast-data";          // codes + settings (synchronisable)
+const CFG_KEY="r-cast-cloud-cfg";
+const ACCES_KEY="r-cast-acces";        // accès de l'utilisateur (local)
+const QUOTA_KEY="r-cast-quota";
+const SHARED_CLOUD={ apiKey:"$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K", binId:"6a69fe02f5f4af5e29d14cb9" };
+
+const DEFAULT_DATA={
+  settings:{ pdgCode:"PDG2026", prixBase:"2 €", prixPrem:"5 €/mois" },
+  codes:[
+    {code:"CAST01", type:"base"},
+    {code:"CASTVIP", type:"premium"},
+  ]
+};
+const EMOJIS=['🎙️','🎧','📻','🎵','🔥','💡','😂','⚽','🎮','🌟','📚','🍕'];
+const COULEURS=['#e50914','#6b4de5','#00b8d4','#2ec26a','#ff8c42','#e5399a','#ffd66b'];
+
+let data=JSON.parse(JSON.stringify(DEFAULT_DATA));
+let casts=[];
+let acces={ niveau:null }; // null | 'base' | 'premium'
+let editEmoji='🎙️', editCouleur='#e50914', editionId=null;
+
+/* ============ OUTILS ============ */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2400);}
+function escap(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function moisCourant(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1);}
+function estPremium(){return acces.niveau==='premium';}
+
+/* ============ STOCKAGE ============ */
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(DATA_KEY)||"null");if(d){data.settings=Object.assign({},DEFAULT_DATA.settings,d.settings||{});data.codes=d.codes||DEFAULT_DATA.codes;}}catch(e){}
+  try{casts=JSON.parse(localStorage.getItem(CASTS_KEY)||"[]");}catch(e){casts=[];}
+  try{acces=JSON.parse(localStorage.getItem(ACCES_KEY)||'{"niveau":null}');}catch(e){acces={niveau:null};}
+}
+function saveData(){try{localStorage.setItem(DATA_KEY,JSON.stringify({settings:data.settings,codes:data.codes}));}catch(e){}if(cloudOn())pushCloudSoon();}
+function saveCasts(){try{localStorage.setItem(CASTS_KEY,JSON.stringify(casts));}catch(e){toast('Stockage plein : supprime un ancien podcast');}}
+function saveAcces(){try{localStorage.setItem(ACCES_KEY,JSON.stringify(acces));}catch(e){}}
+
+/* quota mensuel (base = 3/mois) */
+function getQuota(){try{const q=JSON.parse(localStorage.getItem(QUOTA_KEY)||"{}");if(q.mois!==moisCourant())return{mois:moisCourant(),n:0};return q;}catch(e){return{mois:moisCourant(),n:0};}}
+function incQuota(){const q=getQuota();q.n++;localStorage.setItem(QUOTA_KEY,JSON.stringify(q));}
+function podcastsRestants(){if(estPremium())return Infinity;return Math.max(0,3-getQuota().n);}
+
+/* ============ SYNCHRO ============ */
+let cloud={apiKey:"",binId:""},syncing=false,pushTimer=null;
+function loadCloudCfg(){try{const c=JSON.parse(localStorage.getItem(CFG_KEY)||"{}");cloud.apiKey=c.apiKey||"";cloud.binId=c.binId||"";}catch(e){}
+  if(SHARED_CLOUD.apiKey)cloud.apiKey=SHARED_CLOUD.apiKey;if(SHARED_CLOUD.binId)cloud.binId=SHARED_CLOUD.binId;}
+function saveCloudCfg(){try{localStorage.setItem(CFG_KEY,JSON.stringify(cloud));}catch(e){}}
+function cloudOn(){return !!cloud.apiKey;}
+function badge(s){const b=document.getElementById('syncBadge');if(!b)return;b.className=s||'';b.textContent=s==='ok'?'● Sync':s==='sync'?'○ …':s==='err'?'⚠':'⚡';}
+async function creerBin(){const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey,'X-Bin-Private':'false','X-Bin-Name':'r-cast'},body:JSON.stringify({settings:data.settings,codes:data.codes})});if(!r.ok)throw new Error();const j=await r.json();return j.metadata.id;}
+async function pushCloud(){if(!cloudOn())return;if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}syncing=true;badge('sync');
+  try{const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey},body:JSON.stringify({settings:data.settings,codes:data.codes})});if(!r.ok)throw new Error();badge('ok');}catch(e){badge('err');}syncing=false;}
+function pushCloudSoon(){clearTimeout(pushTimer);pushTimer=setTimeout(pushCloud,800);}
+async function pullCloud(silencieux){if(!cloudOn()||!cloud.binId)return;badge('sync');
+  try{const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId+'/latest',{headers:{'X-Master-Key':cloud.apiKey}});if(!r.ok)throw new Error();const j=await r.json();const d=j.record||{};
+    if(d.codes){data.codes=d.codes;data.settings=Object.assign({},DEFAULT_DATA.settings,d.settings||{});try{localStorage.setItem(DATA_KEY,JSON.stringify({settings:data.settings,codes:data.codes}));}catch(e){}}
+    badge('ok');if(!silencieux)toast('Rechargé ☁️');majOffres();}catch(e){badge('err');if(!silencieux)toast('Synchro impossible');}}
+
+/* ============ VERROU / ACCÈS ============ */
+function majOffres(){
+  const o=document.getElementById('offres');
+  o.innerHTML=
+    '<div class="offre"><h4>Accès de base <span class="prix">'+escap(data.settings.prixBase)+'</span></h4><p>Crée jusqu\'à 3 podcasts par mois avec enregistrement de ta voix.</p></div>'+
+    '<div class="offre prem"><h4>👑 Premium <span class="prix">'+escap(data.settings.prixPrem)+'</span></h4><p>Podcasts illimités + chapitres, musiques d\'intro, pochettes premium et téléchargement.</p></div>'+
+    '<div style="font-size:12px;color:var(--gris);margin-top:6px">Demande ton code au PDG pour débloquer l\'app.</div>';
+}
+function deverrouiller(code){
+  code=code.trim().toUpperCase();
+  const c=data.codes.find(x=>x.code.toUpperCase()===code);
+  if(!c){document.getElementById('verrou-msg').style.color='#ff6b6b';document.getElementById('verrou-msg').textContent='❌ Code invalide';return;}
+  acces.niveau=c.type;saveAcces();
+  entrer();
+}
+function entrer(){
+  document.getElementById('verrou').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('prem-badge').style.display=estPremium()?'inline-block':'none';
+  majQuota();rendreCasts();
+  if(cloudOn())pullCloud(true);
+}
+
+function majQuota(){
+  const q=document.getElementById('quota');
+  if(estPremium()){q.innerHTML='<span>👑 <span class="prem-txt">Premium</span> — podcasts illimités</span><span>'+casts.length+' créé(s)</span>';}
+  else{const r=podcastsRestants();q.innerHTML='<span>Ce mois-ci : <b>'+r+'</b> podcast(s) restant(s) sur 3</span><span class="prem-txt" style="cursor:pointer" id="lien-prem">Passer premium →</span>';
+    setTimeout(()=>{const l=document.getElementById('lien-prem');if(l)l.onclick=()=>toast('Demande un code Premium au PDG 👑');},0);}
+}
+
+/* ============ LISTE ============ */
+function rendreCasts(){
+  const box=document.getElementById('liste-casts');
+  if(!casts.length){box.innerHTML='<div class="vide"><div class="ico">🎙️</div>Aucun podcast pour l\'instant.<br>Appuie sur 🎙️ pour créer le premier !</div>';return;}
+  box.innerHTML=casts.slice().reverse().map(c=>
+    '<div class="cast"><div class="pochette" style="background:'+c.couleur+'">'+c.emoji+'</div>'+
+    '<div class="infos"><h3>'+escap(c.titre)+'</h3><div class="meta">'+new Date(c.ts).toLocaleDateString('fr-FR')+(c.duree?' · '+c.duree:'')+'</div></div>'+
+    '<div class="actions">'+(c.audio?'<button data-play="'+c.id+'">▶️</button>':'')+
+    (estPremium()&&c.audio?'<button data-dl="'+c.id+'">⬇️</button>':'')+
+    '<button data-del="'+c.id+'">🗑️</button></div></div>'
+  ).join('');
+  box.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>jouer(b.dataset.play));
+  box.querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>telecharger(b.dataset.dl));
+  box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>supprimer(b.dataset.del));
+}
+let audioLecture=null;
+function jouer(id){const c=casts.find(x=>x.id===id);if(!c||!c.audio)return;
+  if(audioLecture){audioLecture.pause();audioLecture=null;}
+  audioLecture=new Audio(c.audio);audioLecture.play();toast('▶️ Lecture : '+c.titre);}
+function telecharger(id){const c=casts.find(x=>x.id===id);if(!c||!c.audio)return;
+  const a=document.createElement('a');a.href=c.audio;a.download=(c.titre||'podcast')+'.webm';a.click();toast('⬇️ Téléchargement…');}
+function supprimer(id){if(!confirm('Supprimer ce podcast ?'))return;casts=casts.filter(x=>x.id!==id);saveCasts();rendreCasts();majQuota();toast('Supprimé 🗑️');}
+
+/* ============ STUDIO + ENREGISTREMENT ============ */
+let mediaRec=null, chunks=[], recTimer=null, recSec=0, audioBlob=null, audioURL=null;
+function ouvrirStudio(){
+  if(!estPremium() && podcastsRestants()<=0){toast('Limite atteinte : 3/mois. Passe premium pour l\'illimité 👑');return;}
+  editionId=null;editEmoji='🎙️';editCouleur='#e50914';audioBlob=null;audioURL=null;
+  document.getElementById('st-titre').value='';
+  document.getElementById('st-desc').value='';
+  document.getElementById('rec-audio').style.display='none';
+  document.getElementById('rec-temps').textContent='00:00';
+  document.getElementById('rec-etat').textContent='Appuie sur le micro pour enregistrer';
+  recSec=0;
+  // emojis / couleurs
+  const be=document.getElementById('st-emojis');
+  be.innerHTML=EMOJIS.map(e=>'<span data-e="'+e+'">'+e+'</span>').join('');
+  be.querySelectorAll('span').forEach(s=>s.onclick=()=>{editEmoji=s.dataset.e;majSel();});
+  const bc=document.getElementById('st-couleurs');
+  bc.innerHTML=COULEURS.map(c=>'<span data-c="'+c+'" style="background:'+c+'"></span>').join('');
+  bc.querySelectorAll('span').forEach(s=>s.onclick=()=>{editCouleur=s.dataset.c;majSel();});
+  majSel();
+  // premium extras
+  const chap=document.getElementById('zone-chapitres');
+  const extra=document.getElementById('zone-premium-extra');
+  if(estPremium()){
+    chap.innerHTML='<div class="champ"><label>📑 Chapitres (premium)</label><textarea id="st-chapitres" placeholder="Un chapitre par ligne&#10;Ex.&#10;0:00 Introduction&#10;2:30 Sujet principal"></textarea></div>';
+    extra.innerHTML='<div class="champ"><label>🎵 Musique d\'intro (premium, lien optionnel)</label><input id="st-musique" placeholder="Lien d\'une musique d\'intro (GitHub)"></div>';
+  }else{
+    chap.innerHTML='<div class="premium-lock">👑 Chapitres, musiques d\'intro et téléchargement sont réservés au Premium.</div>';
+    extra.innerHTML='';
+  }
+  document.getElementById('studio').style.display='flex';
+}
+function majSel(){
+  document.querySelectorAll('#st-emojis span').forEach(s=>s.classList.toggle('sel',s.dataset.e===editEmoji));
+  document.querySelectorAll('#st-couleurs span').forEach(s=>s.style.outline=s.dataset.c===editCouleur?'3px solid #fff':'none');
+}
+function fermerStudio(){
+  if(mediaRec&&mediaRec.state==='recording')stopRec();
+  if(recTimer)clearInterval(recTimer);
+  document.getElementById('studio').style.display='none';
+}
+async function toggleRec(){
+  if(mediaRec&&mediaRec.state==='recording'){stopRec();return;}
+  // démarrer
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    mediaRec=new MediaRecorder(stream);chunks=[];
+    mediaRec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+    mediaRec.onstop=()=>{
+      audioBlob=new Blob(chunks,{type:'audio/webm'});
+      const reader=new FileReader();
+      reader.onloadend=()=>{audioURL=reader.result;
+        const a=document.getElementById('rec-audio');a.src=audioURL;a.style.display='block';};
+      reader.readAsDataURL(audioBlob);
+      stream.getTracks().forEach(t=>t.stop());
+    };
+    mediaRec.start();
+    recSec=0;document.getElementById('rec-cercle').classList.add('rec');
+    document.getElementById('rec-cercle').textContent='⏹️';
+    document.getElementById('rec-etat').textContent='🔴 Enregistrement en cours… (appuie pour arrêter)';
+    recTimer=setInterval(()=>{recSec++;const m=String((recSec/60|0)).padStart(2,'0'),s=String(recSec%60).padStart(2,'0');
+      document.getElementById('rec-temps').textContent=m+':'+s;},1000);
+  }catch(e){toast('🎤 Micro refusé. Autorise le micro dans ton navigateur.');}
+}
+function stopRec(){
+  if(mediaRec&&mediaRec.state==='recording')mediaRec.stop();
+  if(recTimer)clearInterval(recTimer);
+  document.getElementById('rec-cercle').classList.remove('rec');
+  document.getElementById('rec-cercle').textContent='🎤';
+  document.getElementById('rec-etat').textContent='✅ Enregistré ! Réécoute ci-dessous, ou refais un essai.';
+}
+function sauverCast(){
+  const titre=document.getElementById('st-titre').value.trim();
+  if(!titre){toast('Ajoute un titre');return;}
+  if(!audioURL){toast('Enregistre ta voix d\'abord 🎤');return;}
+  if(!estPremium() && podcastsRestants()<=0){toast('Limite 3/mois atteinte');return;}
+  const dur=String((recSec/60|0)).padStart(2,'0')+':'+String(recSec%60).padStart(2,'0');
+  const cast={id:'c'+Date.now(),titre,desc:document.getElementById('st-desc').value.trim(),
+    emoji:editEmoji,couleur:editCouleur,audio:audioURL,duree:dur,ts:Date.now()};
+  if(estPremium()){
+    const ch=document.getElementById('st-chapitres');if(ch)cast.chapitres=ch.value.trim();
+    const mu=document.getElementById('st-musique');if(mu)cast.musique=mu.value.trim();
+  }
+  casts.push(cast);saveCasts();
+  if(!estPremium())incQuota();
+  fermerStudio();rendreCasts();majQuota();
+  toast('🎉 Podcast sauvegardé !');
+}
+
+/* ============ PDG ============ */
+function estPDG(){return sessionStorage.getItem('r-cast-pdg')==='1';}
+function majPdgPanel(){
+  document.getElementById('zone-pdg-login').style.display=estPDG()?'none':'block';
+  document.getElementById('zone-pdg-panel').style.display=estPDG()?'block':'none';
+  if(estPDG()){rendreCodes();
+    document.getElementById('prix-base').value=data.settings.prixBase;
+    document.getElementById('prix-prem').value=data.settings.prixPrem;
+    document.getElementById('inp-apikey').value=cloud.apiKey||'';
+    document.getElementById('inp-binid').value=cloud.binId||'';
+    const mb=!!cloud.binId;document.getElementById('lab-binid').style.display=mb?'block':'none';document.getElementById('inp-binid').style.display=mb?'block':'none';
+  }
+}
+function rendreCodes(){
+  const box=document.getElementById('liste-codes');
+  if(!data.codes.length){box.innerHTML='<div style="color:var(--gris);font-size:13px">Aucun code.</div>';return;}
+  box.innerHTML=data.codes.map(c=>'<div class="code-item"><span><b>'+escap(c.code)+'</b> — '+(c.type==='premium'?'👑 Premium':'Base')+'</span><button class="btn-del" style="padding:5px 10px" data-delcode="'+escap(c.code)+'">✕</button></div>').join('');
+  box.querySelectorAll('[data-delcode]').forEach(b=>b.onclick=()=>{data.codes=data.codes.filter(x=>x.code!==b.dataset.delcode);saveData();rendreCodes();});
+}
+
+/* ============ INIT ============ */
+function init(){
+  load();loadCloudCfg();badge(cloudOn()?'ok':'');majOffres();
+  if(acces.niveau)entrer();
+
+  document.getElementById('btn-deverrouiller').onclick=()=>deverrouiller(document.getElementById('inp-code').value);
+  document.getElementById('inp-code').addEventListener('keydown',e=>{if(e.key==='Enter')deverrouiller(e.target.value);});
+  document.getElementById('mini-pdg').onclick=()=>{document.getElementById('modale-reglages').classList.add('on');majPdgPanel();};
+
+  document.getElementById('fab').onclick=ouvrirStudio;
+  document.getElementById('studio-retour').onclick=fermerStudio;
+  document.getElementById('rec-cercle').onclick=toggleRec;
+  document.getElementById('st-sauver').onclick=sauverCast;
+
+  document.getElementById('btn-reglages').onclick=()=>{document.getElementById('modale-reglages').classList.add('on');majPdgPanel();};
+  document.getElementById('btn-fermer-reglages').onclick=()=>document.getElementById('modale-reglages').classList.remove('on');
+  document.getElementById('btn-deco').onclick=()=>{acces={niveau:null};saveAcces();location.reload();};
+
+  document.getElementById('btn-pdg-valider').onclick=()=>{
+    const c=document.getElementById('inp-pdgcode').value.trim();
+    if(c===data.settings.pdgCode){sessionStorage.setItem('r-cast-pdg','1');toast('👑 Mode PDG activé');majPdgPanel();}
+    else toast('Code incorrect');};
+  document.getElementById('btn-quitter-pdg').onclick=()=>{sessionStorage.removeItem('r-cast-pdg');majPdgPanel();};
+
+  document.querySelectorAll('.pdg-tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.pdg-tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+    document.querySelectorAll('.pdg-vue').forEach(v=>v.classList.toggle('on',v.dataset.v===t.dataset.v));});
+
+  document.getElementById('btn-add-code').onclick=()=>{
+    const code=document.getElementById('new-code').value.trim().toUpperCase();
+    const type=document.getElementById('new-code-type').value;
+    if(!code){toast('Entre un code');return;}
+    if(data.codes.some(c=>c.code.toUpperCase()===code)){toast('Ce code existe déjà');return;}
+    data.codes.push({code,type});saveData();rendreCodes();document.getElementById('new-code').value='';toast('Code créé ✅');};
+  document.getElementById('btn-save-prix').onclick=()=>{
+    data.settings.prixBase=document.getElementById('prix-base').value.trim()||'2 €';
+    data.settings.prixPrem=document.getElementById('prix-prem').value.trim()||'5 €/mois';
+    saveData();majOffres();toast('Offres mises à jour');};
+  document.getElementById('btn-save-pdg').onclick=()=>{const v=document.getElementById('inp-newpdg').value.trim();if(v){data.settings.pdgCode=v;saveData();toast('Code PDG changé');document.getElementById('inp-newpdg').value='';}};
+  document.getElementById('btn-sync-save').onclick=async()=>{
+    const k=document.getElementById('inp-apikey').value.trim();if(!k){toast('Colle ta clé');return;}
+    cloud.apiKey=k;const bid=document.getElementById('inp-binid').value.trim();if(bid)cloud.binId=bid;saveCloudCfg();badge('sync');
+    try{if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}await pushCloud();toast('☁️ Synchro activée !');majPdgPanel();}catch(e){badge('err');toast('Erreur : vérifie ta clé');}};
+  document.getElementById('btn-sync-pull').onclick=()=>pullCloud(false);
+}
+init();
+</script>
+</body>
+</html>
