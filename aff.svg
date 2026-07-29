@@ -1,0 +1,139 @@
+<svg viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="fond" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0a3a54"/>
+    <stop offset="0.5" stop-color="#0d5a80"/>
+    <stop offset="1" stop-color="#041826"/>
+  </linearGradient>
+  <radialGradient id="halo" cx="0.5" cy="0.42" r="0.5">
+    <stop offset="0" stop-color="#7fe8ff" stop-opacity="0.7"/>
+    <stop offset="0.5" stop-color="#3fb6d8" stop-opacity="0.2"/>
+    <stop offset="1" stop-color="#3fb6d8" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="or" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffe9a0"/>
+    <stop offset="1" stop-color="#ffc94d"/>
+  </linearGradient>
+  <linearGradient id="peau" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffd9b0"/>
+    <stop offset="1" stop-color="#e8b088"/>
+  </linearGradient>
+</defs>
+
+<!-- fond océan -->
+<rect width="800" height="1200" fill="url(#fond)"/>
+
+<!-- rayons de lumière du haut -->
+<g opacity="0.3">
+  <polygon points="300,0 350,0 260,600 210,600" fill="#9be8ff"/>
+  <polygon points="440,0 490,0 430,600 380,600" fill="#9be8ff"/>
+  <polygon points="560,0 620,0 600,600 540,600" fill="#9be8ff"/>
+</g>
+
+<!-- bulles qui montent -->
+<g fill="#bff0ff" opacity="0.5">
+  <circle cx="90" cy="500" r="10"/>
+  <circle cx="130" cy="420" r="6"/>
+  <circle cx="70" cy="360" r="8"/>
+  <circle cx="710" cy="540" r="12"/>
+  <circle cx="740" cy="450" r="7"/>
+  <circle cx="690" cy="390" r="5"/>
+  <circle cx="150" cy="250" r="5"/>
+  <circle cx="660" cy="280" r="6"/>
+</g>
+
+<!-- halo central autour du Cœur -->
+<ellipse cx="400" cy="500" rx="380" ry="380" fill="url(#halo)"/>
+
+<!-- === LE COEUR DE L'OCEAN (cristal en losange-étoile) === -->
+<g transform="translate(400 300)">
+  <g>
+    <path d="M0 -70 L28 -20 L70 0 L28 20 L0 70 L-28 20 L-70 0 L-28 -20 Z" fill="#7fe8ff" stroke="#fff" stroke-width="3"/>
+    <path d="M0 -70 L28 -20 L70 0 L28 20 L0 70 L-28 20 L-70 0 L-28 -20 Z" fill="#bff0ff" opacity="0.4"/>
+    <path d="M0 -70 L0 70 M-70 0 L70 0" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
+  </g>
+</g>
+
+<!-- === LEO le Gardien (au centre, il flotte) === -->
+<g transform="translate(400 640)">
+  <!-- corps / combinaison de plongée -->
+  <path d="M-55 40 Q-60 -30 0 -45 Q60 -30 55 40 Q40 120 0 130 Q-40 120 -55 40 Z" fill="#1a7a9a" stroke="#0d5a70" stroke-width="3"/>
+  <!-- reflets combinaison -->
+  <path d="M-30 -10 Q-35 60 -20 110" stroke="#5fd0f0" stroke-width="4" fill="none" opacity="0.6"/>
+  <!-- signe du Gardien sur la poitrine -->
+  <path d="M0 20 L10 40 L25 45 L10 50 L0 75 L-10 50 L-25 45 L-10 40 Z" fill="url(#or)"/>
+  <!-- bras ouverts -->
+  <path d="M-52 0 Q-95 20 -110 70" stroke="#1a7a9a" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <path d="M52 0 Q95 20 110 70" stroke="#1a7a9a" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <circle cx="-112" cy="72" r="12" fill="url(#peau)"/>
+  <circle cx="112" cy="72" r="12" fill="url(#peau)"/>
+  <!-- tête -->
+  <circle cx="0" cy="-80" r="42" fill="url(#peau)"/>
+  <!-- cheveux -->
+  <path d="M-42 -90 Q-40 -130 0 -128 Q40 -130 42 -90 Q30 -112 0 -110 Q-30 -112 -42 -90 Z" fill="#3a2a1a"/>
+  <path d="M-42 -88 Q-46 -108 -30 -114 Q-38 -100 -36 -84 Z" fill="#3a2a1a"/>
+  <path d="M42 -88 Q46 -108 30 -114 Q38 -100 36 -84 Z" fill="#3a2a1a"/>
+  <!-- yeux déterminés -->
+  <ellipse cx="-15" cy="-82" rx="5" ry="6" fill="#2a2a3a"/>
+  <ellipse cx="15" cy="-82" rx="5" ry="6" fill="#2a2a3a"/>
+  <circle cx="-13" cy="-84" r="1.6" fill="#fff"/>
+  <circle cx="17" cy="-84" r="1.6" fill="#fff"/>
+  <!-- sourcils -->
+  <path d="M-22 -92 Q-15 -95 -8 -92" stroke="#3a2a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M8 -92 Q15 -95 22 -92" stroke="#3a2a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- sourire -->
+  <path d="M-12 -66 Q0 -58 12 -66" stroke="#c85a5a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- joues -->
+  <ellipse cx="-26" cy="-72" rx="7" ry="4" fill="#ff9a8a" opacity="0.4"/>
+  <ellipse cx="26" cy="-72" rx="7" ry="4" fill="#ff9a8a" opacity="0.4"/>
+</g>
+
+<!-- === Marina la baleine (en bas à gauche, grande silhouette) === -->
+<g transform="translate(170 940)" opacity="0.95">
+  <path d="M-140 0 Q-60 -70 60 -40 Q140 -20 150 10 Q120 15 150 45 Q120 40 90 35 Q0 55 -100 35 Q-150 25 -140 0 Z" fill="#2a6a9a" stroke="#1a4a70" stroke-width="3"/>
+  <path d="M-100 30 Q-60 45 -10 40" stroke="#5fb0d8" stroke-width="3" fill="none" opacity="0.5"/>
+  <circle cx="90" cy="-8" r="6" fill="#0a2a3a"/>
+  <path d="M-140 0 Q-165 -20 -175 5 Q-160 8 -140 0 Z" fill="#2a6a9a"/>
+</g>
+
+<!-- === Octave le poulpe (bas droite) === -->
+<g transform="translate(630 920)">
+  <ellipse cx="0" cy="-20" rx="46" ry="42" fill="#a05ac8" stroke="#7a3aa0" stroke-width="3"/>
+  <ellipse cx="-15" cy="-30" rx="10" ry="12" fill="#fff"/><circle cx="-13" cy="-28" r="5" fill="#2a2a3a"/>
+  <ellipse cx="15" cy="-30" rx="10" ry="12" fill="#fff"/><circle cx="17" cy="-28" r="5" fill="#2a2a3a"/>
+  <path d="M-14 -6 Q0 4 14 -6" stroke="#5a2a70" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g stroke="#a05ac8" stroke-width="12" fill="none" stroke-linecap="round">
+    <path d="M-32 12 Q-52 45 -40 75"/>
+    <path d="M-14 22 Q-24 60 -6 82"/>
+    <path d="M14 22 Q24 60 6 82"/>
+    <path d="M32 12 Q52 45 40 75"/>
+  </g>
+</g>
+
+<!-- === Coquille la tortue (petite, près de Léo) === -->
+<g transform="translate(560 700)">
+  <ellipse cx="0" cy="0" rx="34" ry="26" fill="#3a9a5a" stroke="#2a7a44" stroke-width="3"/>
+  <path d="M-18 -8 L-6 -14 L6 -14 L18 -8 M-20 6 L-8 12 L8 12 L20 6" stroke="#2a7a44" stroke-width="2" fill="none"/>
+  <circle cx="34" cy="-4" r="12" fill="#4aaa6a"/>
+  <circle cx="40" cy="-7" r="2.5" fill="#2a2a3a"/>
+  <path d="M-28 18 Q-34 28 -28 30 M28 18 Q34 28 28 30" stroke="#4aaa6a" stroke-width="8" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- petits poissons -->
+<g fill="url(#or)" opacity="0.9">
+  <g transform="translate(120 720)"><ellipse rx="14" ry="8"/><polygon points="12,0 24,-8 24,8" /></g>
+  <g transform="translate(680 620)"><ellipse rx="12" ry="7"/><polygon points="10,0 20,-7 20,7" /></g>
+  <g transform="translate(200 640)"><ellipse rx="10" ry="6"/><polygon points="8,0 17,-6 17,6" /></g>
+</g>
+
+<!-- === TITRE === -->
+<text x="400" y="1055" text-anchor="middle" font-family="Georgia, serif" font-size="30" fill="#bff0ff" letter-spacing="6">LE GARDIEN DES</text>
+<text x="400" y="1130" text-anchor="middle" font-family="Georgia, serif" font-size="82" font-weight="bold" fill="url(#or)" letter-spacing="2">OCÉANS</text>
+
+<!-- sous-titre entreprise -->
+<text x="400" y="1170" text-anchor="middle" font-family="Trebuchet MS, sans-serif" font-size="18" fill="#9bd0e0" letter-spacing="3">UN FILM DE L'ENTREPRISE R</text>
+
+<!-- filet décoratif -->
+<line x1="250" y1="1005" x2="550" y2="1005" stroke="#ffc94d" stroke-width="1.5" opacity="0.5"/>
+<circle cx="400" cy="1005" r="4" fill="#ffc94d"/>
+</svg>
