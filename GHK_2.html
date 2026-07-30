@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Chat — la messagerie de R</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --rouge:#e50914; --rouge-fonce:#b0060f;
+    --fond:#0d0d12; --fond2:#16161d; --carte:#1d1d26;
+    --ligne:#2a2a36; --texte:#f4f4f6; --gris:#9a9aa8;
+    --violet:#6b4de5; --or:#ffd66b; --vert:#2ec26a;
+  }
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;background:var(--fond);color:var(--texte);
+    height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+  /* ===== EN-TÊTE ===== */
+  header{background:linear-gradient(135deg,var(--rouge),var(--rouge-fonce));padding:14px 18px;
+    display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 2px 14px rgba(0,0,0,.4)}
+  header .logo{width:40px;height:40px;background:#fff;border-radius:11px;display:flex;align-items:center;
+    justify-content:center;font-weight:bold;font-size:22px;color:var(--rouge)}
+  header .titre{flex:1}
+  header .titre h1{font-size:20px;letter-spacing:.5px}
+  header .titre p{font-size:12px;opacity:.85}
+  #syncBadge{font-size:11px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.18);white-space:nowrap}
+  #syncBadge.ok{background:rgba(46,194,106,.3)}
+  #syncBadge.err{background:rgba(0,0,0,.3)}
+
+  /* ===== CONNEXION ===== */
+  #connexion{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 30%,#1a1a24,#0d0d12);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+  #connexion .bigR{width:80px;height:80px;background:var(--rouge);border-radius:22px;display:flex;
+    align-items:center;justify-content:center;font-size:44px;font-weight:bold;color:#fff;margin-bottom:20px;
+    box-shadow:0 10px 30px rgba(229,9,20,.4)}
+  #connexion h2{font-size:30px;margin-bottom:6px}
+  #connexion p{color:var(--gris);margin-bottom:26px;max-width:340px;font-size:15px}
+  #connexion input{width:100%;max-width:320px;padding:15px 18px;font-size:17px;border-radius:14px;
+    border:1px solid var(--ligne);background:var(--carte);color:var(--texte);text-align:center;margin-bottom:14px}
+  #connexion input:focus{outline:none;border-color:var(--rouge)}
+  .btn-r{background:var(--rouge);color:#fff;border:none;padding:15px 34px;font-size:17px;font-weight:bold;
+    border-radius:14px;cursor:pointer;transition:transform .15s}
+  .btn-r:hover{transform:scale(1.04)}
+  #connexion .hint{margin-top:18px;font-size:12px;color:var(--gris)}
+  .lien-pdg{margin-top:10px;font-size:12px;color:var(--gris);background:none;border:none;cursor:pointer;text-decoration:underline}
+
+  /* ===== CORPS ===== */
+  #app{display:none;flex:1;flex-direction:column;overflow:hidden}
+  /* onglets */
+  .onglets{display:flex;background:var(--fond2);flex-shrink:0;border-bottom:1px solid var(--ligne)}
+  .onglet{flex:1;padding:13px 6px;text-align:center;cursor:pointer;font-size:14px;color:var(--gris);
+    border-bottom:3px solid transparent;transition:.15s;position:relative}
+  .onglet.actif{color:var(--texte);border-bottom-color:var(--rouge)}
+  .onglet .pastille{position:absolute;top:8px;right:calc(50% - 34px);background:var(--rouge);color:#fff;
+    font-size:10px;min-width:16px;height:16px;border-radius:8px;padding:0 4px;line-height:16px;display:none}
+
+  .vue{flex:1;display:none;flex-direction:column;overflow:hidden}
+  .vue.actif{display:flex}
+
+  /* liste messages */
+  .messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+  .msg{max-width:78%;padding:10px 14px;border-radius:16px;font-size:15px;line-height:1.35;word-wrap:break-word}
+  .msg .qui{font-size:12px;font-weight:bold;margin-bottom:3px;display:flex;align-items:center;gap:5px}
+  .msg .heure{font-size:10px;color:var(--gris);margin-top:3px;text-align:right}
+  .msg.moi{align-self:flex-end;background:var(--rouge);color:#fff;border-bottom-right-radius:5px}
+  .msg.moi .heure{color:rgba(255,255,255,.7)}
+  .msg.autre{align-self:flex-start;background:var(--carte);border-bottom-left-radius:5px}
+  .msg.autre .qui{color:var(--violet)}
+  .badge-pdg{background:var(--or);color:#000;font-size:9px;padding:1px 6px;border-radius:6px;font-weight:bold}
+  .msg.pdg{border:1px solid var(--or)}
+  .msg.pdg .qui{color:var(--or)}
+  .vide{margin:auto;text-align:center;color:var(--gris);padding:30px}
+  .vide .ico{font-size:44px;margin-bottom:10px}
+
+  /* barre d'écriture */
+  .barre-ecrit{display:flex;gap:8px;padding:12px;background:var(--fond2);border-top:1px solid var(--ligne);flex-shrink:0}
+  .barre-ecrit input{flex:1;padding:12px 16px;border-radius:22px;border:1px solid var(--ligne);
+    background:var(--carte);color:var(--texte);font-size:15px}
+  .barre-ecrit input:focus{outline:none;border-color:var(--rouge)}
+  .barre-ecrit button{background:var(--rouge);color:#fff;border:none;width:46px;border-radius:50%;
+    font-size:20px;cursor:pointer;flex-shrink:0}
+
+  /* liste des clients (privé) */
+  .liste-clients{flex:1;overflow-y:auto;padding:10px}
+  .client-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--carte);
+    border-radius:14px;margin-bottom:8px;cursor:pointer;transition:.15s}
+  .client-item:hover{background:var(--fond2);transform:translateX(3px)}
+  .client-item .ava{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:bold;color:#fff;flex-shrink:0}
+  .client-item .nom{flex:1;font-weight:bold}
+  .client-item .nom small{display:block;font-weight:normal;color:var(--gris);font-size:12px;margin-top:2px}
+  .client-item .fleche{color:var(--gris);font-size:20px}
+  .client-item .pt-nouv{background:var(--rouge);width:10px;height:10px;border-radius:50%}
+
+  /* fil privé : en-tête */
+  .prive-tete{display:none;align-items:center;gap:10px;padding:12px 16px;background:var(--fond2);
+    border-bottom:1px solid var(--ligne);flex-shrink:0}
+  .prive-tete .retour{background:none;border:none;color:var(--texte);font-size:22px;cursor:pointer}
+  .prive-tete .ava{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-weight:bold;color:#fff;font-size:16px}
+  .prive-tete b{font-size:16px}
+
+  /* toast */
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--carte);
+    border:1px solid var(--ligne);color:var(--texte);padding:12px 20px;border-radius:12px;font-size:14px;
+    opacity:0;pointer-events:none;transition:.25s;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* PDG / réglages modale */
+  .modale{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:20px}
+  .modale.on{display:flex}
+  .modale .boite{background:var(--fond2);border:1px solid var(--ligne);border-radius:18px;padding:24px;
+    max-width:440px;width:100%;max-height:88vh;overflow-y:auto}
+  .modale h3{margin-bottom:14px;font-size:20px}
+  .modale label{display:block;font-size:13px;color:var(--gris);margin:12px 0 5px}
+  .modale input{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--ligne);
+    background:var(--carte);color:var(--texte);font-size:14px}
+  .modale input:focus{outline:none;border-color:var(--rouge)}
+  .modale .note{font-size:12px;color:var(--gris);background:var(--carte);padding:12px;border-radius:10px;
+    margin:12px 0;line-height:1.5;border:1px solid var(--ligne)}
+  .modale .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .btn-or{background:var(--or);color:#000;border:none;padding:11px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px}
+  .btn-gris{background:var(--carte);color:var(--texte);border:1px solid var(--ligne);padding:11px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .btn-del{background:rgba(229,9,20,.15);color:#ff6b6b;border:1px solid rgba(229,9,20,.3);padding:11px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .pdg-ico{position:absolute;top:14px;right:18px;background:rgba(255,255,255,.18);border:none;color:#fff;
+    width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:16px}
+
+  /* ===== IMAGES DANS LES MESSAGES ===== */
+  .msg img.photo{max-width:100%;border-radius:12px;margin-top:2px;display:block;cursor:pointer;max-height:280px;object-fit:cover}
+  .msg .txt-msg{margin-top:2px}
+
+  /* ===== BOUTON + (joindre) ===== */
+  .btn-plus{background:var(--carte);color:var(--texte);border:1px solid var(--ligne);width:46px;border-radius:50%;
+    font-size:22px;cursor:pointer;flex-shrink:0;transition:.15s}
+  .btn-plus:hover{background:var(--fond2);border-color:var(--rouge)}
+
+  /* menu joindre (photo / sondage) */
+  .menu-plus{position:fixed;z-index:65;background:var(--fond2);border:1px solid var(--ligne);border-radius:14px;
+    padding:6px;box-shadow:0 8px 30px rgba(0,0,0,.6);display:none;min-width:190px}
+  .menu-plus.on{display:block}
+  .menu-plus button{display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;color:var(--texte);
+    padding:12px 14px;border-radius:10px;cursor:pointer;font-size:15px;text-align:left}
+  .menu-plus button:hover{background:var(--carte)}
+  .menu-plus button .mi{font-size:20px}
+
+  /* ===== SONDAGE (bulle) ===== */
+  .sondage{background:var(--fond2);border:1px solid var(--ligne);border-radius:14px;padding:14px;margin-top:4px;min-width:230px}
+  .sondage .s-q{font-weight:bold;font-size:15px;margin-bottom:12px;line-height:1.3}
+  .sondage .s-opt{position:relative;margin-bottom:8px;border:1px solid var(--ligne);border-radius:10px;
+    overflow:hidden;cursor:pointer;transition:.15s}
+  .sondage .s-opt:hover{border-color:var(--rouge)}
+  .sondage .s-opt.voté{cursor:default}
+  .sondage .s-fill{position:absolute;inset:0;background:rgba(107,77,229,.28);width:0;transition:width .5s ease}
+  .sondage .s-opt.mien .s-fill{background:rgba(229,9,20,.32)}
+  .sondage .s-row{position:relative;display:flex;align-items:center;justify-content:space-between;padding:11px 13px;font-size:14px}
+  .sondage .s-row .s-lbl{display:flex;align-items:center;gap:7px}
+  .sondage .s-check{color:var(--rouge);font-weight:bold}
+  .sondage .s-pct{font-size:13px;color:var(--gris);font-weight:bold}
+  .sondage .s-total{font-size:12px;color:var(--gris);margin-top:4px;text-align:center}
+
+  /* ===== VISIONNEUSE IMAGE PLEIN ÉCRAN ===== */
+  #visio{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:20px}
+  #visio.on{display:flex}
+  #visio img{max-width:100%;max-height:100%;border-radius:10px}
+  #visio .fermer-v{position:absolute;top:18px;right:22px;background:rgba(255,255,255,.15);border:none;color:#fff;
+    width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer}
+
+  /* ===== MODALE CRÉER SONDAGE ===== */
+  .modale .opt-sondage{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+  .modale .opt-sondage input{flex:1}
+  .modale .opt-sondage .del-opt{background:rgba(229,9,20,.15);color:#ff6b6b;border:1px solid rgba(229,9,20,.3);
+    width:38px;height:38px;border-radius:10px;cursor:pointer;flex-shrink:0;font-size:16px}
+  .btn-ajout-opt{background:var(--carte);color:var(--texte);border:1px dashed var(--ligne);padding:10px;
+    border-radius:10px;cursor:pointer;font-size:14px;width:100%;margin-top:4px}
+</style>
+</head>
+<body>
+
+<!-- ===== ÉCRAN DE CONNEXION ===== -->
+<div id="connexion">
+  <div class="bigR">R</div>
+  <h2>R Chat</h2>
+  <p>La messagerie de l'Entreprise R. Choisis ton pseudo pour rejoindre le salon et discuter avec les autres.</p>
+  <input id="inp-pseudo" placeholder="Ton pseudo…" maxlength="20" autocomplete="off">
+  <button class="btn-r" id="btn-entrer">Entrer dans le chat</button>
+  <div class="hint">Ton pseudo sera visible par les autres membres.</div>
+  <button class="lien-pdg" id="lien-pdg">🔑 Entrer en tant que PDG</button>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+  <header>
+    <div class="logo">R</div>
+    <div class="titre">
+      <h1>R Chat</h1>
+      <p id="moi-label">Connecté</p>
+    </div>
+    <span id="syncBadge"></span>
+    <button class="pdg-ico" id="ouvrir-reglages" title="Réglages" style="position:static;margin-left:6px">⚙️</button>
+  </header>
+
+  <div class="onglets">
+    <div class="onglet actif" data-vue="public">💬 Salon public</div>
+    <div class="onglet" data-vue="prive">✉️ Messages privés<span class="pastille" id="pastille-prive"></span></div>
+  </div>
+
+  <!-- VUE SALON PUBLIC -->
+  <div class="vue actif" id="vue-public">
+    <div class="messages" id="msgs-public"></div>
+    <div class="barre-ecrit">
+      <button class="btn-plus" id="plus-public" title="Joindre">+</button>
+      <input id="inp-public" placeholder="Écris au salon…" maxlength="500">
+      <button id="env-public">➤</button>
+    </div>
+  </div>
+
+  <!-- VUE PRIVÉ -->
+  <div class="vue" id="vue-prive">
+    <!-- liste des clients -->
+    <div class="liste-clients" id="liste-clients"></div>
+    <!-- en-tête d'un fil privé -->
+    <div class="prive-tete" id="prive-tete">
+      <button class="retour" id="prive-retour">←</button>
+      <div class="ava" id="prive-ava"></div>
+      <b id="prive-nom"></b>
+    </div>
+    <div class="messages" id="msgs-prive" style="display:none"></div>
+    <div class="barre-ecrit" id="barre-prive" style="display:none">
+      <button class="btn-plus" id="plus-prive" title="Joindre">+</button>
+      <input id="inp-prive" placeholder="Message privé…" maxlength="500">
+      <button id="env-prive">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODALE RÉGLAGES / PDG ===== -->
+<div class="modale" id="modale-reglages">
+  <div class="boite">
+    <h3>⚙️ Réglages</h3>
+
+    <div id="zone-pdg-login">
+      <label>Code PDG (pour administrer)</label>
+      <input id="inp-pdgcode" placeholder="Code secret…" type="password" autocomplete="off">
+      <div class="row"><button class="btn-or" id="btn-pdg-valider">👑 Devenir PDG</button></div>
+    </div>
+
+    <div id="zone-pdg-actif" style="display:none">
+      <div class="note">👑 Tu es connecté en <b>PDG</b>. Tes messages ont un badge doré et tu peux écrire à tous les clients.</div>
+      <label>Changer le code PDG</label>
+      <input id="inp-newpdg" placeholder="Nouveau code PDG">
+      <div class="row"><button class="btn-or" id="btn-save-pdg">💾 Enregistrer le code</button></div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--ligne);margin:20px 0">
+    <h3 style="font-size:17px">☁️ Synchronisation</h3>
+    <div class="note">Pour que les messages soient partagés entre TOUS les appareils : crée un compte gratuit sur <b>jsonbin.io</b>, copie ta <b>X-MASTER-KEY</b>, colle-la ici. R Chat créera sa propre base en ligne (séparée de CinéèR et R Radio).</div>
+    <label>Clé de synchro (X-Master-Key)</label>
+    <input id="inp-apikey" placeholder="$2a$10$..." autocomplete="off">
+    <label id="lab-binid" style="display:none">Identifiant de base (auto)</label>
+    <input id="inp-binid" placeholder="créé automatiquement" style="display:none">
+    <div class="row">
+      <button class="btn-or" id="btn-sync-save">☁️ Activer / mettre à jour</button>
+      <button class="btn-gris" id="btn-sync-pull">↓ Recharger</button>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--ligne);margin:20px 0">
+    <div class="row">
+      <button class="btn-gris" id="btn-fermer-reglages">Fermer</button>
+      <button class="btn-del" id="btn-deco">Se déconnecter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MENU JOINDRE (photo / sondage) ===== -->
+<div class="menu-plus" id="menu-plus">
+  <button id="mp-photo"><span class="mi">📷</span> Envoyer une photo</button>
+  <button id="mp-sondage"><span class="mi">📊</span> Créer un sondage</button>
+</div>
+
+<!-- input fichier caché -->
+<input type="file" id="fichier-photo" accept="image/*" style="display:none">
+
+<!-- ===== VISIONNEUSE IMAGE ===== -->
+<div id="visio">
+  <button class="fermer-v" id="fermer-visio">×</button>
+  <img id="visio-img" alt="Photo">
+</div>
+
+<!-- ===== MODALE CRÉER UN SONDAGE ===== -->
+<div class="modale" id="modale-sondage">
+  <div class="boite">
+    <h3>📊 Créer un sondage</h3>
+    <label>Ta question</label>
+    <input id="son-question" placeholder="Ex : Quel est votre film préféré ?" maxlength="120">
+    <label style="margin-top:14px">Les choix</label>
+    <div id="son-options">
+      <div class="opt-sondage"><input class="son-opt" placeholder="Choix 1" maxlength="60"><button class="del-opt">×</button></div>
+      <div class="opt-sondage"><input class="son-opt" placeholder="Choix 2" maxlength="60"><button class="del-opt">×</button></div>
+    </div>
+    <button class="btn-ajout-opt" id="btn-ajout-opt">＋ Ajouter un choix</button>
+    <div class="row">
+      <button class="btn-or" id="btn-creer-sondage">📊 Publier le sondage</button>
+      <button class="btn-gris" id="btn-annul-sondage">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ CONFIG ============ */
+const KEY="ghk-chat-data";
+const ME_KEY="ghk-chat-me";
+const CFG_KEY="ghk-chat-cloud-cfg";
+/* Après avoir activé la synchro une fois, colle ici pour que tous partagent la même base : */
+const SHARED_CLOUD={ apiKey:"$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K", binId:"6a6af7c3da38895dfea2fbdc" };
+
+const DEFAULT_SETTINGS={ pdgCode:"PDG2026" };
+
+let data={ settings:Object.assign({},DEFAULT_SETTINGS), public:[], prives:{}, membres:[] };
+let me={ pseudo:"", pdg:false };
+let vueActive="public";
+let filPrive=null; // pseudo du client avec qui on discute en privé
+let destinationPlus="public"; // où envoyer photo/sondage : "public" ou "prive"
+
+/* ============ OUTILS ============ */
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200);}
+function maintenant(){return Date.now();}
+function heure(ts){const d=new Date(ts);return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
+function couleurDe(nom){let h=0;for(let i=0;i<nom.length;i++)h=nom.charCodeAt(i)+((h<<5)-h);const c=['#e50914','#6b4de5','#2ec26a','#ff8c42','#00b8d4','#e5399a','#f4b400'];return c[Math.abs(h)%c.length];}
+function initiale(nom){return (nom||'?').trim().charAt(0).toUpperCase();}
+function cleFil(a,b){return [a,b].sort().join('||');}
+
+/* ============ STOCKAGE LOCAL ============ */
+function load(){
+  try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);
+    data.settings=Object.assign({},DEFAULT_SETTINGS,d.settings||{});
+    data.public=d.public||[]; data.prives=d.prives||{}; data.membres=d.membres||[];
+  }}catch(e){}
+  try{const m=JSON.parse(localStorage.getItem(ME_KEY)||"{}");me.pseudo=m.pseudo||"";me.pdg=!!m.pdg;}catch(e){}
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
+  if(cloudOn())pushCloudSoon();}
+function saveMe(){try{localStorage.setItem(ME_KEY,JSON.stringify(me));}catch(e){}}
+
+/* ============ SYNCHRO JSONBIN ============ */
+let cloud={apiKey:"",binId:""}, syncing=false, pushTimer=null;
+function loadCloudCfg(){
+  try{const c=JSON.parse(localStorage.getItem(CFG_KEY)||"{}");cloud.apiKey=c.apiKey||"";cloud.binId=c.binId||"";}catch(e){}
+  if(SHARED_CLOUD.apiKey)cloud.apiKey=SHARED_CLOUD.apiKey;
+  if(SHARED_CLOUD.binId)cloud.binId=SHARED_CLOUD.binId;
+}
+function saveCloudCfg(){try{localStorage.setItem(CFG_KEY,JSON.stringify(cloud));}catch(e){}}
+function cloudOn(){return !!cloud.apiKey;}
+function badge(state){const b=document.getElementById('syncBadge');if(!b)return;
+  b.className=state||'';
+  b.textContent=state==='ok'?'● Synchronisé':state==='sync'?'○ Synchro…':state==='err'?'⚠ Hors ligne':'⚡ Local';}
+
+async function creerBin(){
+  const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',
+    headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey,'X-Bin-Private':'false','X-Bin-Name':'ghk-chat'},
+    body:JSON.stringify(data)});
+  if(!r.ok)throw new Error('création base');
+  const j=await r.json();return j.metadata.id;
+}
+async function pushCloud(){
+  if(!cloudOn())return; if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}
+  syncing=true;badge('sync');
+  try{
+    // 1) on récupère la dernière version du cloud et on fusionne avec la nôtre
+    try{
+      const rl=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId+'/latest',{headers:{'X-Master-Key':cloud.apiKey}});
+      if(rl.ok){
+        const jl=await rl.json();const d=jl.record||{};
+        data.public=fusionnerMessages(data.public,d.public||[]);
+        if(data.public.length>300)data.public=data.public.slice(-300);
+        const prives={};
+        const cles=new Set([...Object.keys(data.prives||{}),...Object.keys(d.prives||{})]);
+        cles.forEach(k=>{prives[k]=fusionnerMessages((data.prives||{})[k],(d.prives||{})[k]);
+          if(prives[k].length>300)prives[k]=prives[k].slice(-300);});
+        data.prives=prives;
+        const membres=new Set([...(data.membres||[]),...(d.membres||[])]);
+        data.membres=Array.from(membres);
+      }
+    }catch(e){}
+    // 2) on pousse la version fusionnée
+    const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId,{method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey},body:JSON.stringify(data)});
+    if(!r.ok)throw new Error();badge('ok');
+    try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
+  }catch(e){badge('err');}
+  syncing=false;
+}
+function pushCloudSoon(){clearTimeout(pushTimer);pushTimer=setTimeout(pushCloud,800);}
+/* Fusionne deux listes de messages par id : garde tous les messages des deux
+   côtés, et pour les sondages combine les votes (personne ne perd son vote). */
+function fusionnerMessages(local,distant){
+  const map=new Map();
+  const ajouter=m=>{
+    if(!m)return;
+    const id=m.id||(m.de+'|'+m.ts);   // secours pour vieux messages sans id
+    if(!map.has(id)){ map.set(id,Object.assign({},m)); }
+    else{
+      const ex=map.get(id);
+      // sondage : on combine les votes des deux versions
+      if(ex.type==='sondage'||m.type==='sondage'){
+        ex.votes=Object.assign({},m.votes||{},ex.votes||{});
+      }
+    }
+  };
+  (distant||[]).forEach(ajouter);   // le distant d'abord
+  (local||[]).forEach(ajouter);     // puis le local (garde nos ajouts + priorité à nos votes)
+  const fusion=Array.from(map.values());
+  fusion.sort((a,b)=>(a.ts||0)-(b.ts||0));
+  return fusion;
+}
+
+async function pullCloud(silencieux){
+  if(!cloudOn()||!cloud.binId)return;
+  badge('sync');
+  try{
+    const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId+'/latest',{headers:{'X-Master-Key':cloud.apiKey}});
+    if(!r.ok)throw new Error();
+    const j=await r.json();const d=j.record||{};
+
+    // FUSION intelligente : on ne perd ni les messages ni les votes de personne
+    data.public=fusionnerMessages(data.public,d.public||[]);
+    if(data.public.length>300)data.public=data.public.slice(-300);
+
+    const prives={};
+    const cles=new Set([...Object.keys(data.prives||{}),...Object.keys(d.prives||{})]);
+    cles.forEach(k=>{
+      prives[k]=fusionnerMessages((data.prives||{})[k],(d.prives||{})[k]);
+      if(prives[k].length>300)prives[k]=prives[k].slice(-300);
+    });
+    data.prives=prives;
+
+    // membres : union des deux
+    const membres=new Set([...(data.membres||[]),...(d.membres||[])]);
+    data.membres=Array.from(membres);
+
+    // réglages : le cloud fait foi (code PDG partagé)
+    data.settings=Object.assign({},DEFAULT_SETTINGS,d.settings||{});
+
+    try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
+    badge('ok');
+    if(!silencieux)toast('Messages rechargés ☁️');
+    rendreTout();
+  }catch(e){badge('err');if(!silencieux)toast('Synchro impossible');}
+}
+
+/* ============ MEMBRES ============ */
+function enregistrerMembre(pseudo){
+  if(!data.membres.includes(pseudo)){data.membres.push(pseudo);save();}
+}
+
+/* ============ ENVOI DE MESSAGES ============ */
+function envoyerPublic(txt){
+  txt=txt.trim();if(!txt)return;
+  data.public.push({id:nouvelId(),de:me.pseudo,pdg:me.pdg,txt:txt,ts:maintenant()});
+  if(data.public.length>300)data.public=data.public.slice(-300);
+  save();rendrePublic();
+}
+function envoyerPrive(dest,txt){
+  txt=txt.trim();if(!txt)return;
+  const c=cleFil(me.pseudo,dest);
+  if(!data.prives[c])data.prives[c]=[];
+  data.prives[c].push({id:nouvelId(),de:me.pseudo,pdg:me.pdg,txt:txt,ts:maintenant()});
+  if(data.prives[c].length>300)data.prives[c]=data.prives[c].slice(-300);
+  save();rendrePrive();
+}
+
+/* ===== ID unique pour chaque message (clé de fusion) ===== */
+function nouvelId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+
+/* ===== ENVOI D'IMAGE ===== */
+function envoyerImage(dataURL,txt){
+  const msg={id:nouvelId(),de:me.pseudo,pdg:me.pdg,type:'image',img:dataURL,txt:(txt||'').trim(),ts:maintenant()};
+  if(destinationPlus==='prive'&&filPrive){
+    const c=cleFil(me.pseudo,filPrive);
+    if(!data.prives[c])data.prives[c]=[];
+    data.prives[c].push(msg);
+    if(data.prives[c].length>300)data.prives[c]=data.prives[c].slice(-300);
+    save();rendrePrive();
+  }else{
+    data.public.push(msg);
+    if(data.public.length>300)data.public=data.public.slice(-300);
+    save();rendrePublic();
+  }
+  toast('📷 Photo envoyée');
+}
+
+/* ===== ENVOI D'UN SONDAGE ===== */
+function envoyerSondage(question,options){
+  const msg={id:nouvelId(),de:me.pseudo,pdg:me.pdg,type:'sondage',question:question,options:options,votes:{},ts:maintenant()};
+  if(destinationPlus==='prive'&&filPrive){
+    const c=cleFil(me.pseudo,filPrive);
+    if(!data.prives[c])data.prives[c]=[];
+    data.prives[c].push(msg);
+    save();rendrePrive();
+  }else{
+    data.public.push(msg);
+    save();rendrePublic();
+  }
+  toast('📊 Sondage publié');
+}
+
+/* ===== VOTER dans un sondage (cherche partout : public + privés) ===== */
+function voter(id,index){
+  let trouvé=false;
+  const s=data.public.find(m=>m.id===id&&m.type==='sondage');
+  if(s){ if(!s.votes)s.votes={}; s.votes[me.pseudo]=index; trouvé=true; }
+  if(!trouvé){
+    for(const k in data.prives){
+      const sp=data.prives[k].find(m=>m.id===id&&m.type==='sondage');
+      if(sp){ if(!sp.votes)sp.votes={}; sp.votes[me.pseudo]=index; trouvé=true; break; }
+    }
+  }
+  if(trouvé){ save(); rendreTout(); }
+}
+
+/* ===== VISIONNEUSE PLEIN ÉCRAN ===== */
+function ouvrirVisio(src){document.getElementById('visio-img').src=src;document.getElementById('visio').classList.add('on');}
+function fermerVisio(){document.getElementById('visio').classList.remove('on');}
+
+/* ===== COMPRESSION D'IMAGE (pour ne pas saturer la base) ===== */
+function compresserImage(file,cb){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxDim=1000;
+      let w=img.width,h=img.height;
+      if(w>h&&w>maxDim){h=Math.round(h*maxDim/w);w=maxDim;}
+      else if(h>maxDim){w=Math.round(w*maxDim/h);h=maxDim;}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      cb(cv.toDataURL('image/jpeg',0.72));
+    };
+    img.onerror=()=>{toast('Image illisible');};
+    img.src=e.target.result;
+  };
+  reader.onerror=()=>{toast('Lecture impossible');};
+  reader.readAsDataURL(file);
+}
+
+/* ============ RENDU ============ */
+function rendrePublic(){
+  const box=document.getElementById('msgs-public');
+  if(!data.public.length){box.innerHTML='<div class="vide"><div class="ico">💬</div>Aucun message pour le moment.<br>Sois le premier à écrire !</div>';return;}
+  box.innerHTML=data.public.map(m=>bulle(m)).join('');
+  box.scrollTop=box.scrollHeight;
+}
+function bulle(m){
+  const moi=m.de===me.pseudo;
+  const cls='msg '+(moi?'moi':'autre')+(m.pdg?' pdg':'');
+  const badgePdg=m.pdg?'<span class="badge-pdg">👑 PDG</span>':'';
+  const nom=moi?'':'<div class="qui">'+badgePdg+' '+escap(m.de)+'</div>';
+  const tete=moi?(m.pdg?'<div class="qui" style="text-align:right">'+badgePdg+'</div>':''):nom;
+
+  let corps='';
+  if(m.type==='image'){
+    corps='<img class="photo" src="'+m.img+'" alt="Photo" onclick="ouvrirVisio(this.src)">';
+    if(m.txt)corps+='<div class="txt-msg">'+escap(m.txt)+'</div>';
+  }else if(m.type==='sondage'){
+    corps=renduSondage(m);
+  }else{
+    corps='<div>'+escap(m.txt)+'</div>';
+  }
+  return '<div class="'+cls+'" data-id="'+(m.id||'')+'">'+tete+corps+
+    '<div class="heure">'+heure(m.ts)+'</div></div>';
+}
+
+/* ===== rendu d'un sondage (avec barres de résultats) ===== */
+function renduSondage(m){
+  const votes=m.votes||{};                 // { pseudo: indexOption }
+  const monVote=votes[me.pseudo];
+  const total=Object.keys(votes).length;
+  const compte=m.options.map((_,i)=>Object.values(votes).filter(v=>v===i).length);
+  let h='<div class="sondage"><div class="s-q">📊 '+escap(m.question)+'</div>';
+  m.options.forEach((opt,i)=>{
+    const n=compte[i];
+    const pct=total?Math.round(n/total*100):0;
+    const mien=(monVote===i);
+    const voté=(monVote!==undefined);
+    h+='<div class="s-opt'+(voté?' voté':'')+(mien?' mien':'')+'" '+
+       (voté?'':'onclick="voter(\''+m.id+'\','+i+')"')+'>'+
+       '<div class="s-fill" style="width:'+(voté?pct:0)+'%"></div>'+
+       '<div class="s-row"><span class="s-lbl">'+(mien?'<span class="s-check">✓</span> ':'')+escap(opt)+'</span>'+
+       (voté?'<span class="s-pct">'+pct+'%</span>':'')+'</div></div>';
+  });
+  h+='<div class="s-total">'+(total?total+' vote'+(total>1?'s':''):'Aucun vote — sois le premier !')+'</div></div>';
+  return h;
+}
+function escap(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+function rendreListeClients(){
+  const box=document.getElementById('liste-clients');
+  const autres=data.membres.filter(p=>p!==me.pseudo);
+  // le PDG apparait pour tout le monde ; les clients voient tous les autres
+  let liste=autres.slice();
+  if(!liste.length){box.innerHTML='<div class="vide"><div class="ico">✉️</div>Personne d\'autre n\'est encore inscrit.<br>Reviens plus tard !</div>';return;}
+  box.innerHTML=liste.map(p=>{
+    const c=cleFil(me.pseudo,p);
+    const fil=data.prives[c]||[];
+    const dernier=fil.length?fil[fil.length-1]:null;
+    const apercu=dernier?escap(dernier.txt).slice(0,32):'Démarrer la conversation';
+    const estPdg=estLePDG(p);
+    return '<div class="client-item" data-p="'+escap(p)+'">'+
+      '<div class="ava" style="background:'+(estPdg?'var(--or)':couleurDe(p))+';color:'+(estPdg?'#000':'#fff')+'">'+initiale(p)+'</div>'+
+      '<div class="nom">'+(estPdg?'👑 ':'')+escap(p)+'<small>'+apercu+'</small></div>'+
+      '<div class="fleche">›</div></div>';
+  }).join('');
+  box.querySelectorAll('.client-item').forEach(el=>{
+    el.onclick=()=>ouvrirFil(el.dataset.p);
+  });
+}
+function estLePDG(pseudo){
+  // un membre est "le PDG" si un de ses messages porte le flag pdg
+  const pub=data.public.some(m=>m.de===pseudo&&m.pdg);
+  if(pub)return true;
+  for(const k in data.prives){if(data.prives[k].some(m=>m.de===pseudo&&m.pdg))return true;}
+  return false;
+}
+
+function ouvrirFil(pseudo){
+  filPrive=pseudo;
+  document.getElementById('liste-clients').style.display='none';
+  document.getElementById('prive-tete').style.display='flex';
+  document.getElementById('msgs-prive').style.display='flex';
+  document.getElementById('barre-prive').style.display='flex';
+  const pdg=estLePDG(pseudo);
+  const ava=document.getElementById('prive-ava');
+  ava.textContent=initiale(pseudo);
+  ava.style.background=pdg?'var(--or)':couleurDe(pseudo);
+  ava.style.color=pdg?'#000':'#fff';
+  document.getElementById('prive-nom').textContent=(pdg?'👑 ':'')+pseudo;
+  rendrePrive();
+}
+function fermerFil(){
+  filPrive=null;
+  document.getElementById('liste-clients').style.display='block';
+  document.getElementById('prive-tete').style.display='none';
+  document.getElementById('msgs-prive').style.display='none';
+  document.getElementById('barre-prive').style.display='none';
+  rendreListeClients();
+}
+function rendrePrive(){
+  if(!filPrive)return;
+  const box=document.getElementById('msgs-prive');
+  const fil=data.prives[cleFil(me.pseudo,filPrive)]||[];
+  if(!fil.length){box.innerHTML='<div class="vide"><div class="ico">✉️</div>Aucun message.<br>Dis bonjour à '+escap(filPrive)+' !</div>';return;}
+  box.innerHTML=fil.map(m=>bulle(m)).join('');
+  box.scrollTop=box.scrollHeight;
+}
+
+function rendreTout(){
+  rendrePublic();
+  if(vueActive==='prive'){ if(filPrive)rendrePrive(); else rendreListeClients(); }
+}
+
+/* ============ NAVIGATION ============ */
+function changerVue(v){
+  vueActive=v;
+  document.querySelectorAll('.onglet').forEach(o=>o.classList.toggle('actif',o.dataset.vue===v));
+  document.querySelectorAll('.vue').forEach(vv=>vv.classList.remove('actif'));
+  document.getElementById('vue-'+v).classList.add('actif');
+  if(v==='prive'){ if(filPrive)rendrePrive(); else { fermerFil(); } }
+  else rendrePublic();
+}
+
+/* ============ CONNEXION ============ */
+function entrer(pseudo,estPdg){
+  me.pseudo=pseudo; me.pdg=!!estPdg; saveMe();
+  enregistrerMembre(pseudo);
+  document.getElementById('connexion').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('moi-label').textContent=(me.pdg?'👑 PDG · ':'')+me.pseudo;
+  rendreTout();
+  if(cloudOn())pullCloud(true);
+}
+
+/* ============ INIT ============ */
+function init(){
+  load(); loadCloudCfg();
+  badge(cloudOn()?'ok':'');
+
+  // déjà connecté ?
+  if(me.pseudo){ entrer(me.pseudo,me.pdg); }
+
+  // connexion
+  document.getElementById('btn-entrer').onclick=()=>{
+    const p=document.getElementById('inp-pseudo').value.trim();
+    if(!p){toast('Choisis un pseudo');return;}
+    if(p.length<2){toast('Pseudo trop court');return;}
+    entrer(p,false);
+  };
+  document.getElementById('inp-pseudo').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('btn-entrer').click();});
+  document.getElementById('lien-pdg').onclick=()=>{
+    document.getElementById('app').style.display='none';
+    document.getElementById('connexion').style.display='none';
+    document.getElementById('modale-reglages').classList.add('on');
+    majReglages();
+  };
+
+  // onglets
+  document.querySelectorAll('.onglet').forEach(o=>o.onclick=()=>changerVue(o.dataset.vue));
+
+  // envoi public
+  document.getElementById('env-public').onclick=()=>{
+    const i=document.getElementById('inp-public');envoyerPublic(i.value);i.value='';};
+  document.getElementById('inp-public').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('env-public').click();});
+
+  // envoi privé
+  document.getElementById('env-prive').onclick=()=>{
+    const i=document.getElementById('inp-prive');if(filPrive){envoyerPrive(filPrive,i.value);i.value='';}};
+  document.getElementById('inp-prive').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('env-prive').click();});
+  document.getElementById('prive-retour').onclick=fermerFil;
+
+  // ===== BOUTON + (menu joindre) =====
+  const menuPlus=document.getElementById('menu-plus');
+  function ouvrirMenuPlus(btn,dest){
+    destinationPlus=dest;
+    const r=btn.getBoundingClientRect();
+    menuPlus.style.left=r.left+'px';
+    menuPlus.style.bottom=(window.innerHeight-r.top+8)+'px';
+    menuPlus.classList.add('on');
+  }
+  document.getElementById('plus-public').onclick=(e)=>{e.stopPropagation();ouvrirMenuPlus(e.currentTarget,'public');};
+  document.getElementById('plus-prive').onclick=(e)=>{e.stopPropagation();ouvrirMenuPlus(e.currentTarget,'prive');};
+  document.addEventListener('click',()=>menuPlus.classList.remove('on'));
+  menuPlus.onclick=(e)=>e.stopPropagation();
+
+  // ----- Photo -----
+  const inputFichier=document.getElementById('fichier-photo');
+  document.getElementById('mp-photo').onclick=()=>{menuPlus.classList.remove('on');inputFichier.value='';inputFichier.click();};
+  inputFichier.onchange=()=>{
+    const f=inputFichier.files[0];if(!f)return;
+    if(!f.type.startsWith('image/')){toast('Choisis une image');return;}
+    toast('📷 Envoi de la photo…');
+    compresserImage(f,dataURL=>{envoyerImage(dataURL,'');});
+  };
+
+  // ----- Sondage -----
+  document.getElementById('mp-sondage').onclick=()=>{
+    menuPlus.classList.remove('on');
+    document.getElementById('son-question').value='';
+    document.getElementById('son-options').innerHTML=
+      '<div class="opt-sondage"><input class="son-opt" placeholder="Choix 1" maxlength="60"><button class="del-opt">×</button></div>'+
+      '<div class="opt-sondage"><input class="son-opt" placeholder="Choix 2" maxlength="60"><button class="del-opt">×</button></div>';
+    brancherDelOpt();
+    document.getElementById('modale-sondage').classList.add('on');
+  };
+  function brancherDelOpt(){
+    document.querySelectorAll('#son-options .del-opt').forEach(b=>{
+      b.onclick=()=>{
+        const opts=document.querySelectorAll('#son-options .opt-sondage');
+        if(opts.length<=2){toast('Il faut au moins 2 choix');return;}
+        b.parentElement.remove();
+      };
+    });
+  }
+  document.getElementById('btn-ajout-opt').onclick=()=>{
+    const opts=document.querySelectorAll('#son-options .opt-sondage');
+    if(opts.length>=6){toast('6 choix maximum');return;}
+    const div=document.createElement('div');div.className='opt-sondage';
+    div.innerHTML='<input class="son-opt" placeholder="Choix '+(opts.length+1)+'" maxlength="60"><button class="del-opt">×</button>';
+    document.getElementById('son-options').appendChild(div);
+    brancherDelOpt();
+  };
+  document.getElementById('btn-annul-sondage').onclick=()=>document.getElementById('modale-sondage').classList.remove('on');
+  document.getElementById('btn-creer-sondage').onclick=()=>{
+    const q=document.getElementById('son-question').value.trim();
+    if(!q){toast('Écris ta question');return;}
+    const opts=Array.from(document.querySelectorAll('#son-options .son-opt')).map(i=>i.value.trim()).filter(v=>v);
+    if(opts.length<2){toast('Il faut au moins 2 choix remplis');return;}
+    envoyerSondage(q,opts);
+    document.getElementById('modale-sondage').classList.remove('on');
+  };
+
+  // ----- Visionneuse image -----
+  document.getElementById('fermer-visio').onclick=fermerVisio;
+  document.getElementById('visio').onclick=(e)=>{if(e.target.id==='visio')fermerVisio();};
+
+  // réglages
+  document.getElementById('ouvrir-reglages').onclick=()=>{document.getElementById('modale-reglages').classList.add('on');majReglages();};
+  document.getElementById('btn-fermer-reglages').onclick=fermerReglages;
+  document.getElementById('btn-pdg-valider').onclick=()=>{
+    const c=document.getElementById('inp-pdgcode').value.trim();
+    if(c===data.settings.pdgCode){
+      me.pdg=true;saveMe();toast('👑 Bienvenue, PDG !');majReglages();
+      if(!me.pseudo){ // pas encore de pseudo : on entre en tant que PDG
+        me.pseudo='PDG';saveMe();enregistrerMembre('PDG');
+      }
+      document.getElementById('moi-label').textContent='👑 PDG · '+me.pseudo;
+    } else toast('Code incorrect');
+  };
+  document.getElementById('btn-save-pdg').onclick=()=>{
+    const v=document.getElementById('inp-newpdg').value.trim();
+    if(v){data.settings.pdgCode=v;save();toast('Code PDG changé');document.getElementById('inp-newpdg').value='';}
+  };
+
+  // synchro
+  document.getElementById('btn-sync-save').onclick=async()=>{
+    const k=document.getElementById('inp-apikey').value.trim();
+    if(!k){toast('Colle ta clé jsonbin');return;}
+    cloud.apiKey=k;
+    const bid=document.getElementById('inp-binid').value.trim();if(bid)cloud.binId=bid;
+    saveCloudCfg();badge('sync');
+    try{ if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();} await pushCloud();
+      toast('☁️ Synchro activée !');majReglages();
+    }catch(e){badge('err');toast('Erreur : vérifie ta clé');}
+  };
+  document.getElementById('btn-sync-pull').onclick=()=>pullCloud(false);
+
+  document.getElementById('btn-deco').onclick=()=>{
+    me={pseudo:'',pdg:false};saveMe();location.reload();
+  };
+
+  // rafraîchissement auto depuis le cloud (toutes les 5s)
+  setInterval(()=>{ if(cloudOn()&&document.getElementById('app').style.display==='flex'&&!syncing)pullCloud(true); },5000);
+}
+
+function majReglages(){
+  document.getElementById('zone-pdg-login').style.display=me.pdg?'none':'block';
+  document.getElementById('zone-pdg-actif').style.display=me.pdg?'block':'none';
+  document.getElementById('inp-apikey').value=cloud.apiKey||'';
+  document.getElementById('inp-binid').value=cloud.binId||'';
+  const montrerBin=!!cloud.binId;
+  document.getElementById('lab-binid').style.display=montrerBin?'block':'none';
+  document.getElementById('inp-binid').style.display=montrerBin?'block':'none';
+}
+function fermerReglages(){
+  document.getElementById('modale-reglages').classList.remove('on');
+  if(me.pseudo){document.getElementById('app').style.display='flex';}
+  else{document.getElementById('connexion').style.display='flex';}
+}
+
+init();
+</script>
+</body>
+</html>
