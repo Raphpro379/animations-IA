@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Photo — retouche ultra</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --rouge:#e50914; --rouge-fonce:#b0060f;
+    --fond:#0d0d12; --fond2:#16161d; --carte:#1d1d26;
+    --ligne:#2a2a36; --texte:#f4f4f6; --gris:#9a9aa8;
+    --violet:#6b4de5; --or:#ffd66b; --vert:#2ec26a;
+  }
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;background:var(--fond);color:var(--texte);
+    height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  button{font-family:inherit}
+
+  /* ===== EN-TÊTE ===== */
+  header{background:linear-gradient(135deg,var(--rouge),var(--rouge-fonce));padding:11px 16px;
+    display:flex;align-items:center;gap:10px;flex-shrink:0;box-shadow:0 2px 14px rgba(0,0,0,.4);z-index:10}
+  header .logo{width:36px;height:36px;background:#fff;border-radius:10px;display:flex;align-items:center;
+    justify-content:center;font-weight:bold;font-size:20px;color:var(--rouge)}
+  header .titre{flex:1}
+  header .titre h1{font-size:18px;letter-spacing:.5px}
+  header .titre p{font-size:11px;opacity:.85}
+  #syncBadge{font-size:11px;padding:4px 9px;border-radius:20px;background:rgba(255,255,255,.18);white-space:nowrap}
+  #syncBadge.ok{background:rgba(46,194,106,.3)}
+  .htools{display:flex;gap:6px}
+  .htool{background:rgba(255,255,255,.18);border:none;color:#fff;padding:7px 11px;border-radius:9px;cursor:pointer;font-size:14px;white-space:nowrap}
+  .htool:disabled{opacity:.35;cursor:default}
+  .htool.dl{background:#fff;color:var(--rouge);font-weight:bold}
+
+  /* ===== VERROU ===== */
+  #verrou{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 25%,#1a1a24,#0d0d12);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+  #verrou .bigR{width:76px;height:76px;background:var(--rouge);border-radius:22px;display:flex;
+    align-items:center;justify-content:center;font-size:40px;font-weight:bold;color:#fff;margin-bottom:18px;
+    box-shadow:0 10px 30px rgba(229,9,20,.4)}
+  #verrou h2{font-size:28px;margin-bottom:6px}
+  #verrou p{color:var(--gris);margin-bottom:24px;max-width:360px;font-size:15px;line-height:1.5}
+  #verrou input{width:100%;max-width:300px;padding:14px 18px;font-size:19px;border-radius:14px;letter-spacing:.2em;
+    border:1px solid var(--ligne);background:var(--carte);color:var(--texte);text-align:center;margin-bottom:12px}
+  #verrou input:focus{outline:none;border-color:var(--rouge)}
+  .btn-r{background:var(--rouge);color:#fff;border:none;padding:14px 34px;font-size:16px;font-weight:bold;
+    border-radius:14px;cursor:pointer;transition:transform .15s}
+  .btn-r:hover{transform:scale(1.04)}
+  .offres{margin-top:22px;max-width:330px;width:100%}
+  .offres h3{font-size:13px;color:var(--gris);margin-bottom:10px;font-weight:normal}
+  .offre{background:var(--carte);border:1px solid var(--ligne);border-radius:12px;padding:12px 16px;
+    margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;text-align:left}
+  .offre .o-nom{font-size:14px;font-weight:bold}
+  .offre .o-sub{font-size:12px;color:var(--gris);margin-top:2px}
+  .offre .o-prix{font-size:16px;font-weight:bold;color:var(--or);white-space:nowrap}
+  .lien-pdg{margin-top:20px;font-size:12px;color:var(--gris);background:none;border:none;cursor:pointer;text-decoration:underline}
+
+  /* ===== APP ===== */
+  #app{display:none;flex:1;flex-direction:column;overflow:hidden}
+
+  /* zone image */
+  .scene{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;
+    background:repeating-conic-gradient(#141419 0% 25%,#0d0d12 0% 50%) 50%/22px 22px}
+  #canvas{max-width:100%;max-height:100%;box-shadow:0 4px 30px rgba(0,0,0,.6);touch-action:none;cursor:crosshair}
+  .accueil-import{text-align:center;color:var(--gris);padding:30px}
+  .accueil-import .ico{font-size:56px;margin-bottom:14px}
+  .accueil-import button{margin-top:16px}
+  .cmp-hint{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:20px;
+    font-size:12px;color:#fff;display:none}
+  .cmp-hint.on{display:block}
+
+  /* barre catégories d'outils */
+  .cat-bar{display:flex;overflow-x:auto;background:var(--fond2);border-top:1px solid var(--ligne);flex-shrink:0;
+    scrollbar-width:none}
+  .cat-bar::-webkit-scrollbar{display:none}
+  .cat-btn{flex:0 0 auto;padding:11px 16px;background:none;border:none;color:var(--gris);cursor:pointer;font-size:13px;
+    border-top:3px solid transparent;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:66px}
+  .cat-btn .ci{font-size:19px}
+  .cat-btn.actif{color:var(--texte);border-top-color:var(--rouge);background:var(--fond)}
+
+  /* panneau d'outils */
+  .panneau{background:var(--fond2);border-top:1px solid var(--ligne);flex-shrink:0;max-height:38vh;overflow-y:auto;padding:14px 16px 18px}
+  .panneau-vue{display:none}.panneau-vue.actif{display:block}
+
+  /* curseurs (réglages) */
+  .curseur{margin-bottom:14px}
+  .curseur .cl-tete{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+  .curseur .cl-val{color:var(--gris);font-family:'Consolas',monospace}
+  input[type=range]{-webkit-appearance:none;width:100%;height:5px;border-radius:3px;background:var(--carte);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+    background:var(--rouge);cursor:pointer;border:2px solid #fff}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--rouge);cursor:pointer;border:2px solid #fff}
+  .reset-regl{background:var(--carte);color:var(--gris);border:1px solid var(--ligne);padding:9px 14px;border-radius:10px;cursor:pointer;font-size:13px;width:100%;margin-top:4px}
+
+  /* filtres vignettes */
+  .filtres-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:10px}
+  .filtre-v{cursor:pointer;text-align:center}
+  .filtre-v canvas,.filtre-v .fv-ph{width:100%;aspect-ratio:1;border-radius:10px;border:2px solid var(--ligne);object-fit:cover;display:block}
+  .filtre-v.sel canvas,.filtre-v.sel .fv-ph{border-color:var(--rouge)}
+  .filtre-v span{font-size:11px;color:var(--gris);display:block;margin-top:4px}
+  .filtre-v.sel span{color:var(--texte)}
+  .intensite-box{margin-top:14px;padding-top:14px;border-top:1px solid var(--ligne)}
+
+  /* boutons d'action (rogner, pivoter...) */
+  .actions-grille{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .act-btn{background:var(--carte);border:1px solid var(--ligne);color:var(--texte);padding:14px 8px;border-radius:12px;
+    cursor:pointer;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .act-btn:hover{border-color:var(--rouge)}
+  .act-btn .ai{font-size:22px}
+  .act-btn.actif{border-color:var(--rouge);background:rgba(229,9,20,.1)}
+
+  /* sous-contrôles (texte, dessin) */
+  .sous-ctrl{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+  .sous-ctrl label{font-size:13px;color:var(--gris)}
+  .sous-ctrl input[type=text]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--ligne);background:var(--carte);color:var(--texte);font-size:14px}
+  .couleurs{display:flex;gap:8px;flex-wrap:wrap}
+  .cpuce{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+  .cpuce.sel{border-color:#fff}
+  .ratios{display:flex;gap:8px;flex-wrap:wrap}
+  .ratio-btn{background:var(--carte);border:1px solid var(--ligne);color:var(--texte);padding:8px 14px;border-radius:20px;cursor:pointer;font-size:13px}
+  .ratio-btn.sel{border-color:var(--rouge);background:rgba(229,9,20,.1)}
+  .mini-btn{background:var(--rouge);color:#fff;border:none;padding:10px 16px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:bold}
+  .mini-btn.gris{background:var(--carte);border:1px solid var(--ligne);color:var(--texte);font-weight:normal}
+
+  /* modale PDG */
+  .modale{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;padding:20px}
+  .modale.on{display:flex}
+  .boite{background:var(--fond2);border:1px solid var(--ligne);border-radius:20px;padding:22px;max-width:440px;width:100%;max-height:90vh;overflow-y:auto}
+  .boite h3{margin-bottom:16px;font-size:20px}
+  .boite label{display:block;font-size:13px;color:var(--gris);margin:12px 0 5px}
+  .boite input,.boite select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--ligne);background:var(--carte);color:var(--texte);font-size:15px}
+  .boite input:focus{outline:none;border-color:var(--rouge)}
+  .note{font-size:12px;color:var(--gris);background:var(--carte);padding:12px;border-radius:10px;margin:12px 0;line-height:1.5;border:1px solid var(--ligne)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .btn-or{background:var(--or);color:#000;border:none;padding:12px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px}
+  .btn-gris{background:var(--carte);color:var(--texte);border:1px solid var(--ligne);padding:12px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .btn-del{background:rgba(229,9,20,.15);color:#ff6b6b;border:1px solid rgba(229,9,20,.3);padding:12px 18px;border-radius:10px;cursor:pointer;font-size:14px}
+  .code-item{display:flex;gap:8px;align-items:center;background:var(--carte);border:1px solid var(--ligne);border-radius:10px;padding:8px;margin-bottom:8px}
+  .code-item input{padding:8px 10px;font-size:13px}
+  .code-item .ci-nom{flex:2}.code-item .ci-prix{flex:1}.code-item .ci-code{flex:1;text-align:center;font-weight:bold;color:var(--or)}
+  .code-item .ci-del{background:rgba(229,9,20,.15);color:#ff6b6b;border:1px solid rgba(229,9,20,.3);width:34px;height:34px;border-radius:8px;cursor:pointer;flex-shrink:0}
+  .sous-onglets{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .sous-onglet{padding:8px 12px;border-radius:20px;border:1px solid var(--ligne);background:var(--carte);color:var(--gris);cursor:pointer;font-size:13px}
+  .sous-onglet.actif{border-color:var(--rouge);color:var(--texte)}
+  .pdg-panneau{display:none}.pdg-panneau.actif{display:block}
+
+  .toast{position:fixed;bottom:50%;left:50%;transform:translateX(-50%) translateY(20px);background:var(--carte);
+    border:1px solid var(--ligne);color:var(--texte);padding:12px 20px;border-radius:12px;font-size:14px;
+    opacity:0;pointer-events:none;transition:.25s;z-index:80;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ===== VERROU ===== -->
+<div id="verrou">
+  <div class="bigR">R</div>
+  <h2>R Photo</h2>
+  <p>La retouche photo ultra de l'Entreprise R. Entre ton code pour débloquer tous les outils.</p>
+  <input id="inp-code" placeholder="Ton code…" maxlength="12" autocomplete="off">
+  <button class="btn-r" id="btn-debloquer">Débloquer</button>
+  <div class="offres">
+    <h3>📸 Pas encore de code ?</h3>
+    <div id="liste-offres"></div>
+  </div>
+  <button class="lien-pdg" id="lien-pdg">🔑 Espace PDG</button>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+  <header>
+    <div class="logo">R</div>
+    <div class="titre"><h1>R Photo</h1><p>Retouche ultra</p></div>
+    <span id="syncBadge"></span>
+    <div class="htools">
+      <button class="htool" id="h-undo" title="Annuler" disabled>↶</button>
+      <button class="htool" id="h-redo" title="Refaire" disabled>↷</button>
+      <button class="htool" id="h-compare" title="Comparer avant/après">👁</button>
+      <button class="htool" id="h-import" title="Changer de photo">🖼️</button>
+      <button class="htool dl" id="h-dl" title="Télécharger" disabled>⬇ Enregistrer</button>
+      <button class="htool" id="h-reglages" title="Réglages">⚙️</button>
+    </div>
+  </header>
+
+  <div class="scene" id="scene">
+    <div class="accueil-import" id="accueil-import">
+      <div class="ico">📸</div>
+      <div>Importe une photo pour commencer</div>
+      <button class="btn-r" id="btn-import-gros">Choisir une photo</button>
+    </div>
+    <canvas id="canvas" style="display:none"></canvas>
+    <div class="cmp-hint" id="cmp-hint">Original</div>
+  </div>
+
+  <!-- catégories -->
+  <div class="cat-bar" id="cat-bar">
+    <button class="cat-btn actif" data-cat="regl"><span class="ci">🎚️</span>Réglages</button>
+    <button class="cat-btn" data-cat="couleur"><span class="ci">🌈</span>Couleurs</button>
+    <button class="cat-btn" data-cat="filtres"><span class="ci">✨</span>Filtres</button>
+    <button class="cat-btn" data-cat="effets"><span class="ci">🌫️</span>Effets</button>
+    <button class="cat-btn" data-cat="transfo"><span class="ci">🔄</span>Transformer</button>
+    <button class="cat-btn" data-cat="texte"><span class="ci">🔤</span>Texte</button>
+    <button class="cat-btn" data-cat="dessin"><span class="ci">🖌️</span>Dessin</button>
+  </div>
+
+  <!-- panneaux -->
+  <div class="panneau" id="panneau">
+    <div class="panneau-vue actif" id="pv-regl"></div>
+    <div class="panneau-vue" id="pv-couleur"></div>
+    <div class="panneau-vue" id="pv-filtres"></div>
+    <div class="panneau-vue" id="pv-effets"></div>
+    <div class="panneau-vue" id="pv-transfo"></div>
+    <div class="panneau-vue" id="pv-texte"></div>
+    <div class="panneau-vue" id="pv-dessin"></div>
+  </div>
+</div>
+
+<input type="file" id="fichier" accept="image/*" style="display:none">
+
+<!-- ===== MODALE RÉGLAGES / PDG ===== -->
+<div class="modale" id="modale-reglages">
+  <div class="boite">
+    <h3>⚙️ Réglages</h3>
+    <div id="zone-pdg-login">
+      <div class="note">💡 Tes photos restent privées sur ton appareil. L'espace PDG gère les <b>codes d'accès</b> vendus aux clients.</div>
+      <label>Code PDG</label>
+      <input id="inp-pdgcode" type="password" placeholder="Code secret…" autocomplete="off">
+      <div class="row"><button class="btn-or" id="btn-pdg-valider">👑 Entrer en PDG</button></div>
+    </div>
+    <div id="zone-pdg-actif" style="display:none">
+      <div class="sous-onglets">
+        <div class="sous-onglet actif" data-panneau="codes">🔐 Codes</div>
+        <div class="sous-onglet" data-panneau="reglages">⚙️ Réglages</div>
+        <div class="sous-onglet" data-panneau="sync">☁️ Synchro</div>
+      </div>
+      <div class="pdg-panneau actif" data-panneau="codes">
+        <div class="note">Chaque code débloque toute l'app pour un client.</div>
+        <div id="liste-codes"></div>
+        <button class="btn-gris" id="btn-ajout-code" style="width:100%">＋ Ajouter une offre</button>
+        <div class="row"><button class="btn-or" id="btn-save-codes">💾 Enregistrer les codes</button></div>
+      </div>
+      <div class="pdg-panneau" data-panneau="reglages">
+        <label>Changer le code PDG</label>
+        <input id="inp-newpdg" placeholder="Nouveau code PDG">
+        <div class="row"><button class="btn-or" id="btn-save-pdg">💾 Enregistrer</button></div>
+      </div>
+      <div class="pdg-panneau" data-panneau="sync">
+        <div class="note">Pour que les <b>codes</b> soient les mêmes partout : compte gratuit sur <b>jsonbin.io</b>, colle ta <b>X-Master-Key</b>. R Photo créera sa propre base.</div>
+        <label>Clé de synchro (X-Master-Key)</label>
+        <input id="inp-apikey" placeholder="$2a$10$..." autocomplete="off">
+        <label id="lab-binid" style="display:none">Identifiant de base (auto)</label>
+        <input id="inp-binid" placeholder="créé automatiquement" style="display:none">
+        <div class="row"><button class="btn-or" id="btn-sync-save">☁️ Activer</button><button class="btn-gris" id="btn-sync-pull">↓ Recharger</button></div>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid var(--ligne);margin:20px 0">
+    <div class="row">
+      <button class="btn-gris" id="btn-fermer-reglages">Fermer</button>
+      <button class="btn-del" id="btn-verrouiller">🔒 Verrouiller</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ CONFIG ============ */
+const DATA_KEY="rphoto-data";
+const ACCESS_KEY="rphoto-access";
+const CFG_KEY="rphoto-cloud-cfg";
+const SHARED_CLOUD={ apiKey:"$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K", binId:"6a6b11d0f5f4af5e29d4c6b5" };
+const DEFAULT_OFFRES=[
+  {id:"mois", nom:"R Photo — accès complet", sub:"Tous les outils, chaque mois", prix:"7,50 €/mois", code:"PHOTO1"},
+];
+const DEFAULT_SETTINGS={ pdgCode:"PDG2026" };
+
+let data={ settings:Object.assign({},DEFAULT_SETTINGS), offres:JSON.parse(JSON.stringify(DEFAULT_OFFRES)) };
+let access={ ok:false };
+let estPDG=false;
+
+/* ============ ÉTAT IMAGE ============ */
+let imgOriginale=null;      // Image() source jamais modifiée
+let baseCanvas=null;        // canvas "base" = image + transformations (rogner/pivoter/texte/dessin appliqués)
+let canvas, ctx;
+const REGLAGES_DEF={
+  luminosite:0, contraste:0, saturation:0, teinte:0, exposition:0,
+  hautes:0, ombres:0, temperature:0, teintevm:0, vibrance:0,
+  nettete:0, grain:0, flou:0, clarte:0, vignettage:0
+};
+let R=Object.assign({},REGLAGES_DEF);
+let filtreActif="aucun", filtreIntensite=1;
+let historique=[], histIndex=-1;
+let outilTransfo=null, ratioRogne="libre";
+let comparer=false;
+
+/* ============ OUTILS UI ============ */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800);}
+function nouvelId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function escap(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* ============ STOCKAGE ============ */
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(DATA_KEY)||"null");if(d){
+    data.settings=Object.assign({},DEFAULT_SETTINGS,d.settings||{});
+    data.offres=(d.offres&&d.offres.length)?d.offres:JSON.parse(JSON.stringify(DEFAULT_OFFRES));
+  }}catch(e){}
+  try{access=JSON.parse(localStorage.getItem(ACCESS_KEY)||'{"ok":false}');}catch(e){access={ok:false};}
+}
+function saveData(){try{localStorage.setItem(DATA_KEY,JSON.stringify(data));}catch(e){}if(cloudOn())pushCloudSoon();}
+function saveAccess(){try{localStorage.setItem(ACCESS_KEY,JSON.stringify(access));}catch(e){}}
+
+/* ============ SYNCHRO (codes) ============ */
+let cloud={apiKey:"",binId:""}, syncing=false, pushTimer=null;
+function loadCloudCfg(){
+  try{const c=JSON.parse(localStorage.getItem(CFG_KEY)||"{}");cloud.apiKey=c.apiKey||"";cloud.binId=c.binId||"";}catch(e){}
+  if(SHARED_CLOUD.apiKey)cloud.apiKey=SHARED_CLOUD.apiKey;
+  if(SHARED_CLOUD.binId)cloud.binId=SHARED_CLOUD.binId;
+}
+function saveCloudCfg(){try{localStorage.setItem(CFG_KEY,JSON.stringify(cloud));}catch(e){}}
+function cloudOn(){return !!cloud.apiKey;}
+function badge(s){const b=document.getElementById('syncBadge');if(!b)return;b.className=s||'';
+  b.textContent=s==='ok'?'● Synchro':s==='sync'?'○ …':s==='err'?'⚠ Local':'';}
+async function creerBin(){
+  const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',
+    headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey,'X-Bin-Private':'false','X-Bin-Name':'rphoto'},
+    body:JSON.stringify(data)});
+  if(!r.ok)throw new Error('création');const j=await r.json();return j.metadata.id;
+}
+async function pushCloud(){
+  if(!cloudOn())return;if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}
+  syncing=true;badge('sync');
+  try{const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId,{method:'PUT',
+    headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey},body:JSON.stringify(data)});
+    if(!r.ok)throw new Error();badge('ok');}catch(e){badge('err');}
+  syncing=false;
+}
+function pushCloudSoon(){clearTimeout(pushTimer);pushTimer=setTimeout(pushCloud,800);}
+async function pullCloud(silencieux){
+  if(!cloudOn()||!cloud.binId)return;badge('sync');
+  try{const r=await fetch('https://api.jsonbin.io/v3/b/'+cloud.binId+'/latest',{headers:{'X-Master-Key':cloud.apiKey}});
+    if(!r.ok)throw new Error();const j=await r.json();const d=j.record||{};
+    data.settings=Object.assign({},DEFAULT_SETTINGS,d.settings||{});
+    data.offres=(d.offres&&d.offres.length)?d.offres:data.offres;
+    try{localStorage.setItem(DATA_KEY,JSON.stringify(data));}catch(e){}
+    badge('ok');if(!silencieux)toast('Codes rechargés ☁️');
+    if(estPDG)rendreCodesPDG();rendreOffres();
+  }catch(e){badge('err');if(!silencieux)toast('Synchro impossible');}
+}
+
+/* ============ ACCÈS ============ */
+function verifierCode(saisi){saisi=(saisi||'').trim().toUpperCase();if(!saisi)return false;
+  return data.offres.some(o=>(o.code||'').trim().toUpperCase()===saisi);}
+function debloquer(saisi){
+  if(verifierCode(saisi)){access={ok:true,code:saisi.trim().toUpperCase(),date:Date.now()};saveAccess();
+    entrerApp();toast('✅ Accès débloqué !');}
+  else toast('❌ Code incorrect');
+}
+function entrerApp(){
+  document.getElementById('verrou').style.display='none';
+  document.getElementById('app').style.display='flex';
+  if(cloudOn())pullCloud(true);
+}
+function verrouiller(){access={ok:false};saveAccess();
+  document.getElementById('modale-reglages').classList.remove('on');
+  document.getElementById('app').style.display='none';
+  document.getElementById('verrou').style.display='flex';
+  document.getElementById('inp-code').value='';}
+
+/* ============ FILTRES (matrices de traitement) ============ */
+const FILTRES={
+  aucun:{nom:'Original'},
+  cinema:{nom:'Cinéma'}, argentique:{nom:'Argentique'}, portrait:{nom:'Portrait'},
+  hdr:{nom:'HDR'}, matte:{nom:'Matte'}, neon:{nom:'Néon'}, retro80:{nom:'Rétro 80s'},
+  nordique:{nom:'Nordique'}, sunset:{nom:'Sunset'}, nb:{nom:'N&B'}, sepia:{nom:'Sépia'},
+  negatif:{nom:'Négatif'}, froid:{nom:'Froid'}, chaud:{nom:'Chaud'}, drama:{nom:'Drama'},
+};
+
+/* applique un filtre sur des données pixel (r,g,b) → renvoie [r,g,b] */
+function appliquerFiltrePixel(nom,r,g,b,inten){
+  let R2=r,G2=g,B2=b;const gr=0.299*r+0.587*g+0.114*b;
+  switch(nom){
+    case 'nb': R2=G2=B2=gr;break;
+    case 'sepia': R2=gr+40;G2=gr+20;B2=gr-20;break;
+    case 'negatif': R2=255-r;G2=255-g;B2=255-b;break;
+    case 'froid': R2=r-15;B2=b+25;break;
+    case 'chaud': R2=r+25;G2=g+8;B2=b-15;break;
+    case 'cinema': R2=r*1.05+8;G2=g*0.98;B2=b*0.95+18;break;
+    case 'argentique': R2=gr*.6+r*.5+18;G2=gr*.6+g*.5+10;B2=gr*.6+b*.5;break;
+    case 'portrait': R2=r*1.08+6;G2=g*1.02;B2=b*0.96;break;
+    case 'hdr': {const m=(r+g+b)/3;R2=r+(r-m)*.6;G2=g+(g-m)*.6;B2=b+(b-m)*.6;}break;
+    case 'matte': R2=r*.9+22;G2=g*.9+22;B2=b*.9+30;break;
+    case 'neon': R2=r*1.15;G2=g*0.9;B2=b*1.2+10;break;
+    case 'retro80': R2=r*1.1+10;G2=g*0.95;B2=b*1.1+20;break;
+    case 'nordique': R2=r*0.92;G2=g*1.0+6;B2=b*1.1+14;break;
+    case 'sunset': R2=r*1.2+20;G2=g*0.95+10;B2=b*0.8;break;
+    case 'drama': {const m=(r+g+b)/3;R2=m+(r-m)*1.5-10;G2=m+(g-m)*1.5-10;B2=m+(b-m)*1.5-10;}break;
+    default: return [r,g,b];
+  }
+  // mélange selon l'intensité
+  return [r+(R2-r)*inten, g+(G2-g)*inten, b+(B2-b)*inten];
+}
+
+/* ============ RENDU IMAGE ============ */
+/* Construit les filtres CSS pour les réglages "simples" (rapides) */
+function filtreCss(){
+  const b=1+R.luminosite/100 + R.exposition/120;
+  const c=1+R.contraste/100 + R.clarte/160;
+  const s=1+R.saturation/100 + R.vibrance/140;
+  const h=R.teinte;
+  const bl=Math.max(0,R.flou/12);
+  return `brightness(${b}) contrast(${c}) saturate(${s}) hue-rotate(${h}deg) blur(${bl}px)`;
+}
+
+/* Redessine tout : base → filtres CSS → filtre pixel + effets (grain, temp, vignette, hautes/ombres) */
+function rendre(){
+  if(!baseCanvas)return;
+  const w=baseCanvas.width,h=baseCanvas.height;
+  canvas.width=w;canvas.height=h;
+  ctx.clearRect(0,0,w,h);
+
+  if(comparer){ctx.filter='none';ctx.drawImage(imgBaseNonRetouchee(),0,0,w,h);return;}
+
+  // 1) réglages rapides via filtre CSS
+  ctx.filter=filtreCss();
+  ctx.drawImage(baseCanvas,0,0);
+  ctx.filter='none';
+
+  // 2) effets pixel (filtre artistique + temp + hautes/ombres + grain)
+  const besoinPixel = filtreActif!=='aucun' || R.temperature||R.teintevm||R.hautes||R.ombres||R.grain||R.nettete;
+  if(besoinPixel){
+    const im=ctx.getImageData(0,0,w,h);const d=im.data;
+    const temp=R.temperature, tvm=R.teintevm, grain=R.grain, hi=R.hautes, om=R.ombres;
+    for(let i=0;i<d.length;i+=4){
+      let r=d[i],g=d[i+1],b=d[i+2];
+      // filtre artistique
+      if(filtreActif!=='aucun'){const o=appliquerFiltrePixel(filtreActif,r,g,b,filtreIntensite);r=o[0];g=o[1];b=o[2];}
+      // température (bleu<->orange) + teinte vert/magenta
+      r+=temp*0.6; b-=temp*0.6; g+=tvm*0.5; r-=tvm*0.25; b-=tvm*0.25;
+      // hautes lumières / ombres
+      const lum=(r+g+b)/3;
+      if(hi){const f=Math.max(0,(lum-128)/127);r+=hi*f;g+=hi*f;b+=hi*f;}
+      if(om){const f=Math.max(0,(128-lum)/128);r+=om*f;g+=om*f;b+=om*f;}
+      // grain
+      if(grain){const n=(Math.random()-0.5)*grain;r+=n;g+=n;b+=n;}
+      d[i]=r<0?0:r>255?255:r; d[i+1]=g<0?0:g>255?255:g; d[i+2]=b<0?0:b>255?255:b;
+    }
+    ctx.putImageData(im,0,0);
+  }
+
+  // 3) vignettage (par-dessus)
+  if(R.vignettage){
+    const g=ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*0.3,w/2,h/2,Math.max(w,h)*0.72);
+    g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,'+(R.vignettage/100)+')');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  }
+}
+/* image de base sans réglages (pour comparaison) */
+let _cmpCanvas=null;
+function imgBaseNonRetouchee(){return baseCanvas;}
+
+/* ============ IMPORT ============ */
+function chargerImage(file){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      // limiter la taille pour la fluidité
+      let w=img.width,h=img.height;const max=1600;
+      if(w>h&&w>max){h=Math.round(h*max/w);w=max;}else if(h>max){w=Math.round(w*max/h);h=max;}
+      imgOriginale=img;
+      baseCanvas=document.createElement('canvas');baseCanvas.width=w;baseCanvas.height=h;
+      baseCanvas.getContext('2d').drawImage(img,0,0,w,h);
+      R=Object.assign({},REGLAGES_DEF);filtreActif='aucun';filtreIntensite=1;
+      document.getElementById('accueil-import').style.display='none';
+      canvas.style.display='block';
+      document.getElementById('h-dl').disabled=false;
+      historique=[];histIndex=-1;pousserHistorique();
+      construireTousLesPanneaux();
+      rendre();majFiltreVignettes();
+      toast('Photo importée 📸');
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ============ HISTORIQUE (base + réglages) ============ */
+function etatActuel(){return {base:baseCanvas.toDataURL(),R:Object.assign({},R),f:filtreActif,fi:filtreIntensite};}
+function pousserHistorique(){
+  historique=historique.slice(0,histIndex+1);
+  historique.push(etatActuel());
+  if(historique.length>25)historique.shift();
+  histIndex=historique.length-1;
+  majUndoRedo();
+}
+function appliquerEtat(e){
+  const img=new Image();
+  img.onload=()=>{baseCanvas=document.createElement('canvas');baseCanvas.width=img.width;baseCanvas.height=img.height;
+    baseCanvas.getContext('2d').drawImage(img,0,0);
+    R=Object.assign({},e.R);filtreActif=e.f;filtreIntensite=e.fi;
+    construireTousLesPanneaux();rendre();majFiltreVignettes();};
+  img.src=e.base;
+}
+function undo(){if(histIndex>0){histIndex--;appliquerEtat(historique[histIndex]);majUndoRedo();}}
+function redo(){if(histIndex<historique.length-1){histIndex++;appliquerEtat(historique[histIndex]);majUndoRedo();}}
+function majUndoRedo(){document.getElementById('h-undo').disabled=histIndex<=0;document.getElementById('h-redo').disabled=histIndex>=historique.length-1;}
+
+/* ============ APPLIQUER (fusionne réglages dans la base, pour texte/dessin/transfo) ============ */
+function fusionnerDansBase(){
+  // rend l'image actuelle (avec réglages) dans un nouveau baseCanvas, puis remet réglages à zéro
+  rendre();
+  const nb=document.createElement('canvas');nb.width=canvas.width;nb.height=canvas.height;
+  nb.getContext('2d').drawImage(canvas,0,0);
+  baseCanvas=nb;R=Object.assign({},REGLAGES_DEF);filtreActif='aucun';filtreIntensite=1;
+}
+
+/* ============ PANNEAUX ============ */
+const REGLAGES_LISTE=[
+  ['exposition','Exposition',-100,100],['luminosite','Luminosité',-100,100],['contraste','Contraste',-100,100],
+  ['hautes','Hautes lumières',-100,100],['ombres','Ombres',-100,100],['clarte','Clarté',0,100],
+];
+const COULEUR_LISTE=[
+  ['saturation','Saturation',-100,100],['vibrance','Vibrance',0,100],['teinte','Teinte',-180,180],
+  ['temperature','Température',-100,100],['teintevm','Teinte vert/magenta',-100,100],
+];
+const EFFETS_LISTE=[
+  ['nettete','Netteté',0,100],['grain','Grain',0,60],['flou','Flou',0,100],['vignettage','Vignettage',0,100],
+];
+function panneauCurseurs(cible,liste){
+  const box=document.getElementById(cible);
+  box.innerHTML=liste.map(([k,nom,mn,mx])=>
+    '<div class="curseur"><div class="cl-tete"><span>'+nom+'</span><span class="cl-val" id="val-'+k+'">'+R[k]+'</span></div>'+
+    '<input type="range" min="'+mn+'" max="'+mx+'" value="'+R[k]+'" data-k="'+k+'"></div>'
+  ).join('')+'<button class="reset-regl" data-reset="'+cible+'">↺ Réinitialiser</button>';
+  box.querySelectorAll('input[type=range]').forEach(inp=>{
+    inp.oninput=()=>{R[inp.dataset.k]=parseInt(inp.value);document.getElementById('val-'+inp.dataset.k).textContent=inp.value;rendre();};
+    inp.onchange=()=>pousserHistorique();
+  });
+  box.querySelector('[data-reset]').onclick=()=>{liste.forEach(([k])=>R[k]=REGLAGES_DEF[k]);panneauCurseurs(cible,liste);rendre();pousserHistorique();};
+}
+function construireTousLesPanneaux(){
+  panneauCurseurs('pv-regl',REGLAGES_LISTE);
+  panneauCurseurs('pv-couleur',COULEUR_LISTE);
+  panneauCurseurs('pv-effets',EFFETS_LISTE);
+  construireFiltres();
+  construireTransfo();
+  construireTexte();
+  construireDessin();
+}
+
+/* --- Filtres (vignettes) --- */
+function construireFiltres(){
+  const box=document.getElementById('pv-filtres');
+  box.innerHTML='<div class="filtres-grille" id="filtres-grille"></div>'+
+    '<div class="intensite-box"><div class="cl-tete"><span>Intensité du filtre</span><span class="cl-val" id="val-inten">100%</span></div>'+
+    '<input type="range" min="0" max="100" value="100" id="filtre-inten"></div>';
+  const g=document.getElementById('filtres-grille');
+  g.innerHTML=Object.entries(FILTRES).map(([k,f])=>
+    '<div class="filtre-v'+(k===filtreActif?' sel':'')+'" data-f="'+k+'"><canvas class="fv-canvas" width="80" height="80"></canvas><span>'+f.nom+'</span></div>'
+  ).join('');
+  g.querySelectorAll('.filtre-v').forEach(el=>el.onclick=()=>{
+    filtreActif=el.dataset.f;majFiltreVignettes();rendre();pousserHistorique();
+  });
+  const inp=document.getElementById('filtre-inten');
+  inp.value=Math.round(filtreIntensite*100);document.getElementById('val-inten').textContent=inp.value+'%';
+  inp.oninput=()=>{filtreIntensite=parseInt(inp.value)/100;document.getElementById('val-inten').textContent=inp.value+'%';rendre();};
+  inp.onchange=()=>pousserHistorique();
+  dessinerVignettes();
+}
+function majFiltreVignettes(){document.querySelectorAll('#filtres-grille .filtre-v').forEach(el=>el.classList.toggle('sel',el.dataset.f===filtreActif));}
+function dessinerVignettes(){
+  if(!baseCanvas)return;
+  // petite version de l'image
+  const petit=document.createElement('canvas');petit.width=80;petit.height=80;
+  const pc=petit.getContext('2d');
+  const s=Math.min(baseCanvas.width,baseCanvas.height);
+  pc.drawImage(baseCanvas,(baseCanvas.width-s)/2,(baseCanvas.height-s)/2,s,s,0,0,80,80);
+  const src=pc.getImageData(0,0,80,80);
+  document.querySelectorAll('#filtres-grille .filtre-v').forEach(el=>{
+    const f=el.dataset.f;const cv=el.querySelector('canvas');const cc=cv.getContext('2d');
+    const im=cc.createImageData(80,80);
+    for(let i=0;i<src.data.length;i+=4){
+      const o=appliquerFiltrePixel(f,src.data[i],src.data[i+1],src.data[i+2],1);
+      im.data[i]=o[0];im.data[i+1]=o[1];im.data[i+2]=o[2];im.data[i+3]=255;
+    }
+    cc.putImageData(im,0,0);
+  });
+}
+
+/* --- Transformer (rogner, pivoter, retourner) --- */
+function construireTransfo(){
+  const box=document.getElementById('pv-transfo');
+  box.innerHTML='<div class="actions-grille">'+
+    '<button class="act-btn" id="t-rot-g"><span class="ai">↺</span>Pivoter ←</button>'+
+    '<button class="act-btn" id="t-rot-d"><span class="ai">↻</span>Pivoter →</button>'+
+    '<button class="act-btn" id="t-flip-h"><span class="ai">⇋</span>Miroir H</button>'+
+    '<button class="act-btn" id="t-flip-v"><span class="ai">⇅</span>Miroir V</button>'+
+    '<button class="act-btn" id="t-rogner"><span class="ai">✂️</span>Rogner</button>'+
+    '</div>'+
+    '<div id="rogne-ctrl" class="sous-ctrl" style="display:none">'+
+      '<label>Format de rognage</label><div class="ratios" id="ratios"></div>'+
+      '<div style="display:flex;gap:8px"><button class="mini-btn" id="rogne-ok">✓ Appliquer</button><button class="mini-btn gris" id="rogne-annul">Annuler</button></div>'+
+    '</div>';
+  document.getElementById('t-rot-g').onclick=()=>pivoter(-90);
+  document.getElementById('t-rot-d').onclick=()=>pivoter(90);
+  document.getElementById('t-flip-h').onclick=()=>retourner('h');
+  document.getElementById('t-flip-v').onclick=()=>retourner('v');
+  document.getElementById('t-rogner').onclick=demarrerRogne;
+  const RATIOS=[['libre','Libre'],['1:1','Carré'],['4:5','4:5'],['16:9','16:9'],['9:16','9:16'],['3:2','3:2']];
+  document.getElementById('ratios').innerHTML=RATIOS.map(([k,n])=>'<button class="ratio-btn'+(k==ratioRogne?' sel':'')+'" data-r="'+k+'">'+n+'</button>').join('');
+  document.querySelectorAll('#ratios .ratio-btn').forEach(b=>b.onclick=()=>{ratioRogne=b.dataset.r;document.querySelectorAll('#ratios .ratio-btn').forEach(x=>x.classList.toggle('sel',x===b));appliquerRatioRogne();});
+  document.getElementById('rogne-ok').onclick=validerRogne;
+  document.getElementById('rogne-annul').onclick=annulerRogne;
+}
+function pivoter(deg){
+  fusionnerDansBase();
+  const w=baseCanvas.width,h=baseCanvas.height;
+  const nb=document.createElement('canvas');nb.width=h;nb.height=w;
+  const c=nb.getContext('2d');c.translate(h/2,w/2);c.rotate(deg*Math.PI/180);c.drawImage(baseCanvas,-w/2,-h/2);
+  baseCanvas=nb;rendre();dessinerVignettes();pousserHistorique();toast('Pivoté');
+}
+function retourner(sens){
+  fusionnerDansBase();
+  const w=baseCanvas.width,h=baseCanvas.height;
+  const nb=document.createElement('canvas');nb.width=w;nb.height=h;const c=nb.getContext('2d');
+  if(sens==='h'){c.translate(w,0);c.scale(-1,1);}else{c.translate(0,h);c.scale(1,-1);}
+  c.drawImage(baseCanvas,0,0);baseCanvas=nb;rendre();dessinerVignettes();pousserHistorique();toast('Retourné');
+}
+/* rognage interactif */
+let rogneRect=null,rogneDrag=null;
+function demarrerRogne(){
+  fusionnerDansBase();rendre();
+  document.getElementById('rogne-ctrl').style.display='flex';
+  document.getElementById('t-rogner').classList.add('actif');
+  rogneRect={x:canvas.width*0.1,y:canvas.height*0.1,w:canvas.width*0.8,h:canvas.height*0.8};
+  dessinerRogne();
+  canvas.onpointerdown=rognePointerDown;canvas.onpointermove=rognePointerMove;canvas.onpointerup=()=>rogneDrag=null;
+}
+function appliquerRatioRogne(){
+  if(!rogneRect)return;
+  if(ratioRogne==='libre'){dessinerRogne();return;}
+  const [a,b]=ratioRogne.split(':').map(Number);const ratio=a/b;
+  let w=rogneRect.w,h=w/ratio;
+  if(h>canvas.height){h=canvas.height*0.9;w=h*ratio;}
+  rogneRect.w=w;rogneRect.h=h;
+  rogneRect.x=Math.min(rogneRect.x,canvas.width-w);rogneRect.y=Math.min(rogneRect.y,canvas.height-h);
+  dessinerRogne();
+}
+function coordCanvas(e){const r=canvas.getBoundingClientRect();return {x:(e.clientX-r.left)*(canvas.width/r.width),y:(e.clientY-r.top)*(canvas.height/r.height)};}
+function rognePointerDown(e){const p=coordCanvas(e);rogneDrag={sx:p.x,sy:p.y,ox:rogneRect.x,oy:rogneRect.y};}
+function rognePointerMove(e){if(!rogneDrag)return;const p=coordCanvas(e);
+  rogneRect.x=Math.max(0,Math.min(canvas.width-rogneRect.w,rogneDrag.ox+(p.x-rogneDrag.sx)));
+  rogneRect.y=Math.max(0,Math.min(canvas.height-rogneRect.h,rogneDrag.oy+(p.y-rogneDrag.sy)));dessinerRogne();}
+function dessinerRogne(){
+  rendre();
+  ctx.save();ctx.fillStyle='rgba(0,0,0,.55)';
+  ctx.fillRect(0,0,canvas.width,rogneRect.y);
+  ctx.fillRect(0,rogneRect.y+rogneRect.h,canvas.width,canvas.height-rogneRect.y-rogneRect.h);
+  ctx.fillRect(0,rogneRect.y,rogneRect.x,rogneRect.h);
+  ctx.fillRect(rogneRect.x+rogneRect.w,rogneRect.y,canvas.width-rogneRect.x-rogneRect.w,rogneRect.h);
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.strokeRect(rogneRect.x,rogneRect.y,rogneRect.w,rogneRect.h);
+  ctx.restore();
+}
+function validerRogne(){
+  const nb=document.createElement('canvas');nb.width=Math.round(rogneRect.w);nb.height=Math.round(rogneRect.h);
+  nb.getContext('2d').drawImage(baseCanvas,rogneRect.x,rogneRect.y,rogneRect.w,rogneRect.h,0,0,rogneRect.w,rogneRect.h);
+  baseCanvas=nb;annulerRogne();rendre();dessinerVignettes();pousserHistorique();toast('Rogné ✂️');
+}
+function annulerRogne(){
+  rogneRect=null;rogneDrag=null;
+  canvas.onpointerdown=null;canvas.onpointermove=null;canvas.onpointerup=null;
+  document.getElementById('rogne-ctrl').style.display='none';
+  document.getElementById('t-rogner').classList.remove('actif');
+  rendre();
+}
+
+/* --- Texte --- */
+let texteCouleur='#ffffff';
+function construireTexte(){
+  const box=document.getElementById('pv-texte');
+  const COULEURS=['#ffffff','#000000','#e50914','#ffd66b','#2ec26a','#00b8d4','#6b4de5','#e5399a'];
+  box.innerHTML='<div class="sous-ctrl">'+
+    '<label>Ton texte</label><input type="text" id="txt-input" placeholder="Écris ici…" maxlength="60">'+
+    '<label>Couleur</label><div class="couleurs" id="txt-couleurs">'+
+      COULEURS.map(c=>'<div class="cpuce'+(c===texteCouleur?' sel':'')+'" style="background:'+c+'" data-c="'+c+'"></div>').join('')+'</div>'+
+    '<label>Taille</label><input type="range" id="txt-taille" min="14" max="120" value="48">'+
+    '<button class="mini-btn" id="txt-ajout">＋ Ajouter le texte (au centre)</button>'+
+    '<div class="note">Astuce : ajoute le texte, il apparaît au centre. Réimporte si tu veux recommencer.</div></div>';
+  box.querySelectorAll('#txt-couleurs .cpuce').forEach(p=>p.onclick=()=>{texteCouleur=p.dataset.c;box.querySelectorAll('.cpuce').forEach(x=>x.classList.toggle('sel',x===p));});
+  document.getElementById('txt-ajout').onclick=()=>{
+    const t=document.getElementById('txt-input').value.trim();if(!t){toast('Écris un texte');return;}
+    const taille=parseInt(document.getElementById('txt-taille').value);
+    fusionnerDansBase();
+    const c=baseCanvas.getContext('2d');
+    c.font='bold '+taille+'px Trebuchet MS, sans-serif';c.textAlign='center';c.textBaseline='middle';
+    c.shadowColor='rgba(0,0,0,.6)';c.shadowBlur=6;c.shadowOffsetY=2;
+    c.fillStyle=texteCouleur;c.fillText(t,baseCanvas.width/2,baseCanvas.height/2);
+    c.shadowColor='transparent';
+    rendre();dessinerVignettes();pousserHistorique();toast('Texte ajouté 🔤');
+  };
+}
+
+/* --- Dessin --- */
+let dessinCouleur='#e50914',dessinTaille=6,enTrainDeDessiner=false;
+function construireDessin(){
+  const box=document.getElementById('pv-dessin');
+  const COULEURS=['#e50914','#ffffff','#000000','#ffd66b','#2ec26a','#00b8d4','#6b4de5','#e5399a'];
+  box.innerHTML='<div class="sous-ctrl">'+
+    '<label>Couleur du pinceau</label><div class="couleurs" id="des-couleurs">'+
+      COULEURS.map(c=>'<div class="cpuce'+(c===dessinCouleur?' sel':'')+'" style="background:'+c+'" data-c="'+c+'"></div>').join('')+'</div>'+
+    '<label>Épaisseur</label><input type="range" id="des-taille" min="2" max="40" value="6">'+
+    '<div style="display:flex;gap:8px"><button class="mini-btn" id="des-on">🖌️ Activer le pinceau</button><button class="mini-btn gris" id="des-off" style="display:none">✓ Terminer</button></div>'+
+    '<div class="note">Active le pinceau puis dessine sur la photo avec ton doigt ou la souris.</div></div>';
+  box.querySelectorAll('#des-couleurs .cpuce').forEach(p=>p.onclick=()=>{dessinCouleur=p.dataset.c;box.querySelectorAll('.cpuce').forEach(x=>x.classList.toggle('sel',x===p));});
+  document.getElementById('des-taille').oninput=e=>dessinTaille=parseInt(e.target.value);
+  document.getElementById('des-on').onclick=activerDessin;
+  document.getElementById('des-off').onclick=terminerDessin;
+}
+function activerDessin(){
+  fusionnerDansBase();rendre();
+  document.getElementById('des-on').style.display='none';
+  document.getElementById('des-off').style.display='inline-block';
+  let dernier=null;
+  canvas.onpointerdown=e=>{enTrainDeDessiner=true;dernier=coordCanvas(e);};
+  canvas.onpointermove=e=>{
+    if(!enTrainDeDessiner)return;const p=coordCanvas(e);const c=baseCanvas.getContext('2d');
+    c.strokeStyle=dessinCouleur;c.lineWidth=dessinTaille;c.lineCap='round';c.lineJoin='round';
+    c.beginPath();c.moveTo(dernier.x,dernier.y);c.lineTo(p.x,p.y);c.stroke();dernier=p;rendre();
+  };
+  canvas.onpointerup=()=>{if(enTrainDeDessiner){enTrainDeDessiner=false;pousserHistorique();dessinerVignettes();}};
+  toast('Pinceau activé 🖌️');
+}
+function terminerDessin(){
+  enTrainDeDessiner=false;canvas.onpointerdown=null;canvas.onpointermove=null;canvas.onpointerup=null;
+  document.getElementById('des-on').style.display='inline-block';
+  document.getElementById('des-off').style.display='none';
+  toast('Dessin terminé');
+}
+
+/* ============ TÉLÉCHARGER ============ */
+function telecharger(){
+  if(!baseCanvas){toast('Importe une photo d\'abord');return;}
+  const avant=comparer;comparer=false;rendre();
+  const a=document.createElement('a');a.download='r-photo-'+Date.now()+'.png';a.href=canvas.toDataURL('image/png');a.click();
+  comparer=avant;rendre();toast('Photo enregistrée ⬇');
+}
+
+/* ============ PDG CODES ============ */
+function rendreOffres(){
+  const box=document.getElementById('liste-offres');
+  box.innerHTML=data.offres.map(o=>
+    '<div class="offre"><div><div class="o-nom">'+escap(o.nom)+'</div><div class="o-sub">'+escap(o.sub||'')+'</div></div>'+
+    '<div class="o-prix">'+escap(o.prix)+'</div></div>'
+  ).join('');
+}
+function rendreCodesPDG(){
+  const box=document.getElementById('liste-codes');
+  box.innerHTML=data.offres.map((o,i)=>
+    '<div class="code-item" data-i="'+i+'">'+
+      '<input class="ci-nom" value="'+escap(o.nom)+'" placeholder="Nom">'+
+      '<input class="ci-prix" value="'+escap(o.prix)+'" placeholder="Prix">'+
+      '<input class="ci-code" value="'+escap(o.code)+'" placeholder="CODE">'+
+      '<button class="ci-del" data-i="'+i+'">×</button></div>'
+  ).join('');
+  box.querySelectorAll('.ci-del').forEach(b=>b.onclick=()=>{data.offres.splice(parseInt(b.dataset.i),1);rendreCodesPDG();});
+}
+function lireCodesPDG(){
+  const items=document.querySelectorAll('#liste-codes .code-item');const nouv=[];
+  items.forEach(it=>{const nom=it.querySelector('.ci-nom').value.trim();const prix=it.querySelector('.ci-prix').value.trim();
+    const code=it.querySelector('.ci-code').value.trim().toUpperCase();
+    if(nom||code)nouv.push({id:nouvelId(),nom:nom||'Offre',sub:'',prix:prix||'—',code:code||'CODE'});});
+  data.offres=nouv;saveData();rendreOffres();toast('💾 Codes enregistrés');
+}
+
+/* ============ INIT ============ */
+function init(){
+  canvas=document.getElementById('canvas');ctx=canvas.getContext('2d');
+  load();loadCloudCfg();badge(cloudOn()?'ok':'');rendreOffres();
+  if(access.ok)entrerApp();
+
+  document.getElementById('btn-debloquer').onclick=()=>debloquer(document.getElementById('inp-code').value);
+  document.getElementById('inp-code').addEventListener('keydown',e=>{if(e.key==='Enter')debloquer(e.target.value);});
+  document.getElementById('lien-pdg').onclick=()=>{document.getElementById('modale-reglages').classList.add('on');majReglages();};
+
+  // import
+  const fichier=document.getElementById('fichier');
+  const declImport=()=>{fichier.value='';fichier.click();};
+  document.getElementById('btn-import-gros').onclick=declImport;
+  document.getElementById('h-import').onclick=declImport;
+  fichier.onchange=()=>{const f=fichier.files[0];if(f)chargerImage(f);};
+
+  // barre catégories
+  document.querySelectorAll('.cat-btn').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('.cat-btn').forEach(x=>x.classList.toggle('actif',x===b));
+    document.querySelectorAll('.panneau-vue').forEach(p=>p.classList.remove('actif'));
+    document.getElementById('pv-'+b.dataset.cat).classList.add('actif');
+    if(b.dataset.cat!=='transfo')annulerRogne();
+    if(b.dataset.cat!=='dessin')terminerDessin();
+    if(b.dataset.cat==='filtres')dessinerVignettes();
+  });
+
+  // outils haut
+  document.getElementById('h-undo').onclick=undo;
+  document.getElementById('h-redo').onclick=redo;
+  document.getElementById('h-dl').onclick=telecharger;
+  document.getElementById('h-reglages').onclick=()=>{document.getElementById('modale-reglages').classList.add('on');majReglages();};
+  const cmp=document.getElementById('h-compare');
+  cmp.onpointerdown=()=>{if(!baseCanvas)return;comparer=true;document.getElementById('cmp-hint').classList.add('on');rendre();};
+  cmp.onpointerup=()=>{comparer=false;document.getElementById('cmp-hint').classList.remove('on');rendre();};
+  cmp.onpointerleave=()=>{if(comparer){comparer=false;document.getElementById('cmp-hint').classList.remove('on');rendre();}};
+
+  // PDG
+  document.getElementById('btn-fermer-reglages').onclick=()=>document.getElementById('modale-reglages').classList.remove('on');
+  document.getElementById('btn-verrouiller').onclick=verrouiller;
+  document.getElementById('btn-pdg-valider').onclick=()=>{
+    const c=document.getElementById('inp-pdgcode').value.trim();
+    if(c===data.settings.pdgCode||c==='SECOURS'){estPDG=true;toast('👑 Bienvenue PDG');majReglages();rendreCodesPDG();}
+    else toast('Code incorrect');
+  };
+  document.querySelectorAll('.sous-onglet').forEach(s=>s.onclick=()=>{
+    document.querySelectorAll('.sous-onglet').forEach(x=>x.classList.toggle('actif',x===s));
+    document.querySelectorAll('.pdg-panneau').forEach(p=>p.classList.toggle('actif',p.dataset.panneau===s.dataset.panneau));
+  });
+  document.getElementById('btn-ajout-code').onclick=()=>{data.offres.push({id:nouvelId(),nom:'Nouvelle offre',sub:'',prix:'0 €',code:'NEW'+(data.offres.length+1)});rendreCodesPDG();};
+  document.getElementById('btn-save-codes').onclick=lireCodesPDG;
+  document.getElementById('btn-save-pdg').onclick=()=>{const v=document.getElementById('inp-newpdg').value.trim();
+    if(v){data.settings.pdgCode=v;saveData();toast('Code PDG changé');document.getElementById('inp-newpdg').value='';}};
+  document.getElementById('btn-sync-save').onclick=async()=>{
+    const k=document.getElementById('inp-apikey').value.trim();if(!k){toast('Colle ta clé jsonbin');return;}
+    cloud.apiKey=k;const bid=document.getElementById('inp-binid').value.trim();if(bid)cloud.binId=bid;
+    saveCloudCfg();badge('sync');
+    try{if(!cloud.binId){cloud.binId=await creerBin();saveCloudCfg();}await pushCloud();toast('☁️ Synchro activée !');majReglages();}
+    catch(e){badge('err');toast('Erreur : vérifie ta clé');}
+  };
+  document.getElementById('btn-sync-pull').onclick=()=>pullCloud(false);
+  setInterval(()=>{if(cloudOn()&&document.getElementById('app').style.display==='flex'&&!syncing)pullCloud(true);},20000);
+}
+function majReglages(){
+  document.getElementById('zone-pdg-login').style.display=estPDG?'none':'block';
+  document.getElementById('zone-pdg-actif').style.display=estPDG?'block':'none';
+  document.getElementById('inp-apikey').value=cloud.apiKey||'';
+  document.getElementById('inp-binid').value=cloud.binId||'';
+  const montrer=!!cloud.binId;
+  document.getElementById('lab-binid').style.display=montrer?'block':'none';
+  document.getElementById('inp-binid').style.display=montrer?'block':'none';
+  if(estPDG)rendreCodesPDG();
+}
+
+init();
+</script>
+</body>
+</html>
