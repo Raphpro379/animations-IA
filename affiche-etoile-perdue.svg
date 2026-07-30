@@ -1,0 +1,200 @@
+<svg viewBox="0 0 720 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- fond ciel -->
+    <radialGradient id="ciel" cx="50%" cy="32%" r="85%">
+      <stop offset="0%" stop-color="#2a2a5e"/>
+      <stop offset="45%" stop-color="#12123a"/>
+      <stop offset="100%" stop-color="#040410"/>
+    </radialGradient>
+    <!-- halo étoile -->
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff8d0"/>
+      <stop offset="30%" stop-color="#ffd84a"/>
+      <stop offset="70%" stop-color="#ff9d3a" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ff9d3a" stop-opacity="0"/>
+    </radialGradient>
+    <!-- coeur de l'étoile -->
+    <radialGradient id="etoileCoeur" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#ffe88a"/>
+      <stop offset="100%" stop-color="#ffb84a"/>
+    </radialGradient>
+    <!-- trou noir -->
+    <radialGradient id="trou" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#000"/>
+      <stop offset="52%" stop-color="#000"/>
+      <stop offset="66%" stop-color="#4a1a6a"/>
+      <stop offset="82%" stop-color="#8a3aaa" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#8a3aaa" stop-opacity="0"/>
+    </radialGradient>
+    <!-- planète Lumina -->
+    <radialGradient id="lumina" cx="38%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#7ac0e4"/>
+      <stop offset="60%" stop-color="#3a7aa4"/>
+      <stop offset="100%" stop-color="#1a3a54"/>
+    </radialGradient>
+    <!-- casque -->
+    <radialGradient id="casque" cx="42%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#bfe8ff" stop-opacity="0.65"/>
+      <stop offset="70%" stop-color="#6aa8d4" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#3a6a9a" stop-opacity="0.3"/>
+    </radialGradient>
+    <!-- titre doré -->
+    <linearGradient id="titreOr" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff2b0"/>
+      <stop offset="45%" stop-color="#ffd84a"/>
+      <stop offset="100%" stop-color="#ff9d3a"/>
+    </linearGradient>
+    <linearGradient id="nebuleuse" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6a3a8a"/>
+      <stop offset="100%" stop-color="#3a5a9a"/>
+    </linearGradient>
+    <filter id="flou"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="flouLeger"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>
+
+  <!-- FOND -->
+  <rect width="720" height="1080" fill="url(#ciel)"/>
+
+  <!-- nébuleuses -->
+  <ellipse cx="120" cy="240" rx="220" ry="140" fill="url(#nebuleuse)" opacity="0.18" filter="url(#flou)"/>
+  <ellipse cx="600" cy="420" rx="200" ry="130" fill="#3a5a9a" opacity="0.14" filter="url(#flou)"/>
+
+  <!-- étoiles du fond -->
+  <g fill="#ffffff">
+    <circle cx="60" cy="80" r="1.6" opacity="0.8"/><circle cx="140" cy="150" r="1.1" opacity="0.6"/>
+    <circle cx="220" cy="60" r="1.9" opacity="0.9"/><circle cx="300" cy="120" r="1.2" opacity="0.5"/>
+    <circle cx="420" cy="70" r="1.5" opacity="0.7"/><circle cx="520" cy="140" r="1.1" opacity="0.6"/>
+    <circle cx="620" cy="80" r="1.8" opacity="0.85"/><circle cx="680" cy="180" r="1.3" opacity="0.6"/>
+    <circle cx="40" cy="300" r="1.4" opacity="0.7"/><circle cx="90" cy="440" r="1.7" opacity="0.8"/>
+    <circle cx="680" cy="340" r="1.5" opacity="0.7"/><circle cx="650" cy="520" r="1.2" opacity="0.6"/>
+    <circle cx="50" cy="560" r="1.6" opacity="0.75"/><circle cx="130" cy="640" r="1.1" opacity="0.5"/>
+    <circle cx="600" cy="620" r="1.4" opacity="0.7"/><circle cx="690" cy="700" r="1.6" opacity="0.7"/>
+    <circle cx="360" cy="40" r="1.3" opacity="0.6"/><circle cx="470" cy="180" r="1" opacity="0.5"/>
+    <circle cx="250" cy="200" r="1.2" opacity="0.55"/><circle cx="180" cy="90" r="1" opacity="0.5"/>
+  </g>
+  <!-- étoiles scintillantes (croix) -->
+  <g fill="#fff8d0" opacity="0.9">
+    <path d="M175 130 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3 z"/>
+    <path d="M560 90 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5 z"/>
+    <path d="M90 380 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 z"/>
+    <path d="M640 560 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5 z"/>
+  </g>
+
+  <!-- TROU NOIR (en haut à droite) -->
+  <g transform="translate(560,235)">
+    <ellipse cx="0" cy="0" rx="150" ry="40" fill="none" stroke="#8a5ab0" stroke-width="3" opacity="0.45" transform="rotate(-18)"/>
+    <circle cx="0" cy="0" r="95" fill="url(#trou)"/>
+    <circle cx="0" cy="0" r="52" fill="#000"/>
+  </g>
+
+  <!-- L'ÉTOILE DU CŒUR (centre haut) -->
+  <g transform="translate(300,300)">
+    <circle cx="0" cy="0" r="170" fill="url(#halo)" opacity="0.9"/>
+    <!-- rayons -->
+    <g stroke="#ffe88a" stroke-width="4" opacity="0.55" stroke-linecap="round">
+      <line x1="0" y1="-140" x2="0" y2="-95"/>
+      <line x1="0" y1="95" x2="0" y2="140"/>
+      <line x1="-140" y1="0" x2="-95" y2="0"/>
+      <line x1="95" y1="0" x2="140" y2="0"/>
+      <line x1="-100" y1="-100" x2="-68" y2="-68"/>
+      <line x1="100" y1="100" x2="68" y2="68"/>
+      <line x1="-100" y1="100" x2="-68" y2="68"/>
+      <line x1="100" y1="-100" x2="68" y2="-68"/>
+    </g>
+    <!-- forme d'étoile-coeur -->
+    <path d="M0,-58 L16,-20 L58,-20 L24,8 L38,50 L0,24 L-38,50 L-24,8 L-58,-20 L-16,-20 Z"
+          fill="url(#etoileCoeur)" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="0" cy="-6" r="14" fill="#fff" opacity="0.8" filter="url(#flouLeger)"/>
+  </g>
+
+  <!-- PLANÈTE LUMINA (bas gauche) -->
+  <g transform="translate(140,760)">
+    <circle cx="0" cy="0" r="115" fill="url(#lumina)"/>
+    <ellipse cx="-30" cy="-25" rx="42" ry="16" fill="#8ad0f4" opacity="0.35"/>
+    <ellipse cx="25" cy="30" rx="55" ry="20" fill="#2a5a7a" opacity="0.5"/>
+    <ellipse cx="-10" cy="55" rx="38" ry="12" fill="#2a5a7a" opacity="0.4"/>
+    <!-- anneau -->
+    <ellipse cx="0" cy="0" rx="160" ry="34" fill="none" stroke="#9ad0f0" stroke-width="6" opacity="0.35" transform="rotate(-20)"/>
+  </g>
+
+  <!-- VAISSEAU L'ÉTINCELLE (traverse le centre) -->
+  <g transform="translate(430,560) rotate(-24)">
+    <!-- traînée -->
+    <path d="M-160,6 Q-90,0 -20,0 L-20,10 Q-90,12 -160,14 Z" fill="#ffd84a" opacity="0.4" filter="url(#flou)"/>
+    <!-- corps -->
+    <ellipse cx="0" cy="0" rx="70" ry="26" fill="#4a5a7a"/>
+    <ellipse cx="0" cy="-5" rx="70" ry="21" fill="#6a7a9a"/>
+    <!-- cockpit -->
+    <circle cx="24" cy="-6" r="18" fill="#8ad0f4"/>
+    <circle cx="24" cy="-6" r="18" fill="none" stroke="#bfe8ff" stroke-width="2"/>
+    <!-- ailerons -->
+    <polygon points="-40,-4 -66,-30 -30,-16" fill="#3a4a6a"/>
+    <polygon points="-40,4 -66,30 -30,16" fill="#3a4a6a"/>
+    <!-- flammes -->
+    <polygon points="-64,-8 -104,0 -64,8" fill="#ff9d3a"/>
+    <polygon points="-64,-4 -88,0 -64,4" fill="#ffd84a"/>
+  </g>
+
+  <!-- PETIT ROBOT BIP -->
+  <g transform="translate(540,500)">
+    <circle cx="0" cy="0" r="20" fill="#c4d0e0"/>
+    <circle cx="0" cy="0" r="20" fill="none" stroke="#8a9ab0" stroke-width="2"/>
+    <circle cx="0" cy="-2" r="11" fill="#2a3a5a"/>
+    <circle cx="-3" cy="-4" r="4" fill="#8ad0f4"/>
+    <rect x="-3" y="-30" width="6" height="12" fill="#8a9ab0"/>
+    <circle cx="0" cy="-32" r="4" fill="#ffd84a"/>
+  </g>
+
+  <!-- NOVA (silhouette d'astronaute, en bas au centre) -->
+  <g transform="translate(390,830)">
+    <!-- corps combinaison -->
+    <path d="M-45,150 Q-50,60 -30,20 Q-20,-5 0,-8 Q20,-5 30,20 Q50,60 45,150 Z" fill="#e8eef6"/>
+    <path d="M-45,150 Q-50,60 -30,20 L-30,150 Z" fill="#c4d0e0" opacity="0.6"/>
+    <!-- détails combinaison -->
+    <rect x="-14" y="35" width="28" height="40" rx="6" fill="#3a5a8a"/>
+    <circle cx="0" cy="55" r="9" fill="#ffd84a"/>
+    <path d="M0,48 l4,7 -4,7 -4,-7 z" fill="#fff"/>
+    <!-- bras -->
+    <path d="M-30,25 Q-58,55 -52,100" fill="none" stroke="#e8eef6" stroke-width="20" stroke-linecap="round"/>
+    <path d="M30,25 Q60,50 58,95" fill="none" stroke="#e8eef6" stroke-width="20" stroke-linecap="round"/>
+    <!-- casque -->
+    <circle cx="0" cy="-30" r="42" fill="#e8eef6"/>
+    <circle cx="0" cy="-30" r="34" fill="#1a2a44"/>
+    <circle cx="0" cy="-30" r="34" fill="url(#casque)"/>
+    <!-- reflet visage -->
+    <ellipse cx="-8" cy="-38" rx="12" ry="16" fill="#bfe8ff" opacity="0.4"/>
+    <circle cx="16" cy="-20" r="6" fill="#fff" opacity="0.5"/>
+    <!-- reflet de l'étoile dans le casque -->
+    <path d="M6,-34 l3,7 7,1 -6,4 2,7 -6,-4 -6,4 2,-7 -6,-4 7,-1 z" fill="#ffd84a" opacity="0.7"/>
+  </g>
+
+  <!-- VORAX (silhouette d'ombre, bas droite) -->
+  <g transform="translate(600,830)" opacity="0.9">
+    <path d="M0,180 Q-45,80 -30,20 Q-20,-20 0,-30 Q20,-20 30,20 Q45,80 0,180 Z" fill="#0a0a18"/>
+    <path d="M0,-30 Q-20,-55 -14,-70 Q0,-58 14,-70 Q20,-55 0,-30" fill="#0a0a18"/>
+    <circle cx="-9" cy="-8" r="4" fill="#8a4aca"/>
+    <circle cx="9" cy="-8" r="4" fill="#8a4aca"/>
+    <!-- volutes d'ombre -->
+    <path d="M-30,20 Q-60,40 -50,80" fill="none" stroke="#0a0a18" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <!-- dégradé sombre en bas pour lisibilité du titre -->
+  <rect x="0" y="875" width="720" height="205" fill="#040410" opacity="0.5"/>
+
+  <!-- BANDEAU TITRE -->
+  <g transform="translate(360,940)">
+    <text x="0" y="0" text-anchor="middle" font-family="Georgia,'Times New Roman',serif"
+          font-size="76" font-weight="bold" fill="url(#titreOr)"
+          stroke="#7a4a10" stroke-width="1" letter-spacing="1">L'ÉTOILE</text>
+    <text x="0" y="66" text-anchor="middle" font-family="Georgia,'Times New Roman',serif"
+          font-size="76" font-weight="bold" fill="url(#titreOr)"
+          stroke="#7a4a10" stroke-width="1" letter-spacing="6">PERDUE</text>
+  </g>
+
+  <!-- sous-titre -->
+  <text x="360" y="1024" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif"
+        font-size="21" fill="#bfd0e8" letter-spacing="4">UN FILM DE L'ENTREPRISE R</text>
+  <text x="360" y="1056" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif"
+        font-size="15" fill="#8a9ab8" letter-spacing="2">· LE GRAND VOYAGE DE NOVA · 1H40 ·</text>
+</svg>
