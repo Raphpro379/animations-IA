@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Calc — la calculatrice de R</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --rouge:#e50914; --rouge-fonce:#b0060f;
+    --fond:#0d0d12; --fond2:#16161d; --carte:#1d1d26;
+    --ligne:#2a2a36; --texte:#f4f4f6; --gris:#9a9aa8;
+    --violet:#6b4de5; --or:#ffd66b; --vert:#2ec26a;
+  }
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;background:var(--fond);color:var(--texte);
+    min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+
+  /* ===== EN-TÊTE ===== */
+  header{background:linear-gradient(135deg,var(--rouge),var(--rouge-fonce));padding:14px 18px;
+    display:flex;align-items:center;gap:12px;box-shadow:0 2px 14px rgba(0,0,0,.4);position:sticky;top:0;z-index:10}
+  header .logo{width:40px;height:40px;background:#fff;border-radius:11px;display:flex;align-items:center;
+    justify-content:center;font-weight:bold;font-size:22px;color:var(--rouge)}
+  header .titre{flex:1}
+  header .titre h1{font-size:20px;letter-spacing:.5px}
+  header .titre p{font-size:12px;opacity:.85}
+  .mode-btn{background:rgba(255,255,255,.18);border:none;color:#fff;padding:8px 14px;border-radius:20px;
+    font-size:13px;cursor:pointer;font-weight:bold;white-space:nowrap;transition:.15s}
+  .mode-btn:hover{background:rgba(255,255,255,.3)}
+
+  /* ===== CORPS ===== */
+  .calc{max-width:440px;width:100%;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:14px;flex:1}
+
+  /* écran */
+  .ecran{background:var(--fond2);border:1px solid var(--ligne);border-radius:18px;padding:18px 20px;
+    min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px}
+  .ecran .calcul{font-size:16px;color:var(--gris);min-height:20px;text-align:right;word-break:break-all;
+    font-family:'Consolas','Courier New',monospace}
+  .ecran .resultat{font-size:44px;font-weight:bold;text-align:right;word-break:break-all;line-height:1.1;
+    font-family:'Consolas','Courier New',monospace}
+  .ecran .resultat.err{color:var(--rouge);font-size:28px}
+
+  /* clavier */
+  .clavier{display:grid;gap:9px}
+  .clavier.simple{grid-template-columns:repeat(4,1fr)}
+  .clavier.scientifique{grid-template-columns:repeat(5,1fr)}
+  .touche{border:none;border-radius:15px;padding:0;height:60px;font-size:22px;cursor:pointer;
+    background:var(--carte);color:var(--texte);transition:transform .08s,background .15s;
+    display:flex;align-items:center;justify-content:center;font-family:'Trebuchet MS',sans-serif}
+  .touche:active{transform:scale(.93)}
+  .touche:hover{background:var(--fond2)}
+  .touche.op{background:#26263340;color:var(--or);font-weight:bold}
+  .touche.op:hover{background:var(--carte)}
+  .touche.egal{background:var(--rouge);color:#fff;font-weight:bold}
+  .touche.egal:hover{background:var(--rouge-fonce)}
+  .touche.fonc{background:var(--fond2);color:var(--violet);font-size:16px;font-weight:bold}
+  .touche.eff{color:var(--rouge);font-weight:bold}
+  .touche.large{grid-column:span 2}
+  .clavier.scientifique .touche{height:52px;font-size:17px}
+
+  /* historique */
+  .hist-tete{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+  .hist-tete h2{font-size:15px;color:var(--gris);font-weight:normal}
+  .hist-vider{background:none;border:none;color:var(--rouge);font-size:13px;cursor:pointer;text-decoration:underline}
+  .historique{display:flex;flex-direction:column;gap:8px;max-height:230px;overflow-y:auto}
+  .hist-item{background:var(--carte);border:1px solid var(--ligne);border-radius:12px;padding:10px 14px;
+    cursor:pointer;transition:.15s}
+  .hist-item:hover{border-color:var(--rouge);transform:translateX(3px)}
+  .hist-item .h-calcul{font-size:13px;color:var(--gris);font-family:'Consolas',monospace}
+  .hist-item .h-res{font-size:19px;font-weight:bold;font-family:'Consolas',monospace;margin-top:2px}
+  .hist-vide{color:var(--gris);text-align:center;padding:24px;font-size:14px}
+  .hist-vide .ico{font-size:34px;margin-bottom:8px}
+
+  /* toast */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--carte);
+    border:1px solid var(--ligne);color:var(--texte);padding:11px 20px;border-radius:12px;font-size:14px;
+    opacity:0;pointer-events:none;transition:.25s;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  footer{text-align:center;padding:16px;color:var(--gris);font-size:12px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">R</div>
+  <div class="titre">
+    <h1>R Calc</h1>
+    <p id="mode-label">Mode simple</p>
+  </div>
+  <button class="mode-btn" id="btn-mode">🔬 Scientifique</button>
+</header>
+
+<div class="calc">
+  <!-- écran -->
+  <div class="ecran">
+    <div class="calcul" id="ecran-calcul"></div>
+    <div class="resultat" id="ecran-resultat">0</div>
+  </div>
+
+  <!-- clavier -->
+  <div class="clavier simple" id="clavier"></div>
+
+  <!-- historique -->
+  <div class="hist-tete">
+    <h2>🕐 Historique</h2>
+    <button class="hist-vider" id="btn-vider">Tout effacer</button>
+  </div>
+  <div class="historique" id="historique"></div>
+</div>
+
+<footer>R Calc · Entreprise R 🧮</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ CONFIG ============ */
+const HKEY="rcalc-historique";
+const MKEY="rcalc-mode";
+
+let expr="";        // l'expression en cours (texte affiché)
+let dernierEstResultat=false;  // si le dernier "=" a produit un résultat
+let mode="simple";
+
+/* ============ CLAVIERS ============ */
+const CLAVIER_SIMPLE=[
+  {t:'C',c:'eff',a:'clear'}, {t:'⌫',c:'eff',a:'back'}, {t:'%',c:'op',a:'%'}, {t:'÷',c:'op',a:'/'},
+  {t:'7',a:'7'}, {t:'8',a:'8'}, {t:'9',a:'9'}, {t:'×',c:'op',a:'*'},
+  {t:'4',a:'4'}, {t:'5',a:'5'}, {t:'6',a:'6'}, {t:'−',c:'op',a:'-'},
+  {t:'1',a:'1'}, {t:'2',a:'2'}, {t:'3',a:'3'}, {t:'+',c:'op',a:'+'},
+  {t:'±',c:'op',a:'neg'}, {t:'0',a:'0'}, {t:',',a:'.'}, {t:'=',c:'egal',a:'eq'},
+];
+const CLAVIER_SCIENTIFIQUE=[
+  {t:'sin',c:'fonc',a:'sin('}, {t:'cos',c:'fonc',a:'cos('}, {t:'tan',c:'fonc',a:'tan('}, {t:'π',c:'fonc',a:'pi'}, {t:'C',c:'eff',a:'clear'},
+  {t:'√',c:'fonc',a:'sqrt('}, {t:'x²',c:'fonc',a:'^2'}, {t:'xʸ',c:'fonc',a:'^'}, {t:'ln',c:'fonc',a:'ln('}, {t:'⌫',c:'eff',a:'back'},
+  {t:'(',c:'op',a:'('}, {t:')',c:'op',a:')'}, {t:'%',c:'op',a:'%'}, {t:'÷',c:'op',a:'/'}, {t:'×',c:'op',a:'*'},
+  {t:'7',a:'7'}, {t:'8',a:'8'}, {t:'9',a:'9'}, {t:'−',c:'op',a:'-'}, {t:'+',c:'op',a:'+'},
+  {t:'4',a:'4'}, {t:'5',a:'5'}, {t:'6',a:'6'}, {t:'±',c:'op',a:'neg'}, {t:'e',c:'fonc',a:'e'},
+  {t:'1',a:'1'}, {t:'2',a:'2'}, {t:'3',a:'3'}, {t:',',a:'.'}, {t:'!',c:'fonc',a:'fact'},
+  {t:'0',a:'0',c:'large'}, {t:'.',a:'.',c:''}, {t:'=',c:'egal',a:'eq',c2:'large'},
+];
+
+/* ============ OUTILS ============ */
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800);}
+
+/* ============ MOTEUR DE CALCUL (parseur sûr, sans eval) ============ */
+/* On transforme l'affichage en expression math, puis on l'évalue avec un vrai parseur. */
+function evaluer(entree){
+  // Tokeniser
+  let s=entree.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/,/g,'.');
+  s=s.replace(/π|pi/g,'('+Math.PI+')').replace(/(?<![a-z])e(?![a-z])/g,'('+Math.E+')');
+  let pos=0;
+  function espace(){while(s[pos]===' ')pos++;}
+  function nombre(){
+    espace();let d='';
+    while(pos<s.length&&/[0-9.]/.test(s[pos])){d+=s[pos++];}
+    if(d==='')throw new Error('nombre manquant');
+    return parseFloat(d);
+  }
+  function facteur(){
+    espace();
+    if(s[pos]==='('){pos++;let v=expression();espace();if(s[pos]!==')')throw new Error('parenthèse');pos++;return apresFacteur(v);}
+    if(s[pos]==='-'){pos++;return -facteur();}
+    if(s[pos]==='+'){pos++;return facteur();}
+    // fonctions
+    for(const [nom,fn] of Object.entries(FONCTIONS)){
+      if(s.startsWith(nom+'(',pos)){pos+=nom.length+1;let v=expression();espace();if(s[pos]!==')')throw new Error('parenthèse');pos++;return apresFacteur(fn(v));}
+    }
+    return apresFacteur(nombre());
+  }
+  // gère puissance ^ et factorielle ! collés au facteur
+  function apresFacteur(v){
+    espace();
+    if(s[pos]==='!'){pos++;return apresFacteur(factorielle(v));}
+    if(s[pos]==='^'){pos++;let e=facteur();return Math.pow(v,e);}
+    if(s[pos]==='%'){pos++;return apresFacteur(v/100);}
+    return v;
+  }
+  function terme(){
+    let v=facteur();espace();
+    while(s[pos]==='*'||s[pos]==='/'){const op=s[pos++];const d=facteur();
+      if(op==='*')v*=d;else{if(d===0)throw new Error('÷0');v/=d;}espace();}
+    return v;
+  }
+  function expression(){
+    let v=terme();espace();
+    while(s[pos]==='+'||s[pos]==='-'){const op=s[pos++];const d=terme();
+      if(op==='+')v+=d;else v-=d;espace();}
+    return v;
+  }
+  const r=expression();espace();
+  if(pos<s.length)throw new Error('syntaxe');
+  if(!isFinite(r))throw new Error('∞');
+  return r;
+}
+const FONCTIONS={
+  sin:x=>Math.sin(x*Math.PI/180), cos:x=>Math.cos(x*Math.PI/180), tan:x=>Math.tan(x*Math.PI/180),
+  sqrt:x=>{if(x<0)throw new Error('√négatif');return Math.sqrt(x);}, ln:x=>{if(x<=0)throw new Error('ln≤0');return Math.log(x);},
+};
+function factorielle(n){
+  if(n<0||n!==Math.floor(n))throw new Error('! entier≥0');
+  if(n>170)throw new Error('trop grand');
+  let r=1;for(let i=2;i<=n;i++)r*=i;return r;
+}
+function formater(n){
+  if(Number.isInteger(n))return n.toString();
+  // arrondir joliment (évite 0.1+0.2=0.30000000004)
+  let r=parseFloat(n.toPrecision(12));
+  return r.toString();
+}
+
+/* ============ SAISIE ============ */
+function appuyer(action){
+  const finOperateurs=/[+\-*/%^(]$/;
+  if(/^[0-9]$/.test(action)){                     // chiffre
+    if(dernierEstResultat){expr='';dernierEstResultat=false;}
+    expr+=action;
+  }else if(action==='.'){
+    if(dernierEstResultat){expr='0';dernierEstResultat=false;}
+    // pas deux points dans le même nombre
+    const bout=expr.split(/[+\-*/%^()]/).pop();
+    if(!bout.includes('.'))expr+=(bout===''?'0.':'.');
+  }else if(['+','-','*','/','^','%'].includes(action)){
+    dernierEstResultat=false;
+    if(expr===''&&action==='-'){expr='-';}
+    else if(expr===''){/* rien : pas d'opérateur en premier (sauf -) */}
+    else if(finOperateurs.test(expr)){expr=expr.slice(0,-1)+action;} // remplace l'opérateur
+    else expr+=action;
+  }else if(action==='('||action===')'){
+    if(dernierEstResultat&&action==='('){expr='';dernierEstResultat=false;}
+    expr+=action;
+  }else if(action==='pi'){ if(dernierEstResultat){expr='';dernierEstResultat=false;} expr+='π'; }
+  else if(action==='e'){ if(dernierEstResultat){expr='';dernierEstResultat=false;} expr+='e'; }
+  else if(action==='^2'){ expr+='^2'; dernierEstResultat=false; }
+  else if(action==='fact'){ expr+='!'; dernierEstResultat=false; }
+  else if(action.endsWith('(')){                  // fonction (sin, cos, sqrt, ln...)
+    if(dernierEstResultat){expr='';dernierEstResultat=false;}
+    expr+=action;
+  }else if(action==='clear'){ expr=''; dernierEstResultat=false; }
+  else if(action==='back'){ expr=expr.slice(0,-1); dernierEstResultat=false; }
+  else if(action==='neg'){                          // ± inverse le signe
+    try{ const v=evaluer(expr||'0'); expr=formater(-v); dernierEstResultat=false; }catch(e){}
+  }else if(action==='eq'){ calculer(); return; }
+  afficher();
+}
+
+function afficher(){
+  document.getElementById('ecran-resultat').classList.remove('err');
+  const joli=expr.replace(/\*/g,'×').replace(/\//g,'÷').replace(/-/g,'−');
+  if(dernierEstResultat){
+    // après un =, on montre le résultat en grand et le calcul au-dessus reste
+    document.getElementById('ecran-resultat').textContent=joli||'0';
+  }else{
+    document.getElementById('ecran-resultat').textContent=joli||'0';
+    document.getElementById('ecran-calcul').textContent='';
+  }
+}
+
+function calculer(){
+  if(!expr||/[+\-*/%^(]$/.test(expr)){return;}
+  try{
+    const res=evaluer(expr);
+    const resTxt=formater(res);
+    const calculJoli=expr.replace(/\*/g,'×').replace(/\//g,'÷').replace(/-/g,'−');
+    document.getElementById('ecran-calcul').textContent=calculJoli+' =';
+    document.getElementById('ecran-resultat').textContent=resTxt;
+    document.getElementById('ecran-resultat').classList.remove('err');
+    ajouterHistorique(calculJoli,resTxt);
+    expr=resTxt;
+    dernierEstResultat=true;
+  }catch(e){
+    document.getElementById('ecran-resultat').textContent='Erreur';
+    document.getElementById('ecran-resultat').classList.add('err');
+    document.getElementById('ecran-calcul').textContent=expr.replace(/\*/g,'×').replace(/\//g,'÷');
+    dernierEstResultat=false;
+    expr='';
+  }
+}
+
+/* ============ HISTORIQUE ============ */
+let historique=[];
+function chargerHistorique(){try{historique=JSON.parse(localStorage.getItem(HKEY)||'[]');}catch(e){historique=[];}}
+function sauverHistorique(){try{localStorage.setItem(HKEY,JSON.stringify(historique));}catch(e){}}
+function ajouterHistorique(calcul,res){
+  historique.unshift({calcul,res});
+  if(historique.length>50)historique=historique.slice(0,50);
+  sauverHistorique();rendreHistorique();
+}
+function rendreHistorique(){
+  const box=document.getElementById('historique');
+  if(!historique.length){box.innerHTML='<div class="hist-vide"><div class="ico">🧮</div>Aucun calcul pour l\'instant.<br>Fais ton premier calcul !</div>';return;}
+  box.innerHTML=historique.map((h,i)=>
+    '<div class="hist-item" data-res="'+h.res+'"><div class="h-calcul">'+h.calcul+' =</div><div class="h-res">'+h.res+'</div></div>'
+  ).join('');
+  box.querySelectorAll('.hist-item').forEach(el=>{
+    el.onclick=()=>{expr=el.dataset.res;dernierEstResultat=true;afficher();toast('Résultat repris');};
+  });
+}
+
+/* ============ CLAVIER RENDU ============ */
+function rendreClavier(){
+  const box=document.getElementById('clavier');
+  box.className='clavier '+mode;
+  const cfg=mode==='simple'?CLAVIER_SIMPLE:CLAVIER_SCIENTIFIQUE;
+  box.innerHTML=cfg.map(k=>{
+    let cls='touche';
+    if(k.c)cls+=' '+k.c;
+    if(k.c2)cls+=' '+k.c2;
+    return '<button class="'+cls+'" data-a="'+k.a+'">'+k.t+'</button>';
+  }).join('');
+  box.querySelectorAll('.touche').forEach(b=>{
+    b.onclick=()=>appuyer(b.dataset.a);
+  });
+}
+
+/* ============ MODE ============ */
+function basculerMode(){
+  mode=(mode==='simple')?'scientifique':'simple';
+  localStorage.setItem(MKEY,mode);
+  document.getElementById('mode-label').textContent=mode==='simple'?'Mode simple':'Mode scientifique';
+  document.getElementById('btn-mode').textContent=mode==='simple'?'🔬 Scientifique':'🧮 Simple';
+  rendreClavier();
+}
+
+/* ============ CLAVIER PHYSIQUE ============ */
+document.addEventListener('keydown',e=>{
+  const k=e.key;
+  if(/[0-9]/.test(k))appuyer(k);
+  else if(k==='.'||k===',')appuyer('.');
+  else if(k==='+'||k==='-'||k==='*'||k==='/')appuyer(k);
+  else if(k==='(')appuyer('(');
+  else if(k===')')appuyer(')');
+  else if(k==='%')appuyer('%');
+  else if(k==='^')appuyer('^');
+  else if(k==='Enter'||k==='='){e.preventDefault();appuyer('eq');}
+  else if(k==='Backspace')appuyer('back');
+  else if(k==='Escape'||k==='Delete')appuyer('clear');
+});
+
+/* ============ INIT ============ */
+function init(){
+  mode=localStorage.getItem(MKEY)||'simple';
+  document.getElementById('mode-label').textContent=mode==='simple'?'Mode simple':'Mode scientifique';
+  document.getElementById('btn-mode').textContent=mode==='simple'?'🔬 Scientifique':'🧮 Simple';
+  rendreClavier();
+  chargerHistorique();rendreHistorique();
+  afficher();
+  document.getElementById('btn-mode').onclick=basculerMode;
+  document.getElementById('btn-vider').onclick=()=>{
+    if(!historique.length){toast('Historique déjà vide');return;}
+    historique=[];sauverHistorique();rendreHistorique();toast('Historique effacé');
+  };
+}
+init();
+</script>
+</body>
+</html>
