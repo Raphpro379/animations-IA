@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>R Pub — Régie publicitaire</title>
+<style>
+  :root{
+    --rouge:#e50914;--rouge-fonce:#b0060f;--fond:#0d0d12;--fond2:#15151d;
+    --carte:#1c1c26;--ligne:#2a2a38;--texte:#f4f4f8;--gris:#8a8a9a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:var(--fond);color:var(--texte);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh;font-size:15px;line-height:1.5}
+  button{font-family:inherit}
+
+  /* ===== VERROU PDG ===== */
+  #verrou{position:fixed;inset:0;z-index:100;background:var(--fond);display:flex;
+    flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+  #verrou .logo{font-size:60px;margin-bottom:8px}
+  #verrou h1{font-size:26px;margin-bottom:4px}
+  #verrou h1 b{color:var(--rouge)}
+  #verrou p{color:var(--gris);margin-bottom:26px;max-width:320px}
+  #verrou input{width:100%;max-width:280px;background:var(--carte);border:1px solid var(--ligne);
+    color:var(--texte);padding:14px 16px;border-radius:12px;font-size:16px;text-align:center;letter-spacing:2px}
+  #verrou input:focus{outline:none;border-color:var(--rouge)}
+  #verrou button{margin-top:14px;width:100%;max-width:280px;background:var(--rouge);color:#fff;border:none;
+    padding:14px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer}
+  #verrou button:active{background:var(--rouge-fonce)}
+  #verrou .err{color:var(--rouge);font-size:13px;margin-top:12px;min-height:16px}
+
+  /* ===== APP ===== */
+  #app{display:none;max-width:680px;margin:0 auto;padding-bottom:40px}
+  #app.on{display:block}
+  header{background:linear-gradient(135deg,var(--rouge),var(--rouge-fonce));padding:18px 20px;
+    display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+  header .logo{font-size:30px}
+  header h1{flex:1;font-size:21px}
+  header .badge{font-size:11px;background:rgba(0,0,0,.25);padding:5px 10px;border-radius:20px;display:flex;align-items:center;gap:5px}
+  header .badge .pt{width:7px;height:7px;border-radius:50%;background:#f1c40f}
+  header .badge.ok .pt{background:#2ecc71}
+
+  .zone{padding:20px}
+  .titre-zone{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--gris);
+    margin:8px 0 14px;font-weight:600}
+
+  /* formulaire */
+  .champ{margin-bottom:16px}
+  .champ label{display:block;font-size:13px;color:var(--gris);margin-bottom:6px}
+  .champ input[type=text],.champ textarea,.champ select{width:100%;background:var(--carte);
+    border:1px solid var(--ligne);color:var(--texte);padding:12px 14px;border-radius:10px;font-size:15px}
+  .champ input:focus,.champ textarea:focus,.champ select:focus{outline:none;border-color:var(--rouge)}
+  .champ textarea{resize:vertical;min-height:70px}
+  .champ .aide{font-size:12px;color:var(--gris);margin-top:5px}
+  .rangee{display:flex;gap:12px}
+  .rangee .champ{flex:1}
+
+  .couleurs{display:flex;gap:10px;flex-wrap:wrap}
+  .couleurs .pastille{width:38px;height:38px;border-radius:10px;cursor:pointer;border:3px solid transparent}
+  .couleurs .pastille.sel{border-color:#fff}
+
+  .btn-publier{width:100%;background:var(--rouge);color:#fff;border:none;padding:15px;border-radius:12px;
+    font-size:16px;font-weight:600;cursor:pointer;margin-top:6px}
+  .btn-publier:active{background:var(--rouge-fonce)}
+  .btn-publier:disabled{opacity:.5}
+
+  /* aperçu */
+  .apercu-box{background:var(--fond2);border:1px dashed var(--ligne);border-radius:14px;padding:20px;margin-bottom:8px}
+  .apercu-pub{border-radius:16px;overflow:hidden;max-width:340px;margin:0 auto;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+  .apercu-pub .haut{padding:22px 20px;color:#fff;text-align:center}
+  .apercu-pub .haut .ic{font-size:38px;margin-bottom:8px}
+  .apercu-pub .haut h3{font-size:20px;margin-bottom:6px}
+  .apercu-pub .haut p{font-size:14px;opacity:.92;line-height:1.45}
+  .apercu-pub .bas{background:var(--carte);padding:14px}
+  .apercu-pub .bas .cta{display:block;background:#fff;color:#111;text-align:center;padding:12px;
+    border-radius:10px;font-weight:600;font-size:15px;text-decoration:none}
+  .apercu-pub .bas .fermer{text-align:center;color:var(--gris);font-size:13px;margin-top:10px}
+
+  /* liste des pubs publiées */
+  .pub-carte{background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:14px;
+    margin-bottom:12px;display:flex;gap:12px;align-items:center}
+  .pub-carte .past-couleur{width:44px;height:44px;border-radius:10px;flex-shrink:0}
+  .pub-carte .infos{flex:1;min-width:0}
+  .pub-carte .infos h4{font-size:15px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pub-carte .infos p{font-size:12px;color:var(--gris);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pub-carte .etat{font-size:11px;padding:3px 8px;border-radius:20px;flex-shrink:0}
+  .pub-carte .etat.active{background:rgba(46,204,113,.15);color:#2ecc71}
+  .pub-carte .etat.pause{background:rgba(241,196,15,.15);color:#f1c40f}
+  .pub-carte .actions{display:flex;gap:6px;flex-shrink:0}
+  .pub-carte .actions button{background:var(--fond2);border:1px solid var(--ligne);color:var(--texte);
+    width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:15px}
+  .pub-carte .actions button.suppr:active{color:var(--rouge)}
+  .vide{text-align:center;color:var(--gris);padding:40px 20px}
+  .vide .ic{font-size:48px;margin-bottom:12px}
+
+  .sep{height:1px;background:var(--ligne);margin:24px 0}
+
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--carte);
+    border:1px solid var(--ligne);color:var(--texte);padding:13px 22px;border-radius:12px;font-size:14px;
+    opacity:0;pointer-events:none;transition:.25s;z-index:120;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ===== VERROU PDG ===== -->
+<div id="verrou">
+  <div class="logo">📢</div>
+  <h1>R <b>Pub</b></h1>
+  <p>Régie publicitaire de l'Entreprise R. Espace réservé au PDG.</p>
+  <input type="password" id="code-pdg" placeholder="Code PDG" autocomplete="off">
+  <button id="btn-entrer">Entrer</button>
+  <div class="err" id="err-pdg"></div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+  <header>
+    <span class="logo">📢</span>
+    <h1>R Pub</h1>
+    <span class="badge" id="badge-cloud"><span class="pt"></span><span id="badge-txt">…</span></span>
+  </header>
+
+  <div class="zone">
+    <div class="titre-zone">Créer une pub</div>
+
+    <div class="champ">
+      <label>Titre de la pub</label>
+      <input type="text" id="f-titre" placeholder="Ex : Nouvelle app R Photo !" maxlength="60">
+    </div>
+
+    <div class="champ">
+      <label>Texte</label>
+      <textarea id="f-texte" placeholder="Ex : Retouche tes photos comme un pro. Disponible maintenant !" maxlength="200"></textarea>
+    </div>
+
+    <div class="rangee">
+      <div class="champ">
+        <label>Emoji / icône</label>
+        <input type="text" id="f-emoji" placeholder="📸" maxlength="4" value="🎉">
+      </div>
+      <div class="champ">
+        <label>Texte du bouton</label>
+        <input type="text" id="f-cta" placeholder="Découvrir" maxlength="24" value="Découvrir">
+      </div>
+    </div>
+
+    <div class="champ">
+      <label>Lien du bouton (vers une R app)</label>
+      <input type="text" id="f-lien" placeholder="https://raphpro379.github.io/animations-IA/UYT.html">
+      <div class="aide">Colle l'adresse de l'app à ouvrir quand on clique sur le bouton.</div>
+    </div>
+
+    <div class="champ">
+      <label>Couleur</label>
+      <div class="couleurs" id="couleurs"></div>
+    </div>
+
+    <div class="champ">
+      <label>Aperçu en direct</label>
+      <div class="apercu-box">
+        <div class="apercu-pub" id="apercu">
+          <div class="haut" id="ap-haut">
+            <div class="ic" id="ap-ic">🎉</div>
+            <h3 id="ap-titre">Titre de la pub</h3>
+            <p id="ap-texte">Ton texte apparaîtra ici…</p>
+          </div>
+          <div class="bas">
+            <a class="cta" id="ap-cta">Découvrir</a>
+            <div class="fermer">Plus tard</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-publier" id="btn-publier">📢 Publier cette pub</button>
+
+    <div class="sep"></div>
+
+    <div class="titre-zone">Pubs en ligne (<span id="nb-pubs">0</span>)</div>
+    <div id="liste-pubs"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= CONFIG ================= */
+const SHARED_CLOUD={ apiKey:"$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K", binId:"6a6b3b0df5f4af5e29d56df4" };
+const PDG_KEY="rpub-pdg-ok";
+const PDG_CODE_DEFAUT="PDG2026";
+const PDG_SECOURS="SECOURS";
+
+const COULEURS=[
+  {nom:"Rouge",v:"#e50914",v2:"#b0060f"},
+  {nom:"Bleu",v:"#2563eb",v2:"#1e40af"},
+  {nom:"Vert",v:"#16a34a",v2:"#15803d"},
+  {nom:"Violet",v:"#7c3aed",v2:"#5b21b6"},
+  {nom:"Orange",v:"#ea580c",v2:"#c2410c"},
+  {nom:"Rose",v:"#db2777",v2:"#9d174d"},
+  {nom:"Turquoise",v:"#0891b2",v2:"#0e7490"},
+  {nom:"Noir",v:"#1f2937",v2:"#111827"},
+];
+
+let pubs=[];
+let couleurSel=0;
+
+/* ================= UTILITAIRES ================= */
+function $(id){return document.getElementById(id);}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200);}
+function nouvelId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function cloudOn(){return SHARED_CLOUD.apiKey && SHARED_CLOUD.binId;}
+function echapper(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ================= CLOUD ================= */
+async function cloudLire(){
+  if(!cloudOn())return null;
+  try{
+    const r=await fetch("https://api.jsonbin.io/v3/b/"+SHARED_CLOUD.binId+"/latest",
+      {headers:{"X-Master-Key":SHARED_CLOUD.apiKey}});
+    if(!r.ok)return null;
+    const j=await r.json();
+    return j.record||null;
+  }catch(e){return null;}
+}
+async function cloudEcrire(data){
+  if(!cloudOn())return false;
+  try{
+    const r=await fetch("https://api.jsonbin.io/v3/b/"+SHARED_CLOUD.binId,
+      {method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":SHARED_CLOUD.apiKey},
+       body:JSON.stringify(data)});
+    return r.ok;
+  }catch(e){return false;}
+}
+function badge(ok){
+  const b=$('badge-cloud');b.classList.toggle('ok',ok);
+  $('badge-txt').textContent=ok?'En ligne':'Hors ligne';
+}
+
+async function chargerPubs(){
+  const rec=await cloudLire();
+  if(rec&&Array.isArray(rec.pubs)){pubs=rec.pubs;badge(true);}
+  else if(rec){pubs=[];badge(true);}
+  else{badge(false);}
+  rendreListe();
+}
+async function publierCloud(){
+  const ok=await cloudEcrire({pubs:pubs});
+  badge(ok);
+  return ok;
+}
+
+/* ================= APERÇU ================= */
+function majApercu(){
+  const c=COULEURS[couleurSel];
+  const titre=$('f-titre').value.trim()||"Titre de la pub";
+  const texte=$('f-texte').value.trim()||"Ton texte apparaîtra ici…";
+  const emoji=$('f-emoji').value.trim()||"🎉";
+  const cta=$('f-cta').value.trim()||"Découvrir";
+  $('ap-haut').style.background="linear-gradient(135deg,"+c.v+","+c.v2+")";
+  $('ap-ic').textContent=emoji;
+  $('ap-titre').textContent=titre;
+  $('ap-texte').textContent=texte;
+  $('ap-cta').textContent=cta;
+  $('ap-cta').style.color=c.v;
+}
+
+function rendreCouleurs(){
+  const box=$('couleurs');box.innerHTML='';
+  COULEURS.forEach((c,i)=>{
+    const d=document.createElement('div');
+    d.className='pastille'+(i===couleurSel?' sel':'');
+    d.style.background=c.v;d.title=c.nom;
+    d.onclick=()=>{couleurSel=i;rendreCouleurs();majApercu();};
+    box.appendChild(d);
+  });
+}
+
+/* ================= PUBLIER ================= */
+async function publier(){
+  const titre=$('f-titre').value.trim();
+  const texte=$('f-texte').value.trim();
+  if(!titre){toast('Ajoute un titre');return;}
+  if(!texte){toast('Ajoute un texte');return;}
+  const c=COULEURS[couleurSel];
+  const pub={
+    id:nouvelId(),
+    titre:titre,
+    texte:texte,
+    emoji:$('f-emoji').value.trim()||"🎉",
+    cta:$('f-cta').value.trim()||"Découvrir",
+    lien:$('f-lien').value.trim(),
+    couleur:c.v,couleur2:c.v2,
+    active:true,
+    date:Date.now()
+  };
+  const btn=$('btn-publier');btn.disabled=true;btn.textContent='Publication…';
+  pubs.unshift(pub);
+  const ok=await publierCloud();
+  btn.disabled=false;btn.textContent='📢 Publier cette pub';
+  if(ok){
+    toast('📢 Pub publiée ! Elle apparaît dans R App');
+    // réinitialiser le formulaire
+    $('f-titre').value='';$('f-texte').value='';$('f-lien').value='';
+    $('f-emoji').value='🎉';$('f-cta').value='Découvrir';couleurSel=0;
+    rendreCouleurs();majApercu();rendreListe();
+  }else{
+    pubs.shift();
+    toast('⚠️ Échec — vérifie ta connexion');
+  }
+}
+
+/* ================= LISTE ================= */
+function rendreListe(){
+  $('nb-pubs').textContent=pubs.length;
+  const box=$('liste-pubs');
+  if(!pubs.length){
+    box.innerHTML='<div class="vide"><div class="ic">📭</div>Aucune pub en ligne pour l\'instant.<br>Crée ta première pub ci-dessus !</div>';
+    return;
+  }
+  box.innerHTML=pubs.map(p=>
+    '<div class="pub-carte" data-id="'+p.id+'">'+
+      '<div class="pastcouleur pastille" style="width:44px;height:44px;border-radius:10px;flex-shrink:0;'+
+        'background:linear-gradient(135deg,'+p.couleur+','+(p.couleur2||p.couleur)+');display:flex;align-items:center;justify-content:center;font-size:22px">'+echapper(p.emoji||'🎉')+'</div>'+
+      '<div class="infos"><h4>'+echapper(p.titre)+'</h4><p>'+echapper(p.texte)+'</p></div>'+
+      '<span class="etat '+(p.active?'active':'pause')+'">'+(p.active?'En ligne':'En pause')+'</span>'+
+      '<div class="actions">'+
+        '<button class="basc" data-id="'+p.id+'" title="'+(p.active?'Mettre en pause':'Remettre en ligne')+'">'+(p.active?'⏸':'▶')+'</button>'+
+        '<button class="suppr" data-id="'+p.id+'" title="Supprimer">🗑️</button>'+
+      '</div>'+
+    '</div>'
+  ).join('');
+  box.querySelectorAll('.basc').forEach(b=>b.onclick=()=>basculer(b.dataset.id));
+  box.querySelectorAll('.suppr').forEach(b=>b.onclick=()=>supprimer(b.dataset.id));
+}
+
+async function basculer(id){
+  const p=pubs.find(x=>x.id===id);if(!p)return;
+  p.active=!p.active;
+  rendreListe();
+  const ok=await publierCloud();
+  toast(ok?(p.active?'Pub remise en ligne':'Pub mise en pause'):'⚠️ Échec');
+  if(!ok){p.active=!p.active;rendreListe();}
+}
+async function supprimer(id){
+  const av=pubs.slice();
+  pubs=pubs.filter(x=>x.id!==id);
+  rendreListe();
+  const ok=await publierCloud();
+  toast(ok?'Pub supprimée':'⚠️ Échec');
+  if(!ok){pubs=av;rendreListe();}
+}
+
+/* ================= VERROU PDG ================= */
+function pdgCodeActuel(){return localStorage.getItem('rpub-pdg-code')||PDG_CODE_DEFAUT;}
+function entrerApp(){
+  $('verrou').style.display='none';
+  $('app').classList.add('on');
+  rendreCouleurs();majApercu();chargerPubs();
+}
+function verifierPdg(){
+  const v=$('code-pdg').value.trim();
+  if(v===pdgCodeActuel()||v===PDG_SECOURS){
+    localStorage.setItem(PDG_KEY,'1');
+    entrerApp();
+  }else{
+    $('err-pdg').textContent='Code incorrect';
+    $('code-pdg').value='';
+  }
+}
+
+/* ================= INIT ================= */
+function init(){
+  rendreCouleurs();
+  // aperçu en direct
+  ['f-titre','f-texte','f-emoji','f-cta'].forEach(id=>{
+    $(id).addEventListener('input',majApercu);
+  });
+  $('btn-publier').onclick=publier;
+  $('btn-entrer').onclick=verifierPdg;
+  $('code-pdg').addEventListener('keydown',e=>{if(e.key==='Enter')verifierPdg();});
+
+  if(localStorage.getItem(PDG_KEY)==='1')entrerApp();
+}
+init();
+</script>
+</body>
+</html>
