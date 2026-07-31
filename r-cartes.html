@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Cartes — Crée tes cartes et invitations</title>
+<style>
+  :root{
+    --rouge:#e50914;
+    --rouge-fonce:#b0060f;
+    --noir:#0b0b0d;
+    --noir2:#141418;
+    --carte:#1c1c22;
+    --carte2:#24242c;
+    --texte:#f5f5f7;
+    --gris:#9a9aa5;
+    --or:#ffce3a;
+    --vert:#2ecc71;
+    --bordure:#2e2e38;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#22050a 0%,var(--noir) 55%);
+    color:var(--texte);min-height:100vh;padding-bottom:60px;
+  }
+  header{text-align:center;padding:30px 18px 10px;}
+  .logo{font-size:2.6rem;font-weight:900;letter-spacing:-1px;}
+  .logo .r{color:var(--rouge);}
+  .sous{color:var(--gris);margin-top:6px;font-size:1rem;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px;}
+
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:12px;font-weight:700;transition:.15s;}
+  button:active{transform:scale(.97);}
+  .btn-primaire{background:var(--rouge);color:#fff;padding:13px 22px;font-size:1.05rem;box-shadow:0 6px 18px rgba(229,9,20,.35);}
+  .btn-primaire:hover{background:var(--rouge-fonce);}
+  .btn-ghost{background:var(--carte);color:var(--texte);padding:12px 18px;font-size:.98rem;border:1px solid var(--bordure);}
+  .btn-ghost:hover{background:var(--carte2);}
+
+  .barre{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0 8px;}
+  .badge-premium{background:linear-gradient(135deg,#ffce3a,#ff9a1a);color:#000;padding:8px 16px;border-radius:20px;font-weight:800;font-size:.9rem;display:inline-flex;align-items:center;gap:6px;}
+  .badge-gratuit{background:var(--carte);color:var(--gris);padding:8px 16px;border-radius:20px;font-weight:700;font-size:.9rem;border:1px solid var(--bordure);}
+
+  .studio{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px;}
+  @media(max-width:760px){.studio{grid-template-columns:1fr;}}
+
+  .panneau{background:var(--carte);border:1px solid var(--bordure);border-radius:16px;padding:18px;}
+  .panneau h3{font-size:1.1rem;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+  label{display:block;font-size:.88rem;font-weight:700;margin:14px 0 6px;color:var(--gris);}
+  input,textarea,select{width:100%;background:var(--noir2);border:1px solid var(--bordure);color:var(--texte);border-radius:10px;padding:11px 13px;font-size:1rem;font-family:inherit;}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--rouge);border-color:var(--rouge);}
+  textarea{resize:vertical;min-height:70px;}
+
+  /* choix (modèles, couleurs, motifs) */
+  .choix{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+  .opt{position:relative;border:2px solid var(--bordure);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:.9rem;font-weight:600;background:var(--noir2);transition:.15s;}
+  .opt:hover{border-color:var(--gris);}
+  .opt.actif{border-color:var(--rouge);background:rgba(229,9,20,.12);}
+  .opt.verrou{opacity:.55;}
+  .opt .lock{font-size:.75rem;margin-left:4px;}
+  .pastille{width:34px;height:34px;border-radius:50%;border:2px solid var(--bordure);cursor:pointer;transition:.15s;}
+  .pastille.actif{border-color:#fff;transform:scale(1.12);}
+  .pastille.verrou{opacity:.5;}
+
+  /* aperçu carte */
+  .apercu-zone{display:flex;flex-direction:column;align-items:center;}
+  #carte{width:100%;max-width:360px;aspect-ratio:3/4;border-radius:16px;overflow:hidden;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 26px;}
+  #carte .emoji-deco{font-size:3.4rem;margin-bottom:14px;line-height:1;}
+  #carte .c-titre{font-size:1.9rem;font-weight:900;line-height:1.15;margin-bottom:14px;word-break:break-word;}
+  #carte .c-msg{font-size:1.05rem;line-height:1.5;word-break:break-word;}
+  #carte .c-sign{margin-top:18px;font-size:.95rem;font-style:italic;opacity:.9;}
+  #carte .filigrane{position:absolute;bottom:10px;right:12px;font-size:.7rem;font-weight:800;opacity:.55;letter-spacing:.5px;}
+
+  .actions-carte{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+
+  /* offre premium */
+  .promo{background:linear-gradient(135deg,rgba(255,206,58,.14),rgba(229,9,20,.1));border:1px solid rgba(255,206,58,.3);border-radius:14px;padding:16px 18px;margin-top:22px;}
+  .promo b{color:var(--or);}
+  .promo .l{color:var(--gris);font-size:.92rem;line-height:1.5;margin-top:4px;}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:24px 14px;z-index:50;}
+  .overlay.ouvert{display:flex;}
+  .modale{background:var(--noir2);border:1px solid var(--bordure);border-radius:20px;width:100%;max-width:400px;padding:26px 24px;text-align:center;}
+  .modale h2{font-size:1.4rem;margin-bottom:6px;}
+  .modale p{color:var(--gris);font-size:.94rem;margin-bottom:16px;line-height:1.5;}
+  .modale input{text-align:center;font-size:1.2rem;letter-spacing:2px;margin-bottom:14px;}
+  .m-actions{display:flex;gap:10px;}
+  .m-actions button{flex:1;padding:12px;}
+  .fermer{background:var(--carte);color:var(--gris);border:1px solid var(--bordure);}
+  .msg-err{color:#ff6b74;font-size:.9rem;margin-bottom:10px;min-height:20px;}
+  .msg-ok{color:var(--vert);font-size:.9rem;margin-bottom:10px;min-height:20px;}
+
+  /* vignettes bibliothèque */
+  .vignette{width:88px;border-radius:9px;overflow:hidden;border:1px solid var(--bordure);background:var(--noir2);cursor:pointer;position:relative;transition:.15s;}
+  .vignette:hover{border-color:var(--rouge);}
+  .vignette .mini{width:100%;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px;overflow:hidden;}
+  .vignette .mini .me{font-size:1.1rem;line-height:1;}
+  .vignette .mini .mt{font-size:.5rem;font-weight:800;line-height:1.1;margin-top:2px;word-break:break-word;}
+  .vignette .supp{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);color:#ff8a90;border:none;border-radius:50%;width:20px;height:20px;font-size:.75rem;cursor:pointer;line-height:1;padding:0;}
+  .vignette .supp:hover{background:rgba(229,9,20,.8);color:#fff;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="r">R</span> Cartes 📸</div>
+  <div class="sous">Crée de belles cartes et invitations en quelques clics</div>
+  <div class="barre">
+    <span id="statutPlan" class="badge-gratuit">🆓 Version gratuite</span>
+    <button class="btn-ghost" id="btnPremium" onclick="ouvrirPremium()">⭐ Passer Premium</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="studio">
+
+    <!-- PANNEAU RÉGLAGES -->
+    <div class="panneau">
+      <h3>✏️ Ta carte</h3>
+
+      <label>Type de carte</label>
+      <div class="choix" id="types"></div>
+
+      <label>Titre</label>
+      <input id="fTitre" value="Joyeux Anniversaire !" maxlength="40" oninput="rendre()">
+
+      <label>Message</label>
+      <textarea id="fMsg" maxlength="200" oninput="rendre()">Passe une journée magique remplie de bonheur et de surprises !</textarea>
+
+      <label>Signature</label>
+      <input id="fSign" value="Avec amour" maxlength="40" oninput="rendre()">
+
+      <label>Modèle (fond)</label>
+      <div class="choix" id="modeles"></div>
+
+      <label>Couleur du texte</label>
+      <div class="choix" id="couleurs"></div>
+
+      <label>Décoration (emoji)</label>
+      <div class="choix" id="decos"></div>
+    </div>
+
+    <!-- PANNEAU APERÇU -->
+    <div class="panneau apercu-zone">
+      <h3 style="align-self:flex-start;">👁️ Aperçu</h3>
+      <div id="carte"></div>
+      <div class="actions-carte">
+        <button class="btn-primaire" onclick="telecharger()">📥 Télécharger</button>
+        <button class="btn-ghost" onclick="enregistrerBiblio()">📚 Enregistrer</button>
+        <button class="btn-ghost" id="btnImprimer" onclick="imprimer()">🖨️ Imprimer <span id="lockImp" style="color:var(--or)">🔒</span></button>
+      </div>
+
+      <div id="biblioBox" style="width:100%;margin-top:20px;display:none;">
+        <h3 style="font-size:1rem;margin-bottom:10px;">📚 Ma bibliothèque <span id="cptBiblio" style="color:var(--gris);font-weight:600;"></span></h3>
+        <div id="biblioListe" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
+      </div>
+
+      <div class="promo" id="promoBox">
+        <b>⭐ Passe en Premium !</b>
+        <div class="l">Débloque <b>tous</b> les modèles, toutes les couleurs, plein de décos, et enlève le petit logo « R Cartes » sur ta carte. Demande ton code au PDG !</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALE PREMIUM -->
+<div class="overlay" id="overlayPrem">
+  <div class="modale">
+    <h2>⭐ Débloquer Premium</h2>
+    <p>Entre ton code Premium (donné par le PDG après paiement) pour tout débloquer.</p>
+    <div class="msg-err" id="premErr"></div>
+    <input id="fCode" placeholder="CODE" maxlength="20" oninput="document.getElementById('premErr').textContent=''">
+    <div class="m-actions">
+      <button class="fermer" onclick="fermerPremium()">Annuler</button>
+      <button class="btn-primaire" onclick="validerCode()">Débloquer</button>
+    </div>
+    <p style="margin-top:16px;font-size:.85rem;">Pas de code ? Écris au PDG dans <b style="color:var(--or)">R Chat</b> 💬 ou appelle le <b style="color:var(--or)">06 76 64 74 81</b>.</p>
+  </div>
+</div>
+
+<script>
+/* ================= PREMIUM ================= */
+const CODE_PREMIUM = "RCARTES-VIP";   // ← le code que tu donnes aux clients qui paient
+let premium = localStorage.getItem("rcartes_premium")==="1";
+
+/* ================= DONNÉES ================= */
+/* free:true = dispo en gratuit ; sinon réservé premium */
+const TYPES = [
+  {id:"anniv", label:"🎂 Anniversaire", titre:"Joyeux Anniversaire !", emoji:"🎂", free:true},
+  {id:"invit", label:"🎉 Invitation", titre:"Tu es invité(e) !", emoji:"🎉", free:true},
+  {id:"merci", label:"💐 Merci", titre:"Merci beaucoup !", emoji:"💐", free:true},
+  {id:"fete", label:"🎊 Fête", titre:"On fait la fête !", emoji:"🎊", free:false},
+  {id:"noel", label:"🎄 Noël", titre:"Joyeux Noël !", emoji:"🎄", free:false},
+  {id:"nouvelan", label:"🎆 Nouvel An", titre:"Bonne Année !", emoji:"🎆", free:false},
+  {id:"amour", label:"❤️ Amour", titre:"Je t'aime", emoji:"❤️", free:false},
+  {id:"felic", label:"🏆 Félicitations", titre:"Félicitations !", emoji:"🏆", free:false},
+  {id:"retab", label:"🌷 Bon rétablissement", titre:"Prompt rétablissement", emoji:"🌷", free:false},
+];
+
+const MODELES = [
+  {id:"corail", label:"Corail", bg:"linear-gradient(135deg,#ff6a88,#ff99ac)", free:true},
+  {id:"ocean", label:"Océan", bg:"linear-gradient(135deg,#2193b0,#6dd5ed)", free:true},
+  {id:"nuit", label:"Nuit", bg:"linear-gradient(135deg,#232526,#414345)", free:true},
+  {id:"or", label:"Doré", bg:"linear-gradient(135deg,#f7971e,#ffd200)", free:false},
+  {id:"foret", label:"Forêt", bg:"linear-gradient(135deg,#134e5e,#71b280)", free:false},
+  {id:"violet", label:"Violet", bg:"linear-gradient(135deg,#8e2de2,#4a00e0)", free:false},
+  {id:"rose", label:"Rose", bg:"linear-gradient(135deg,#ee9ca7,#ffdde1)", free:false},
+  {id:"feu", label:"Feu", bg:"linear-gradient(135deg,#f12711,#f5af19)", free:false},
+  {id:"menthe", label:"Menthe", bg:"linear-gradient(135deg,#00b4db,#0083b0)", free:false},
+  {id:"noelbg", label:"Noël", bg:"linear-gradient(135deg,#c31432,#240b36)", free:false},
+];
+
+const COULEURS = [
+  {id:"blanc", c:"#ffffff", free:true},
+  {id:"noir", c:"#1a1a1a", free:true},
+  {id:"or", c:"#ffce3a", free:false},
+  {id:"rose", c:"#ff6ab0", free:false},
+  {id:"bleu", c:"#5ad1ff", free:false},
+  {id:"vert", c:"#7dffa0", free:false},
+];
+
+const DECOS = [
+  {id:"auto", label:"Auto", emoji:"", free:true},
+  {id:"aucun", label:"Aucun", emoji:"—", free:true},
+  {id:"star", label:"⭐", emoji:"⭐", free:false},
+  {id:"heart", label:"❤️", emoji:"❤️", free:false},
+  {id:"party", label:"🎉", emoji:"🎉", free:false},
+  {id:"flower", label:"🌸", emoji:"🌸", free:false},
+  {id:"gift", label:"🎁", emoji:"🎁", free:false},
+  {id:"balloon", label:"🎈", emoji:"🎈", free:false},
+];
+
+/* ================= ÉTAT ================= */
+let sel = { type:"anniv", modele:"corail", couleur:"blanc", deco:"auto" };
+
+/* ================= RENDU DES CHOIX ================= */
+function dispo(item){ return premium || item.free; }
+
+function renderChoix(){
+  // types
+  document.getElementById("types").innerHTML = TYPES.map(t=>
+    `<div class="opt ${sel.type===t.id?'actif':''} ${dispo(t)?'':'verrou'}" onclick="choisir('type','${t.id}')">${t.label}${dispo(t)?'':'<span class="lock">🔒</span>'}</div>`
+  ).join("");
+  // modèles
+  document.getElementById("modeles").innerHTML = MODELES.map(m=>
+    `<div class="opt ${sel.modele===m.id?'actif':''} ${dispo(m)?'':'verrou'}" onclick="choisir('modele','${m.id}')">${m.label}${dispo(m)?'':'<span class="lock">🔒</span>'}</div>`
+  ).join("");
+  // couleurs
+  document.getElementById("couleurs").innerHTML = COULEURS.map(c=>
+    `<div class="pastille ${sel.couleur===c.id?'actif':''} ${dispo(c)?'':'verrou'}" style="background:${c.c}" title="${dispo(c)?'':'Premium'}" onclick="choisir('couleur','${c.id}')"></div>`
+  ).join("");
+  // décos
+  document.getElementById("decos").innerHTML = DECOS.map(d=>
+    `<div class="opt ${sel.deco===d.id?'actif':''} ${dispo(d)?'':'verrou'}" onclick="choisir('deco','${d.id}')">${d.label}${dispo(d)?'':'<span class="lock">🔒</span>'}</div>`
+  ).join("");
+}
+
+function choisir(cat, id){
+  const listes = {type:TYPES, modele:MODELES, couleur:COULEURS, deco:DECOS};
+  const item = listes[cat].find(x=>x.id===id);
+  if(!dispo(item)){ ouvrirPremium(); return; }
+  sel[cat] = id;
+  if(cat==="type"){
+    // pré-remplit titre + emoji selon le type
+    document.getElementById("fTitre").value = item.titre;
+  }
+  renderChoix();
+  rendre();
+}
+
+/* ================= RENDU CARTE ================= */
+function rendre(){
+  const type = TYPES.find(t=>t.id===sel.type);
+  const modele = MODELES.find(m=>m.id===sel.modele);
+  const couleur = COULEURS.find(c=>c.id===sel.couleur);
+  const deco = DECOS.find(d=>d.id===sel.deco);
+
+  let emoji = "";
+  if(deco.id==="auto") emoji = type.emoji;
+  else if(deco.id==="aucun") emoji = "";
+  else emoji = deco.emoji;
+
+  const titre = document.getElementById("fTitre").value || "";
+  const msg = document.getElementById("fMsg").value || "";
+  const sign = document.getElementById("fSign").value || "";
+
+  const carte = document.getElementById("carte");
+  carte.style.background = modele.bg;
+  carte.style.color = couleur.c;
+  carte.innerHTML = `
+    ${emoji?`<div class="emoji-deco">${emoji}</div>`:""}
+    <div class="c-titre">${echapper(titre)}</div>
+    <div class="c-msg">${echapper(msg)}</div>
+    ${sign?`<div class="c-sign">${echapper(sign)}</div>`:""}
+    ${premium?"":`<div class="filigrane">✦ R Cartes</div>`}
+  `;
+}
+function echapper(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>"); }
+
+/* ================= TÉLÉCHARGEMENT ================= */
+function telecharger(){
+  const type = TYPES.find(t=>t.id===sel.type);
+  const modele = MODELES.find(m=>m.id===sel.modele);
+  const couleur = COULEURS.find(c=>c.id===sel.couleur);
+  const deco = DECOS.find(d=>d.id===sel.deco);
+  let emoji = deco.id==="auto"?type.emoji:(deco.id==="aucun"?"":deco.emoji);
+
+  const W=720, H=960;
+  const cv=document.createElement("canvas"); cv.width=W; cv.height=H;
+  const ctx=cv.getContext("2d");
+
+  // fond dégradé (on lit les 2 couleurs du gradient)
+  const cols = modele.bg.match(/#[0-9a-f]{6}/gi) || ["#333","#111"];
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,cols[0]); g.addColorStop(1,cols[1]||cols[0]);
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+  ctx.fillStyle=couleur.c;
+  ctx.textAlign="center";
+
+  let y=H/2-160;
+  if(emoji){ ctx.font="130px serif"; ctx.fillText(emoji,W/2,y); y+=110; }
+
+  // titre (avec retour à la ligne auto)
+  ctx.font="bold 62px 'Segoe UI',sans-serif";
+  y = wrapText(ctx, document.getElementById("fTitre").value, W/2, y+50, W-120, 70);
+
+  // message
+  ctx.font="34px 'Segoe UI',sans-serif";
+  y = wrapText(ctx, document.getElementById("fMsg").value, W/2, y+40, W-140, 46);
+
+  // signature
+  const sign=document.getElementById("fSign").value;
+  if(sign){ ctx.font="italic 32px 'Segoe UI',sans-serif"; ctx.fillText(sign,W/2,y+50); }
+
+  // filigrane si gratuit
+  if(!premium){
+    ctx.font="bold 22px 'Segoe UI',sans-serif";
+    ctx.fillStyle=couleur.c; ctx.globalAlpha=0.55;
+    ctx.textAlign="right"; ctx.fillText("✦ R Cartes", W-24, H-24);
+    ctx.globalAlpha=1;
+  }
+
+  const a=document.createElement("a");
+  a.download = "carte-R-"+sel.type+".png";
+  a.href = cv.toDataURL("image/png");
+  a.click();
+}
+function wrapText(ctx, text, x, y, maxW, lh){
+  const mots=(text||"").split(" ");
+  let ligne="";
+  for(const mot of mots){
+    const test=ligne+mot+" ";
+    if(ctx.measureText(test).width>maxW && ligne){
+      ctx.fillText(ligne.trim(),x,y); ligne=mot+" "; y+=lh;
+    }else ligne=test;
+  }
+  if(ligne.trim()){ ctx.fillText(ligne.trim(),x,y); y+=lh; }
+  return y;
+}
+
+/* ================= PREMIUM ================= */
+function ouvrirPremium(){
+  if(premium){ alert("Tu es déjà Premium ! ⭐"); return; }
+  document.getElementById("premErr").textContent="";
+  document.getElementById("fCode").value="";
+  document.getElementById("overlayPrem").classList.add("ouvert");
+}
+function fermerPremium(){ document.getElementById("overlayPrem").classList.remove("ouvert"); }
+function validerCode(){
+  const code=document.getElementById("fCode").value.trim().toUpperCase();
+  if(code===CODE_PREMIUM){
+    premium=true;
+    localStorage.setItem("rcartes_premium","1");
+    fermerPremium();
+    majPlan();
+    majBoutonImprimer();
+    renderChoix(); rendre();
+    alert("🎉 Premium débloqué ! Tous les modèles et couleurs sont à toi, et le logo a disparu !");
+  }else{
+    document.getElementById("premErr").textContent="Code incorrect ❌";
+  }
+}
+function majPlan(){
+  const b=document.getElementById("statutPlan");
+  if(premium){
+    b.className="badge-premium"; b.innerHTML="⭐ Premium activé";
+    document.getElementById("btnPremium").style.display="none";
+    document.getElementById("promoBox").style.display="none";
+  }else{
+    b.className="badge-gratuit"; b.textContent="🆓 Version gratuite";
+  }
+}
+
+/* ================= BIBLIOTHÈQUE (gratuit) ================= */
+function chargerBiblio(){
+  try{ return JSON.parse(localStorage.getItem("rcartes_biblio")||"[]"); }catch(e){ return []; }
+}
+function sauverBiblio(liste){ localStorage.setItem("rcartes_biblio", JSON.stringify(liste)); }
+
+function enregistrerBiblio(){
+  const liste = chargerBiblio();
+  liste.unshift({
+    id:"c"+Date.now(),
+    sel:{...sel},
+    titre:document.getElementById("fTitre").value,
+    msg:document.getElementById("fMsg").value,
+    sign:document.getElementById("fSign").value
+  });
+  if(liste.length>30) liste.pop(); // limite raisonnable
+  sauverBiblio(liste);
+  renderBiblio();
+  alert("📚 Carte enregistrée dans ta bibliothèque !");
+}
+
+function renderBiblio(){
+  const liste = chargerBiblio();
+  const box = document.getElementById("biblioBox");
+  const l = document.getElementById("biblioListe");
+  document.getElementById("cptBiblio").textContent = liste.length ? "("+liste.length+")" : "";
+  if(liste.length===0){ box.style.display="none"; return; }
+  box.style.display="block";
+  l.innerHTML = liste.map(c=>{
+    const type = TYPES.find(t=>t.id===c.sel.type)||TYPES[0];
+    const modele = MODELES.find(m=>m.id===c.sel.modele)||MODELES[0];
+    const couleur = COULEURS.find(x=>x.id===c.sel.couleur)||COULEURS[0];
+    const deco = DECOS.find(d=>d.id===c.sel.deco)||DECOS[0];
+    let emoji = deco.id==="auto"?type.emoji:(deco.id==="aucun"?"":deco.emoji);
+    return `<div class="vignette" onclick="rouvrir('${c.id}')" title="Rouvrir cette carte">
+      <div class="mini" style="background:${modele.bg};color:${couleur.c}">
+        ${emoji?`<div class="me">${emoji}</div>`:""}
+        <div class="mt">${echapper((c.titre||"").slice(0,30))}</div>
+      </div>
+      <button class="supp" onclick="event.stopPropagation();supprimerBiblio('${c.id}')">✕</button>
+    </div>`;
+  }).join("");
+}
+
+function rouvrir(id){
+  const c = chargerBiblio().find(x=>x.id===id);
+  if(!c) return;
+  // vérifie que les éléments premium sont dispo, sinon retombe sur gratuit
+  const okType = TYPES.find(t=>t.id===c.sel.type); 
+  sel = {...c.sel};
+  document.getElementById("fTitre").value = c.titre||"";
+  document.getElementById("fMsg").value = c.msg||"";
+  document.getElementById("fSign").value = c.sign||"";
+  renderChoix();
+  rendre();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function supprimerBiblio(id){
+  if(!confirm("Supprimer cette carte de ta bibliothèque ?")) return;
+  sauverBiblio(chargerBiblio().filter(c=>c.id!==id));
+  renderBiblio();
+}
+
+/* ================= IMPRIMER (premium) ================= */
+function imprimer(){
+  if(!premium){ ouvrirPremium(); return; }
+  const type = TYPES.find(t=>t.id===sel.type);
+  const modele = MODELES.find(m=>m.id===sel.modele);
+  const couleur = COULEURS.find(c=>c.id===sel.couleur);
+  const deco = DECOS.find(d=>d.id===sel.deco);
+  let emoji = deco.id==="auto"?type.emoji:(deco.id==="aucun"?"":deco.emoji);
+  const titre=echapper(document.getElementById("fTitre").value);
+  const msg=echapper(document.getElementById("fMsg").value);
+  const sign=echapper(document.getElementById("fSign").value);
+
+  const w=window.open("","_blank");
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Carte R</title>
+  <style>
+    @page{margin:0;}
+    body{margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Segoe UI',sans-serif;}
+    .carte{width:14cm;height:18.66cm;background:${modele.bg};color:${couleur.c};
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2cm;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .e{font-size:3.5cm;margin-bottom:.6cm;}
+    .t{font-size:1.4cm;font-weight:900;line-height:1.15;margin-bottom:.6cm;}
+    .m{font-size:.7cm;line-height:1.5;}
+    .s{margin-top:.8cm;font-style:italic;font-size:.6cm;}
+  </style></head><body>
+    <div class="carte">
+      ${emoji?`<div class="e">${emoji}</div>`:""}
+      <div class="t">${titre}</div>
+      <div class="m">${msg}</div>
+      ${sign?`<div class="s">${sign}</div>`:""}
+    </div>
+    <script>window.onload=function(){window.print();}<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+/* met à jour le cadenas du bouton imprimer selon le plan */
+function majBoutonImprimer(){
+  const lock = document.getElementById("lockImp");
+  if(lock) lock.style.display = premium ? "none" : "inline";
+}
+
+/* ================= INIT ================= */
+majPlan();
+majBoutonImprimer();
+renderChoix();
+rendre();
+renderBiblio();
+</script>
+</body>
+</html>
