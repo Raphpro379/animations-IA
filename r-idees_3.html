@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Idées — La boîte à idées de l'Entreprise R</title>
+<style>
+  :root{
+    --rouge:#e50914;
+    --rouge-fonce:#b0060f;
+    --noir:#0b0b0d;
+    --noir2:#141418;
+    --carte:#1c1c22;
+    --carte2:#24242c;
+    --texte:#f5f5f7;
+    --gris:#9a9aa5;
+    --or:#ffce3a;
+    --vert:#2ecc71;
+    --orange:#f39c12;
+    --bordure:#2e2e38;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#22050a 0%,var(--noir) 55%);
+    color:var(--texte);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  header{
+    text-align:center;
+    padding:34px 18px 22px;
+  }
+  .logo{
+    font-size:2.6rem;
+    font-weight:900;
+    letter-spacing:-1px;
+  }
+  .logo .r{color:var(--rouge);}
+  .sous{color:var(--gris);margin-top:6px;font-size:1rem;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px;}
+
+  /* Barre d'actions */
+  .barre{
+    display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+    margin:8px 0 26px;
+  }
+  button{
+    font-family:inherit;cursor:pointer;border:none;border-radius:12px;
+    font-weight:700;transition:.15s;
+  }
+  button:active{transform:scale(.97);}
+  .btn-primaire{
+    background:var(--rouge);color:#fff;padding:13px 22px;font-size:1.05rem;
+    box-shadow:0 6px 18px rgba(229,9,20,.35);
+  }
+  .btn-primaire:hover{background:var(--rouge-fonce);}
+  .btn-ghost{
+    background:var(--carte);color:var(--texte);padding:13px 20px;font-size:1rem;
+    border:1px solid var(--bordure);
+  }
+  .btn-ghost:hover{background:var(--carte2);}
+
+  /* Filtres */
+  .filtres{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:22px;}
+  .chip{
+    background:var(--carte);color:var(--gris);border:1px solid var(--bordure);
+    padding:8px 15px;border-radius:20px;font-size:.9rem;font-weight:600;
+  }
+  .chip.actif{background:var(--rouge);color:#fff;border-color:var(--rouge);}
+
+  /* Grille d'idées */
+  .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+  .idee{
+    background:var(--carte);border:1px solid var(--bordure);border-radius:16px;
+    overflow:hidden;display:flex;flex-direction:column;
+  }
+  .idee-img{width:100%;height:150px;object-fit:cover;background:var(--noir2);display:block;}
+  .idee-corps{padding:15px 16px 16px;flex:1;display:flex;flex-direction:column;}
+  .idee-cat{
+    display:inline-block;font-size:.72rem;font-weight:800;text-transform:uppercase;
+    letter-spacing:.5px;color:var(--rouge);margin-bottom:7px;
+  }
+  .idee-titre{font-size:1.18rem;font-weight:800;line-height:1.25;margin-bottom:7px;}
+  .idee-desc{color:var(--gris);font-size:.94rem;line-height:1.45;flex:1;}
+  .idee-bas{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px;}
+  .idee-auteur{font-size:.82rem;color:var(--gris);}
+  .vote{
+    display:flex;align-items:center;gap:8px;background:var(--noir2);
+    border:1px solid var(--bordure);border-radius:22px;padding:6px 6px 6px 14px;
+  }
+  .vote b{font-size:1rem;min-width:14px;text-align:center;}
+  .vote button{
+    background:var(--rouge);color:#fff;width:34px;height:34px;border-radius:50%;
+    font-size:1.1rem;line-height:1;display:flex;align-items:center;justify-content:center;
+  }
+  .vote button.vote-fait{background:var(--vert);}
+
+  /* Statut */
+  .statut{
+    display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:800;
+    padding:4px 10px;border-radius:20px;margin-top:10px;width:fit-content;
+  }
+  .st-attente{background:#2a2a33;color:var(--gris);}
+  .st-cours{background:rgba(243,156,18,.18);color:var(--orange);}
+  .st-acceptee{background:rgba(46,204,113,.18);color:var(--vert);}
+  .st-refusee{background:rgba(229,9,20,.18);color:#ff6b74;}
+
+  .admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+  .admin-actions button{font-size:.78rem;padding:7px 10px;border-radius:9px;background:var(--carte2);color:var(--texte);border:1px solid var(--bordure);}
+  .admin-actions button:hover{background:#33333d;}
+  .admin-actions .del{background:rgba(229,9,20,.15);color:#ff6b74;border-color:rgba(229,9,20,.3);}
+
+  .vide{text-align:center;color:var(--gris);padding:60px 20px;font-size:1.05rem;}
+
+  /* Modale */
+  .overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);
+    display:none;align-items:flex-start;justify-content:center;padding:24px 14px;z-index:50;overflow-y:auto;
+  }
+  .overlay.ouvert{display:flex;}
+  .modale{
+    background:var(--noir2);border:1px solid var(--bordure);border-radius:20px;
+    width:100%;max-width:480px;padding:26px 24px;
+  }
+  .modale h2{font-size:1.5rem;margin-bottom:4px;}
+  .modale .m-sous{color:var(--gris);font-size:.92rem;margin-bottom:20px;}
+  label{display:block;font-size:.9rem;font-weight:700;margin:16px 0 7px;}
+  input,textarea,select{
+    width:100%;background:var(--carte);border:1px solid var(--bordure);color:var(--texte);
+    border-radius:11px;padding:12px 14px;font-size:1rem;font-family:inherit;
+  }
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--rouge);border-color:var(--rouge);}
+  textarea{resize:vertical;min-height:80px;}
+  .apercu-img{margin-top:10px;width:100%;height:140px;object-fit:cover;border-radius:11px;display:none;border:1px solid var(--bordure);}
+  .m-actions{display:flex;gap:10px;margin-top:24px;}
+  .m-actions button{flex:1;padding:13px;font-size:1rem;}
+  .fermer{background:var(--carte);color:var(--gris);border:1px solid var(--bordure);}
+
+  .etat{text-align:center;color:var(--gris);font-size:.85rem;margin:14px 0;}
+  .pill-pdg{background:var(--or);color:#000;}
+  .pill-pdg:hover{background:#e6b800;}
+
+  @media(max-width:520px){
+    .logo{font-size:2.1rem;}
+    .grille{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="r">R</span> Idées 💡</div>
+  <div class="sous">Propose tes idées d'apps pour l'Entreprise R — et vote pour tes préférées !</div>
+</header>
+
+<div class="wrap">
+  <div class="barre">
+    <button class="btn-primaire" onclick="ouvrirAjout()">➕ Proposer une idée</button>
+    <button class="btn-ghost pill-pdg" id="btnPDG" onclick="basculerPDG()">👑 Mode PDG</button>
+    <button class="btn-ghost" id="btnReglages" onclick="ouvrirReglages()">⚙️ Réglages</button>
+  </div>
+
+  <div class="filtres" id="filtres"></div>
+
+  <div class="etat" id="etat">Chargement des idées… ☁️</div>
+  <div class="grille" id="grille"></div>
+</div>
+
+<!-- MODALE AJOUT -->
+<div class="overlay" id="overlay">
+  <div class="modale">
+    <h2>💡 Nouvelle idée</h2>
+    <div class="m-sous">Décris l'app que tu aimerais voir dans R App !</div>
+
+    <label>Titre de l'app *</label>
+    <input id="fTitre" placeholder="Ex : R Météo" maxlength="50">
+
+    <label>Catégorie *</label>
+    <select id="fCat">
+      <option>🎮 Jeu</option>
+      <option>🛠️ Outil</option>
+      <option>🎬 Divertissement</option>
+      <option>📚 Apprendre</option>
+      <option>💬 Communication</option>
+      <option>🎨 Créatif</option>
+      <option>💰 Argent / Business</option>
+      <option>✨ Autre</option>
+    </select>
+
+    <label>Description *</label>
+    <textarea id="fDesc" placeholder="Explique à quoi sert ton app et pourquoi elle serait géniale…" maxlength="400"></textarea>
+
+    <label>Ton nom (ou pseudo) *</label>
+    <input id="fNom" placeholder="Ex : Lucas" maxlength="30">
+
+    <label>Une image (facultatif) 🖼️</label>
+    <input type="file" id="fImg" accept="image/*" onchange="chargerImage(event)">
+    <img class="apercu-img" id="apercu">
+
+    <div class="m-actions">
+      <button class="fermer" onclick="fermerAjout()">Annuler</button>
+      <button class="btn-primaire" onclick="envoyerIdee()">Envoyer 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE RÉGLAGES (protégée par code PDG) -->
+<div class="overlay" id="overlayReg">
+  <div class="modale">
+    <h2>⚙️ Réglages</h2>
+    <div class="m-sous">Synchronisation cloud — réservé au PDG.</div>
+
+    <label>☁️ Clé de synchro (X-Master-Key)</label>
+    <input id="rApiKey" placeholder="$2a$10$..." autocomplete="off">
+
+    <label>Identifiant de base (auto)</label>
+    <input id="rBinId" placeholder="se remplit tout seul après l'activation">
+
+    <div class="etat" id="regEtat" style="margin:14px 0 0;display:none;"></div>
+
+    <div class="m-actions">
+      <button class="fermer" onclick="fermerReglages()">Fermer</button>
+      <button class="btn-primaire" onclick="activerSync()">☁️ Activer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= CONFIG CLOUD ================= */
+/* R Idées a sa PROPRE base (séparée de CinéèR, R Radio, R Chat...).
+   Au 1er lancement, si binId est vide, l'app crée automatiquement sa base
+   et affiche le nouvel identifiant à figer ici. */
+const SHARED_CLOUD = {
+  apiKey: "$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K",
+  binId: "6a6c439ef5f4af5e29d8dcd8"
+};
+const API = "https://api.jsonbin.io/v3/b";
+const CFG_KEY = "ridees-cloud-cfg";
+let cloud = { apiKey: SHARED_CLOUD.apiKey, binId: SHARED_CLOUD.binId };
+/* le binId figé a toujours priorité ; sinon on récupère celui créé localement */
+if(!cloud.binId){
+  try{
+    const c = JSON.parse(localStorage.getItem(CFG_KEY)||"{}");
+    if(c.binId) cloud.binId = c.binId;
+  }catch(e){}
+}
+
+const CODE_PDG = "PDG2026";
+
+let idees = [];
+let modePDG = false;
+let filtreActif = "Toutes";
+let imageBase64 = "";
+
+/* Identité locale pour empêcher de voter deux fois */
+let monID = localStorage.getItem("ridees_id");
+if(!monID){ monID = "u"+Math.random().toString(36).slice(2,10); localStorage.setItem("ridees_id", monID); }
+let mesVotes = JSON.parse(localStorage.getItem("ridees_votes")||"[]");
+
+const CATS = ["Toutes","🎮 Jeu","🛠️ Outil","🎬 Divertissement","📚 Apprendre","💬 Communication","🎨 Créatif","💰 Argent / Business","✨ Autre"];
+
+/* ================= STOCKAGE ================= */
+function saveCloudCfg(){ try{ localStorage.setItem(CFG_KEY, JSON.stringify({binId:cloud.binId})); }catch(e){} }
+
+/* Crée la base R Idées si elle n'existe pas encore */
+async function creerBase(){
+  const r = await fetch(API, {
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Master-Key":cloud.apiKey,"X-Bin-Name":"R-Idees","X-Bin-Private":"false"},
+    body:JSON.stringify({idees:[]})
+  });
+  if(!r.ok) throw new Error("création base impossible");
+  const d = await r.json();
+  cloud.binId = d.metadata.id;
+  saveCloudCfg();
+}
+
+async function chargerIdees(){
+  try{
+    if(!cloud.binId){ await creerBase(); idees=[]; return; }
+    const r = await fetch(API+"/"+cloud.binId+"/latest", {headers:{"X-Master-Key":cloud.apiKey}});
+    if(r.ok){ const d = await r.json(); idees = d.record.idees || []; return; }
+    throw new Error("cloud indispo");
+  }catch(e){
+    idees = JSON.parse(localStorage.getItem("ridees_data")||"[]");
+  }
+}
+async function sauverIdees(){
+  localStorage.setItem("ridees_data", JSON.stringify(idees));
+  try{
+    if(!cloud.binId) return;
+    await fetch(API+"/"+cloud.binId, {
+      method:"PUT",
+      headers:{"Content-Type":"application/json","X-Master-Key":cloud.apiKey},
+      body:JSON.stringify({idees})
+    });
+  }catch(e){/* le local a déjà sauvegardé */}
+}
+
+/* ================= AFFICHAGE ================= */
+function renderFiltres(){
+  const f = document.getElementById("filtres");
+  f.innerHTML = CATS.map(c=>
+    `<div class="chip ${c===filtreActif?'actif':''}" onclick="setFiltre('${c.replace(/'/g,"\\'")}')">${c}</div>`
+  ).join("");
+}
+function setFiltre(c){ filtreActif=c; renderFiltres(); renderIdees(); }
+
+const STATUTS = {
+  attente:{txt:"⏳ En attente",cls:"st-attente"},
+  cours:{txt:"🔧 En cours",cls:"st-cours"},
+  acceptee:{txt:"✅ Acceptée",cls:"st-acceptee"},
+  refusee:{txt:"❌ Refusée",cls:"st-refusee"}
+};
+
+function renderIdees(){
+  const g = document.getElementById("grille");
+  let liste = [...idees];
+  if(filtreActif!=="Toutes") liste = liste.filter(i=>i.cat===filtreActif);
+  liste.sort((a,b)=> (b.votes||0)-(a.votes||0));
+
+  if(liste.length===0){
+    g.innerHTML = `<div class="vide">Aucune idée pour l'instant.<br>Sois le premier à en proposer une ! 💡</div>`;
+    return;
+  }
+
+  g.innerHTML = liste.map(i=>{
+    const aVote = mesVotes.includes(i.id);
+    const st = STATUTS[i.statut||"attente"];
+    return `
+    <div class="idee">
+      ${i.img ? `<img class="idee-img" src="${i.img}" alt="">` : ""}
+      <div class="idee-corps">
+        <span class="idee-cat">${i.cat||""}</span>
+        <div class="idee-titre">${echapper(i.titre)}</div>
+        <div class="idee-desc">${echapper(i.desc)}</div>
+        <span class="statut ${st.cls}">${st.txt}</span>
+        <div class="idee-bas">
+          <span class="idee-auteur">par ${echapper(i.nom||"Anonyme")}</span>
+          <div class="vote">
+            <b>${i.votes||0}</b>
+            <button class="${aVote?'vote-fait':''}" onclick="voter('${i.id}')" title="J'aime cette idée">👍</button>
+          </div>
+        </div>
+        ${modePDG ? renderAdmin(i) : ""}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderAdmin(i){
+  return `<div class="admin-actions">
+    <button onclick="setStatut('${i.id}','cours')">🔧 En cours</button>
+    <button onclick="setStatut('${i.id}','acceptee')">✅ Accepter</button>
+    <button onclick="setStatut('${i.id}','refusee')">❌ Refuser</button>
+    <button onclick="setStatut('${i.id}','attente')">↩️ Attente</button>
+    <button class="del" onclick="supprimer('${i.id}')">🗑️ Suppr.</button>
+  </div>`;
+}
+
+function echapper(t){
+  return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+/* ================= ACTIONS CLIENT ================= */
+function ouvrirAjout(){ document.getElementById("overlay").classList.add("ouvert"); }
+function fermerAjout(){
+  document.getElementById("overlay").classList.remove("ouvert");
+  document.getElementById("fTitre").value="";
+  document.getElementById("fDesc").value="";
+  document.getElementById("fNom").value="";
+  document.getElementById("fImg").value="";
+  document.getElementById("apercu").style.display="none";
+  imageBase64="";
+}
+
+function chargerImage(e){
+  const f = e.target.files[0];
+  if(!f) return;
+  if(f.size > 800000){ // redimensionne les grosses images
+    redimImage(f);
+  }else{
+    const r = new FileReader();
+    r.onload = ()=>{ imageBase64=r.result; montrerApercu(); };
+    r.readAsDataURL(f);
+  }
+}
+function redimImage(f){
+  const r = new FileReader();
+  r.onload = ()=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const c = document.createElement("canvas");
+      const max = 700;
+      let {width:w,height:h} = img;
+      if(w>h && w>max){ h=h*max/w; w=max; }
+      else if(h>max){ w=w*max/h; h=max; }
+      c.width=w; c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      imageBase64 = c.toDataURL("image/jpeg",0.75);
+      montrerApercu();
+    };
+    img.src = r.result;
+  };
+  r.readAsDataURL(f);
+}
+function montrerApercu(){
+  const a = document.getElementById("apercu");
+  a.src = imageBase64; a.style.display="block";
+}
+
+async function envoyerIdee(){
+  const titre = document.getElementById("fTitre").value.trim();
+  const cat = document.getElementById("fCat").value;
+  const desc = document.getElementById("fDesc").value.trim();
+  const nom = document.getElementById("fNom").value.trim();
+  if(!titre || !desc || !nom){
+    alert("Remplis au moins le titre, la description et ton nom ! 😊");
+    return;
+  }
+  idees.push({
+    id:"i"+Date.now()+Math.random().toString(36).slice(2,6),
+    titre, cat, desc, nom, img:imageBase64,
+    votes:0, statut:"attente", date:Date.now()
+  });
+  await sauverIdees();
+  fermerAjout();
+  renderIdees();
+}
+
+async function voter(id){
+  const idee = idees.find(i=>i.id===id);
+  if(!idee) return;
+  if(mesVotes.includes(id)){
+    // retirer le vote
+    idee.votes = Math.max(0,(idee.votes||0)-1);
+    mesVotes = mesVotes.filter(x=>x!==id);
+  }else{
+    idee.votes = (idee.votes||0)+1;
+    mesVotes.push(id);
+  }
+  localStorage.setItem("ridees_votes", JSON.stringify(mesVotes));
+  renderIdees();
+  await sauverIdees();
+}
+
+/* ================= MODE PDG ================= */
+function basculerPDG(){
+  if(modePDG){ modePDG=false; document.getElementById("btnPDG").textContent="👑 Mode PDG"; renderIdees(); return; }
+  const code = prompt("Code PDG :");
+  if(code===CODE_PDG){
+    modePDG=true;
+    document.getElementById("btnPDG").textContent="👑 PDG activé";
+    renderIdees();
+  }else if(code!==null){
+    alert("Code incorrect ❌");
+  }
+}
+async function setStatut(id,statut){
+  const idee = idees.find(i=>i.id===id);
+  if(idee){ idee.statut=statut; renderIdees(); await sauverIdees(); }
+}
+async function supprimer(id){
+  if(!confirm("Supprimer définitivement cette idée ?")) return;
+  idees = idees.filter(i=>i.id!==id);
+  renderIdees();
+  await sauverIdees();
+}
+
+/* ================= RÉGLAGES (protégés) ================= */
+function ouvrirReglages(){
+  const code = prompt("Code PDG pour accéder aux réglages :");
+  if(code===null) return;
+  if(code!==CODE_PDG){ alert("Code incorrect ❌"); return; }
+  document.getElementById("rApiKey").value = cloud.apiKey || "";
+  document.getElementById("rBinId").value = cloud.binId || "";
+  document.getElementById("regEtat").style.display="none";
+  document.getElementById("overlayReg").classList.add("ouvert");
+}
+function fermerReglages(){ document.getElementById("overlayReg").classList.remove("ouvert"); }
+
+async function activerSync(){
+  const key = document.getElementById("rApiKey").value.trim();
+  const bin = document.getElementById("rBinId").value.trim();
+  const box = document.getElementById("regEtat");
+  box.style.display="block";
+  if(!key){ box.innerHTML="⚠️ Colle d'abord ta clé de synchro."; return; }
+  cloud.apiKey = key;
+  box.innerHTML = "☁️ Connexion en cours…";
+  try{
+    if(bin){
+      // base déjà existante : on la teste
+      const r = await fetch(API+"/"+bin+"/latest", {headers:{"X-Master-Key":key}});
+      if(!r.ok) throw new Error("base introuvable");
+      cloud.binId = bin;
+    }else{
+      // création d'une nouvelle base R Idées
+      await creerBase();
+      document.getElementById("rBinId").value = cloud.binId;
+    }
+    saveCloudCfg();
+    await chargerIdees();
+    renderIdees();
+    box.innerHTML = "✅ Synchro activée !<br>Identifiant à me redonner : <b style='color:var(--or)'>"+cloud.binId+"</b>";
+  }catch(e){
+    box.innerHTML = "❌ Échec. Vérifie ta clé (et l'identifiant si tu en as mis un).";
+  }
+}
+
+/* ================= INIT ================= */
+(async function(){
+  renderFiltres();
+  await chargerIdees();
+  document.getElementById("etat").style.display="none";
+  renderIdees();
+})();
+</script>
+</body>
+</html>
