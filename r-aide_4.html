@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Aide — Les guides de l'Entreprise R</title>
+<style>
+  :root{
+    --rouge:#e50914;
+    --rouge-fonce:#b0060f;
+    --noir:#0b0b0d;
+    --noir2:#141418;
+    --carte:#1c1c22;
+    --carte2:#24242c;
+    --texte:#f5f5f7;
+    --gris:#9a9aa5;
+    --or:#ffce3a;
+    --bordure:#2e2e38;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#22050a 0%,var(--noir) 55%);
+    color:var(--texte);min-height:100vh;padding-bottom:60px;
+  }
+  header{text-align:center;padding:34px 18px 10px;}
+  .logo{font-size:2.6rem;font-weight:900;letter-spacing:-1px;}
+  .logo .r{color:var(--rouge);}
+  .sous{color:var(--gris);margin-top:6px;font-size:1rem;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 16px;}
+
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:12px;font-weight:700;transition:.15s;}
+  button:active{transform:scale(.97);}
+  .btn-primaire{background:var(--rouge);color:#fff;padding:13px 22px;font-size:1.05rem;box-shadow:0 6px 18px rgba(229,9,20,.35);}
+  .btn-primaire:hover{background:var(--rouge-fonce);}
+  .btn-ghost{background:var(--carte);color:var(--texte);padding:13px 20px;font-size:1rem;border:1px solid var(--bordure);}
+  .btn-ghost:hover{background:var(--carte2);}
+  .pill-pdg{background:var(--or);color:#000;}
+  .pill-pdg:hover{background:#e6b800;}
+
+  .barre{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:18px 0 6px;}
+
+  .recherche{position:relative;margin:20px 0 20px;}
+  .recherche input{width:100%;background:var(--carte);border:1px solid var(--bordure);color:var(--texte);border-radius:14px;padding:16px 16px 16px 50px;font-size:1.05rem;font-family:inherit;}
+  .recherche input:focus{outline:2px solid var(--rouge);border-color:var(--rouge);}
+  .recherche .loupe{position:absolute;left:17px;top:50%;transform:translateY(-50%);font-size:1.3rem;opacity:.7;}
+
+  .filtres{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+  .chip{background:var(--carte);color:var(--gris);border:1px solid var(--bordure);padding:8px 15px;border-radius:20px;font-size:.9rem;font-weight:600;cursor:pointer;transition:.15s;}
+  .chip:hover{background:var(--carte2);}
+  .chip.actif{background:var(--rouge);color:#fff;border-color:var(--rouge);}
+
+  .guide{background:var(--carte);border:1px solid var(--bordure);border-radius:14px;margin-bottom:12px;overflow:hidden;}
+  .guide-tete{padding:17px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:.15s;}
+  .guide-tete:hover{background:var(--carte2);}
+  .guide-gauche{display:flex;align-items:center;gap:12px;min-width:0;}
+  .guide-emoji{font-size:1.5rem;flex-shrink:0;}
+  .guide-info{min-width:0;}
+  .guide-titre{font-size:1.1rem;font-weight:800;line-height:1.3;}
+  .guide-cat{font-size:.78rem;color:var(--rouge);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+  .fleche{font-size:1.1rem;color:var(--gris);transition:transform .2s;flex-shrink:0;}
+  .guide.ouvert .fleche{transform:rotate(90deg);}
+  .guide-corps{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  .guide.ouvert .guide-corps{max-height:3000px;}
+  .guide-texte{padding:0 18px 20px;color:var(--texte);line-height:1.7;font-size:1rem;}
+  .guide-texte h4{color:var(--or);margin:14px 0 6px;font-size:1rem;}
+  .guide-texte ol,.guide-texte ul{margin:8px 0 8px 22px;}
+  .guide-texte li{margin-bottom:6px;}
+  .guide-texte p{margin-bottom:10px;color:var(--gris);}
+  .astuce{background:rgba(255,206,58,.1);border:1px solid rgba(255,206,58,.3);border-radius:10px;padding:11px 14px;font-size:.92rem;color:var(--or);margin-top:12px;line-height:1.5;}
+
+  .admin-actions{display:flex;gap:6px;flex-wrap:wrap;padding:0 18px 16px;}
+  .admin-actions button{font-size:.78rem;padding:7px 12px;border-radius:9px;background:var(--carte2);color:var(--texte);border:1px solid var(--bordure);}
+  .admin-actions button:hover{background:#33333d;}
+  .admin-actions .del{background:rgba(229,9,20,.15);color:#ff6b74;border-color:rgba(229,9,20,.3);}
+
+  .vide{text-align:center;color:var(--gris);padding:50px 20px;font-size:1.05rem;}
+  .contact{text-align:center;margin-top:34px;padding:22px;background:var(--carte);border:1px solid var(--bordure);border-radius:14px;}
+  .contact .t{font-size:1.15rem;font-weight:800;margin-bottom:6px;}
+  .contact .d{color:var(--gris);font-size:.95rem;line-height:1.6;}
+  .contact b{color:var(--or);}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding:24px 14px;z-index:50;overflow-y:auto;}
+  .overlay.ouvert{display:flex;}
+  .modale{background:var(--noir2);border:1px solid var(--bordure);border-radius:20px;width:100%;max-width:560px;padding:26px 24px;}
+  .modale h2{font-size:1.5rem;margin-bottom:4px;}
+  .modale .m-sous{color:var(--gris);font-size:.92rem;margin-bottom:16px;}
+  label{display:block;font-size:.9rem;font-weight:700;margin:16px 0 7px;}
+  input,textarea,select{width:100%;background:var(--carte);border:1px solid var(--bordure);color:var(--texte);border-radius:11px;padding:12px 14px;font-size:1rem;font-family:inherit;}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--rouge);border-color:var(--rouge);}
+  textarea{resize:vertical;min-height:160px;font-family:inherit;line-height:1.5;}
+  .ligne2{display:flex;gap:12px;}
+  .ligne2>div{flex:1;}
+  .aide-champ{font-size:.82rem;color:var(--gris);margin-top:6px;line-height:1.5;}
+  .aide-champ code{background:var(--carte2);padding:1px 6px;border-radius:5px;color:var(--or);font-size:.85rem;}
+  .m-actions{display:flex;gap:10px;margin-top:24px;}
+  .m-actions button{flex:1;padding:13px;font-size:1rem;}
+  .fermer{background:var(--carte);color:var(--gris);border:1px solid var(--bordure);}
+  .etat{text-align:center;color:var(--gris);font-size:.85rem;margin:14px 0;}
+
+  @media(max-width:520px){.logo{font-size:2.1rem;}.ligne2{flex-direction:column;gap:0;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="r">R</span> Aide 🆘</div>
+  <div class="sous">Tous les guides pour bien utiliser l'Entreprise R</div>
+</header>
+
+<div class="wrap">
+  <div class="barre">
+    <button class="btn-ghost pill-pdg" id="btnPDG" onclick="basculerPDG()">👑 Mode PDG</button>
+    <button class="btn-ghost" id="btnReglages" onclick="ouvrirReglages()">⚙️ Réglages</button>
+  </div>
+
+  <div class="recherche">
+    <span class="loupe">🔍</span>
+    <input id="rech" placeholder="Cherche un guide… (ex : CinéèR, payer, commander)" oninput="rendre()">
+  </div>
+
+  <div id="zoneAjout" style="display:none;text-align:center;margin-bottom:18px;">
+    <button class="btn-primaire" onclick="ouvrirEdit(null)">➕ Ajouter un guide</button>
+  </div>
+
+  <div class="filtres" id="filtres"></div>
+
+  <div class="etat" id="etat">Chargement des guides… ☁️</div>
+  <div id="liste"></div>
+
+  <div class="contact">
+    <div class="t">Tu n'as pas trouvé ? 🤔</div>
+    <div class="d">Écris au PDG dans <b>R Chat</b> 💬 ou appelle le <b>06 76 64 74 81</b> (c'est gratuit !).</div>
+  </div>
+</div>
+
+<!-- MODALE EDITION GUIDE (PDG) -->
+<div class="overlay" id="overlayEdit">
+  <div class="modale">
+    <h2 id="editTitre">➕ Nouveau guide</h2>
+    <div class="m-sous">Écris un guide clair pour aider tes clients.</div>
+
+    <div class="ligne2">
+      <div>
+        <label>Emoji</label>
+        <input id="fEmoji" placeholder="🎬" maxlength="4">
+      </div>
+      <div>
+        <label>Catégorie *</label>
+        <input id="fCat" placeholder="Ex : CinéèR" maxlength="30">
+      </div>
+    </div>
+
+    <label>Titre du guide *</label>
+    <input id="fTitre" placeholder="Ex : Comment regarder un film" maxlength="80">
+
+    <label>Contenu du guide *</label>
+    <textarea id="fHtml" placeholder="Écris ton guide ici…"></textarea>
+    <div class="aide-champ">
+      Mise en forme : saute une ligne pour un nouveau paragraphe.
+      Écris <code>&lt;b&gt;gras&lt;/b&gt;</code> pour du gras,
+      et commence une ligne par <code>-</code> pour faire une liste à puces.
+    </div>
+
+    <div class="m-actions">
+      <button class="fermer" onclick="fermerEdit()">Annuler</button>
+      <button class="btn-primaire" onclick="enregistrerGuide()">Enregistrer 💾</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE RÉGLAGES -->
+<div class="overlay" id="overlayReg">
+  <div class="modale">
+    <h2>⚙️ Réglages</h2>
+    <div class="m-sous">Synchronisation cloud — réservé au PDG.</div>
+    <label>☁️ Clé de synchro (X-Master-Key)</label>
+    <input id="rApiKey" placeholder="$2a$10$..." autocomplete="off">
+    <label>Identifiant de base (auto)</label>
+    <input id="rBinId" placeholder="se remplit après l'activation">
+    <div class="etat" id="regEtat" style="margin:14px 0 0;display:none;"></div>
+    <div class="m-actions">
+      <button class="fermer" onclick="fermerReglages()">Fermer</button>
+      <button class="btn-primaire" onclick="activerSync()">☁️ Activer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= CONFIG CLOUD ================= */
+const SHARED_CLOUD = {
+  apiKey: "$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K",
+  binId: "6a6c5365f5f4af5e29d90a34"
+};
+const API = "https://api.jsonbin.io/v3/b";
+const CFG_KEY = "raide-cloud-cfg";
+let cloud = { apiKey: SHARED_CLOUD.apiKey, binId: SHARED_CLOUD.binId };
+if(!cloud.binId){
+  try{ const c = JSON.parse(localStorage.getItem(CFG_KEY)||"{}"); if(c.binId) cloud.binId=c.binId; }catch(e){}
+}
+const CODE_PDG = "PDG2026";
+
+/* ================= GUIDES PAR DÉFAUT ================= */
+const GUIDES_DEFAUT = [
+  {cat:"Général", emoji:"🏠", titre:"C'est quoi R App ?",
+    html:`R App, c'est ton portail unique qui réunit <b>toutes</b> les apps de l'Entreprise R au même endroit.\n\nPlus besoin de chercher partout : films, radio, jeux, boutique, idées… tout est réuni sur une seule page, avec les offres du moment.`},
+  {cat:"CinéèR", emoji:"🎬", titre:"Comment regarder un film ou une série",
+    html:`- Ouvre <b>CinéèR</b> depuis R App.\n- Choisis une série ou un film.\n- Si c'est payant, entre ton <b>code d'accès</b>.\n- Clique sur un épisode pour le lancer. ▶️\n\nUn code débloque toute la série.`},
+  {cat:"R Radio", emoji:"📻", titre:"Comment écouter R Radio",
+    html:`- Ouvre <b>R Radio</b> depuis R App.\n- Clique sur ▶️ pour lancer la lecture.\n- Utilise les filtres Émissions / Redifs / Musiques.\n\nPour l'écoute illimitée, prends l'offre R Radio en illimité (7,50 €).`},
+  {cat:"R Boutique", emoji:"🛍️", titre:"Comment commander sur R Boutique",
+    html:`- Ouvre <b>R Boutique</b> depuis R App.\n- Choisis un produit et clique sur <b>Commander</b>.\n- Mets ton nom, un moyen de te contacter et la quantité.\n\nLe paiement se fait <b>en espèces</b> 💵. Le PDG valide ta commande puis te contacte.`},
+  {cat:"R Idée", emoji:"💡", titre:"Comment proposer une idée d'app",
+    html:`- Ouvre <b>R Idée</b> depuis R App.\n- Clique sur <b>Proposer une idée</b>.\n- Remplis le titre, la catégorie, la description et ton nom.\n\nTout le monde peut voter 👍 pour ton idée !`},
+  {cat:"Aide", emoji:"🆘", titre:"Un problème ? Qui contacter",
+    html:`Si tu es bloqué :\n- 💬 Écris au PDG dans <b>R Chat</b>.\n- 📞 Appelle le <b>06 76 64 74 81</b> (gratuit).\n\nDécris bien ton problème pour être aidé plus vite.`}
+];
+
+let guides = [];
+let modePDG = false;
+let filtreActif = "Tous";
+let editId = null;
+
+/* ================= STOCKAGE ================= */
+function saveCloudCfg(){ try{ localStorage.setItem(CFG_KEY, JSON.stringify({binId:cloud.binId})); }catch(e){} }
+
+async function creerBase(){
+  const r = await fetch(API, {
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Master-Key":cloud.apiKey,"X-Bin-Name":"R-Aide","X-Bin-Private":"false"},
+    body:JSON.stringify({guides:GUIDES_DEFAUT.map(g=>({...g,id:"g"+Math.random().toString(36).slice(2,9)}))})
+  });
+  if(!r.ok) throw new Error("création base impossible");
+  const d = await r.json();
+  cloud.binId = d.metadata.id;
+  saveCloudCfg();
+}
+
+async function charger(){
+  try{
+    if(!cloud.binId){ await creerBase(); }
+    const r = await fetch(API+"/"+cloud.binId+"/latest", {headers:{"X-Master-Key":cloud.apiKey}});
+    if(r.ok){ const d = await r.json(); guides = d.record.guides || []; }
+    else throw new Error("cloud indispo");
+  }catch(e){
+    try{ guides = JSON.parse(localStorage.getItem("raide-data")); }catch(_){ guides=null; }
+    if(!guides || !guides.length){ guides = GUIDES_DEFAUT.map(g=>({...g,id:"g"+Math.random().toString(36).slice(2,9)})); }
+  }
+}
+async function sauver(){
+  localStorage.setItem("raide-data", JSON.stringify(guides));
+  try{
+    if(!cloud.binId) return;
+    await fetch(API+"/"+cloud.binId, {
+      method:"PUT",
+      headers:{"Content-Type":"application/json","X-Master-Key":cloud.apiKey},
+      body:JSON.stringify({guides})
+    });
+  }catch(e){}
+}
+
+/* ================= MISE EN FORME SIMPLE ================= */
+function formater(txt){
+  const lignes = (txt||"").split("\n");
+  let html="", dansListe=false;
+  for(let l of lignes){
+    l=l.trim();
+    if(l.startsWith("-")){
+      if(!dansListe){ html+="<ul>"; dansListe=true; }
+      html+="<li>"+l.slice(1).trim()+"</li>";
+    }else{
+      if(dansListe){ html+="</ul>"; dansListe=false; }
+      if(l) html+="<p>"+l+"</p>";
+    }
+  }
+  if(dansListe) html+="</ul>";
+  return html;
+}
+function echapper(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+/* ================= AFFICHAGE ================= */
+function categories(){ return ["Tous", ...new Set(guides.map(g=>g.cat))]; }
+function renderFiltres(){
+  document.getElementById("filtres").innerHTML = categories().map(c=>
+    `<div class="chip ${c===filtreActif?'actif':''}" onclick="setFiltre('${c.replace(/'/g,"\\'")}')">${c}</div>`
+  ).join("");
+}
+function setFiltre(c){ filtreActif=c; renderFiltres(); rendre(); }
+
+function rendre(){
+  const q = document.getElementById("rech").value.trim().toLowerCase();
+  let liste = guides;
+  if(filtreActif!=="Tous") liste = liste.filter(g=>g.cat===filtreActif);
+  if(q){
+    liste = liste.filter(g=>
+      (g.titre||"").toLowerCase().includes(q) ||
+      (g.cat||"").toLowerCase().includes(q) ||
+      (g.html||"").toLowerCase().includes(q)
+    );
+  }
+  const box = document.getElementById("liste");
+  if(liste.length===0){
+    box.innerHTML = `<div class="vide">Aucun guide trouvé 🔍<br>Essaie un autre mot, ou contacte le PDG.</div>`;
+    return;
+  }
+  box.innerHTML = liste.map(g=>`
+    <div class="guide" id="${g.id}">
+      <div class="guide-tete" onclick="basculer('${g.id}')">
+        <div class="guide-gauche">
+          <span class="guide-emoji">${g.emoji||"📄"}</span>
+          <div class="guide-info">
+            <div class="guide-titre">${echapper(g.titre)}</div>
+            <div class="guide-cat">${echapper(g.cat)}</div>
+          </div>
+        </div>
+        <span class="fleche">▶</span>
+      </div>
+      <div class="guide-corps">
+        <div class="guide-texte">${formater(g.html)}</div>
+        ${modePDG ? `<div class="admin-actions">
+          <button onclick="event.stopPropagation();ouvrirEdit('${g.id}')">✏️ Modifier</button>
+          <button class="del" onclick="event.stopPropagation();supprimerGuide('${g.id}')">🗑️ Supprimer</button>
+        </div>` : ""}
+      </div>
+    </div>
+  `).join("");
+}
+function basculer(id){ document.getElementById(id).classList.toggle("ouvert"); }
+
+/* ================= EDITION (PDG) ================= */
+function ouvrirEdit(id){
+  editId=id;
+  if(id){
+    const g=guides.find(x=>x.id===id);
+    document.getElementById("editTitre").textContent="✏️ Modifier le guide";
+    document.getElementById("fEmoji").value=g.emoji||"";
+    document.getElementById("fCat").value=g.cat||"";
+    document.getElementById("fTitre").value=g.titre||"";
+    document.getElementById("fHtml").value=g.html||"";
+  }else{
+    document.getElementById("editTitre").textContent="➕ Nouveau guide";
+    document.getElementById("fEmoji").value="";
+    document.getElementById("fCat").value="";
+    document.getElementById("fTitre").value="";
+    document.getElementById("fHtml").value="";
+  }
+  document.getElementById("overlayEdit").classList.add("ouvert");
+}
+function fermerEdit(){ document.getElementById("overlayEdit").classList.remove("ouvert"); }
+
+async function enregistrerGuide(){
+  const emoji=document.getElementById("fEmoji").value.trim()||"📄";
+  const cat=document.getElementById("fCat").value.trim();
+  const titre=document.getElementById("fTitre").value.trim();
+  const html=document.getElementById("fHtml").value.trim();
+  if(!cat || !titre || !html){ alert("Remplis la catégorie, le titre et le contenu ! 😊"); return; }
+  if(editId){
+    const g=guides.find(x=>x.id===editId);
+    if(g) Object.assign(g,{emoji,cat,titre,html});
+  }else{
+    guides.push({id:"g"+Date.now()+Math.random().toString(36).slice(2,6),emoji,cat,titre,html});
+  }
+  await sauver();
+  fermerEdit();
+  renderFiltres(); rendre();
+}
+async function supprimerGuide(id){
+  if(!confirm("Supprimer ce guide ?")) return;
+  guides=guides.filter(g=>g.id!==id);
+  await sauver();
+  renderFiltres(); rendre();
+}
+
+/* ================= MODE PDG ================= */
+function basculerPDG(){
+  if(modePDG){ modePDG=false; document.getElementById("btnPDG").textContent="👑 Mode PDG"; document.getElementById("zoneAjout").style.display="none"; rendre(); return; }
+  const code=prompt("Code PDG :");
+  if(code===CODE_PDG){ modePDG=true; document.getElementById("btnPDG").textContent="👑 PDG activé"; document.getElementById("zoneAjout").style.display="block"; rendre(); }
+  else if(code!==null){ alert("Code incorrect ❌"); }
+}
+
+/* ================= RÉGLAGES ================= */
+function ouvrirReglages(){
+  const code=prompt("Code PDG pour accéder aux réglages :");
+  if(code===null) return;
+  if(code!==CODE_PDG){ alert("Code incorrect ❌"); return; }
+  document.getElementById("rApiKey").value=cloud.apiKey||"";
+  document.getElementById("rBinId").value=cloud.binId||"";
+  document.getElementById("regEtat").style.display="none";
+  document.getElementById("overlayReg").classList.add("ouvert");
+}
+function fermerReglages(){ document.getElementById("overlayReg").classList.remove("ouvert"); }
+async function activerSync(){
+  const key=document.getElementById("rApiKey").value.trim();
+  const bin=document.getElementById("rBinId").value.trim();
+  const box=document.getElementById("regEtat"); box.style.display="block";
+  if(!key){ box.innerHTML="⚠️ Colle d'abord ta clé de synchro."; return; }
+  cloud.apiKey=key; box.innerHTML="☁️ Connexion en cours…";
+  try{
+    if(bin){
+      const r=await fetch(API+"/"+bin+"/latest",{headers:{"X-Master-Key":key}});
+      if(!r.ok) throw new Error("base introuvable");
+      cloud.binId=bin;
+    }else{
+      await creerBase();
+      document.getElementById("rBinId").value=cloud.binId;
+    }
+    saveCloudCfg();
+    await charger(); renderFiltres(); rendre();
+    box.innerHTML="✅ Synchro activée !<br>Identifiant à me redonner : <b style='color:var(--or)'>"+cloud.binId+"</b>";
+  }catch(e){
+    box.innerHTML="❌ Échec. Vérifie ta clé (et l'identifiant si tu en as mis un).";
+  }
+}
+
+/* ================= INIT ================= */
+(async function(){
+  await charger();
+  document.getElementById("etat").style.display="none";
+  renderFiltres();
+  rendre();
+})();
+</script>
+</body>
+</html>
