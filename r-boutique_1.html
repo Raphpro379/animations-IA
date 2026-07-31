@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Boutique — La boutique de l'Entreprise R</title>
+<style>
+  :root{
+    --rouge:#e50914;
+    --rouge-fonce:#b0060f;
+    --noir:#0b0b0d;
+    --noir2:#141418;
+    --carte:#1c1c22;
+    --carte2:#24242c;
+    --texte:#f5f5f7;
+    --gris:#9a9aa5;
+    --or:#ffce3a;
+    --vert:#2ecc71;
+    --orange:#f39c12;
+    --bordure:#2e2e38;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#22050a 0%,var(--noir) 55%);
+    color:var(--texte);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  header{text-align:center;padding:34px 18px 22px;}
+  .logo{font-size:2.6rem;font-weight:900;letter-spacing:-1px;}
+  .logo .r{color:var(--rouge);}
+  .sous{color:var(--gris);margin-top:6px;font-size:1rem;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px;}
+
+  .barre{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:8px 0 26px;}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:12px;font-weight:700;transition:.15s;}
+  button:active{transform:scale(.97);}
+  .btn-primaire{background:var(--rouge);color:#fff;padding:13px 22px;font-size:1.05rem;box-shadow:0 6px 18px rgba(229,9,20,.35);}
+  .btn-primaire:hover{background:var(--rouge-fonce);}
+  .btn-ghost{background:var(--carte);color:var(--texte);padding:13px 20px;font-size:1rem;border:1px solid var(--bordure);}
+  .btn-ghost:hover{background:var(--carte2);}
+  .pill-pdg{background:var(--or);color:#000;}
+  .pill-pdg:hover{background:#e6b800;}
+
+  /* Filtres */
+  .filtres{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:22px;}
+  .chip{background:var(--carte);color:var(--gris);border:1px solid var(--bordure);padding:8px 15px;border-radius:20px;font-size:.9rem;font-weight:600;}
+  .chip.actif{background:var(--rouge);color:#fff;border-color:var(--rouge);}
+
+  /* Grille produits */
+  .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+  .prod{background:var(--carte);border:1px solid var(--bordure);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;}
+  .prod-img{width:100%;height:160px;object-fit:cover;background:var(--noir2);display:block;}
+  .prod-corps{padding:15px 16px 16px;flex:1;display:flex;flex-direction:column;}
+  .prod-cat{display:inline-block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--rouge);margin-bottom:7px;}
+  .prod-titre{font-size:1.2rem;font-weight:800;line-height:1.25;margin-bottom:7px;}
+  .prod-desc{color:var(--gris);font-size:.94rem;line-height:1.45;flex:1;}
+  .prod-bas{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px;}
+  .prix{font-size:1.5rem;font-weight:900;color:var(--or);}
+  .prix small{font-size:.8rem;color:var(--gris);font-weight:600;}
+  .rupture{opacity:.5;}
+  .badge-rupture{background:#2a2a33;color:var(--gris);font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:20px;}
+
+  .admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+  .admin-actions button{font-size:.78rem;padding:7px 10px;border-radius:9px;background:var(--carte2);color:var(--texte);border:1px solid var(--bordure);}
+  .admin-actions button:hover{background:#33333d;}
+  .admin-actions .del{background:rgba(229,9,20,.15);color:#ff6b74;border-color:rgba(229,9,20,.3);}
+
+  .vide{text-align:center;color:var(--gris);padding:60px 20px;font-size:1.05rem;}
+  .section-titre{font-size:1.4rem;font-weight:800;margin:30px 0 16px;display:flex;align-items:center;gap:10px;}
+  .compteur{background:var(--carte);color:var(--gris);font-size:.85rem;padding:3px 12px;border-radius:20px;font-weight:700;}
+
+  /* Commandes (PDG) */
+  .cmd{background:var(--carte);border:1px solid var(--bordure);border-radius:14px;padding:16px;margin-bottom:12px;}
+  .cmd-haut{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+  .cmd-titre{font-size:1.1rem;font-weight:800;}
+  .cmd-info{color:var(--gris);font-size:.9rem;margin-top:4px;line-height:1.5;}
+  .cmd-prix{font-size:1.3rem;font-weight:900;color:var(--or);white-space:nowrap;}
+  .cmd-statut{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:20px;margin-top:10px;}
+  .st-attente{background:rgba(243,156,18,.18);color:var(--orange);}
+  .st-acceptee{background:rgba(46,204,113,.18);color:var(--vert);}
+  .st-refusee{background:rgba(229,9,20,.18);color:#ff6b74;}
+  .cmd-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+  .cmd-actions button{font-size:.85rem;padding:9px 14px;border-radius:10px;}
+  .b-accept{background:var(--vert);color:#062;}
+  .b-refus{background:rgba(229,9,20,.15);color:#ff6b74;border:1px solid rgba(229,9,20,.3);}
+  .b-suppr{background:var(--carte2);color:var(--gris);border:1px solid var(--bordure);}
+
+  /* Modale */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding:24px 14px;z-index:50;overflow-y:auto;}
+  .overlay.ouvert{display:flex;}
+  .modale{background:var(--noir2);border:1px solid var(--bordure);border-radius:20px;width:100%;max-width:480px;padding:26px 24px;}
+  .modale h2{font-size:1.5rem;margin-bottom:4px;}
+  .modale .m-sous{color:var(--gris);font-size:.92rem;margin-bottom:20px;}
+  label{display:block;font-size:.9rem;font-weight:700;margin:16px 0 7px;}
+  input,textarea,select{width:100%;background:var(--carte);border:1px solid var(--bordure);color:var(--texte);border-radius:11px;padding:12px 14px;font-size:1rem;font-family:inherit;}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--rouge);border-color:var(--rouge);}
+  textarea{resize:vertical;min-height:70px;}
+  .ligne2{display:flex;gap:12px;}
+  .ligne2>div{flex:1;}
+  .apercu-img{margin-top:10px;width:100%;height:140px;object-fit:cover;border-radius:11px;display:none;border:1px solid var(--bordure);}
+  .m-actions{display:flex;gap:10px;margin-top:24px;}
+  .m-actions button{flex:1;padding:13px;font-size:1rem;}
+  .fermer{background:var(--carte);color:var(--gris);border:1px solid var(--bordure);}
+  .etat{text-align:center;color:var(--gris);font-size:.85rem;margin:14px 0;}
+  .info-paiement{background:rgba(255,206,58,.1);border:1px solid rgba(255,206,58,.3);border-radius:11px;padding:12px 14px;font-size:.88rem;color:var(--or);margin-top:16px;line-height:1.5;}
+
+  @media(max-width:520px){.logo{font-size:2.1rem;}.grille{grid-template-columns:1fr;}.ligne2{flex-direction:column;gap:0;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="r">R</span> Boutique 🛍️</div>
+  <div class="sous">Produits, offres et apps de l'Entreprise R — paiement en espèces</div>
+</header>
+
+<div class="wrap">
+  <div class="barre">
+    <button class="btn-ghost pill-pdg" id="btnPDG" onclick="basculerPDG()">👑 Mode PDG</button>
+    <button class="btn-ghost" id="btnReglages" onclick="ouvrirReglages()">⚙️ Réglages</button>
+  </div>
+
+  <div class="filtres" id="filtres"></div>
+
+  <div class="etat" id="etat">Chargement de la boutique… ☁️</div>
+
+  <!-- ZONE PDG : ajouter un produit + commandes -->
+  <div id="zonePDG" style="display:none;">
+    <button class="btn-primaire" style="margin-bottom:10px;" onclick="ouvrirAjout()">➕ Ajouter un produit</button>
+    <div class="section-titre">📦 Commandes reçues <span class="compteur" id="cptCmd">0</span></div>
+    <div id="listeCmd"></div>
+  </div>
+
+  <div class="section-titre" id="titreProduits">🛒 Nos produits <span class="compteur" id="cptProd">0</span></div>
+  <div class="grille" id="grille"></div>
+</div>
+
+<!-- MODALE COMMANDE (client) -->
+<div class="overlay" id="overlayCmd">
+  <div class="modale">
+    <h2 id="cmdNomProd">Commander</h2>
+    <div class="m-sous" id="cmdPrixProd"></div>
+
+    <label>Ton nom *</label>
+    <input id="cNom" placeholder="Ex : Lucas" maxlength="30">
+
+    <label>Comment te contacter ? (tel, message...) *</label>
+    <input id="cContact" placeholder="Ex : 06 12 34 56 78" maxlength="60">
+
+    <label>Quantité</label>
+    <input id="cQte" type="number" value="1" min="1" max="99">
+
+    <div class="info-paiement">💵 Paiement en <b>espèces</b>. Après ta commande, le PDG la valide et te contacte pour convenir du paiement et de la remise.</div>
+
+    <div class="m-actions">
+      <button class="fermer" onclick="fermerCmd()">Annuler</button>
+      <button class="btn-primaire" onclick="passerCommande()">Commander 🛒</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE AJOUT PRODUIT (PDG) -->
+<div class="overlay" id="overlayAjout">
+  <div class="modale">
+    <h2 id="ajoutTitre">📦 Nouveau produit</h2>
+    <div class="m-sous">Ajoute un produit, une offre ou une app à vendre.</div>
+
+    <label>Nom *</label>
+    <input id="fNom" placeholder="Ex : Casquette R" maxlength="50">
+
+    <label>Catégorie *</label>
+    <select id="fCat">
+      <option>📦 Produit</option>
+      <option>🏷️ Offre</option>
+      <option>📱 App</option>
+      <option>✨ Autre</option>
+    </select>
+
+    <div class="ligne2">
+      <div>
+        <label>Prix *</label>
+        <input id="fPrix" type="number" placeholder="10" min="0" step="0.5">
+      </div>
+      <div>
+        <label>Unité</label>
+        <input id="fUnite" placeholder="€" value="€" maxlength="12">
+      </div>
+    </div>
+
+    <label>Description *</label>
+    <textarea id="fDesc" placeholder="Décris le produit…" maxlength="300"></textarea>
+
+    <label>Image (facultatif) 🖼️</label>
+    <input type="file" id="fImg" accept="image/*" onchange="chargerImage(event)">
+    <img class="apercu-img" id="apercu">
+
+    <label style="display:flex;align-items:center;gap:10px;margin-top:18px;cursor:pointer;">
+      <input type="checkbox" id="fRupture" style="width:auto;">
+      <span>En rupture (indisponible à la commande)</span>
+    </label>
+
+    <div class="m-actions">
+      <button class="fermer" onclick="fermerAjout()">Annuler</button>
+      <button class="btn-primaire" onclick="enregistrerProduit()">Enregistrer 💾</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE RÉGLAGES -->
+<div class="overlay" id="overlayReg">
+  <div class="modale">
+    <h2>⚙️ Réglages</h2>
+    <div class="m-sous">Synchronisation cloud — réservé au PDG.</div>
+    <label>☁️ Clé de synchro (X-Master-Key)</label>
+    <input id="rApiKey" placeholder="$2a$10$..." autocomplete="off">
+    <label>Identifiant de base (auto)</label>
+    <input id="rBinId" placeholder="se remplit après l'activation">
+    <div class="etat" id="regEtat" style="margin:14px 0 0;display:none;"></div>
+    <div class="m-actions">
+      <button class="fermer" onclick="fermerReglages()">Fermer</button>
+      <button class="btn-primaire" onclick="activerSync()">☁️ Activer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= CONFIG CLOUD ================= */
+/* R Boutique a sa PROPRE base (séparée des autres apps). */
+const SHARED_CLOUD = {
+  apiKey: "$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K",
+  binId: "6a6c4a72f5f4af5e29d8ef30"
+};
+const API = "https://api.jsonbin.io/v3/b";
+const CFG_KEY = "rboutique-cloud-cfg";
+let cloud = { apiKey: SHARED_CLOUD.apiKey, binId: SHARED_CLOUD.binId };
+if(!cloud.binId){
+  try{ const c = JSON.parse(localStorage.getItem(CFG_KEY)||"{}"); if(c.binId) cloud.binId=c.binId; }catch(e){}
+}
+
+const CODE_PDG = "PDG2026";
+
+let boutique = { produits:[], commandes:[] };
+let modePDG = false;
+let filtreActif = "Tous";
+let imageBase64 = "";
+let editId = null;      // id du produit en cours d'édition (null = nouveau)
+let prodCommande = null; // produit qu'on est en train de commander
+
+const CATS = ["Tous","📦 Produit","🏷️ Offre","📱 App","✨ Autre"];
+
+/* ================= STOCKAGE ================= */
+function saveCloudCfg(){ try{ localStorage.setItem(CFG_KEY, JSON.stringify({binId:cloud.binId})); }catch(e){} }
+
+async function creerBase(){
+  const r = await fetch(API, {
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Master-Key":cloud.apiKey,"X-Bin-Name":"R-Boutique","X-Bin-Private":"false"},
+    body:JSON.stringify({produits:[],commandes:[]})
+  });
+  if(!r.ok) throw new Error("création base impossible");
+  const d = await r.json();
+  cloud.binId = d.metadata.id;
+  saveCloudCfg();
+}
+
+async function charger(){
+  try{
+    if(!cloud.binId){ await creerBase(); boutique={produits:[],commandes:[]}; return; }
+    const r = await fetch(API+"/"+cloud.binId+"/latest", {headers:{"X-Master-Key":cloud.apiKey}});
+    if(r.ok){ const d = await r.json(); boutique = {produits:d.record.produits||[], commandes:d.record.commandes||[]}; return; }
+    throw new Error("cloud indispo");
+  }catch(e){
+    try{ boutique = JSON.parse(localStorage.getItem("rboutique-data")) || {produits:[],commandes:[]}; }
+    catch(_){ boutique={produits:[],commandes:[]}; }
+  }
+}
+async function sauver(){
+  localStorage.setItem("rboutique-data", JSON.stringify(boutique));
+  try{
+    if(!cloud.binId) return;
+    await fetch(API+"/"+cloud.binId, {
+      method:"PUT",
+      headers:{"Content-Type":"application/json","X-Master-Key":cloud.apiKey},
+      body:JSON.stringify(boutique)
+    });
+  }catch(e){}
+}
+
+/* ================= AFFICHAGE ================= */
+function renderFiltres(){
+  document.getElementById("filtres").innerHTML = CATS.map(c=>
+    `<div class="chip ${c===filtreActif?'actif':''}" onclick="setFiltre('${c.replace(/'/g,"\\'")}')">${c}</div>`
+  ).join("");
+}
+function setFiltre(c){ filtreActif=c; renderFiltres(); renderProduits(); }
+
+function echapper(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function renderProduits(){
+  const g = document.getElementById("grille");
+  let liste = [...boutique.produits];
+  if(filtreActif!=="Tous") liste = liste.filter(p=>p.cat===filtreActif);
+  document.getElementById("cptProd").textContent = liste.length;
+
+  if(liste.length===0){
+    g.innerHTML = `<div class="vide">Aucun produit ${modePDG?"pour l'instant. Clique sur « Ajouter un produit » ! 📦":"disponible pour le moment. Reviens bientôt ! 🛍️"}</div>`;
+    return;
+  }
+  g.innerHTML = liste.map(p=>{
+    const dispo = !p.rupture;
+    return `
+    <div class="prod ${dispo?'':'rupture'}">
+      ${p.img ? `<img class="prod-img" src="${p.img}" alt="">` : ""}
+      <div class="prod-corps">
+        <span class="prod-cat">${p.cat||""}</span>
+        <div class="prod-titre">${echapper(p.nom)}</div>
+        <div class="prod-desc">${echapper(p.desc)}</div>
+        <div class="prod-bas">
+          <span class="prix">${p.prix}<small> ${echapper(p.unite||"€")}</small></span>
+          ${dispo
+            ? (modePDG ? "" : `<button class="btn-primaire" style="padding:10px 16px;font-size:.95rem;" onclick="ouvrirCmd('${p.id}')">🛒 Commander</button>`)
+            : `<span class="badge-rupture">Rupture</span>`}
+        </div>
+        ${modePDG ? renderAdminProd(p) : ""}
+      </div>
+    </div>`;
+  }).join("");
+}
+function renderAdminProd(p){
+  return `<div class="admin-actions">
+    <button onclick="editerProduit('${p.id}')">✏️ Modifier</button>
+    <button onclick="basculerRupture('${p.id}')">${p.rupture?"✅ Remettre en stock":"⛔ Rupture"}</button>
+    <button class="del" onclick="supprimerProduit('${p.id}')">🗑️ Suppr.</button>
+  </div>`;
+}
+
+const ST_CMD = {
+  attente:{txt:"⏳ En attente",cls:"st-attente"},
+  acceptee:{txt:"✅ Acceptée",cls:"st-acceptee"},
+  refusee:{txt:"❌ Refusée",cls:"st-refusee"}
+};
+function renderCommandes(){
+  const box = document.getElementById("listeCmd");
+  const cmds = [...boutique.commandes].sort((a,b)=>b.date-a.date);
+  document.getElementById("cptCmd").textContent = cmds.length;
+  if(cmds.length===0){ box.innerHTML = `<div class="vide">Aucune commande pour l'instant. 📭</div>`; return; }
+  box.innerHTML = cmds.map(c=>{
+    const st = ST_CMD[c.statut||"attente"];
+    return `
+    <div class="cmd">
+      <div class="cmd-haut">
+        <div>
+          <div class="cmd-titre">${echapper(c.prodNom)}</div>
+          <div class="cmd-info">👤 ${echapper(c.nom)} · 📞 ${echapper(c.contact)}<br>Quantité : ${c.qte}</div>
+        </div>
+        <div class="cmd-prix">${(c.prix*c.qte).toFixed(2)} ${echapper(c.unite||"€")}</div>
+      </div>
+      <span class="cmd-statut ${st.cls}">${st.txt}</span>
+      <div class="cmd-actions">
+        <button class="b-accept" onclick="setStatutCmd('${c.id}','acceptee')">✅ Accepter</button>
+        <button class="b-refus" onclick="setStatutCmd('${c.id}','refusee')">❌ Refuser</button>
+        <button class="b-suppr" onclick="supprimerCmd('${c.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function majAffichage(){
+  document.getElementById("zonePDG").style.display = modePDG ? "block" : "none";
+  document.getElementById("titreProduits").style.display = modePDG ? "flex" : "flex";
+  renderProduits();
+  if(modePDG) renderCommandes();
+}
+
+/* ================= COMMANDE (CLIENT) ================= */
+function ouvrirCmd(id){
+  const p = boutique.produits.find(x=>x.id===id);
+  if(!p) return;
+  prodCommande = p;
+  document.getElementById("cmdNomProd").textContent = "Commander : "+p.nom;
+  document.getElementById("cmdPrixProd").textContent = p.prix+" "+(p.unite||"€")+" l'unité";
+  document.getElementById("cQte").value = 1;
+  document.getElementById("overlayCmd").classList.add("ouvert");
+}
+function fermerCmd(){
+  document.getElementById("overlayCmd").classList.remove("ouvert");
+  document.getElementById("cNom").value="";
+  document.getElementById("cContact").value="";
+  prodCommande=null;
+}
+async function passerCommande(){
+  const nom = document.getElementById("cNom").value.trim();
+  const contact = document.getElementById("cContact").value.trim();
+  let qte = parseInt(document.getElementById("cQte").value)||1;
+  if(qte<1) qte=1;
+  if(!nom || !contact){ alert("Remplis ton nom et un moyen de te contacter ! 😊"); return; }
+  if(!prodCommande) return;
+  boutique.commandes.push({
+    id:"c"+Date.now()+Math.random().toString(36).slice(2,6),
+    prodNom:prodCommande.nom, prix:prodCommande.prix, unite:prodCommande.unite||"€",
+    nom, contact, qte, statut:"attente", date:Date.now()
+  });
+  await sauver();
+  fermerCmd();
+  alert("Commande envoyée ! 🎉 Le PDG va la valider et te contacter pour le paiement en espèces. 💵");
+}
+
+/* ================= AJOUT / EDITION PRODUIT (PDG) ================= */
+function ouvrirAjout(){
+  editId=null; imageBase64="";
+  document.getElementById("ajoutTitre").textContent="📦 Nouveau produit";
+  document.getElementById("fNom").value="";
+  document.getElementById("fPrix").value="";
+  document.getElementById("fUnite").value="€";
+  document.getElementById("fDesc").value="";
+  document.getElementById("fImg").value="";
+  document.getElementById("apercu").style.display="none";
+  document.getElementById("fRupture").checked=false;
+  document.getElementById("fCat").selectedIndex=0;
+  document.getElementById("overlayAjout").classList.add("ouvert");
+}
+function editerProduit(id){
+  const p = boutique.produits.find(x=>x.id===id);
+  if(!p) return;
+  editId=id; imageBase64=p.img||"";
+  document.getElementById("ajoutTitre").textContent="✏️ Modifier le produit";
+  document.getElementById("fNom").value=p.nom;
+  document.getElementById("fPrix").value=p.prix;
+  document.getElementById("fUnite").value=p.unite||"€";
+  document.getElementById("fDesc").value=p.desc;
+  document.getElementById("fCat").value=p.cat;
+  document.getElementById("fRupture").checked=!!p.rupture;
+  const a=document.getElementById("apercu");
+  if(p.img){ a.src=p.img; a.style.display="block"; } else a.style.display="none";
+  document.getElementById("fImg").value="";
+  document.getElementById("overlayAjout").classList.add("ouvert");
+}
+function fermerAjout(){ document.getElementById("overlayAjout").classList.remove("ouvert"); }
+
+function chargerImage(e){
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const c=document.createElement("canvas");
+      const max=700; let {width:w,height:h}=img;
+      if(w>h && w>max){h=h*max/w;w=max;} else if(h>max){w=w*max/h;h=max;}
+      c.width=w;c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      imageBase64=c.toDataURL("image/jpeg",0.75);
+      const a=document.getElementById("apercu"); a.src=imageBase64; a.style.display="block";
+    };
+    img.src=r.result;
+  };
+  r.readAsDataURL(f);
+}
+
+async function enregistrerProduit(){
+  const nom=document.getElementById("fNom").value.trim();
+  const cat=document.getElementById("fCat").value;
+  const prix=parseFloat(document.getElementById("fPrix").value);
+  const unite=document.getElementById("fUnite").value.trim()||"€";
+  const desc=document.getElementById("fDesc").value.trim();
+  const rupture=document.getElementById("fRupture").checked;
+  if(!nom || isNaN(prix) || !desc){ alert("Remplis au moins le nom, le prix et la description ! 😊"); return; }
+  if(editId){
+    const p=boutique.produits.find(x=>x.id===editId);
+    if(p){ Object.assign(p,{nom,cat,prix,unite,desc,rupture,img:imageBase64}); }
+  }else{
+    boutique.produits.push({
+      id:"p"+Date.now()+Math.random().toString(36).slice(2,6),
+      nom,cat,prix,unite,desc,rupture,img:imageBase64,date:Date.now()
+    });
+  }
+  await sauver();
+  fermerAjout();
+  majAffichage();
+}
+async function supprimerProduit(id){
+  if(!confirm("Supprimer ce produit ?")) return;
+  boutique.produits=boutique.produits.filter(p=>p.id!==id);
+  await sauver(); majAffichage();
+}
+async function basculerRupture(id){
+  const p=boutique.produits.find(x=>x.id===id);
+  if(p){ p.rupture=!p.rupture; await sauver(); majAffichage(); }
+}
+
+/* ================= COMMANDES (PDG) ================= */
+async function setStatutCmd(id,statut){
+  const c=boutique.commandes.find(x=>x.id===id);
+  if(c){ c.statut=statut; await sauver(); renderCommandes(); }
+}
+async function supprimerCmd(id){
+  if(!confirm("Supprimer cette commande ?")) return;
+  boutique.commandes=boutique.commandes.filter(c=>c.id!==id);
+  await sauver(); renderCommandes();
+}
+
+/* ================= MODE PDG ================= */
+function basculerPDG(){
+  if(modePDG){ modePDG=false; document.getElementById("btnPDG").textContent="👑 Mode PDG"; majAffichage(); return; }
+  const code=prompt("Code PDG :");
+  if(code===CODE_PDG){ modePDG=true; document.getElementById("btnPDG").textContent="👑 PDG activé"; majAffichage(); }
+  else if(code!==null){ alert("Code incorrect ❌"); }
+}
+
+/* ================= RÉGLAGES ================= */
+function ouvrirReglages(){
+  const code=prompt("Code PDG pour accéder aux réglages :");
+  if(code===null) return;
+  if(code!==CODE_PDG){ alert("Code incorrect ❌"); return; }
+  document.getElementById("rApiKey").value=cloud.apiKey||"";
+  document.getElementById("rBinId").value=cloud.binId||"";
+  document.getElementById("regEtat").style.display="none";
+  document.getElementById("overlayReg").classList.add("ouvert");
+}
+function fermerReglages(){ document.getElementById("overlayReg").classList.remove("ouvert"); }
+async function activerSync(){
+  const key=document.getElementById("rApiKey").value.trim();
+  const bin=document.getElementById("rBinId").value.trim();
+  const box=document.getElementById("regEtat"); box.style.display="block";
+  if(!key){ box.innerHTML="⚠️ Colle d'abord ta clé de synchro."; return; }
+  cloud.apiKey=key; box.innerHTML="☁️ Connexion en cours…";
+  try{
+    if(bin){
+      const r=await fetch(API+"/"+bin+"/latest",{headers:{"X-Master-Key":key}});
+      if(!r.ok) throw new Error("base introuvable");
+      cloud.binId=bin;
+    }else{
+      await creerBase();
+      document.getElementById("rBinId").value=cloud.binId;
+    }
+    saveCloudCfg();
+    await charger(); majAffichage();
+    box.innerHTML="✅ Synchro activée !<br>Identifiant à me redonner : <b style='color:var(--or)'>"+cloud.binId+"</b>";
+  }catch(e){
+    box.innerHTML="❌ Échec. Vérifie ta clé (et l'identifiant si tu en as mis un).";
+  }
+}
+
+/* ================= INIT ================= */
+(async function(){
+  renderFiltres();
+  await charger();
+  document.getElementById("etat").style.display="none";
+  majAffichage();
+})();
+</script>
+</body>
+</html>
