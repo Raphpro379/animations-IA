@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///C:/Users/RAPHAEL/Downloads/espace-premium-r_5.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Premium R</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{
+    --or:#ffd54a; --or2:#f5a623; --or-clair:#fff6c0;
+    --bleu:#159ad8; --bleu2:#0f86c4;
+    --fond:#0a1526; --carte:#122238; --carte2:#16263f;
+    --bord:#24405f; --txt:#eaf2fb; --txt2:#93b0cf;
+  }
+  body{
+    font-family:'Segoe UI',system-ui,sans-serif;
+    background:radial-gradient(circle at 50% -10%, #163455, #0a1526 60%);
+    color:var(--txt); min-height:100vh;
+  }
+  .cache{display:none!important;}
+
+  /* ---------- ÉCRAN CONNEXION ---------- */
+  #connexion{
+    min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; padding:30px 20px; text-align:center;
+  }
+  .logoVIP{
+    width:170px; height:238px; border-radius:18px; position:relative; overflow:hidden;
+    background:linear-gradient(160deg,#29c0ee,#159ad8 60%,#0f86c4);
+    box-shadow:0 0 50px #ffd70055,0 16px 40px #0009; margin-bottom:26px;
+  }
+  .logoVIP .halo{position:absolute;top:10%;left:50%;width:150px;height:150px;transform:translateX(-50%);
+    background:radial-gradient(circle,#ffe98a55,transparent 65%);animation:pulse 2.6s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.5;transform:translateX(-50%) scale(.9);}50%{opacity:1;transform:translateX(-50%) scale(1.15);}}
+  .logoVIP .R{position:absolute;top:6%;left:0;right:0;font:900 italic 120px 'Arial Black',sans-serif;
+    background:linear-gradient(160deg,#fff6c0,#ffd54a 35%,#f5a623 70%,#d98314);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 6px #0006);animation:bob 3s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+  .logoVIP .shine{position:absolute;top:0;left:-60%;width:50%;height:100%;
+    background:linear-gradient(100deg,transparent,#ffffffaa,transparent);transform:skewX(-20deg);
+    animation:sweep 3.2s ease-in-out infinite;}
+  @keyframes sweep{0%{left:-60%;}55%{left:130%;}100%{left:130%;}}
+  .logoVIP .ban{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);width:78%;padding:7px 0;
+    background:linear-gradient(180deg,#fff4c2,#ffd766);border-radius:5px;
+    clip-path:polygon(0 20%,6% 0,94% 0,100% 20%,100% 80%,94% 100%,6% 100%,0 80%);}
+  .logoVIP .ban span{font:900 19px 'Segoe UI',sans-serif;letter-spacing:2px;text-transform:uppercase;
+    background:linear-gradient(90deg,#8e2de2,#c026d3,#8e2de2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+
+  h1.titre{font-size:26px;margin-bottom:6px;
+    background:linear-gradient(90deg,var(--or),var(--or-clair),var(--or2));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .soustitre{color:var(--txt2);font-size:15px;margin-bottom:28px;}
+  .boite{background:var(--carte);border:1px solid var(--bord);border-radius:18px;padding:24px 20px;width:100%;max-width:360px;}
+  .boite label{display:block;text-align:left;font-size:13px;color:var(--txt2);margin-bottom:8px;}
+  input{width:100%;padding:14px;border-radius:12px;border:1px solid var(--bord);
+    background:#0d1a2e;color:var(--txt);font-size:16px;text-align:center;letter-spacing:1px;}
+  input:focus{outline:none;border-color:var(--or);}
+  .btn-or{width:100%;margin-top:14px;padding:14px;border:none;border-radius:12px;cursor:pointer;
+    font-size:16px;font-weight:800;color:#2a1a00;background:linear-gradient(90deg,var(--or),var(--or2));transition:opacity .2s,transform .1s;}
+  .btn-or:hover{opacity:.9;} .btn-or:active{transform:scale(.97);}
+  .err{color:#ff6b6b;font-size:13px;margin-top:12px;min-height:18px;}
+  .pdg-lien{margin-top:22px;color:var(--txt2);font-size:12px;cursor:pointer;text-decoration:underline;}
+
+  /* ---------- APP ---------- */
+  #app{max-width:820px;margin:0 auto;padding:0 0 90px;}
+  header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;
+    padding:14px 18px;background:#0c1a2edd;backdrop-filter:blur(8px);border-bottom:1px solid var(--bord);}
+  .mini-logo{width:34px;height:34px;border-radius:8px;background:linear-gradient(160deg,#29c0ee,#0f86c4);
+    display:flex;align-items:center;justify-content:center;font:900 italic 22px 'Arial Black';color:var(--or);flex-shrink:0;}
+  .top h2{font-size:17px;flex:1;} .top h2 span{color:var(--or);}
+  .badge-vip{font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;color:#2a1a00;
+    background:linear-gradient(90deg,var(--or),var(--or2));}
+  .sortie{background:none;border:1px solid var(--bord);color:var(--txt2);padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;}
+
+  .welcome{padding:22px 18px 6px;}
+  .welcome h3{font-size:22px;margin-bottom:4px;}
+  .welcome p{color:var(--txt2);font-size:14px;}
+
+  /* onglets */
+  nav.tabs{display:flex;gap:8px;padding:14px 18px;overflow-x:auto;}
+  nav.tabs button{white-space:nowrap;padding:10px 16px;border-radius:20px;border:1px solid var(--bord);
+    background:var(--carte);color:var(--txt2);font-size:14px;font-weight:600;cursor:pointer;transition:.2s;}
+  nav.tabs button.actif{background:linear-gradient(90deg,var(--or),var(--or2));color:#2a1a00;border-color:transparent;}
+
+  .section{padding:6px 18px;}
+  .vide{color:var(--txt2);text-align:center;padding:40px 20px;font-size:14px;}
+
+  /* cartes contenu */
+  .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+  .carte{background:var(--carte);border:1px solid var(--bord);border-radius:16px;overflow:hidden;transition:transform .18s,border-color .18s;}
+  .carte:hover{transform:translateY(-3px);border-color:#ffd54a55;}
+  .carte .haut{padding:16px;}
+  .carte .cat{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;
+    background:#ffd54a22;color:var(--or);margin-bottom:8px;}
+  .carte h4{font-size:16px;margin-bottom:6px;}
+  .carte p{font-size:13px;color:var(--txt2);line-height:1.5;white-space:pre-wrap;}
+  .carte a.lien{display:block;margin-top:10px;padding:9px;text-align:center;border-radius:10px;text-decoration:none;
+    font-weight:700;font-size:13px;color:#2a1a00;background:linear-gradient(90deg,var(--or),var(--or2));}
+  .carte .suppr{width:100%;padding:8px;background:#ff6b6b22;color:#ff8e8e;border:none;border-top:1px solid var(--bord);cursor:pointer;font-size:12px;}
+
+  /* avantages */
+  .avantage{display:flex;gap:14px;align-items:flex-start;background:var(--carte);border:1px solid var(--bord);
+    border-radius:14px;padding:16px;margin-bottom:12px;}
+  .avantage .ico{font-size:26px;}
+  .avantage h4{font-size:15px;margin-bottom:3px;} .avantage p{font-size:13px;color:var(--txt2);}
+  .avantage .suppr{margin-left:auto;background:none;border:none;color:#ff8e8e;cursor:pointer;font-size:18px;}
+
+  /* salon */
+  .msg{background:var(--carte);border:1px solid var(--bord);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+  .msg .qui{font-size:13px;font-weight:700;color:var(--or);margin-bottom:4px;}
+  .msg .txt{font-size:14px;color:var(--txt);white-space:pre-wrap;}
+  .msg .h{font-size:11px;color:var(--txt2);margin-top:6px;}
+  .compo{display:flex;gap:8px;margin-top:14px;}
+  .compo input{text-align:left;letter-spacing:0;}
+  .compo button{padding:0 18px;border:none;border-radius:12px;font-weight:800;color:#2a1a00;
+    background:linear-gradient(90deg,var(--or),var(--or2));cursor:pointer;}
+
+  /* PDG */
+  .pdg-panel{background:var(--carte2);border:1px dashed var(--or);border-radius:16px;padding:18px;margin:14px 18px;}
+  .pdg-panel h4{color:var(--or);font-size:15px;margin-bottom:14px;}
+  .champ{margin-bottom:10px;}
+  .champ label{display:block;font-size:12px;color:var(--txt2);margin-bottom:5px;}
+  .champ input,.champ select,.champ textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--bord);
+    background:#0d1a2e;color:var(--txt);font-size:14px;text-align:left;letter-spacing:0;font-family:inherit;}
+  .champ textarea{resize:vertical;min-height:60px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .modal-bg{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:20px;z-index:50;}
+  .modal{background:var(--carte);border:1px solid var(--bord);border-radius:18px;padding:22px;max-width:400px;width:100%;max-height:90vh;overflow:auto;}
+  .modal h3{margin-bottom:16px;font-size:18px;}
+  .modal .fermer{float:right;background:none;border:none;color:var(--txt2);font-size:22px;cursor:pointer;}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--or);color:#2a1a00;
+    padding:12px 22px;border-radius:12px;font-weight:700;z-index:99;box-shadow:0 8px 24px #0007;}
+</style>
+</head>
+<body>
+
+<!-- ====== ÉCRAN DE CONNEXION ====== -->
+<div id="connexion" class="cache">
+  <div class="logoVIP">
+    <div class="halo"></div><div class="shine"></div>
+    <div class="R">R</div>
+    <div class="ban"><span>pro</span></div>
+  </div>
+  <h1 class="titre">Espace Premium R</h1>
+  <p class="soustitre">🔒 Réservé aux membres VIP</p>
+  <div class="boite">
+    <label>Entre ton code secret Premium</label>
+    <input id="codeInput" type="password" placeholder="Ton code secret" autocomplete="off" onkeydown="if(event.key===&#39;Enter&#39;)connecter()">
+    <button class="btn-or" onclick="connecter()">✨ Entrer dans le club</button>
+    <div class="err" id="errCode"></div>
+  </div>
+  <div class="pdg-lien" onclick="ouvrirPDG()">🔑 Accès PDG</div>
+</div>
+
+<!-- ====== APP ====== -->
+<div id="app" class="">
+  <header class="top">
+    <div class="mini-logo">R</div>
+    <h2>Espace <span>Premium</span></h2>
+    <span id="syncBadge" style="font-size: 11px; color: rgb(126, 230, 160); white-space: nowrap;">☁️ Synchronisé</span>
+    <span class="badge-vip" id="badgeRole">👑 PDG</span>
+    <button class="sortie" onclick="deconnecter()">Sortir</button>
+  </header>
+
+  <div class="welcome">
+    <h3>Bienvenue au club ! 🏅</h3>
+    <p>Tu fais partie des membres Premium. Profite de tes avantages exclusifs.</p>
+  </div>
+
+  <!-- panneau PDG ajout -->
+  <div id="zonePDG" class="">
+    <div class="pdg-panel">
+      <h4>👑 Mode PDG — ajouter du contenu VIP</h4>
+      <button class="btn-or" onclick="modalAjout(&#39;contenu&#39;)">🎁 + Contenu exclusif</button>
+      <div style="height:8px"></div>
+      <button class="btn-or" onclick="modalAjout(&#39;avantage&#39;)">⭐ + Avantage Premium</button>
+
+      <hr style="border:none;border-top:1px solid var(--bord);margin:18px 0 14px">
+      <h4 style="font-size:14px;">☁️ Synchro entre appareils</h4>
+      <p style="font-size:12px;color:var(--txt2);line-height:1.5;margin:6px 0 12px;">
+        Colle ta clé jsonbin (X-Master-Key) ci-dessous pour activer la synchro.
+        L'app créera sa propre base en ligne. Copie ensuite l'identifiant et
+        colle-le dans <b>SHARED_CLOUD.binId</b> en haut du fichier, puis
+        ré-uploade sur GitHub — et tous tes membres verront le même contenu ! 🚀
+      </p>
+      <div class="champ" style="margin-bottom:10px;">
+        <label>Clé de synchro (X-Master-Key)</label>
+        <input id="cleInput" type="text" placeholder="$2a$10$..." value="$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K" autocomplete="off">
+      </div>
+      <button class="btn-or" onclick="activerSynchro()">☁️ Activer / mettre à jour la synchro</button>
+      <div id="binIdBox" style="display: block; background: rgb(13, 26, 46); border: 1px solid var(--bord); border-radius: 10px; padding: 12px; margin-top: 12px;">
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px;">Identifiant de ta base (à figer dans le fichier) :</div>
+        <code style="display:block;color:#9fb4cf;font-size:13px;word-break:break-all;background:#0a1526;padding:8px 10px;border-radius:8px;font-family:monospace;">6a6dad3ada38895dfeabc293</code>
+        <button class="btn-or" style="margin-top:10px;padding:9px;font-size:13px;" onclick="copierBinId()">📋 Copier l'identifiant</button>
+      </div>
+      <button class="sortie" style="margin-top:10px;" onclick="tirerCloud()">↓ Recharger depuis le cloud</button>
+    </div></div>
+
+  <nav class="tabs">
+    <button class="actif" data-tab="contenu" onclick="changerTab(&#39;contenu&#39;)">🎁 Exclusif</button>
+    <button data-tab="avantages" onclick="changerTab(&#39;avantages&#39;)">⭐ Avantages</button>
+    <button data-tab="salon" onclick="changerTab(&#39;salon&#39;)">💬 Salon VIP</button>
+  </nav>
+
+  <div id="tab-contenu" class="section"><div class="vide">Aucun contenu exclusif pour l'instant. 🎁</div></div>
+  <div id="tab-avantages" class="section cache">
+    <div class="avantage">
+      <div class="ico">🚀</div>
+      <div><h4>Accès en avant-première</h4><p>Tu vois les nouveautés avant tout le monde.</p></div>
+      <button class="suppr" onclick="suppr(&#39;avantages&#39;,0)">✕</button>
+    </div>
+    <div class="avantage">
+      <div class="ico">💰</div>
+      <div><h4>-50% sur tout</h4><p>Réduction VIP sur toutes les apps payantes de R.</p></div>
+      <button class="suppr" onclick="suppr(&#39;avantages&#39;,1)">✕</button>
+    </div>
+    <div class="avantage">
+      <div class="ico">🎧</div>
+      <div><h4>Sans publicité</h4><p>Profite de CinéèR et R Radio sans aucune pub.</p></div>
+      <button class="suppr" onclick="suppr(&#39;avantages&#39;,2)">✕</button>
+    </div></div>
+  <div id="tab-salon" class="section cache">
+    <div class="msg">
+      <div class="qui">Le PDG 👑</div>
+      <div class="txt">Bienvenue dans le salon privé des membres Premium ! 🎉</div>
+      <div class="h">Message d'accueil</div>
+    </div>
+    <div class="compo">
+      <input id="msgInput" placeholder="Écris un message dans le salon VIP..." onkeydown="if(event.key===&#39;Enter&#39;)posterMsg()">
+      <button onclick="posterMsg()">Envoyer</button>
+    </div></div>
+</div>
+
+<div id="modalZone"></div>
+<div id="toastZone"></div>
+
+<script>
+/* ===================== DONNÉES ===================== */
+const CODE_VIP = "RPRO-VIP";     // code des membres premium
+const CODE_PDG = "PDG2026";      // code du patron
+
+let estPDG = false;
+let pseudo = "Membre VIP";
+
+// contenu par défaut (le PDG peut en ajouter)
+let data = {
+  contenu: [
+    {cat:"🎬 Vidéo", titre:"Making-of exclusif", desc:"Les coulisses de la série Nova, rien que pour les premiums !", lien:""},
+    {cat:"🎁 Cadeau", titre:"Fond d'écran VIP", desc:"Un magnifique fond d'écran doré de l'Entreprise R à télécharger.", lien:""},
+  ],
+  avantages: [
+    {ico:"🚀", titre:"Accès en avant-première", desc:"Tu vois les nouveautés avant tout le monde."},
+    {ico:"💰", titre:"-50% sur tout", desc:"Réduction VIP sur toutes les apps payantes de R."},
+    {ico:"🎧", titre:"Sans publicité", desc:"Profite de CinéèR et R Radio sans aucune pub."},
+  ],
+  salon: [
+    {qui:"Le PDG 👑", txt:"Bienvenue dans le salon privé des membres Premium ! 🎉", h:"Message d'accueil"},
+  ]
+};
+
+/* ===================== SYNCHRO CLOUD (jsonbin) ===================== */
+/* L'Espace Premium a sa PROPRE base (séparée de CinéèR, R Radio, R Idées...).
+   Au 1er lancement en mode PDG, si binId est vide, l'app crée sa base
+   automatiquement et affiche le nouvel identifiant à figer ici. */
+const SHARED_CLOUD = {
+  apiKey: "$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K",
+  binId: "6a6dad3ada38895dfeabc293"   // ← base de l'Espace Premium R
+};
+const API = "https://api.jsonbin.io/v3/b";
+const CFG_KEY = "premiumR-cloud-cfg";
+const LOCAL_KEY = "premiumR-data";
+let cloud = { apiKey: SHARED_CLOUD.apiKey, binId: SHARED_CLOUD.binId };
+try{ const c=JSON.parse(localStorage.getItem(CFG_KEY)||"{}"); if(!cloud.apiKey && c.apiKey) cloud.apiKey=c.apiKey; if(!cloud.binId && c.binId) cloud.binId=c.binId; }catch(e){}
+function saveCloudCfg(){ try{ localStorage.setItem(CFG_KEY, JSON.stringify(cloud)); }catch(e){} }
+function cloudOn(){ return !!cloud.apiKey; }
+
+/* charge d'abord le local (pour affichage immédiat) */
+try{ const s=JSON.parse(localStorage.getItem(LOCAL_KEY)); if(s) data=s; }catch(e){}
+
+/* sauvegarde : local tout de suite + cloud si dispo */
+let syncTimer=null;
+function sauver(){
+  try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); }catch(e){}
+  if(cloudOn()){
+    clearTimeout(syncTimer);
+    syncTimer=setTimeout(pousserCloud, 600);
+  }
+}
+
+/* badge d'état en haut */
+function majBadgeSync(etat){
+  const b=document.getElementById('syncBadge'); if(!b) return;
+  if(etat==='ok'){ b.textContent='☁️ Synchronisé'; b.style.color='#7ee6a0'; }
+  else if(etat==='sync'){ b.textContent='☁️ Synchro…'; b.style.color='var(--or)'; }
+  else if(etat==='err'){ b.textContent='⚠️ Hors ligne'; b.style.color='#ff8e8e'; }
+  else { b.textContent='⚡ Local'; b.style.color='var(--txt2)'; }
+}
+
+/* créer la base au premier coup */
+async function creerBase(){
+  const r = await fetch(API, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey,'X-Bin-Private':'false','X-Bin-Name':'espace-premium-r'},
+    body: JSON.stringify(data)
+  });
+  const j = await r.json();
+  const id = j.metadata && j.metadata.id;
+  if(id){ cloud.binId=id; saveCloudCfg(); return id; }
+  throw new Error('création base échouée');
+}
+
+/* envoyer les données au cloud */
+async function pousserCloud(){
+  if(!cloudOn()) return;
+  majBadgeSync('sync');
+  try{
+    if(!cloud.binId){ await creerBase(); afficherBinId(); }
+    else{
+      await fetch(API+'/'+cloud.binId, {
+        method:'PUT',
+        headers:{'Content-Type':'application/json','X-Master-Key':cloud.apiKey},
+        body: JSON.stringify(data)
+      });
+    }
+    majBadgeSync('ok');
+  }catch(e){ majBadgeSync('err'); }
+}
+
+/* récupérer les données du cloud */
+async function tirerCloud(){
+  if(!cloudOn() || !cloud.binId) return;
+  majBadgeSync('sync');
+  try{
+    const r = await fetch(API+'/'+cloud.binId+'/latest', { headers:{'X-Master-Key':cloud.apiKey} });
+    const j = await r.json();
+    if(j.record){ data=j.record; try{localStorage.setItem(LOCAL_KEY,JSON.stringify(data));}catch(e){} render(); }
+    majBadgeSync('ok');
+  }catch(e){ majBadgeSync('err'); }
+}
+
+/* affiche l'identifiant à figer, pour le PDG */
+function afficherBinId(){
+  const z=document.getElementById('binIdBox');
+  if(z && cloud.binId){
+    z.style.display='block';
+    z.querySelector('code').textContent=cloud.binId;
+  }
+}
+
+/* ===================== CONNEXION ===================== */
+function connecter(){
+  const v = document.getElementById('codeInput').value.trim().toUpperCase();
+  const err = document.getElementById('errCode');
+  if(v === CODE_VIP){ estPDG=false; entrer(); }
+  else if(v === CODE_PDG){ estPDG=true; entrer(); }
+  else { err.textContent = "❌ Code incorrect. Réessaie !"; }
+}
+function ouvrirPDG(){
+  const code = prompt("🔑 Entre ton code PDG :");
+  if(code && code.trim().toUpperCase() === CODE_PDG){ estPDG=true; entrer(); }
+  else if(code!==null){ alert("❌ Code PDG incorrect."); }
+}
+function entrer(){
+  document.getElementById('connexion').classList.add('cache');
+  document.getElementById('app').classList.remove('cache');
+  document.getElementById('badgeRole').textContent = estPDG ? "👑 PDG" : "🏅 VIP";
+  document.getElementById('zonePDG').classList.toggle('cache', !estPDG);
+  if(estPDG) renderPDG();
+  render();
+  if(cloudOn()){ majBadgeSync(cloud.binId?'ok':'sync'); tirerCloud(); }
+  window.scrollTo(0,0);
+}
+function deconnecter(){
+  document.getElementById('app').classList.add('cache');
+  document.getElementById('connexion').classList.remove('cache');
+  document.getElementById('codeInput').value='';
+  document.getElementById('errCode').textContent='';
+}
+
+/* ===================== ONGLETS ===================== */
+function changerTab(t){
+  ['contenu','avantages','salon'].forEach(x=>{
+    document.getElementById('tab-'+x).classList.toggle('cache', x!==t);
+  });
+  document.querySelectorAll('nav.tabs button').forEach(b=>{
+    b.classList.toggle('actif', b.dataset.tab===t);
+  });
+}
+
+/* ===================== RENDU ===================== */
+function render(){ renderContenu(); renderAvantages(); renderSalon(); }
+
+function renderContenu(){
+  const z=document.getElementById('tab-contenu');
+  if(!data.contenu.length){ z.innerHTML='<div class="vide">Aucun contenu exclusif pour l\'instant. 🎁</div>'; return; }
+  z.innerHTML = '<div class="grille">'+data.contenu.map((c,i)=>`
+    <div class="carte">
+      <div class="haut">
+        <span class="cat">${esc(c.cat)}</span>
+        <h4>${esc(c.titre)}</h4>
+        <p>${esc(c.desc)}</p>
+        ${c.lien?`<a class="lien" href="${esc(c.lien)}" target="_blank">▶️ Ouvrir</a>`:''}
+      </div>
+      ${estPDG?`<button class="suppr" onclick="suppr('contenu',${i})">🗑️ Supprimer</button>`:''}
+    </div>`).join('')+'</div>';
+}
+
+function renderAvantages(){
+  const z=document.getElementById('tab-avantages');
+  if(!data.avantages.length){ z.innerHTML='<div class="vide">Aucun avantage pour l\'instant. ⭐</div>'; return; }
+  z.innerHTML = data.avantages.map((a,i)=>`
+    <div class="avantage">
+      <div class="ico">${esc(a.ico)}</div>
+      <div><h4>${esc(a.titre)}</h4><p>${esc(a.desc)}</p></div>
+      ${estPDG?`<button class="suppr" onclick="suppr('avantages',${i})">✕</button>`:''}
+    </div>`).join('');
+}
+
+function renderSalon(){
+  const z=document.getElementById('tab-salon');
+  const liste = data.salon.length ? data.salon.map((m,i)=>`
+    <div class="msg">
+      <div class="qui">${esc(m.qui)}</div>
+      <div class="txt">${esc(m.txt)}</div>
+      ${m.h?`<div class="h">${esc(m.h)}</div>`:''}
+    </div>`).join('') : '<div class="vide">Le salon est vide. Sois le premier à écrire ! 💬</div>';
+  z.innerHTML = liste + `
+    <div class="compo">
+      <input id="msgInput" placeholder="Écris un message dans le salon VIP..." onkeydown="if(event.key==='Enter')posterMsg()">
+      <button onclick="posterMsg()">Envoyer</button>
+    </div>`;
+}
+
+function posterMsg(){
+  const inp=document.getElementById('msgInput');
+  const t=inp.value.trim(); if(!t) return;
+  const now=new Date();
+  const h=now.toLocaleDateString('fr-FR')+' à '+now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  data.salon.push({qui: estPDG?"Le PDG 👑":"Membre VIP 🏅", txt:t, h:h});
+  sauver(); renderSalon();
+  document.getElementById('tab-salon').scrollIntoView({behavior:'smooth',block:'end'});
+}
+
+/* ===================== PDG : AJOUT ===================== */
+function renderPDG(){
+  document.getElementById('zonePDG').innerHTML = `
+    <div class="pdg-panel">
+      <h4>👑 Mode PDG — ajouter du contenu VIP</h4>
+      <button class="btn-or" onclick="modalAjout('contenu')">🎁 + Contenu exclusif</button>
+      <div style="height:8px"></div>
+      <button class="btn-or" onclick="modalAjout('avantage')">⭐ + Avantage Premium</button>
+
+      <hr style="border:none;border-top:1px solid var(--bord);margin:18px 0 14px">
+      <h4 style="font-size:14px;">☁️ Synchro entre appareils</h4>
+      <p style="font-size:12px;color:var(--txt2);line-height:1.5;margin:6px 0 12px;">
+        Colle ta clé jsonbin (X-Master-Key) ci-dessous pour activer la synchro.
+        L'app créera sa propre base en ligne. Copie ensuite l'identifiant et
+        colle-le dans <b>SHARED_CLOUD.binId</b> en haut du fichier, puis
+        ré-uploade sur GitHub — et tous tes membres verront le même contenu ! 🚀
+      </p>
+      <div class="champ" style="margin-bottom:10px;">
+        <label>Clé de synchro (X-Master-Key)</label>
+        <input id="cleInput" type="text" placeholder="$2a$10$..." value="${esc(cloud.apiKey||'')}" autocomplete="off">
+      </div>
+      <button class="btn-or" onclick="activerSynchro()">☁️ Activer / mettre à jour la synchro</button>
+      <div id="binIdBox" style="display:none;background:#0d1a2e;border:1px solid var(--bord);border-radius:10px;padding:12px;margin-top:12px;">
+        <div style="font-size:11px;color:var(--txt2);margin-bottom:6px;">Identifiant de ta base (à figer dans le fichier) :</div>
+        <code style="display:block;color:#9fb4cf;font-size:13px;word-break:break-all;background:#0a1526;padding:8px 10px;border-radius:8px;font-family:monospace;"></code>
+        <button class="btn-or" style="margin-top:10px;padding:9px;font-size:13px;" onclick="copierBinId()">📋 Copier l'identifiant</button>
+      </div>
+      <button class="sortie" style="margin-top:10px;" onclick="tirerCloud()">↓ Recharger depuis le cloud</button>
+    </div>`;
+  if(cloud.binId) afficherBinId();
+}
+
+function activerSynchro(){
+  const v=document.getElementById('cleInput').value.trim();
+  if(!v){ toast('Colle ta clé d\'abord !'); return; }
+  cloud.apiKey=v; saveCloudCfg();
+  toast('☁️ Synchro activée !');
+  pousserCloud();
+}
+
+function copierBinId(){
+  if(!cloud.binId) return;
+  navigator.clipboard.writeText(cloud.binId).then(()=>toast('📋 Identifiant copié !')).catch(()=>{
+    prompt('Copie cet identifiant :', cloud.binId);
+  });
+}
+
+function modalAjout(type){
+  let html='';
+  if(type==='contenu'){
+    html=`<h3><button class="fermer" onclick="fermerModal()">×</button>🎁 Nouveau contenu exclusif</h3>
+      <div class="champ"><label>Catégorie</label>
+        <select id="f_cat">
+          <option>🎬 Vidéo</option><option>🎁 Cadeau</option><option>📰 Article</option>
+          <option>🎵 Musique</option><option>🎮 Jeu</option><option>⭐ Autre</option>
+        </select></div>
+      <div class="champ"><label>Titre</label><input id="f_titre" placeholder="Ex: Making-of secret"></div>
+      <div class="champ"><label>Description</label><textarea id="f_desc" placeholder="Décris ce contenu..."></textarea></div>
+      <div class="champ"><label>Lien (facultatif)</label><input id="f_lien" placeholder="https://..."></div>
+      <button class="btn-or" onclick="valider('contenu')">✅ Ajouter</button>`;
+  } else {
+    html=`<h3><button class="fermer" onclick="fermerModal()">×</button>⭐ Nouvel avantage</h3>
+      <div class="row2">
+        <div class="champ"><label>Emoji</label><input id="f_ico" placeholder="🚀" maxlength="4"></div>
+        <div class="champ"><label>Titre</label><input id="f_titre" placeholder="Accès VIP"></div>
+      </div>
+      <div class="champ"><label>Description</label><textarea id="f_desc" placeholder="Explique l'avantage..."></textarea></div>
+      <button class="btn-or" onclick="valider('avantage')">✅ Ajouter</button>`;
+  }
+  document.getElementById('modalZone').innerHTML = `<div class="modal-bg" onclick="if(event.target===this)fermerModal()"><div class="modal">${html}</div></div>`;
+}
+function fermerModal(){ document.getElementById('modalZone').innerHTML=''; }
+
+function valider(type){
+  if(type==='contenu'){
+    const t=val('f_titre'); if(!t){toast('Ajoute un titre !');return;}
+    data.contenu.unshift({cat:val('f_cat'),titre:t,desc:val('f_desc'),lien:val('f_lien')});
+    renderContenu();
+  } else {
+    const t=val('f_titre'); if(!t){toast('Ajoute un titre !');return;}
+    data.avantages.push({ico:val('f_ico')||'⭐',titre:t,desc:val('f_desc')});
+    renderAvantages();
+  }
+  sauver(); fermerModal(); toast('✅ Ajouté !');
+}
+
+function suppr(type,i){
+  if(!confirm('Supprimer cet élément ?')) return;
+  data[type].splice(i,1); sauver(); render();
+  toast('🗑️ Supprimé');
+}
+
+/* ===================== OUTILS ===================== */
+function val(id){ const e=document.getElementById(id); return e?e.value.trim():''; }
+function esc(s){ return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(m){
+  document.getElementById('toastZone').innerHTML=`<div class="toast">${esc(m)}</div>`;
+  setTimeout(()=>document.getElementById('toastZone').innerHTML='',2200);
+}
+</script>
+
+
+</body></html>
