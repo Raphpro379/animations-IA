@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mini App Dessin</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f3f1ec;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px;
+  }
+  h1 {
+    font-size: 20px;
+    color: #2b2b2b;
+    margin: 8px 0 16px;
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 14px;
+  }
+  .toolbar label {
+    font-size: 13px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  input[type="color"] {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 0;
+  }
+  input[type="range"] {
+    width: 100px;
+  }
+  button {
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    background: #2b2b2b;
+    color: white;
+    transition: opacity 0.15s;
+  }
+  button:hover { opacity: 0.85; }
+  button.secondary {
+    background: #e5e2da;
+    color: #2b2b2b;
+  }
+  #canvas-wrap {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    padding: 8px;
+  }
+  canvas {
+    border-radius: 6px;
+    touch-action: none;
+    display: block;
+    background: white;
+    cursor: crosshair;
+  }
+</style>
+</head>
+<body>
+
+<h1>🎨 Mini App Dessin</h1>
+
+<div class="toolbar">
+  <label>Couleur
+    <input type="color" id="color" value="#2b2b2b">
+  </label>
+  <label>Épaisseur
+    <input type="range" id="size" min="1" max="40" value="5">
+    <span id="sizeLabel">5</span>
+  </label>
+  <button id="eraserBtn" class="secondary">Gomme</button>
+  <button id="clearBtn" class="secondary">Effacer tout</button>
+  <button id="downloadBtn">Télécharger</button>
+</div>
+
+<div id="canvas-wrap">
+  <canvas id="canvas" width="800" height="500"></canvas>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const colorInput = document.getElementById('color');
+const sizeInput = document.getElementById('size');
+const sizeLabel = document.getElementById('sizeLabel');
+const eraserBtn = document.getElementById('eraserBtn');
+const clearBtn = document.getElementById('clearBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+
+// fond blanc initial
+ctx.fillStyle = '#ffffff';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+let drawing = false;
+let erasing = false;
+let lastX = 0;
+let lastY = 0;
+
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  if (e.touches && e.touches.length > 0) {
+    return {
+      x: (e.touches[0].clientX - rect.left) * scaleX,
+      y: (e.touches[0].clientY - rect.top) * scaleY
+    };
+  }
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
+  };
+}
+
+function startDraw(e) {
+  drawing = true;
+  const pos = getPos(e);
+  lastX = pos.x;
+  lastY = pos.y;
+  e.preventDefault();
+}
+
+function draw(e) {
+  if (!drawing) return;
+  const pos = getPos(e);
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(pos.x, pos.y);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = sizeInput.value;
+  ctx.strokeStyle = erasing ? '#ffffff' : colorInput.value;
+  ctx.stroke();
+  lastX = pos.x;
+  lastY = pos.y;
+  e.preventDefault();
+}
+
+function stopDraw() {
+  drawing = false;
+}
+
+canvas.addEventListener('mousedown', startDraw);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDraw);
+canvas.addEventListener('mouseleave', stopDraw);
+
+canvas.addEventListener('touchstart', startDraw, { passive: false });
+canvas.addEventListener('touchmove', draw, { passive: false });
+canvas.addEventListener('touchend', stopDraw);
+
+sizeInput.addEventListener('input', () => {
+  sizeLabel.textContent = sizeInput.value;
+});
+
+eraserBtn.addEventListener('click', () => {
+  erasing = !erasing;
+  eraserBtn.textContent = erasing ? 'Gomme (active)' : 'Gomme';
+  eraserBtn.style.background = erasing ? '#c9c4b5' : '#e5e2da';
+});
+
+clearBtn.addEventListener('click', () => {
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+});
+
+downloadBtn.addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'mon-dessin.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
+</script>
+
+</body>
+</html>
