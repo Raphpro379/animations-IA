@@ -976,5 +976,50 @@ function init(){
 }
 init();
 </script>
+<!-- ═══ RÉCEPTEUR PUB — POP-UP ═══ -->
+<div id="rpub-popup" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.75);align-items:center;justify-content:center;padding:24px;font-family:system-ui,-apple-system,sans-serif">
+  <div style="border-radius:18px;overflow:hidden;max-width:340px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:rpubIn .3s ease">
+    <div id="rpub-haut" style="padding:26px 22px;color:#fff;text-align:center">
+      <div id="rpub-ic" style="font-size:44px;margin-bottom:10px">🎉</div>
+      <h3 id="rpub-titre" style="font-size:21px;margin:0 0 8px;font-weight:700">Titre</h3>
+      <p id="rpub-texte" style="font-size:14px;margin:0;opacity:.93;line-height:1.5">Texte</p>
+    </div>
+    <div style="background:#1c1c26;padding:16px">
+      <a id="rpub-cta" href="#" style="display:block;background:#fff;color:#111;text-align:center;padding:13px;border-radius:11px;font-weight:600;font-size:15px;text-decoration:none">Découvrir</a>
+      <div id="rpub-fermer" style="text-align:center;color:#8a8a9a;font-size:13px;margin-top:12px;cursor:pointer">Plus tard</div>
+    </div>
+  </div>
+</div>
+<style>@keyframes rpubIn{from{opacity:0;transform:scale(.9) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
+<script>
+(function(){
+  var RPUB={apiKey:"$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K",binId:"6a6b3b0df5f4af5e29d56df4"};
+  var UNE_HEURE=3600000;
+  function vueRecemment(id){try{var m=JSON.parse(localStorage.getItem('rpub-vues')||'{}');return m[id]&&(Date.now()-m[id]<UNE_HEURE);}catch(e){return false;}}
+  function marquerVu(id){try{var m=JSON.parse(localStorage.getItem('rpub-vues')||'{}');m[id]=Date.now();localStorage.setItem('rpub-vues',JSON.stringify(m));}catch(e){}}
+  function afficher(p){
+    document.getElementById('rpub-haut').style.background='linear-gradient(135deg,'+(p.couleur||'#e50914')+','+(p.couleur2||p.couleur||'#b0060f')+')';
+    document.getElementById('rpub-ic').textContent=p.emoji||'🎉';
+    document.getElementById('rpub-titre').textContent=p.titre||'';
+    document.getElementById('rpub-texte').textContent=p.texte||'';
+    var cta=document.getElementById('rpub-cta');
+    cta.textContent=p.cta||'Découvrir';cta.style.color=p.couleur||'#e50914';
+    if(p.lien){cta.href=p.lien;}else{cta.style.display='none';}
+    cta.onclick=function(){marquerVu(p.id);};
+    var pop=document.getElementById('rpub-popup');pop.style.display='flex';
+    function fermer(){pop.style.display='none';marquerVu(p.id);}
+    document.getElementById('rpub-fermer').onclick=fermer;
+    pop.onclick=function(e){if(e.target===pop)fermer();};
+  }
+  fetch("https://api.jsonbin.io/v3/b/"+RPUB.binId+"/latest",{headers:{"X-Master-Key":RPUB.apiKey}})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(j){
+      if(!j||!j.record||!j.record.pubs)return;
+      var dispo=j.record.pubs.filter(function(p){return p.active&&!vueRecemment(p.id);});
+      if(dispo.length)afficher(dispo[0]);
+    }).catch(function(){});
+})();
+</script>
+<!-- ═══ FIN POP-UP ═══ -->
 </body>
 </html>
