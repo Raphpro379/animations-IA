@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R Galerie</title>
+<style>
+  :root{
+    --bg:#0d0d14; --card:#16161f; --card2:#1e1e2b;
+    --accent:#c9a84c; --accent2:#e0c060;
+    --premium:#a855f7; --premium2:#c77dff;
+    --text:#f0f0f5; --muted:#8a8a9a; --line:#2a2a38;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:40px}
+
+  /* ── Bandeau retour R App ── */
+  .rapp-bar{background:linear-gradient(90deg,#111,#1a1a24);border-bottom:1px solid var(--line);padding:10px 14px}
+  .rapp-bar a{color:var(--text);text-decoration:none;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+
+  header{text-align:center;padding:26px 16px 18px}
+  header h1{font-size:30px;font-weight:800;letter-spacing:.5px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  header p{color:var(--muted);font-size:14px;margin-top:6px}
+
+  /* ── Filtres ── */
+  .filtres{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 14px 18px}
+  .filtre{background:var(--card);border:1px solid var(--line);color:var(--muted);padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+  .filtre.actif{background:var(--accent);color:#111;border-color:var(--accent)}
+
+  /* ── Grille photos ── */
+  .grille{columns:2;column-gap:12px;padding:0 12px;max-width:900px;margin:0 auto}
+  @media(min-width:640px){.grille{columns:3}}
+  .photo{break-inside:avoid;margin-bottom:12px;border-radius:14px;overflow:hidden;position:relative;background:var(--card);cursor:pointer;border:1px solid var(--line)}
+  .photo img{width:100%;display:block;transition:.3s}
+  .photo:hover img{transform:scale(1.04)}
+  .photo .legende{position:absolute;left:0;right:0;bottom:0;padding:20px 10px 8px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-size:12px;font-weight:600}
+  .badge{position:absolute;top:8px;right:8px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+  .badge.gratuit{background:rgba(0,0,0,.6);color:#fff}
+  .badge.premium{background:linear-gradient(135deg,var(--premium),var(--premium2));color:#fff}
+  .photo.verrou img{filter:blur(14px) brightness(.5)}
+  .verrou-ic{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;color:#fff;font-weight:700}
+  .verrou-ic .lock{font-size:32px}
+  .del-btn{position:absolute;top:8px;left:8px;background:rgba(220,40,40,.9);color:#fff;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer;display:none;z-index:3}
+  body.pdg .del-btn{display:block}
+
+  .vide{text-align:center;color:var(--muted);padding:50px 20px;font-size:14px}
+
+  /* ── Barre PDG ── */
+  #pdgBar{display:none;background:linear-gradient(90deg,#2a220a,#3a2f10);border:1px solid var(--accent);margin:0 12px 16px;border-radius:14px;padding:14px;max-width:900px;margin-left:auto;margin-right:auto}
+  body.pdg #pdgBar{display:block}
+  #pdgBar h3{color:var(--accent2);font-size:14px;margin-bottom:10px}
+  #pdgBar .row{display:flex;gap:8px;flex-wrap:wrap}
+  #pdgBar button{background:var(--accent);color:#111;border:none;padding:9px 14px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer}
+  .synk{margin-top:10px;font-size:11px;color:var(--muted);word-break:break-all}
+  .synk code{color:var(--accent2)}
+
+  /* ── Boutons flottants ── */
+  .fab{position:fixed;bottom:18px;width:52px;height:52px;border-radius:50%;border:none;font-size:22px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.5);z-index:50}
+  #keyBtn{right:18px;background:var(--card2);color:var(--accent)}
+
+  /* ── Modales ── */
+  .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:20px}
+  .modal.on{display:flex}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;max-width:380px;width:100%}
+  .box h2{font-size:19px;margin-bottom:14px}
+  .box label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+  .box input,.box select,.box textarea{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:10px;border-radius:9px;font-size:14px;font-family:inherit}
+  .box textarea{resize:vertical;min-height:60px}
+  .box .acts{display:flex;gap:8px;margin-top:16px}
+  .box .acts button{flex:1;padding:11px;border-radius:9px;border:none;font-weight:700;cursor:pointer}
+  .btn-ok{background:var(--accent);color:#111}
+  .btn-no{background:var(--card2);color:var(--muted)}
+
+  /* ── Visionneuse plein écran ── */
+  #viewer{display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.94);align-items:center;justify-content:center;padding:16px;flex-direction:column}
+  #viewer.on{display:flex}
+  #viewer img{max-width:100%;max-height:80vh;border-radius:12px}
+  #viewer .vlegende{color:#fff;margin-top:14px;font-size:15px;font-weight:600;text-align:center}
+  #viewer .vclose{position:absolute;top:16px;right:20px;color:#fff;font-size:30px;cursor:pointer}
+  .sync-tag{text-align:center;font-size:11px;color:var(--muted);padding:8px}
+</style>
+</head>
+<body>
+
+<div class="rapp-bar"><a href="UJ.html">⬅️ Retour à R App</a></div>
+
+<header>
+  <h1>📷 R Galerie</h1>
+  <p>La galerie photo de l'Entreprise R</p>
+</header>
+
+<!-- Barre PDG -->
+<div id="pdgBar">
+  <h3>👑 Mode PDG activé</h3>
+  <div class="row">
+    <button onclick="openAdd()">➕ Ajouter une photo</button>
+    <button onclick="pushCloud()">☁️ Publier (synchro)</button>
+    <button onclick="quitPdg()">Quitter PDG</button>
+  </div>
+  <div style="margin-top:12px">
+    <label style="display:block;font-size:12px;color:var(--muted);margin-bottom:4px">🔑 Clé de synchro (ID du bin jsonbin)</label>
+    <div style="display:flex;gap:8px">
+      <input id="binInp" placeholder="Colle ton ID de bin ici…" style="flex:1;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:9px;border-radius:8px;font-size:13px">
+      <button onclick="saveBin()" style="flex:0 0 auto">💾</button>
+    </div>
+  </div>
+  <div class="synk" style="margin-top:12px">Code VIP (à donner aux membres) : <code id="vipTxt">…</code></div>
+  <div class="synk">Clé active : <code id="synkTxt">…</code></div>
+</div>
+
+<div class="filtres">
+  <div class="filtre actif" data-f="tout" onclick="setFiltre(this)">Tout</div>
+  <div class="filtre" data-f="gratuit" onclick="setFiltre(this)">🆓 Gratuit</div>
+  <div class="filtre" data-f="premium" onclick="setFiltre(this)">⭐ Premium</div>
+</div>
+
+<div class="grille" id="grille"></div>
+<div class="vide" id="vide" style="display:none">Aucune photo pour l'instant.<br>Entre en mode PDG pour en ajouter ! 👑</div>
+<div class="sync-tag" id="syncTag">Chargement…</div>
+
+<button class="fab" id="keyBtn" onclick="openCode()" title="Code">🔑</button>
+
+<!-- Modale code -->
+<div class="modal" id="mCode">
+  <div class="box">
+    <h2>🔑 Entrer un code</h2>
+    <p style="font-size:12px;color:var(--muted)">Code VIP pour débloquer les photos premium, ou code PDG pour gérer la galerie.</p>
+    <label>Code</label>
+    <input type="password" id="codeInp" placeholder="••••••" onkeydown="if(event.key==='Enter')validCode()">
+    <div class="acts">
+      <button class="btn-no" onclick="closeM('mCode')">Annuler</button>
+      <button class="btn-ok" onclick="validCode()">Valider</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modale ajout -->
+<div class="modal" id="mAdd">
+  <div class="box">
+    <h2>➕ Ajouter une photo</h2>
+    <label>Lien de l'image (URL)</label>
+    <input id="aUrl" placeholder="https://…/photo.jpg">
+    <label>Titre / légende</label>
+    <input id="aTitre" placeholder="Coucher de soleil">
+    <label>Type</label>
+    <select id="aType">
+      <option value="gratuit">🆓 Gratuit</option>
+      <option value="premium">⭐ Premium (verrouillé)</option>
+    </select>
+    <div class="acts">
+      <button class="btn-no" onclick="closeM('mAdd')">Annuler</button>
+      <button class="btn-ok" onclick="addPhoto()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Visionneuse -->
+<div id="viewer">
+  <span class="vclose" onclick="closeViewer()">✕</span>
+  <img id="vImg" src="">
+  <div class="vlegende" id="vLeg"></div>
+</div>
+
+<script>
+/* ═══════════ CONFIG ═══════════ */
+var CODE_VIP = "VIP2026";      // débloque les photos premium
+var CODE_PDG = "PDG2026";      // mode gestion
+
+var SYNC = {
+  apiKey : "$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K",
+  binId  : "6a7d56a5da38895dfeddfa76"   // bin r-galerie (modifiable aussi dans l'app en mode PDG)
+};
+/* ══════════════════════════════ */
+
+// Si tu as déjà entré un ID dans l'app, on le récupère
+var savedBin = localStorage.getItem('rgal-bin');
+if(savedBin){ SYNC.binId = savedBin; }
+
+var photos = [];
+var filtre = "tout";
+var vipOk = localStorage.getItem('rgal-vip') === 'oui';
+
+function refreshBinDisplay(){
+  document.getElementById('synkTxt').textContent = SYNC.binId ? SYNC.binId : "(non configurée)";
+  var vip = document.getElementById('vipTxt');
+  if(vip) vip.textContent = CODE_VIP;
+  var inp = document.getElementById('binInp');
+  if(inp) inp.value = SYNC.binId || "";
+}
+refreshBinDisplay();
+
+function saveBin(){
+  var v = document.getElementById('binInp').value.trim();
+  SYNC.binId = v;
+  localStorage.setItem('rgal-bin', v);
+  refreshBinDisplay();
+  alert(v ? "🔑 Clé enregistrée ! Je charge les photos…" : "Clé effacée.");
+  if(v) pullCloud();
+}
+
+function render(){
+  var g = document.getElementById('grille');
+  var liste = photos.filter(function(p){
+    return filtre==="tout" || p.type===filtre;
+  });
+  g.innerHTML = "";
+  document.getElementById('vide').style.display = photos.length ? "none" : "block";
+  liste.forEach(function(p){
+    var verrou = (p.type==="premium" && !vipOk);
+    var div = document.createElement('div');
+    div.className = "photo" + (verrou ? " verrou" : "");
+    div.innerHTML =
+      '<img src="'+p.url+'" alt="'+esc(p.titre)+'" loading="lazy" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22%3E%3Crect fill=%22%23222%22 width=%22300%22 height=%22200%22/%3E%3Ctext x=%22150%22 y=%22105%22 fill=%22%23666%22 font-size=%2214%22 text-anchor=%22middle%22%3EImage indisponible%3C/text%3E%3C/svg%3E\'">' +
+      '<span class="badge '+(p.type==="premium"?"premium":"gratuit")+'">'+(p.type==="premium"?"⭐ Premium":"🆓 Gratuit")+'</span>' +
+      (verrou ? '<div class="verrou-ic"><span class="lock">🔒</span>Code VIP requis</div>' : '<div class="legende">'+esc(p.titre)+'</div>') +
+      '<button class="del-btn" onclick="event.stopPropagation();delPhoto(\''+p.id+'\')">🗑</button>';
+    div.onclick = function(){
+      if(verrou){ openCode(); }
+      else { openViewer(p); }
+    };
+    g.appendChild(div);
+  });
+}
+function esc(s){return (s||"").replace(/[<>&"]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});}
+
+function setFiltre(el){
+  document.querySelectorAll('.filtre').forEach(function(f){f.classList.remove('actif');});
+  el.classList.add('actif');
+  filtre = el.dataset.f;
+  render();
+}
+
+/* ── Visionneuse ── */
+function openViewer(p){
+  document.getElementById('vImg').src = p.url;
+  document.getElementById('vLeg').textContent = p.titre;
+  document.getElementById('viewer').classList.add('on');
+}
+function closeViewer(){ document.getElementById('viewer').classList.remove('on'); }
+
+/* ── Codes ── */
+function openCode(){ document.getElementById('codeInp').value=""; document.getElementById('mCode').classList.add('on'); }
+function closeM(id){ document.getElementById(id).classList.remove('on'); }
+function validCode(){
+  var c = document.getElementById('codeInp').value.trim();
+  if(c===CODE_PDG){
+    document.body.classList.add('pdg');
+    closeM('mCode');
+    alert("👑 Mode PDG activé !");
+  } else if(c===CODE_VIP){
+    vipOk = true;
+    localStorage.setItem('rgal-vip','oui');
+    closeM('mCode');
+    render();
+    alert("⭐ Photos Premium débloquées !");
+  } else {
+    alert("Code incorrect ❌");
+  }
+}
+function quitPdg(){ document.body.classList.remove('pdg'); }
+
+/* ── Ajout / suppression ── */
+function openAdd(){ document.getElementById('mAdd').classList.add('on'); }
+function addPhoto(){
+  var url = document.getElementById('aUrl').value.trim();
+  var titre = document.getElementById('aTitre').value.trim();
+  var type = document.getElementById('aType').value;
+  if(!url){ alert("Mets un lien d'image."); return; }
+  photos.unshift({ id:'p'+Date.now(), url:url, titre:titre||"Sans titre", type:type });
+  document.getElementById('aUrl').value="";
+  document.getElementById('aTitre').value="";
+  closeM('mAdd');
+  render();
+  alert("Photo ajoutée ! N'oublie pas de cliquer ☁️ Publier pour la synchro.");
+}
+function delPhoto(id){
+  if(!confirm("Supprimer cette photo ?")) return;
+  photos = photos.filter(function(p){return p.id!==id;});
+  render();
+}
+
+/* ── Synchro jsonbin ── */
+function pullCloud(){
+  if(!SYNC.binId){
+    document.getElementById('syncTag').textContent = "⚠️ Entre ta clé de synchro en mode PDG";
+    render();
+    return;
+  }
+  fetch("https://api.jsonbin.io/v3/b/"+SYNC.binId+"/latest",{headers:{"X-Master-Key":SYNC.apiKey}})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(j){
+      if(j && j.record && j.record.photos){ photos = j.record.photos; }
+      document.getElementById('syncTag').textContent = "☁️ Synchronisé — "+photos.length+" photo(s)";
+      render();
+    })
+    .catch(function(){
+      document.getElementById('syncTag').textContent = "⚠️ Hors ligne";
+      render();
+    });
+}
+function pushCloud(){
+  if(!SYNC.binId){ alert("Configure d'abord la clé de synchro (binId) dans le code."); return; }
+  fetch("https://api.jsonbin.io/v3/b/"+SYNC.binId,{
+    method:"PUT",
+    headers:{"Content-Type":"application/json","X-Master-Key":SYNC.apiKey},
+    body:JSON.stringify({photos:photos})
+  })
+  .then(function(r){return r.ok?r.json():Promise.reject();})
+  .then(function(){ alert("☁️ Publié ! Tous tes membres voient les photos maintenant."); document.getElementById('syncTag').textContent="☁️ Synchronisé — "+photos.length+" photo(s)"; })
+  .catch(function(){ alert("Échec de la publication. Vérifie la clé/binId."); });
+}
+
+/* ── Démarrage ── */
+pullCloud();
+</script>
+</body>
+</html>
