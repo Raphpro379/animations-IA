@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R TV</title>
+<style>
+  :root{
+    --bg:#0a0a12; --card:#15151f; --card2:#1e1e2b;
+    --accent:#e50914; --accent2:#ff3b47;
+    --premium:#a855f7; --premium2:#c77dff;
+    --text:#f0f0f5; --muted:#8a8a9a; --line:#2a2a38;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:40px}
+
+  .rapp-bar{background:linear-gradient(90deg,#111,#1a1a24);border-bottom:1px solid var(--line);padding:10px 14px}
+  .rapp-bar a{color:var(--text);text-decoration:none;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+
+  header{text-align:center;padding:24px 16px 16px}
+  header h1{font-size:32px;font-weight:900;letter-spacing:1px}
+  header h1 .r{color:var(--accent)}
+  header p{color:var(--muted);font-size:14px;margin-top:6px}
+
+  .filtres{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 14px 18px}
+  .filtre{background:var(--card);border:1px solid var(--line);color:var(--muted);padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+  .filtre.actif{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:0 14px;max-width:1000px;margin:0 auto}
+  .vid{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s;position:relative}
+  .vid:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .vid .thumb{position:relative;aspect-ratio:16/9;background:#000;overflow:hidden}
+  .vid .thumb img{width:100%;height:100%;object-fit:cover}
+  .vid .thumb .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)}
+  .vid.verrou .thumb img{filter:blur(10px) brightness(.4)}
+  .vid.verrou .thumb .play{font-size:26px;flex-direction:column;gap:4px}
+  .vid.verrou .thumb .play small{font-size:11px}
+  .vid .info{padding:9px 10px}
+  .vid .titre{font-size:13px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .vid .meta{font-size:11px;color:var(--muted);margin-top:4px}
+  .badge{position:absolute;top:7px;right:7px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;z-index:2}
+  .badge.premium{background:linear-gradient(135deg,var(--premium),var(--premium2));color:#fff}
+  .badge.gratuit{background:rgba(0,0,0,.65);color:#fff}
+  .del-btn{position:absolute;top:7px;left:7px;background:rgba(220,40,40,.92);color:#fff;border:none;width:26px;height:26px;border-radius:50%;font-size:13px;cursor:pointer;display:none;z-index:3}
+  body.pdg .del-btn{display:block}
+
+  .vide{text-align:center;color:var(--muted);padding:50px 20px;font-size:14px}
+
+  #pdgBar{display:none;background:linear-gradient(90deg,#2a0a0c,#3a1012);border:1px solid var(--accent);margin:0 14px 16px;border-radius:14px;padding:14px;max-width:1000px;margin-left:auto;margin-right:auto}
+  body.pdg #pdgBar{display:block}
+  #pdgBar h3{color:var(--accent2);font-size:14px;margin-bottom:10px}
+  #pdgBar .row{display:flex;gap:8px;flex-wrap:wrap}
+  #pdgBar button{background:var(--accent);color:#fff;border:none;padding:9px 14px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer}
+  .synk{margin-top:10px;font-size:11px;color:var(--muted);word-break:break-all}
+  .synk code{color:var(--accent2)}
+
+  .fab{position:fixed;bottom:18px;right:18px;width:52px;height:52px;border-radius:50%;border:none;font-size:22px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.5);z-index:50;background:var(--card2);color:var(--accent)}
+
+  .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:20px}
+  .modal.on{display:flex}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto}
+  .box h2{font-size:19px;margin-bottom:14px}
+  .box label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+  .box input,.box select{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:10px;border-radius:9px;font-size:14px;font-family:inherit}
+  .box .acts{display:flex;gap:8px;margin-top:16px}
+  .box .acts button{flex:1;padding:11px;border-radius:9px;border:none;font-weight:700;cursor:pointer}
+  .btn-ok{background:var(--accent);color:#fff}
+  .btn-no{background:var(--card2);color:var(--muted)}
+
+  #player{display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.96);flex-direction:column;align-items:center;justify-content:center;padding:16px}
+  #player.on{display:flex}
+  #player video{max-width:100%;max-height:78vh;border-radius:12px;background:#000}
+  #player .ptitre{color:#fff;margin-top:14px;font-size:16px;font-weight:700;text-align:center}
+  #player .pclose{position:absolute;top:16px;right:20px;color:#fff;font-size:30px;cursor:pointer}
+  .sync-tag{text-align:center;font-size:11px;color:var(--muted);padding:10px}
+</style>
+</head>
+<body>
+
+<div class="rapp-bar"><a href="UJ.html">⬅️ Retour à R App</a></div>
+
+<header>
+  <h1><span class="r">R</span> TV 📺</h1>
+  <p>La chaîne vidéo de l'Entreprise R</p>
+</header>
+
+<div id="pdgBar">
+  <h3>👑 Mode PDG activé</h3>
+  <div class="row">
+    <button onclick="openAdd()">➕ Ajouter une vidéo</button>
+    <button onclick="pushCloud()">☁️ Publier (synchro)</button>
+    <button onclick="quitPdg()">Quitter PDG</button>
+  </div>
+  <div style="margin-top:12px">
+    <label style="display:block;font-size:12px;color:var(--muted);margin-bottom:4px">🔑 Clé de synchro (ID du bin jsonbin)</label>
+    <div style="display:flex;gap:8px">
+      <input id="binInp" placeholder="Colle ton ID de bin ici…" style="flex:1;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:9px;border-radius:8px;font-size:13px">
+      <button onclick="saveBin()" style="flex:0 0 auto">💾</button>
+    </div>
+  </div>
+  <div class="synk" style="margin-top:12px">Code VIP (à donner aux membres) : <code id="vipTxt">…</code></div>
+  <div class="synk">Clé active : <code id="synkTxt">…</code></div>
+</div>
+
+<div class="filtres" id="filtres"></div>
+
+<div class="grille" id="grille"></div>
+<div class="vide" id="vide" style="display:none">Aucune vidéo pour l'instant.<br>Entre en mode PDG pour en ajouter ! 👑</div>
+<div class="sync-tag" id="syncTag">Chargement…</div>
+
+<button class="fab" onclick="openCode()" title="Code">🔑</button>
+
+<!-- Modale code -->
+<div class="modal" id="mCode">
+  <div class="box">
+    <h2>🔑 Entrer un code</h2>
+    <p style="font-size:12px;color:var(--muted)">Code VIP pour débloquer les vidéos premium, ou code PDG pour gérer R TV.</p>
+    <label>Code</label>
+    <input type="password" id="codeInp" placeholder="••••••" onkeydown="if(event.key==='Enter')validCode()">
+    <div class="acts">
+      <button class="btn-no" onclick="closeM('mCode')">Annuler</button>
+      <button class="btn-ok" onclick="validCode()">Valider</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modale ajout -->
+<div class="modal" id="mAdd">
+  <div class="box">
+    <h2>➕ Ajouter une vidéo</h2>
+    <label>Lien de la vidéo (.mp4)</label>
+    <input id="aUrl" placeholder="https://…/video.mp4">
+    <label>Lien de la miniature (image, optionnel)</label>
+    <input id="aThumb" placeholder="https://…/thumbnail.jpg">
+    <label>Titre</label>
+    <input id="aTitre" placeholder="Mon super épisode">
+    <label>Catégorie</label>
+    <input id="aCat" placeholder="Ex : Émissions, Clips, Vlogs…">
+    <label>Type</label>
+    <select id="aType">
+      <option value="gratuit">🆓 Gratuit</option>
+      <option value="premium">⭐ Premium (verrouillé)</option>
+    </select>
+    <div class="acts">
+      <button class="btn-no" onclick="closeM('mAdd')">Annuler</button>
+      <button class="btn-ok" onclick="addVid()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lecteur -->
+<div id="player">
+  <span class="pclose" onclick="closePlayer()">✕</span>
+  <video id="pVideo" controls playsinline></video>
+  <div class="ptitre" id="pTitre"></div>
+</div>
+
+<script>
+/* ═══════════ CONFIG ═══════════ */
+var CODE_VIP = "VIP2026";      // débloque les vidéos premium
+var CODE_PDG = "PDG2026";      // mode gestion
+
+var SYNC = {
+  apiKey : "$2a$10$fPM.Bpmbk.lJdF/UqW/dVuybMkyaHLeUAIpZBQoVucjnTKdx6K.3K",
+  binId  : "6a7db794f5f4af5e2910f7c9"   // bin R TV (modifiable aussi dans l'app en mode PDG)
+};
+/* ══════════════════════════════ */
+
+var savedBin = localStorage.getItem('rtv-bin');
+if(savedBin){ SYNC.binId = savedBin; }
+
+var videos = [];
+var filtre = "tout";
+var vipOk = localStorage.getItem('rtv-vip') === 'oui';
+
+function refreshBinDisplay(){
+  document.getElementById('synkTxt').textContent = SYNC.binId ? SYNC.binId : "(non configurée)";
+  var vip = document.getElementById('vipTxt');
+  if(vip) vip.textContent = CODE_VIP;
+  var inp = document.getElementById('binInp');
+  if(inp) inp.value = SYNC.binId || "";
+}
+refreshBinDisplay();
+
+function saveBin(){
+  var v = document.getElementById('binInp').value.trim();
+  SYNC.binId = v;
+  localStorage.setItem('rtv-bin', v);
+  refreshBinDisplay();
+  alert(v ? "🔑 Clé enregistrée ! Je charge les vidéos…" : "Clé effacée.");
+  if(v) pullCloud();
+}
+
+var THUMB_DEF = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22320%22 height=%22180%22%3E%3Crect fill=%22%23111%22 width=%22320%22 height=%22180%22/%3E%3Ctext x=%22160%22 y=%2295%22 fill=%22%23e50914%22 font-size=%2240%22 text-anchor=%22middle%22%3E%E2%96%B6%3C/text%3E%3C/svg%3E';
+
+function renderFiltres(){
+  var cats = ["tout","gratuit","premium"];
+  videos.forEach(function(v){ if(v.cat && cats.indexOf(v.cat)<0) cats.push(v.cat); });
+  var labels = {tout:"Tout",gratuit:"🆓 Gratuit",premium:"⭐ Premium"};
+  var html = "";
+  cats.forEach(function(c){
+    html += '<div class="filtre'+(c===filtre?' actif':'')+'" onclick="setFiltre(\''+c+'\')">'+(labels[c]||c)+'</div>';
+  });
+  document.getElementById('filtres').innerHTML = html;
+}
+
+function render(){
+  renderFiltres();
+  var g = document.getElementById('grille');
+  var liste = videos.filter(function(v){
+    if(filtre==="tout") return true;
+    if(filtre==="gratuit"||filtre==="premium") return v.type===filtre;
+    return v.cat===filtre;
+  });
+  g.innerHTML = "";
+  document.getElementById('vide').style.display = videos.length ? "none" : "block";
+  liste.forEach(function(v){
+    var verrou = (v.type==="premium" && !vipOk);
+    var div = document.createElement('div');
+    div.className = "vid" + (verrou ? " verrou" : "");
+    div.innerHTML =
+      '<div class="thumb">' +
+        '<span class="badge '+(v.type==="premium"?"premium":"gratuit")+'">'+(v.type==="premium"?"⭐":"🆓")+'</span>' +
+        '<img src="'+(v.thumb||THUMB_DEF)+'" onerror="this.src=\''+THUMB_DEF+'\'">' +
+        (verrou ? '<div class="play">🔒<small>Code VIP</small></div>' : '<div class="play">▶</div>') +
+        '<button class="del-btn" onclick="event.stopPropagation();delVid(\''+v.id+'\')">🗑</button>' +
+      '</div>' +
+      '<div class="info"><div class="titre">'+esc(v.titre)+'</div><div class="meta">'+esc(v.cat||"Vidéo")+'</div></div>';
+    div.onclick = function(){
+      if(verrou){ openCode(); } else { openPlayer(v); }
+    };
+    g.appendChild(div);
+  });
+}
+function esc(s){return (s||"").replace(/[<>&"]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});}
+
+function setFiltre(c){ filtre=c; render(); }
+
+function openPlayer(v){
+  var vid = document.getElementById('pVideo');
+  vid.src = v.url;
+  document.getElementById('pTitre').textContent = v.titre;
+  document.getElementById('player').classList.add('on');
+  vid.play().catch(function(){});
+}
+function closePlayer(){
+  var vid = document.getElementById('pVideo');
+  vid.pause(); vid.src="";
+  document.getElementById('player').classList.remove('on');
+}
+
+function openCode(){ document.getElementById('codeInp').value=""; document.getElementById('mCode').classList.add('on'); }
+function closeM(id){ document.getElementById(id).classList.remove('on'); }
+function validCode(){
+  var c = document.getElementById('codeInp').value.trim();
+  if(c===CODE_PDG){
+    document.body.classList.add('pdg'); closeM('mCode'); refreshBinDisplay();
+    alert("👑 Mode PDG activé !");
+  } else if(c===CODE_VIP){
+    vipOk = true; localStorage.setItem('rtv-vip','oui'); closeM('mCode'); render();
+    alert("⭐ Vidéos Premium débloquées !");
+  } else { alert("Code incorrect ❌"); }
+}
+function quitPdg(){ document.body.classList.remove('pdg'); }
+
+function openAdd(){ document.getElementById('mAdd').classList.add('on'); }
+function addVid(){
+  var url = document.getElementById('aUrl').value.trim();
+  var thumb = document.getElementById('aThumb').value.trim();
+  var titre = document.getElementById('aTitre').value.trim();
+  var cat = document.getElementById('aCat').value.trim();
+  var type = document.getElementById('aType').value;
+  if(!url){ alert("Mets le lien de la vidéo .mp4"); return; }
+  videos.unshift({ id:'v'+Date.now(), url:url, thumb:thumb, titre:titre||"Sans titre", cat:cat||"Vidéos", type:type });
+  ['aUrl','aThumb','aTitre','aCat'].forEach(function(i){document.getElementById(i).value="";});
+  closeM('mAdd'); render();
+  alert("Vidéo ajoutée ! Clique ☁️ Publier pour la synchro.");
+}
+function delVid(id){
+  if(!confirm("Supprimer cette vidéo ?")) return;
+  videos = videos.filter(function(v){return v.id!==id;});
+  render();
+}
+
+function pullCloud(){
+  if(!SYNC.binId){
+    document.getElementById('syncTag').textContent = "⚠️ Entre ta clé de synchro en mode PDG";
+    render(); return;
+  }
+  fetch("https://api.jsonbin.io/v3/b/"+SYNC.binId+"/latest",{headers:{"X-Master-Key":SYNC.apiKey}})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(j){
+      if(j && j.record && j.record.videos){ videos = j.record.videos; }
+      document.getElementById('syncTag').textContent = "☁️ Synchronisé — "+videos.length+" vidéo(s)";
+      render();
+    })
+    .catch(function(){
+      document.getElementById('syncTag').textContent = "⚠️ Hors ligne";
+      render();
+    });
+}
+function pushCloud(){
+  if(!SYNC.binId){ alert("Configure d'abord ta clé de synchro (bin)."); return; }
+  fetch("https://api.jsonbin.io/v3/b/"+SYNC.binId,{
+    method:"PUT",
+    headers:{"Content-Type":"application/json","X-Master-Key":SYNC.apiKey},
+    body:JSON.stringify({videos:videos})
+  })
+  .then(function(r){return r.ok?r.json():Promise.reject();})
+  .then(function(){ alert("☁️ Publié ! Tous tes membres voient les vidéos."); document.getElementById('syncTag').textContent="☁️ Synchronisé — "+videos.length+" vidéo(s)"; })
+  .catch(function(){ alert("Échec de la publication. Vérifie la clé/bin."); });
+}
+
+pullCloud();
+</script>
+</body>
+</html>
