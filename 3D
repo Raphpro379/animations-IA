@@ -1,0 +1,633 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Suivi de mes gains</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f0fdf4);
+            color: #1f2937;
+            min-height: 100vh;
+            padding: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            color: #166534;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #64748b;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .card span {
+            display: block;
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .card strong {
+            display: block;
+            color: #15803d;
+            font-size: 1.8rem;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+            color: #166534;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-add {
+            color: white;
+            background: #16a34a;
+        }
+
+        .btn-add:hover {
+            background: #15803d;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .toolbar-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-export {
+            color: white;
+            background: #2563eb;
+        }
+
+        .btn-clear {
+            color: white;
+            background: #dc2626;
+        }
+
+        .btn-delete {
+            color: white;
+            background: #ef4444;
+            padding: 8px 12px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            color: #475569;
+            background: #f8fafc;
+        }
+
+        td.amount {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #64748b;
+            padding: 35px;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            padding: 15px;
+        }
+
+        @media (max-width: 800px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            form {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>💰 Suivi de mes gains</h1>
+        <p>Enregistre et consulte facilement l'argent que tu as gagné.</p>
+    </header>
+
+    <!-- Résumé -->
+    <section class="cards">
+        <div class="card">
+            <span>Total gagné</span>
+            <strong id="totalGeneral">0,00 €</strong>
+        </div>
+
+        <div class="card">
+            <span>Gains de ce mois</span>
+            <strong id="totalMois">0,00 €</strong>
+        </div>
+
+        <div class="card">
+            <span>Gains aujourd'hui</span>
+            <strong id="totalJour">0,00 €</strong>
+        </div>
+    </section>
+
+    <!-- Formulaire -->
+    <section class="panel">
+        <h2>Ajouter un gain</h2>
+
+        <form id="gainForm">
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="motif">Pourquoi / Provenance</label>
+                <input
+                    type="text"
+                    id="motif"
+                    placeholder="Exemple : Vente, salaire, mission..."
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="montant">Montant en euros</label>
+                <input
+                    type="number"
+                    id="montant"
+                    placeholder="0,00"
+                    min="0.01"
+                    step="0.01"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-add">
+                Ajouter
+            </button>
+        </form>
+    </section>
+
+    <!-- Historique -->
+    <section class="panel">
+        <div class="toolbar">
+            <h2>Historique des gains</h2>
+
+            <div class="toolbar-buttons">
+                <button type="button" class="btn-export" id="exportButton">
+                    Exporter en CSV
+                </button>
+
+                <button type="button" class="btn-clear" id="clearButton">
+                    Tout supprimer
+                </button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Motif / Provenance</th>
+                        <th>Montant</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="gainList"></tbody>
+            </table>
+
+            <div class="empty-message" id="emptyMessage">
+                Aucun gain enregistré pour le moment.
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        Les données sont enregistrées uniquement dans ton navigateur.
+    </footer>
+
+</div>
+
+<script>
+    const STORAGE_KEY = "application_gains";
+
+    const gainForm = document.getElementById("gainForm");
+    const dateInput = document.getElementById("date");
+    const motifInput = document.getElementById("motif");
+    const montantInput = document.getElementById("montant");
+
+    const gainList = document.getElementById("gainList");
+    const emptyMessage = document.getElementById("emptyMessage");
+
+    const totalGeneralElement = document.getElementById("totalGeneral");
+    const totalMoisElement = document.getElementById("totalMois");
+    const totalJourElement = document.getElementById("totalJour");
+
+    const exportButton = document.getElementById("exportButton");
+    const clearButton = document.getElementById("clearButton");
+
+    let gains = chargerGains();
+
+    /**
+     * Retourne la date locale au format AAAA-MM-JJ.
+     */
+    function obtenirDateLocale() {
+        const maintenant = new Date();
+        const annee = maintenant.getFullYear();
+        const mois = String(maintenant.getMonth() + 1).padStart(2, "0");
+        const jour = String(maintenant.getDate()).padStart(2, "0");
+
+        return `${annee}-${mois}-${jour}`;
+    }
+
+    /**
+     * Charge les gains enregistrés dans le navigateur.
+     */
+    function chargerGains() {
+        try {
+            const donnees = localStorage.getItem(STORAGE_KEY);
+            return donnees ? JSON.parse(donnees) : [];
+        } catch (erreur) {
+            return [];
+        }
+    }
+
+    /**
+     * Enregistre les gains dans le navigateur.
+     */
+    function sauvegarderGains() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(gains));
+    }
+
+    /**
+     * Formate un nombre en euros.
+     */
+    function formaterMontant(montant) {
+        return Number(montant).toLocaleString("fr-FR", {
+            style: "currency",
+            currency: "EUR"
+        });
+    }
+
+    /**
+     * Transforme une date AAAA-MM-JJ en JJ/MM/AAAA.
+     */
+    function formaterDate(date) {
+        const parties = date.split("-");
+
+        if (parties.length !== 3) {
+            return date;
+        }
+
+        return `${parties[2]}/${parties[1]}/${parties[0]}`;
+    }
+
+    /**
+     * Ajoute un gain.
+     */
+    gainForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const date = dateInput.value;
+        const motif = motifInput.value.trim();
+        const montant = Number(montantInput.value);
+
+        if (!date || !motif || !Number.isFinite(montant) || montant <= 0) {
+            alert("Merci de remplir correctement tous les champs.");
+            return;
+        }
+
+        const nouveauGain = {
+            id: Date.now(),
+            date: date,
+            motif: motif,
+            montant: montant
+        };
+
+        gains.push(nouveauGain);
+
+        sauvegarderGains();
+        afficherGains();
+
+        gainForm.reset();
+        dateInput.value = obtenirDateLocale();
+        motifInput.focus();
+    });
+
+    /**
+     * Supprime un gain précis.
+     */
+    function supprimerGain(id) {
+        const confirmation = confirm(
+            "Veux-tu vraiment supprimer cette entrée ?"
+        );
+
+        if (!confirmation) {
+            return;
+        }
+
+        gains = gains.filter(function(gain) {
+            return gain.id !== id;
+        });
+
+        sauvegarderGains();
+        afficherGains();
+    }
+
+    /**
+     * Affiche la liste et recalcule les totaux.
+     */
+    function afficherGains() {
+        gainList.textContent = "";
+
+        const gainsTries = [...gains].sort(function(a, b) {
+            if (a.date === b.date) {
+                return b.id - a.id;
+            }
+
+            return b.date.localeCompare(a.date);
+        });
+
+        emptyMessage.style.display =
+            gainsTries.length === 0 ? "block" : "none";
+
+        gainsTries.forEach(function(gain) {
+            const ligne = document.createElement("tr");
+
+            const celluleDate = document.createElement("td");
+            celluleDate.textContent = formaterDate(gain.date);
+
+            const celluleMotif = document.createElement("td");
+            celluleMotif.textContent = gain.motif;
+
+            const celluleMontant = document.createElement("td");
+            celluleMontant.textContent = formaterMontant(gain.montant);
+            celluleMontant.className = "amount";
+
+            const celluleAction = document.createElement("td");
+
+            const boutonSupprimer = document.createElement("button");
+            boutonSupprimer.type = "button";
+            boutonSupprimer.className = "btn-delete";
+            boutonSupprimer.textContent = "Supprimer";
+
+            boutonSupprimer.addEventListener("click", function() {
+                supprimerGain(gain.id);
+            });
+
+            celluleAction.appendChild(boutonSupprimer);
+
+            ligne.appendChild(celluleDate);
+            ligne.appendChild(celluleMotif);
+            ligne.appendChild(celluleMontant);
+            ligne.appendChild(celluleAction);
+
+            gainList.appendChild(ligne);
+        });
+
+        calculerTotaux();
+    }
+
+    /**
+     * Calcule le total général, mensuel et journalier.
+     */
+    function calculerTotaux() {
+        const dateActuelle = obtenirDateLocale();
+        const moisActuel = dateActuelle.substring(0, 7);
+
+        let totalGeneral = 0;
+        let totalMois = 0;
+        let totalJour = 0;
+
+        gains.forEach(function(gain) {
+            const montant = Number(gain.montant);
+
+            totalGeneral += montant;
+
+            if (gain.date.substring(0, 7) === moisActuel) {
+                totalMois += montant;
+            }
+
+            if (gain.date === dateActuelle) {
+                totalJour += montant;
+            }
+        });
+
+        totalGeneralElement.textContent = formaterMontant(totalGeneral);
+        totalMoisElement.textContent = formaterMontant(totalMois);
+        totalJourElement.textContent = formaterMontant(totalJour);
+    }
+
+    /**
+     * Supprime toutes les données.
+     */
+    clearButton.addEventListener("click", function() {
+        if (gains.length === 0) {
+            alert("Il n'y a aucune donnée à supprimer.");
+            return;
+        }
+
+        const confirmation = confirm(
+            "Attention : toutes les entrées seront supprimées. Continuer ?"
+        );
+
+        if (!confirmation) {
+            return;
+        }
+
+        gains = [];
+        sauvegarderGains();
+        afficherGains();
+    });
+
+    /**
+     * Protège les cellules CSV.
+     */
+    function echapperCSV(valeur) {
+        const texte = String(valeur).replaceAll('"', '""');
+        return `"${texte}"`;
+    }
+
+    /**
+     * Exporte les données dans un fichier CSV compatible avec Excel.
+     */
+    exportButton.addEventListener("click", function() {
+        if (gains.length === 0) {
+            alert("Il n'y a aucune donnée à exporter.");
+            return;
+        }
+
+        const lignes = [
+            ["Date", "Motif / Provenance", "Montant en euros"]
+        ];
+
+        gains.forEach(function(gain) {
+            lignes.push([
+                gain.date,
+                gain.motif,
+                Number(gain.montant).toFixed(2).replace(".", ",")
+            ]);
+        });
+
+        const contenuCSV = lignes
+            .map(function(ligne) {
+                return ligne.map(echapperCSV).join(";");
+            })
+            .join("\n");
+
+        const blob = new Blob(
+            ["\uFEFF" + contenuCSV],
+            { type: "text/csv;charset=utf-8;" }
+        );
+
+        const url = URL.createObjectURL(blob);
+        const lien = document.createElement("a");
+
+        lien.href = url;
+        lien.download = "historique-gains.csv";
+
+        document.body.appendChild(lien);
+        lien.click();
+        lien.remove();
+
+        URL.revokeObjectURL(url);
+    });
+
+    // Initialisation de l'application
+    dateInput.value = obtenirDateLocale();
+    afficherGains();
+</script>
+
+</body>
+</html>
+```
