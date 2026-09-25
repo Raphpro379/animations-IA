@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>R · Compte à rebours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@500;700&family=Orbitron:wght@600;900&family=Playfair+Display:ital,wght@1,700;0,900&family=Press+Start+2P&family=Righteous&family=Space+Grotesk:wght@500;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px));
+    transition: background .8s ease, color .5s ease;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .brand {
+    font-size: .95rem;
+    letter-spacing: .3em;
+    opacity: .7;
+    margin-bottom: 6px;
+  }
+  .target {
+    font-size: 1.1rem;
+    opacity: .85;
+    margin-bottom: 30px;
+  }
+
+  .clock {
+    display: flex;
+    gap: clamp(10px, 4vw, 34px);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 34px;
+  }
+  .unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 78px;
+  }
+  .num {
+    font-size: clamp(2.6rem, 12vw, 5.2rem);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .lbl {
+    margin-top: 10px;
+    font-size: .8rem;
+    letter-spacing: .18em;
+    opacity: .8;
+  }
+
+  .headline {
+    font-size: clamp(1.3rem, 5vw, 2.2rem);
+    margin-bottom: 26px;
+    max-width: 620px;
+  }
+
+  .newbtn {
+    border: none;
+    cursor: pointer;
+    padding: 13px 26px;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 700;
+    transition: transform .15s ease, box-shadow .2s ease, opacity .2s ease;
+  }
+  .newbtn:hover { transform: translateY(-3px); }
+  .newbtn:active { transform: translateY(0); }
+  .newbtn:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    body, .newbtn { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="brand" id="brand">R 3D</div>
+  <div class="target" id="target"></div>
+  <div class="headline" id="headline"></div>
+  <div class="clock">
+    <div class="unit"><span class="num" id="d">00</span><span class="lbl">JOURS</span></div>
+    <div class="unit"><span class="num" id="h">00</span><span class="lbl">HEURES</span></div>
+    <div class="unit"><span class="num" id="m">00</span><span class="lbl">MINUTES</span></div>
+    <div class="unit"><span class="num" id="s">00</span><span class="lbl">SECONDES</span></div>
+  </div>
+  <button class="newbtn" id="newbtn">Voir un autre style ✨</button>
+
+<script>
+  // ---- Thèmes : chacun a ses couleurs, sa police, son style ----
+  const themes = [
+    { name:"Néon",      bg:"#0f172a", fg:"#e2e8f0", accent:"#38bdf8", font:"'Orbitron', sans-serif",     numFont:"'Orbitron', sans-serif", head:"Prépare-toi, ça arrive !", btnbg:"#38bdf8", btnfg:"#0f172a" },
+    { name:"Arcade",    bg:"#1a1030", fg:"#ffe66d", accent:"#ff4d6d", font:"'Press Start 2P', monospace", numFont:"'Press Start 2P', monospace", head:"NIVEAU SUIVANT DANS", btnbg:"#ff4d6d", btnfg:"#fff" },
+    { name:"Bonbon",    bg:"#ffe0ec", fg:"#7a1f4b", accent:"#ff5da2", font:"'Fredoka', sans-serif",       numFont:"'Fredoka', sans-serif", head:"Le compte à rebours sucré 🍭", btnbg:"#ff5da2", btnfg:"#fff" },
+    { name:"Chic",      bg:"#12100e", fg:"#f5efe6", accent:"#d4af37", font:"'Playfair Display', serif",   numFont:"'Playfair Display', serif", head:"L'attente a du style", btnbg:"#d4af37", btnfg:"#12100e" },
+    { name:"Pop",       bg:"#fdf500", fg:"#111",    accent:"#ff2e63", font:"'Bungee', sans-serif",         numFont:"'Bungee', sans-serif", head:"ÇA APPROCHE !", btnbg:"#111", btnfg:"#fdf500" },
+    { name:"Space",     bg:"#05010f", fg:"#c8b6ff", accent:"#9d4edd", font:"'Space Grotesk', sans-serif",  numFont:"'Orbitron', sans-serif", head:"Décollage imminent 🚀", btnbg:"#9d4edd", btnfg:"#fff" },
+    { name:"Fun",       bg:"#00b4d8", fg:"#fff",    accent:"#ffd166", font:"'Righteous', sans-serif",      numFont:"'Righteous', sans-serif", head:"Encore un peu de patience !", btnbg:"#ffd166", btnfg:"#023047" },
+    { name:"Carnet",    bg:"#fffdf5", fg:"#2b2b2b", accent:"#e63946", font:"'Caveat', cursive",            numFont:"'Caveat', cursive", head:"J-moins quelques jours…", btnbg:"#e63946", btnfg:"#fff" },
+    { name:"Menthe",    bg:"#022c22", fg:"#d1fae5", accent:"#34d399", font:"'Space Grotesk', sans-serif",  numFont:"'Space Grotesk', sans-serif", head:"Bientôt du nouveau chez R", btnbg:"#34d399", btnfg:"#022c22" },
+  ];
+
+  const MONTHS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+
+  // ---- Trouver le prochain 25 ----
+  function nextTarget() {
+    const now = new Date();
+    let y = now.getFullYear();
+    let mo = now.getMonth();
+    // cible : 25 du mois courant à 18h00 (sortie du catalogue)
+    let t = new Date(y, mo, 25, 18, 0, 0);
+    if (now >= t) {            // on a dépassé le 25 à 18h -> mois suivant
+      mo += 1;
+      if (mo > 11) { mo = 0; y += 1; }
+      t = new Date(y, mo, 25, 18, 0, 0);
+    }
+    return t;
+  }
+
+  function pad(n){ return String(n).padStart(2,"0"); }
+
+  let target = nextTarget();
+
+  function applyTheme(th){
+    document.body.style.background = th.bg;
+    document.body.style.color = th.fg;
+    document.body.style.fontFamily = th.font;
+    document.getElementById("headline").textContent = th.head;
+    document.getElementById("brand").style.color = th.accent;
+    const btn = document.getElementById("newbtn");
+    btn.style.background = th.btnbg;
+    btn.style.color = th.btnfg;
+    document.querySelectorAll(".num").forEach(el=>{
+      el.style.fontFamily = th.numFont;
+      el.style.color = th.accent;
+    });
+    // date cible affichée
+    document.getElementById("target").textContent =
+      "Prochain rendez-vous : 25 " + MONTHS[target.getMonth()] + " " + target.getFullYear() + " à 18h00";
+  }
+
+  // Style du jour : dépend de la date, donc il change à minuit
+  // et reste le même toute la journée.
+  function dayIndex(){
+    const now = new Date();
+    // nombre de jours depuis le 1er janvier 1970 (heure locale)
+    const days = Math.floor((now - now.getTimezoneOffset()*60000) / 86400000);
+    return days;
+  }
+  let shownDay = null;
+  function themeOfToday(){
+    const idx = dayIndex() % themes.length;
+    shownDay = dayIndex();
+    applyTheme(themes[idx]);
+  }
+
+  function tick(){
+    const now = new Date();
+    if (now >= target) target = nextTarget();     // bascule vers le prochain 25
+    if (dayIndex() !== shownDay) themeOfToday();   // nouveau style à minuit
+    let diff = Math.floor((target - now)/1000);
+    const d = Math.floor(diff/86400); diff -= d*86400;
+    const h = Math.floor(diff/3600);  diff -= h*3600;
+    const m = Math.floor(diff/60);    diff -= m*60;
+    const s = diff;
+    document.getElementById("d").textContent = pad(d);
+    document.getElementById("h").textContent = pad(h);
+    document.getElementById("m").textContent = pad(m);
+    document.getElementById("s").textContent = pad(s);
+  }
+
+  // Le bouton laisse juste jeter un œil aux autres styles (aperçu)
+  document.getElementById("newbtn").addEventListener("click", function(){
+    const th = themes[Math.floor(Math.random()*themes.length)];
+    applyTheme(th);
+  });
+
+  themeOfToday();   // le style du jour (change tout seul à minuit)
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
